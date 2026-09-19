@@ -1,0 +1,6 @@
+.sites-runtime/
+qa/
+sources/
+.DS_Store
+__pycache__/
+*.pyc

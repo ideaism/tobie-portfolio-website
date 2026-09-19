@@ -1,0 +1,673 @@
+{
+  "fileKey": "cQRDWjMiIX2sLgF8zcryFL",
+  "url": "https://www.figma.com/design/cQRDWjMiIX2sLgF8zcryFL",
+  "account": "Tobie",
+  "pages": [
+    {
+      "route": "/",
+      "lang": "zh",
+      "label": "00 · Home",
+      "source": "21:2",
+      "page": "2:6",
+      "x": 120,
+      "wrapper": "49:7134",
+      "components": [
+        "26:455",
+        "26:798",
+        "26:1141"
+      ],
+      "prototype": "49:7135",
+      "prototypeInstance": "49:7136"
+    },
+    {
+      "route": "/work/qingju/",
+      "lang": "zh",
+      "label": "01 · Qingju",
+      "source": "16:2",
+      "page": "2:6",
+      "x": 1660,
+      "wrapper": "49:7502",
+      "components": [
+        "27:817",
+        "27:1140",
+        "27:1460"
+      ],
+      "prototype": "49:7503",
+      "prototypeInstance": "49:7504"
+    },
+    {
+      "route": "/work/playbook/",
+      "lang": "zh",
+      "label": "02 · PlayBook",
+      "source": "13:2",
+      "page": "2:6",
+      "x": 3200,
+      "wrapper": "49:7847",
+      "components": [
+        "14:30",
+        "14:441",
+        "14:851"
+      ],
+      "prototype": "49:7848",
+      "prototypeInstance": "49:7849"
+    },
+    {
+      "route": "/work/smt/",
+      "lang": "zh",
+      "label": "03 · Industrial Securities",
+      "source": "18:2",
+      "page": "2:6",
+      "x": 4740,
+      "wrapper": "49:8282",
+      "components": [
+        "27:1509",
+        "27:1836",
+        "27:2158"
+      ],
+      "prototype": "49:8283",
+      "prototypeInstance": "49:8284"
+    },
+    {
+      "route": "/work/commons-fridge/",
+      "lang": "zh",
+      "label": "04 · Commons Fridge",
+      "source": "19:2",
+      "page": "2:6",
+      "x": 6280,
+      "wrapper": "49:8629",
+      "components": [
+        "27:2207",
+        "27:2483",
+        "27:2756"
+      ],
+      "prototype": "49:8630",
+      "prototypeInstance": "49:8631"
+    },
+    {
+      "route": "/en/",
+      "lang": "en",
+      "label": "00 · Home",
+      "source": "15:2",
+      "page": "2:8",
+      "x": 120,
+      "wrapper": "50:1765",
+      "components": [
+        "28:26",
+        "28:369",
+        "28:712"
+      ],
+      "mobile": false,
+      "prototype": "50:1766",
+      "prototypeInstance": "50:1767"
+    },
+    {
+      "route": "/en/work/qingju/",
+      "lang": "en",
+      "label": "01 · Qingju",
+      "source": "20:2",
+      "page": "2:8",
+      "x": 1660,
+      "wrapper": "50:2133",
+      "components": [
+        "29:388",
+        "29:711",
+        "29:1031"
+      ],
+      "mobile": false,
+      "prototype": "50:2134",
+      "prototypeInstance": "50:2135"
+    },
+    {
+      "route": "/en/work/playbook/",
+      "lang": "en",
+      "label": "02 · PlayBook",
+      "source": "23:2",
+      "page": "2:8",
+      "x": 3200,
+      "wrapper": "50:2478",
+      "components": [
+        "29:1080",
+        "29:1491",
+        "29:1901"
+      ],
+      "mobile": false,
+      "prototype": "50:2479",
+      "prototypeInstance": "50:2480"
+    },
+    {
+      "route": "/en/work/smt/",
+      "lang": "en",
+      "label": "03 · Industrial Securities",
+      "source": "22:2",
+      "page": "2:8",
+      "x": 4740,
+      "wrapper": "50:2913",
+      "components": [
+        "30:1156",
+        "30:1483",
+        "30:1805"
+      ],
+      "mobile": false,
+      "prototype": "50:2914",
+      "prototypeInstance": "50:2915"
+    },
+    {
+      "route": "/en/work/commons-fridge/",
+      "lang": "en",
+      "label": "04 · Commons Fridge",
+      "source": "24:2",
+      "page": "2:8",
+      "x": 6280,
+      "wrapper": "50:3260",
+      "components": [
+        "30:1854",
+        "30:2130",
+        "30:2403"
+      ],
+      "mobile": false,
+      "prototype": "50:3261",
+      "prototypeInstance": "50:3262"
+    },
+    {
+      "route": "/",
+      "lang": "zh",
+      "label": "00 · Home",
+      "source": "34:2",
+      "page": "2:7",
+      "x": 120,
+      "mobile": true,
+      "wrapper": "50:5294",
+      "components": [
+        "47:3650",
+        "47:3983",
+        "47:4324"
+      ],
+      "prototype": "50:5295",
+      "prototypeInstance": "50:5296"
+    },
+    {
+      "route": "/work/qingju/",
+      "lang": "zh",
+      "label": "01 · Qingju",
+      "source": "32:2",
+      "page": "2:7",
+      "x": 670,
+      "mobile": true,
+      "wrapper": "50:5652",
+      "components": [
+        "47:4364",
+        "47:4683",
+        "47:5007"
+      ],
+      "prototype": "50:5653",
+      "prototypeInstance": "50:5654"
+    },
+    {
+      "route": "/work/playbook/",
+      "lang": "zh",
+      "label": "02 · PlayBook",
+      "source": "36:2",
+      "page": "2:7",
+      "x": 1220,
+      "mobile": true,
+      "wrapper": "50:5993",
+      "components": [
+        "47:5048",
+        "47:5457",
+        "47:5873"
+      ],
+      "prototype": "50:5994",
+      "prototypeInstance": "50:5995"
+    },
+    {
+      "route": "/work/smt/",
+      "lang": "zh",
+      "label": "03 · Industrial Securities",
+      "source": "33:2",
+      "page": "2:7",
+      "x": 1770,
+      "mobile": true,
+      "wrapper": "50:6426",
+      "components": [
+        "47:5914",
+        "47:6236",
+        "47:6561"
+      ],
+      "prototype": "50:6427",
+      "prototypeInstance": "50:6428"
+    },
+    {
+      "route": "/work/commons-fridge/",
+      "lang": "zh",
+      "label": "04 · Commons Fridge",
+      "source": "35:2",
+      "page": "2:7",
+      "x": 2320,
+      "mobile": true,
+      "wrapper": "50:6768",
+      "components": [
+        "47:6602",
+        "47:6872",
+        "47:7147"
+      ],
+      "prototype": "50:6769",
+      "prototypeInstance": "50:6770"
+    },
+    {
+      "route": "/en/",
+      "lang": "en",
+      "label": "00 · Home",
+      "source": "41:2",
+      "page": "2:9",
+      "x": 120,
+      "mobile": true,
+      "wrapper": "50:8797",
+      "components": [
+        "47:7188",
+        "47:7521",
+        "47:7862"
+      ],
+      "prototype": "50:8798",
+      "prototypeInstance": "50:8799"
+    },
+    {
+      "route": "/en/work/qingju/",
+      "lang": "en",
+      "label": "01 · Qingju",
+      "source": "40:2",
+      "page": "2:9",
+      "x": 670,
+      "mobile": true,
+      "wrapper": "50:9155",
+      "components": [
+        "47:7902",
+        "47:8221",
+        "47:8545"
+      ],
+      "prototype": "50:9156",
+      "prototypeInstance": "50:9157"
+    },
+    {
+      "route": "/en/work/playbook/",
+      "lang": "en",
+      "label": "02 · PlayBook",
+      "source": "44:2",
+      "page": "2:9",
+      "x": 1220,
+      "mobile": true,
+      "wrapper": "50:9496",
+      "components": [
+        "47:8586",
+        "47:8996",
+        "47:9413"
+      ],
+      "prototype": "50:9497",
+      "prototypeInstance": "50:9498"
+    },
+    {
+      "route": "/en/work/smt/",
+      "lang": "en",
+      "label": "03 · Industrial Securities",
+      "source": "39:2",
+      "page": "2:9",
+      "x": 1770,
+      "mobile": true,
+      "wrapper": "50:9930",
+      "components": [
+        "47:9454",
+        "47:9776",
+        "47:10101"
+      ],
+      "prototype": "50:9931",
+      "prototypeInstance": "50:9932"
+    },
+    {
+      "route": "/en/work/commons-fridge/",
+      "lang": "en",
+      "label": "04 · Commons Fridge",
+      "source": "43:2",
+      "page": "2:9",
+      "x": 2320,
+      "mobile": true,
+      "wrapper": "50:10272",
+      "components": [
+        "47:10142",
+        "47:10412",
+        "47:10687"
+      ],
+      "prototype": "50:10273",
+      "prototypeInstance": "50:10274"
+    }
+  ],
+  "studio": {
+    "setId": "46:594",
+    "variants": [
+      {
+        "mask": 3,
+        "id": "46:75"
+      },
+      {
+        "mask": 7,
+        "id": "46:149"
+      },
+      {
+        "mask": 0,
+        "id": "46:223"
+      },
+      {
+        "mask": 1,
+        "id": "46:297"
+      },
+      {
+        "mask": 2,
+        "id": "46:371"
+      },
+      {
+        "mask": 4,
+        "id": "46:445"
+      },
+      {
+        "mask": 5,
+        "id": "46:519"
+      },
+      {
+        "mask": 6,
+        "id": "46:593"
+      }
+    ]
+  },
+  "app": {
+    "setId": "48:232",
+    "variants": [
+      {
+        "state": 0,
+        "id": "48:58"
+      },
+      {
+        "state": 1,
+        "id": "48:115"
+      },
+      {
+        "state": 2,
+        "id": "48:172"
+      },
+      {
+        "state": 3,
+        "id": "48:231"
+      }
+    ]
+  },
+  "playable": {
+    "frames": [
+      {
+        "id": "53:10865",
+        "name": "▶ PlayBook Studio · 点击材料实时计算"
+      },
+      {
+        "id": "53:10937",
+        "name": "▶ PlayBook App · 合成、取消与重置"
+      }
+    ],
+    "createdNodeIds": [
+      "53:10865",
+      "53:10866",
+      "53:10937",
+      "53:10938"
+    ]
+  },
+  "audit": {
+    "pages": [
+      {
+        "route": "/",
+        "mobile": false,
+        "wrapper": "49:7134",
+        "prototype": "49:7135",
+        "width": 1280,
+        "height": 4215.2880859375,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/qingju/",
+        "mobile": false,
+        "wrapper": "49:7502",
+        "prototype": "49:7503",
+        "width": 1280,
+        "height": 6360.1640625,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/playbook/",
+        "mobile": false,
+        "wrapper": "49:7847",
+        "prototype": "49:7848",
+        "width": 1280,
+        "height": 6385.6796875,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/smt/",
+        "mobile": false,
+        "wrapper": "49:8282",
+        "prototype": "49:8283",
+        "width": 1280,
+        "height": 5484.8125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/commons-fridge/",
+        "mobile": false,
+        "wrapper": "49:8629",
+        "prototype": "49:8630",
+        "width": 1280,
+        "height": 5769.9609375,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/",
+        "mobile": false,
+        "wrapper": "50:1765",
+        "prototype": "50:1766",
+        "width": 1280,
+        "height": 4356.97607421875,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/qingju/",
+        "mobile": false,
+        "wrapper": "50:2133",
+        "prototype": "50:2134",
+        "width": 1280,
+        "height": 6872.5078125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/playbook/",
+        "mobile": false,
+        "wrapper": "50:2478",
+        "prototype": "50:2479",
+        "width": 1280,
+        "height": 6887.1640625,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/smt/",
+        "mobile": false,
+        "wrapper": "50:2913",
+        "prototype": "50:2914",
+        "width": 1280,
+        "height": 5800.078125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/commons-fridge/",
+        "mobile": false,
+        "wrapper": "50:3260",
+        "prototype": "50:3261",
+        "width": 1280,
+        "height": 6115.71875,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/",
+        "mobile": true,
+        "wrapper": "50:5294",
+        "prototype": "50:5295",
+        "width": 390,
+        "height": 5782.2509765625,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/qingju/",
+        "mobile": true,
+        "wrapper": "50:5652",
+        "prototype": "50:5653",
+        "width": 390,
+        "height": 6934.7109375,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/playbook/",
+        "mobile": true,
+        "wrapper": "50:5993",
+        "prototype": "50:5994",
+        "width": 390,
+        "height": 7491.0234375,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/smt/",
+        "mobile": true,
+        "wrapper": "50:6426",
+        "prototype": "50:6427",
+        "width": 390,
+        "height": 5761.9921875,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/work/commons-fridge/",
+        "mobile": true,
+        "wrapper": "50:6768",
+        "prototype": "50:6769",
+        "width": 390,
+        "height": 6369.8203125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/",
+        "mobile": true,
+        "wrapper": "50:8797",
+        "prototype": "50:8798",
+        "width": 390,
+        "height": 6041.02392578125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/qingju/",
+        "mobile": true,
+        "wrapper": "50:9155",
+        "prototype": "50:9156",
+        "width": 390,
+        "height": 7986.90673828125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/playbook/",
+        "mobile": true,
+        "wrapper": "50:9496",
+        "prototype": "50:9497",
+        "width": 390,
+        "height": 8562.2109375,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/smt/",
+        "mobile": true,
+        "wrapper": "50:9930",
+        "prototype": "50:9931",
+        "width": 390,
+        "height": 6676.171875,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      },
+      {
+        "route": "/en/work/commons-fridge/",
+        "mobile": true,
+        "wrapper": "50:10272",
+        "prototype": "50:10273",
+        "width": 390,
+        "height": 7308.453125,
+        "textNodes": 0,
+        "fonts": [],
+        "unexpectedFonts": [],
+        "reactionNodes": 0
+      }
+    ],
+    "variableCount": 24,
+    "rootCounts": {
+      "FRAME": 13895,
+      "TEXT": 7805,
+      "INSTANCE": 153,
+      "COMPONENT_SET": 3,
+      "COMPONENT": 97,
+      "RECTANGLE": 252,
+      "VECTOR": 91
+    }
+  },
+  "temporaryCapturesRemoved": true
+}

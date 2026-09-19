@@ -38,3 +38,12 @@ Reviewed all four CDU project PDFs, EAI CV and Wuhan mapping, plus the graduatio
 - 共享单车项目 file 3Lmu2yG7oAKiIxxIMkOWie is a distinct application study, not automatically the commercial Qingju growth-system case. Kept separate to avoid conflating projects.
 
 Existing 27-page portfolio PDF is offered as a companion download; it is not represented as identical to the website selection.
+
+## Original PlayBook motion — 2026-09-19
+- Old portfolio: https://www.figma.com/design/lfqzkEzhH33yq5kvIkNEqW
+- 2159:24200 创建合成配方1: original GIF, 369 frames, 12.31 seconds.
+- 2159:24203 查看物品 2: original GIF, 1216 frames, 20.27 seconds; also represented by VIDEO node 2136:29465.
+- 2159:24207 评论1: original GIF, 367 frames, 12.23 seconds.
+- Source GIF bytes downloaded through Figma asset tool. Web MP4 versions transcode the original recordings with no new animation/content. Silent source clips. Three-frame inspection confirms the respective recipe creation, item detail/relationship and contextual comment flows.
+- User confirms one PlayBook demonstration was made in ProtoPie; tool metadata alone cannot identify which clip, so individual clip tool attribution is not invented.
+- New inline browser demos are retrospective, operable explanations of the documented design rules; historical design authorship/launch boundaries remain unchanged.

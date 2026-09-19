@@ -2,6 +2,7 @@ from pathlib import Path
 from html import escape
 import json
 import re
+from native_demos import preview, section_demo, motion_demos
 ROOT=Path(__file__).parent
 OUT=ROOT/'dist'
 ASSETS=json.loads((ROOT/'assets.json').read_text())
@@ -13,7 +14,7 @@ def img(name,alt,extra=''):
  w,h=ASSETS[name]
  return f'<img src="/assets/{name}.webp" alt="{escape(alt)}" width="{w}" height="{h}" {extra}>' 
 def head(title,desc,lang):
- return f'''<!doctype html><html lang="{'zh-CN' if lang=='zh' else 'en'}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} — Tobie / Yucheng Feng</title><meta name="description" content="{escape(desc)}"><meta name="theme-color" content="#244ce4"><meta property="og:type" content="website"><meta property="og:title" content="{escape(title)} — Tobie"><meta property="og:description" content="{escape(desc)}"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23244ce4'/%3E%3Ctext x='13' y='47' font-family='Arial' font-weight='700' font-size='43' fill='white'%3Et.%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="/styles.css"><script src="/site.js" defer></script></head><body>'''
+ return f'''<!doctype html><html lang="{'zh-CN' if lang=='zh' else 'en'}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} — Tobie / Yucheng Feng</title><meta name="description" content="{escape(desc)}"><meta name="theme-color" content="#244ce4"><meta property="og:type" content="website"><meta property="og:title" content="{escape(title)} — Tobie"><meta property="og:description" content="{escape(desc)}"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23244ce4'/%3E%3Ctext x='13' y='47' font-family='Arial' font-weight='700' font-size='43' fill='white'%3Et.%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/interactions.css"><script src="/site.js" defer></script><script type="module" src="/interactions.js"></script></head><body>'''
 def nav(lang,slug=''):
  home=url('',lang);other=url(slug,'en' if lang=='zh' else 'zh')
  return f'''<a class="skip" href="#main">{tr('跳到内容','Skip to content',lang)}</a><header class="header"><div class="wrap nav"><a class="brand" href="{home}" aria-label="Tobie · {tr('首页','Home',lang)}">tobie<i>.</i><small>YUCHENG FENG</small></a><nav class="navlinks" id="navigation" aria-label="{tr('主导航','Main navigation',lang)}"><a href="{home}#work">{tr('精选作品','Work',lang)}</a><a class="nav-extra" href="{home}#explorations">{tr('探索','Explorations',lang)}</a><a class="nav-extra" href="{home}#about">{tr('关于我','About',lang)}</a><a class="nav-extra" href="#contact">{tr('联系','Contact',lang)}</a><a class="lang" href="{other}" lang="{'en' if lang=='zh' else 'zh-CN'}" aria-label="{tr('Read in English','切换到中文',lang)}">{tr('EN','中文',lang)}</a></nav><button class="menu-btn" aria-label="{tr('展开导航','Open navigation',lang)}" aria-controls="navigation" aria-expanded="false">☰</button></div></header>'''
@@ -27,7 +28,8 @@ PROJECTS=[
 ]
 def project_card(p,lang):
  i=0 if lang=='zh' else 1
- return f'''<a class="project {p['class']}" href="{url(p['slug'],lang)}"><div class="project-visual">{img(p['image'],p['name']+' — '+p['title'][i],'loading="lazy" width="1920" height="1080"')}<span class="round-arrow" aria-hidden="true">↗</span></div><div class="project-copy"><div class="project-meta"><span>{p['type'][i]}</span><span>{p['year']}</span></div><h3><span class="project-title-line">{p['name']}</span>{p['title'][i]}</h3><p>{p['summary'][i]}</p><div class="project-tags">{p['tags'][i]}</div></div></a>'''
+ visual=preview(p['slug'],lang) or img(p['image'],p['name']+' — '+p['title'][i],'loading="lazy"')
+ return f'''<article class="project {p['class']}"><a class="project-visual" href="{url(p['slug'],lang)}" aria-label="{tr('阅读案例：','Read case study: ',lang)+p['name']}">{visual}<span class="round-arrow" aria-hidden="true">↗</span></a><div class="project-copy"><div class="project-meta"><span>{p['type'][i]}</span><span>{p['year']}</span></div><h3><a href="{url(p['slug'],lang)}"><span class="project-title-line">{p['name']}</span>{p['title'][i]}</a></h3><p>{p['summary'][i]}</p><div class="project-tags">{p['tags'][i]}</div><div class="project-actions"><a href="{url(p['slug'],lang)}">{tr('阅读案例','Read case',lang)} ↗</a><a class="try-demo" href="{url(p['slug'],lang)}#interactive-demo">{tr('亲手试一试','Try the interaction',lang)} <span aria-hidden="true">→</span></a></div></div></article>'''
 def home(lang):
  content=head(tr('冯渝程 · 用户体验与交互设计','UX & Interaction Design',lang),tr('从用户研究、复杂工具到实体交互。精选青桔、PlayBook、兴业 SMT 与 The Commons Fridge 项目。','Selected work in user research, complex tools and physical interactions: Qingju, PlayBook, Industrial Securities SMT and The Commons Fridge.',lang),lang)+nav(lang)
  content+=f'''<main id="main"><section class="hero wrap"><div class="hero-top"><span>UX / INTERACTION DESIGNER</span><span>SELECTED WORK · 2021—2026</span></div><div class="hero-main"><div class="reveal"><h1>Tobie<span>.</span></h1><p class="name">{tr('冯渝程 / Yucheng Feng','Yucheng Feng / 冯渝程',lang)}</p><p class="intro">{tr('理解人的日常，<br>把复杂的问题，设计得<em>清晰而可用。</em>','I explore everyday behaviour<br>and make complex experiences<br><em>clearer to use.</em>',lang)}</p></div><div class="hero-art">{img('tobie-avatar',tr('Tobie 的个人插画形象：黑发、眼镜与牛仔外套','Tobie’s illustrated avatar with dark hair, glasses and a denim jacket',lang),'width="500" height="500" fetchpriority="high"')}<p class="art-label">CURIOUS MIND. THOUGHTFUL DESIGN.</p></div></div><div class="hero-bottom"><a class="inline-link" href="#work">{tr('看看我的设计','Explore selected work',lang)}<span class="arrow" aria-hidden="true">↓</span></a><p>{tr('研究 → 交互 → 系统 → 真实情境','Research → Interaction → Systems → Context',lang)}</p></div></section><section class="section wrap" id="work"><div class="section-top"><h2>{tr('精选作品','Selected work',lang)}</h2><small>01—04 / {tr('从问题到设计决策','From questions to design decisions',lang)}</small></div><div class="work-grid">{''.join(project_card(p,lang) for p in PROJECTS)}</div></section>'''
@@ -45,13 +47,18 @@ if __name__=='__main__':
  for lang in ['zh','en']: save('' if lang=='zh' else 'en',home(lang))
  print('Homepage generated in Chinese and English.')
 
+def case_visual(slug,c,title,lang):
+ native=preview(slug,lang)
+ if not native: return f'<div class="case-cover fridge">{img(c["image"],title,'fetchpriority="high"')}</div>'
+ return f'''<div class="case-native-cover">{native}</div><details class="source-evidence cover-evidence"><summary>{tr('查看原始项目概览','View original project overview',lang)} <span>{tr('原稿截图','Source screenshot',lang)}</span></summary><div class="case-cover">{img(c['image'],title,'loading="lazy"')}</div></details>'''
+
 def case_page(slug,lang):
  from cases import CASES
  c=CASES[slug];i=0 if lang=='zh' else 1
  title=c['title'][i];deck=c['deck'][i]
  html=head(title,deck,lang)+nav(lang,slug)
  facts=''.join(f'<div><dt>{f[i]}</dt><dd>{f[i+2]}</dd></div>' for f in c['facts'])
- html+=f'''<main id="main" class="wrap"><header class="case-head"><a class="back" href="{url('',lang)}#work">← {tr('返回精选作品','Back to selected work',lang)}</a><div class="kicker">{slug.replace('-',' ').upper()} / CASE STUDY</div><h1>{title}</h1><p class="case-deck">{deck}</p><dl class="case-facts">{facts}</dl></header><div class="case-cover {'fridge' if slug=='commons-fridge' else ''}">{img(c['image'],title,'width="1920" height="1080" fetchpriority="high"')}</div><div class="case-layout"><nav class="case-toc" aria-label="{tr('案例目录','Case study contents',lang)}">'''
+ html+=f'''<main id="main" class="wrap"><header class="case-head"><a class="back" href="{url('',lang)}#work">← {tr('返回精选作品','Back to selected work',lang)}</a><div class="kicker">{slug.replace('-',' ').upper()} / CASE STUDY</div><h1>{title}</h1><p class="case-deck">{deck}</p><dl class="case-facts">{facts}</dl></header><div class="case-intro-actions"><a class="demo-button" href="#interactive-demo">{tr("直接体验这个设计","Try this design",lang)} ↓</a></div>{case_visual(slug,c,title,lang)}<div class="case-layout"><nav class="case-toc" aria-label="{tr('案例目录','Case study contents',lang)}">'''
  for n,s in enumerate(c['sections']): html+=f'<a href="#section-{n+1}">{s["label"][i]}</a>'
  html+='</nav><article>'
  for n,s in enumerate(c['sections']):
@@ -62,12 +69,17 @@ def case_page(slug,lang):
   if 'insight' in s:html+=f'<div class="insight">{s["insight"][i]}</div>'
   if 'steps' in s:
    html+='<div class="steps">'+''.join(f'<div class="step"><span>{st[0][i]}</span><h3>{st[1][i]}</h3><p>{st[2][i]}</p></div>' for st in s['steps'])+'</div>'
+  demo=section_demo(slug,n+1,lang)
+  html+=demo
+  if demo and ('image' in s or 'phones' in s): html+=f'<details class="source-evidence"><summary>{tr("查看原始设计证据","View original design evidence",lang)} <span>{tr("原稿截图","Source screenshots",lang)}</span></summary>'
   if 'image' in s:
    cap=s['caption'][i]
    html+=f'<figure class="evidence"><button data-enlarge aria-label="{tr("放大图片：","Enlarge image: ",lang)+escape(s["title"][i])}">{img(s["image"],s["title"][i],"loading=\"lazy\"")}</button><figcaption>{cap}</figcaption></figure>'
   if 'phones' in s:
    labels=[tr('材料不足','Missing materials',lang),tr('满足要求','Requirements met',lang),tr('确认合成','Confirm crafting',lang)]
    html+='<figure class="evidence"><div class="phone-row">'+''.join(f'<button data-enlarge aria-label="{tr("放大图片：","Enlarge image: ",lang)}{labels[j]}">'+img(p,labels[j],'loading="lazy"')+'</button>' for j,p in enumerate(s['phones']))+'</div><figcaption>'+s['caption'][i]+'</figcaption></figure>'
+  if demo and ('image' in s or 'phones' in s): html+='</details>'
+  if slug=='playbook' and n==1: html+=motion_demos(lang)
   if 'external' in s:html+=f'<p style="margin-top:24px"><a class="source-link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
   html+='</section>'
  html+=f'<p class="archive-note"><a class="source-link" href="{c["source"]}" target="_blank" rel="noopener">{tr("查看 Figma 项目原稿 ↗","View the original Figma file ↗",lang)}</a> · {tr("原稿访问遵循原文件权限。","Access follows the source file’s sharing permissions.",lang)}</p></article></div>'

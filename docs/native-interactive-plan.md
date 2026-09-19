@@ -24,7 +24,7 @@ No extra design-approval gate because user explicitly requested direct design an
 - [x] Build Figma foundations, native component instances and complete desktop/mobile page layouts, with wired interaction states.
 - [x] Embed verified original video and expose source/prototype context.
 - [x] Verify real browser interaction paths, keyboard/mobile/reduced motion; inspect Figma geometry, native layer counts and actual prototype links.
-- [ ] Publish updated website using existing Sites project and deliver Figma and website links.
+- [x] Publish updated website using existing Sites project and deliver Figma and website links.
 
 ## Discovery
 No Code Connect files exist in this dependency-free static project. Target Figma starts empty; no existing native screens or local tokens/styles. Available community libraries inspected; branded portfolio foundations will be created where library assets do not fit. Fonts verified in Figma: DM Sans, Space Grotesk, Noto Sans SC.
@@ -45,4 +45,6 @@ Old portfolio lfqzkEzhH33yq5kvIkNEqW contains VIDEO node 2136:29465 “查看物
 ## Delivery
 Figma: https://www.figma.com/design/cQRDWjMiIX2sLgF8zcryFL
 Website: https://tobie-yucheng-feng-portfolio.beijixinfei.chatgpt.site
-Publication pending; preserve existing owner-private access.
+Published successfully on 2026-09-19. Existing owner-private access preserved.
+
+Version 2 source: a52444f6d759c2f5d83f20bfd6792e496a1a4077. Native deployment appgdep_6aade96af6048191bd1df5daf75f448b returned succeeded. Three original clips plus five native demo modules are live in the saved static archive. Browser handoff is left to the existing Sites view because this task is not foreground.

@@ -1,0 +1,298 @@
+{
+ "fridge/cf-add": [
+  480,
+  1104
+ ],
+ "fridge/cf-found": [
+  480,
+  1131
+ ],
+ "fridge/cf-home": [
+  480,
+  1062
+ ],
+ "fridge/cf-house": [
+  480,
+  2736
+ ],
+ "fridge/cf-shop": [
+  480,
+  1062
+ ],
+ "fridge/penguin-add": [
+  240,
+  243
+ ],
+ "fridge/penguin-duo": [
+  1200,
+  675
+ ],
+ "fridge/penguin-found": [
+  240,
+  163
+ ],
+ "fridge/penguin-manage": [
+  240,
+  208
+ ],
+ "fridge/penguin-motion": [
+  985,
+  145
+ ],
+ "fridge/penguin-received": [
+  240,
+  243
+ ],
+ "fridge/photo-fridge": [
+  2000,
+  1500
+ ],
+ "fridge/photo-touch": [
+  1400,
+  1867
+ ],
+ "fridge/research": [
+  2280,
+  324
+ ],
+ "fridge/submission-0": [
+  800,
+  1467
+ ],
+ "fridge/submission-1": [
+  800,
+  1467
+ ],
+ "fridge/submission-2": [
+  800,
+  1467
+ ],
+ "fridge/submission-3": [
+  800,
+  1467
+ ],
+ "fridge/submission-4": [
+  800,
+  1467
+ ],
+ "playbook/app-craft-confirm": [
+  780,
+  1754
+ ],
+ "playbook/app-craft-missing": [
+  780,
+  1754
+ ],
+ "playbook/app-craft-ready": [
+  780,
+  1754
+ ],
+ "playbook/app-home": [
+  390,
+  1617
+ ],
+ "playbook/app-inventory": [
+  390,
+  1045
+ ],
+ "playbook/app-missions": [
+  390,
+  1269
+ ],
+ "playbook/app-owned": [
+  390,
+  933
+ ],
+ "playbook/app-reward": [
+  330,
+  453
+ ],
+ "playbook/app-search": [
+  390,
+  844
+ ],
+ "playbook/app-search-creators": [
+  390,
+  844
+ ],
+ "playbook/app-unowned": [
+  390,
+  875
+ ],
+ "playbook/cauldron-list": [
+  390,
+  1519
+ ],
+ "playbook/early-ui": [
+  390,
+  812
+ ],
+ "playbook/studio-campaign": [
+  1464,
+  966
+ ],
+ "playbook/studio-editor": [
+  2400,
+  1350
+ ],
+ "playbook/team-home": [
+  390,
+  2205
+ ],
+ "playbook/team-inventory": [
+  390,
+  1226
+ ],
+ "playbook/team-mission": [
+  390,
+  1356
+ ],
+ "playbook/team-profile": [
+  390,
+  1699
+ ],
+ "playbook/team-search": [
+  390,
+  904
+ ],
+ "qingju/cover": [
+  1920,
+  1080
+ ],
+ "qingju/field": [
+  1920,
+  916
+ ],
+ "qingju/journey": [
+  1920,
+  1080
+ ],
+ "qingju/lofi-board": [
+  2400,
+  2218
+ ],
+ "qingju/lofi-r0c0": [
+  400,
+  867
+ ],
+ "qingju/lofi-r0c1": [
+  400,
+  867
+ ],
+ "qingju/lofi-r0c2": [
+  400,
+  867
+ ],
+ "qingju/lofi-r0c3": [
+  400,
+  867
+ ],
+ "qingju/lofi-r0c4": [
+  400,
+  867
+ ],
+ "qingju/lofi-r0c5": [
+  400,
+  867
+ ],
+ "qingju/lofi-r0c6": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c0": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c1": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c2": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c3": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c4": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c5": [
+  400,
+  867
+ ],
+ "qingju/lofi-r1c6": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c0": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c1": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c2": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c3": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c4": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c5": [
+  400,
+  867
+ ],
+ "qingju/lofi-r2c6": [
+  400,
+  867
+ ],
+ "qingju/research": [
+  1920,
+  2153
+ ],
+ "qingju/team-memory": [
+  400,
+  867
+ ],
+ "qingju/team-route": [
+  1200,
+  867
+ ],
+ "smt/buy": [
+  153,
+  170
+ ],
+ "smt/overview": [
+  1920,
+  1080
+ ],
+ "smt/sell": [
+  263,
+  170
+ ],
+ "smt/states": [
+  1944,
+  194
+ ],
+ "smt/trade-components": [
+  1797,
+  1300
+ ],
+ "tobie/avatar": [
+  500,
+  500
+ ],
+ "tobie/face": [
+  160,
+  160
+ ]
+}

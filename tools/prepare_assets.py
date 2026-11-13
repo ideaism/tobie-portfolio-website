@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parent                              # 简历作品集投递/
 OUT = ROOT / 'dist' / 'assets' / 'work'
 SRC = ROOT / 'sources'
-EXP = REPO / 'output' / 'portfolio' / 'assets'
-V2 = REPO / 'output' / 'portfolio' / 'v2' / 'assets'
+EXP = REPO / '04-shared' / 'output' / 'portfolio' / 'assets'      # output/ moved to 04-shared/ on 2026-10-20
+V2 = REPO / '04-shared' / 'output' / 'portfolio' / 'v2' / 'assets'
 
 # name -> (source path, max width, quality)
 JOBS = {

@@ -674,3 +674,6 @@ html.studio-open{overflow:hidden}
 .cz-bubble b{font-weight:500;color:#555;white-space:nowrap}
 .cz-bubble span{grid-column:1 / -1;word-break:break-word}
 .proto[data-compact] .cz-bubble{max-width:40%;font-size:max(9px,calc(24 * var(--u)))}
+
+/* a strip that holds a single phone: centre it instead of leaving half the frame empty (2026-11-16) */
+.phone-strip:has(> figure:only-child){grid-template-columns:minmax(0,300px);justify-content:center}

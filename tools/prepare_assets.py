@@ -120,8 +120,17 @@ for r in range(3):
         JOBS[f'qingju/lofi-r{r}c{c}'] = (SRC / 'work' / 'qingju-screens' / f'r{r}c{c}.png', 400, 88)
 
 
+# name -> (left, top, right, bottom) in source pixels. For Figma exports that were not clipped to
+# their frame: the export keeps a grey margin and lets overflowing layers hang outside the frame.
+CROP = {
+    'playbook/studio-campaign': (20, 20, 1460, 830),   # the 1440×810 Studio frame (2026-11-16)
+}
+
+
 def export(name, src, max_w, quality):
     im = Image.open(src)
+    if name in CROP:
+        im = im.crop(CROP[name])
     im = im.convert('RGBA') if im.mode in ('RGBA', 'LA', 'P') else im.convert('RGB')
     if im.width > max_w:
         im = im.resize((max_w, round(im.height * max_w / im.width)), Image.LANCZOS)

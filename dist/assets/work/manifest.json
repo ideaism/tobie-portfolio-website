@@ -55,6 +55,38 @@
   2280,
   324
  ],
+ "fridge/sub-chain": [
+  2000,
+  1212
+ ],
+ "fridge/sub-curves": [
+  2000,
+  1135
+ ],
+ "fridge/sub-failure-to-feature": [
+  2000,
+  1289
+ ],
+ "fridge/sub-failures": [
+  1921,
+  1148
+ ],
+ "fridge/sub-personas": [
+  2000,
+  1387
+ ],
+ "fridge/sub-refusals": [
+  2000,
+  961
+ ],
+ "fridge/sub-rounds": [
+  2000,
+  1091
+ ],
+ "fridge/sub-test-not-run": [
+  2000,
+  1060
+ ],
  "fridge/submission-0": [
   800,
   1467

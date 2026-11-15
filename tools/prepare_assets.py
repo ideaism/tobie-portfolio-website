@@ -76,6 +76,15 @@ JOBS = {
     'fridge/penguin-received': (V2 / 'penguin-received.png', 240, 92),
     'fridge/penguin-found': (V2 / 'penguin-found.png', 240, 92),
     'fridge/penguin-motion': (V2 / 'penguin-motion.png', 985, 88),
+    # 2026-11-15：最终提交稿（23 页横版 PDF）里的八页，裁掉页脚和四周空白，见 docs/sources.md
+    'fridge/sub-chain': (SRC / 'work' / 'fridge' / 'sub-L02-chain.png', 2000, 86),
+    'fridge/sub-personas': (SRC / 'work' / 'fridge' / 'sub-L04-personas.png', 2000, 86),
+    'fridge/sub-curves': (SRC / 'work' / 'fridge' / 'sub-L08-curves.png', 2000, 86),
+    'fridge/sub-failures': (SRC / 'work' / 'fridge' / 'sub-L09-failures.png', 2000, 86),
+    'fridge/sub-failure-to-feature': (SRC / 'work' / 'fridge' / 'sub-L10-failure-to-feature.png', 2000, 86),
+    'fridge/sub-refusals': (SRC / 'work' / 'fridge' / 'sub-L15-refusals.png', 2000, 86),
+    'fridge/sub-rounds': (SRC / 'work' / 'fridge' / 'sub-L16-rounds.png', 2000, 86),
+    'fridge/sub-test-not-run': (SRC / 'work' / 'fridge' / 'sub-L19-test-not-run.png', 2000, 86),
 }
 for n in range(5):
     JOBS[f'fridge/submission-{n}'] = (EXP / f'fridge-p22-{n}.jpg', 800, 82)

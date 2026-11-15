@@ -79,9 +79,10 @@ class StudioTests(unittest.TestCase):
     free to operate inside limits, labelled as a rebuild, interface from the source, no invented data."""
 
     def test_every_rebuilt_demo_says_it_is_a_rebuild(self):
-        for needle in ('2026', '重做', '不是当年的交付物', '界面元素取自原稿'):
+        # 2026-11-16（卡 20261116-007）：不再强制出现「不是当年的交付物」/ "not a deliverable from the time"
+        for needle in ('2026', '重做', '界面元素取自原稿'):
             self.assertIn(needle, REBUILT[0])
-        for needle in ('2026', 'rebuilt in code', 'not a deliverable from the time', 'taken from the source'):
+        for needle in ('2026', 'rebuilt in code', 'taken from the source'):
             self.assertIn(needle, REBUILT[1])
         for key, d in STUDIO.items():
             self.assertTrue(d['provenance'][0].startswith(REBUILT[0]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')

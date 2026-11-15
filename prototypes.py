@@ -289,7 +289,7 @@ STUDIO = {
   'short': {'crane': ['纸鹤', 'Paper crane'], 'phones': ['红耳机', 'Red headphones']},
   'handle': {'open': [1886, 925, 44, 186], 'closed': [2836, 925, 44, 186]},
   'web': {'cover': [1925, 975, 955, 645], 'bg': '#FBFBFB', 'title': [1930, 950, 330, 62], 'title_src': 'phones',
-          'bounds': [1990, 1090, 2815, 1566], 'node': 104, 'radius': 46, 'red': '#F4524D', 'blue': '#486CFF'},
+          'bounds': [1990, 1090, 2815, 1566], 'node': 132, 'radius': 46, 'red': '#F4524D', 'blue': '#486CFF'},
   # a cursor left in two of the frames: covered with the page's own fill / with the same spot from the other frame
   'patches': {'closed': [{'box': [2030, 630, 130, 140], 'fill': '#FBFBFB'}], 'phones': [{'box': [1345, 590, 150, 150], 'from': 'crane'}]},
   'webs': {

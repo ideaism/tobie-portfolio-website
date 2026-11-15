@@ -41,8 +41,8 @@ FLOWS = {
             'These are the three original states of the PlayBook App crafting flow. Tap the real controls to move on; a control that is disabled in the source stays disabled here.'],
   'label': ['PlayBook App · 合成 Cookie Cutter', 'PlayBook App · Crafting “Cookie Cutter”'],
   'prov': ['原始界面', 'Original screens'],
-  'provenance': ['界面来自 2023–24 PlayBook App 原稿：交互流程与状态为我的 UX，视觉 UI 由另一位设计师完成。热点为作品集添加，未新增任何状态。',
-                 'Screens from the 2023–24 PlayBook App source file: flow and states are my UX; the visual UI is by another designer. Hotspots were added for this portfolio; no states were invented.'],
+  'provenance': ['界面来自 2023–24 PlayBook App 原稿，交互流程与状态是我的 UX。',
+                 'Screens from the 2023–24 PlayBook App source file; the flow and states are my UX.'],
   'start': 'missing',
   # Collecting materials is not designed in the source, so "ready" is entered
   # from the step rail rather than from a control inside the screen.
@@ -91,8 +91,8 @@ FLOWS = {
             'My 2021 low-fidelity screens, linked in the order drawn on the original board. Tap the real buttons in the screens to move on.'],
   'label': ['青桔 · 低保真主流程', 'Qingju · low-fidelity main flow'],
   'prov': ['原始线框', 'Original wireframes'],
-  'provenance': ['线框截自 2021 年低保真原型板（本人完成），仅去除了板上的连线箭头；中文为原稿界面语言。高保真由团队完成，未在此演示。',
-                 'Screens cut from my 2021 low-fidelity board; only the board’s flow arrows were removed. The interface language is Chinese, as in the source. High fidelity was a team output and is not used here.'],
+  'provenance': ['线框来自我 2021 年的低保真原型板；中文为原稿界面语言。',
+                 'Screens from my 2021 low-fidelity board. The interface language is Chinese, as in the source.'],
   'start': 'discover',
   'screens': {
    'discover': {'src': '/assets/work/qingju/lofi-r0c0.webp', 'step': ['发现路线', 'Discover a route'],
@@ -165,8 +165,8 @@ def _live(clip, n):
     return f'/assets/work/playbook/live-{clip}-{n:02d}.webp'
 
 
-REBUILT = ['这是 2026 年按原稿和当年录屏用代码重做的，不是当年的交付物；界面元素取自原稿',
-           'This was rebuilt in code in 2026 from the source design and the recordings of the time; it is not a deliverable from the time, and the interface elements are taken from the source']
+REBUILT = ['2026 年按原稿和当年录屏用代码重做，界面元素取自原稿',
+           'This was rebuilt in code in 2026 from the source design and the recordings of the time; the interface elements are taken from the source']
 REBUILT_TAG = ['2026 年用代码重做 · 界面取自原稿', 'Rebuilt in code, 2026 · interface from the source']
 
 # One recipe as plain data: what is required, what is optional, and the chain of output groups.
@@ -189,8 +189,8 @@ STUDIO = {
           ['不拖也行：先点左边的物品，再点要放的栏，或者用画面下方的按钮。', 'No dragging needed: click an item on the left, then the area it goes to, or use the buttons below the canvas.']],
   'note': ['当年想让创作者看得见的，就是这条规则本身：要交什么、能得到什么、几样里给哪样。所以它被画成能摆弄的积木，而不是一张表单。',
            'What creators needed to see was the rule itself: what to hand in, what comes out, which one of several. That is why it is drawn as blocks to move around rather than as a form.'],
-  'provenance': [REBUILT[0] + '：左边的物品库、标题栏和底部工具栏就是录屏画面，八样物品的图标裁自同一帧，三个栏、物品卡片、And / Or 和概率条按画面量出的尺寸和颜色重画（UX 与 UI 均为我的工作）。每栏能放几样、一组最多几样，画面下方改概率和调先后的按钮，以及「读作」那一行，是重做时定的，原稿里看不出来。条件栏和工具栏在这段录屏里没有用到，这里只照原样摆着。画布上的字用的是你设备上的字体，不是原稿的字体。',
-                 REBUILT[1] + ': the item library, title bar and bottom toolbar are the recording itself, the eight item icons are cut from the same frame, and the three areas, item tiles, And / Or and probability bars are redrawn to the sizes and colours measured on it (UX and UI are both my work). How many items each area takes, how many fit in a group, the buttons below the canvas for probability and order, and the “reads as” line were decided for this rebuild; the source does not show them. The Condition area and the toolbar are not used in this recording and are only shown as they were. Text on the canvas uses a font from your device, not the source typeface.'],
+  'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。',
+                 REBUILT[1] + ' (UX and UI are both my work).'],
   'still': [_live('recipe', 8), ['配方编辑器：Require 里有宝箱和钥匙，Output 里是手柄和两种颜料', 'Recipe editor: a crate and a key in Require; a gamepad and two paints in Output']],
   'frame': [1920, 1080],
   'chrome': _live('recipe', 3), 'icons': '/assets/work/playbook/live-recipe-icons.webp',
@@ -274,8 +274,8 @@ STUDIO = {
           ['顺着线走：在纸鹤的关系网里点红耳机，就到了红耳机；反过来也一样。红色竖条收起或展开右边的详情。', 'Follow a line: click the headphones in the crane’s web to get to the headphones, and back again. The red tab folds the detail panel away or brings it back.']],
   'note': ['一件物品值不值得收，常常取决于它能换成什么、由什么换来。关系网把这层关系画在物品详情里，不用翻配方表。',
            'Whether an item is worth keeping often depends on what it can become and what it comes from. The relationship web shows that inside the item detail, without opening the recipe list.'],
-  'provenance': [REBUILT[0] + '：整页是录屏画面，关系网里的物品裁自同一批画面，连线按画面里的方向和颜色重画（UX 与 UI 均为我的工作）。原稿只给纸鹤和红耳机画了详情，其余物品没有数据，这里没有编。红耳机的关系网在录屏画面最下面还露出一条蓝线和半件物品，看不清是什么，没有画进来。关系网里的物品能拖动、能点着跳到另一件，是重做时加的。',
-                 REBUILT[1] + ': the page is the recording itself, the items in the web are cut from the same frames, and the lines are redrawn with the direction and colour they have there (UX and UI are both my work). The source drew a detail view only for the paper crane and the red headphones; the other items have no data and none was made up. At the bottom edge of the recording, the headphones’ web shows one more blue line and half an item that cannot be made out; they are left out. Dragging items in the web and clicking through to another item were added for this rebuild.'],
+  'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。',
+                 REBUILT[1] + ' (UX and UI are both my work).'],
   'still': [_live('items', 2), ['物品库和纸鹤的详情：三档价格和一张关系网', 'The item library with the paper crane’s detail: three price tiers and a relationship web']],
   'frame': [2880, 1620],
   'frames': {'closed': _live('items', 1), 'crane': _live('items', 2), 'phones': _live('items', 3)},
@@ -335,8 +335,8 @@ STUDIO = {
           ['来回调：圆点可以拖到别的位置；画面下方的清单能逐个删掉，或者全部清掉。', 'Adjust: a dot can be dragged to another place; the list below the image removes markers one by one, or all at once.']],
   'note': ['创作者审粉丝投稿时，想说的话要落在画面的具体位置上，而不是笼统地说「这张图」。',
            'When a creator reviews a fan submission, a comment should land on a specific place in the image, not on “the picture” in general.'],
-  'provenance': [REBUILT[0] + '：底图是录屏画面，回复框直接裁自录屏，选框、圆点和气泡按画面复刻（UX 与 UI 均为我的工作），位置和文字随你的操作变化。最多留 5 个标记、圆点可以拖动、画面下方的清单，是重做时定的；录屏里右边的留言栏没有跟着新增，这里也没有改它。你写的字只留在这一页，刷新就没了，不会上传。',
-                 REBUILT[1] + ': the image is the recording itself, the reply box is cut straight from it, and the selection, the dot and the bubble are rebuilt from it (UX and UI are both my work); their position and text follow what you do. The limit of 5 markers, dragging a dot, and the list below the image were decided for this rebuild; in the recording the panel on the right does not gain a new entry, so it is left alone here too. What you type stays on this page until it is reloaded; nothing is uploaded.'],
+  'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。你写的字只留在这一页，刷新就没了，不会上传。',
+                 REBUILT[1] + ' (UX and UI are both my work). What you type stays on this page until it is reloaded; nothing is uploaded.'],
   'still': [_live('comments', 2), ['一张粉丝投稿的大图，图上有一个蓝色圆点和一条留言气泡', 'A large fan submission image with a blue dot and a comment bubble on it']],
   'frame': [1920, 1080],
   'base': _live('comments', 0), 'parts': _live('comments', 1),
@@ -511,7 +511,7 @@ def studio_tour(lang, anchor):
   </div>
  </div>
 </div>
-<p class="proto__prov">{t('界面来自 PlayBook Studio 原稿（UX 与 UI 均为我的工作）。导览只移动视角并加注释，没有改变界面内容；这是确定性的规则编辑，不是 AI 工作流。', 'Screen from the PlayBook Studio source file (UX and UI are my work). The tour only pans and annotates; the interface itself is unchanged. This is deterministic rule editing, not an AI workflow.', lang)}</p>
+<p class="proto__prov">{t('界面来自 PlayBook Studio 原稿（UX 与 UI 均为我的工作），导览只加了注释。', 'Screen from the PlayBook Studio source file (UX and UI are my work); the tour only adds annotations.', lang)}</p>
 </div></section>'''
 
 
@@ -565,7 +565,7 @@ def smt_table(lang, anchor):
   <div>{_note(notes['default'], t('Tobie 的注释', 'Tobie’s note', lang))}<p class="meta" style="margin-top:12px">{t('也可以直接把鼠标移到行上、点击行来选中。', 'You can also hover and click rows directly.', lang)}</p></div>
  </div>
 </div>
-<p class="proto__prov">{t('这是“表格 / 账户持仓”组件的代码复刻：列、数值、颜色（涨红 #DF3537、跌绿 #1D9920、选中 #F1F4FF、悬停 #E5E6E9）与行高均取自原稿截图；数值为原稿示例数据，不连接任何账户或行情。原稿中搜索框的行为未在组件里定义，因此这里只保留外观。', 'A code replica of the “Table / Account Positions” component: columns, values, colours (gain red #DF3537, loss green #1D9920, selected #F1F4FF, hover #E5E6E9) and row height are taken from the source screenshots. Values are the source file’s sample data; nothing connects to an account or market feed. The search field’s behaviour is not defined in the component, so only its appearance is kept.', lang)}</p>
+<p class="proto__prov">{t('这是“表格 / 账户持仓”组件的代码复刻：列、数值、颜色（涨红 #DF3537、跌绿 #1D9920、选中 #F1F4FF、悬停 #E5E6E9）与行高均取自原稿截图，数值为原稿示例数据。', 'A code replica of the “Table / Account Positions” component: columns, values, colours (gain red #DF3537, loss green #1D9920, selected #F1F4FF, hover #E5E6E9) and row height are taken from the source screenshots. Values are the source file’s sample data.', lang)}</p>
 </div></section>'''
 
 
@@ -592,7 +592,7 @@ def fridge_live(lang, anchor):
   <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_URL}" target="_blank" rel="noopener">↗ {t('新窗口全屏打开', 'Open full screen', lang)}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {t('重新载入', 'Reload', lang)}</button></div>
  </div>
 </div>
-<p class="proto__prov">{t('嵌入的是公开部署的原型（GitHub Pages）。原型自身在每一屏标注版本与“研究者自测”说明；它证明流程可以运行，不代表使用率或减少浪费的效果。', 'Embedded from the public deployment (GitHub Pages). The prototype labels its version and its researcher self-test status on every screen; it shows that the flow runs, not adoption or reduced waste.', lang)}</p>
+<p class="proto__prov">{t('嵌入的是公开部署的原型（GitHub Pages），每一屏都标着版本号。', 'Embedded from the public deployment (GitHub Pages); every screen shows its version.', lang)}</p>
 </div></section>'''
 
 

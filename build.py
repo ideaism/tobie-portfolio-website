@@ -280,6 +280,8 @@ CASE_HERO = {
     'commons-fridge': ('photo', ['The Commons Fridge · 研究者演示', 'The Commons Fridge · researcher demonstration']),
 }
 
+BRIEF_LABELS = [['问题', 'Problem'], ['我的关键决定', 'Key decisions'], ['结果', 'Outcome']]   # 案例开头三行摘要（2026-11-16）
+
 CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
     'qingju': ['让成长体系，回到骑行本身。', 'Connect cycling rewards to the reasons people ride.'],
     'playbook': ['把复杂规则，变成可参与的体验。', 'Turn creator rules into fan experiences.'],
@@ -318,6 +320,7 @@ def case_page(slug, lang):
     title = T(CASE_TITLES[slug], lang)
     h = head(f"{p['name']} — {title} — Tobie", c['deck'][i], lang, path) + topbar(lang, path, 'work')
     facts = ''.join(f'<div><dt>{f[i]}</dt><dd>{f[i + 2]}</dd></div>' for f in c['facts'])
+    brief = ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(BRIEF_LABELS, c['brief']))
     prov_key, hero_label = CASE_HERO[slug]
     prov_text, prov_cls = PROV[prov_key]
     h += f'''<main id="main" class="wrap">
@@ -326,6 +329,7 @@ def case_page(slug, lang):
  <p class="label path" style="--project:var(--p-{p['project']})"><span>{p['name']}</span><span>{p['year']}</span><span>{T(p['type'], lang)}</span></p>
  <h1>{title}</h1>
  <p class="lead">{c['deck'][i]}</p>
+ <dl class="case-brief" data-component="Case brief">{brief}</dl>
  <dl class="case-spec" data-component="Spec table">{facts}</dl>
 </header>
 <div class="case-hero frame-block reveal">{frame_label(T(hero_label, lang), T(prov_text, lang), prov_cls, p['project'])}<div class="frame">{collage(slug, lang)}</div>

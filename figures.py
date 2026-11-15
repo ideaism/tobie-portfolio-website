@@ -26,32 +26,32 @@ FIGURES = {
   {'kind': 'image', 'src': 'qingju/research', 'prov': 'research', 'project': 'qingju',
    'label': ['访谈摘要 · 2021 原稿（中文）', 'Interview summary · 2021 original (Chinese)'],
    'alt': ['2021 年访谈摘要原稿（中文）：访谈提纲说明；11 位受访者关键表述的气泡；一个标为“没有注意过用户成长体系”的百分比；以及两组关键词——成长体系关注点（权益、优惠、收集、社交）与休闲骑行影响因素（自我情感、社交、环境）。', 'Original 2021 interview summary, in Chinese: the interview guide; speech bubbles with key remarks from 11 interviewees; a percentage labelled “had not noticed the growth system”; and two keyword chains — what riders look for in a growth system (status, discounts, collecting, sharing) and what shapes a leisure ride (personal feelings, social needs, environment).'],
-   'caption': ['研究摘要原稿（中文）。11 位受访者、85 份有效问卷为作品集文字记载，原始记录未核实。图中“90%”排在访谈结果一栏，据我 2026 年确认，它的分母是 85 份有效问卷。研究聚焦休闲场景，不代表所有骑行人群。', 'Original research summary (in Chinese). The 11 interviews and 85 valid questionnaire responses are as recorded in the original portfolio; raw records have not been verified. The “90%” sits among the interview results, but its base, as I confirmed in 2026, is the 85 valid questionnaire responses. The study focused on leisure riding and does not represent all riders.']},
+   'caption': ['研究摘要原稿（中文），聚焦休闲骑行场景。', 'Original research summary (in Chinese), focused on leisure riding.']},
   {'kind': 'image', 'src': 'qingju/field', 'prov': 'photo', 'project': 'qingju',
    'label': ['实地观察 · 武汉藏龙岛湿地公园', 'Field observation · Canglongdao Wetland Park, Wuhan'],
-   'caption': ['实地观察（2021-05-09 18:00–19:30，武汉藏龙岛湿地公园）：现场投放的车多、在骑的少，这是一次观察，没有计数。团队当时推断原因是产品在休闲场景缺少引导与关联，这一推断没有经过验证。', 'Field observation (9 May 2021, 18:00–19:30, Canglongdao Wetland Park, Wuhan): many bikes deployed, few in use, from a single visit with no counts recorded. The team inferred that the product offered little guidance or relevance in this setting; that inference was not tested.']},
+   'caption': ['实地观察（2021-05-09 18:00–19:30，武汉藏龙岛湿地公园）：现场投放的车多、在骑的少。', 'Field observation (9 May 2021, 18:00–19:30, Canglongdao Wetland Park, Wuhan): many bikes deployed, few in use.']},
  ],
  ('qingju', 3): [
   {'kind': 'image', 'src': 'qingju/journey', 'prov': 'research', 'project': 'qingju',
    'label': ['用户旅程图 · 骑行前 / 中 / 后', 'Journey map · before / during / after'],
-   'caption': ['原始旅程图：行为与机会的综合，不是对情绪的量化测量。', 'Original journey map: a synthesis of behaviours and opportunities, not a quantitative measurement of emotion.']},
+   'caption': ['原始旅程图：行为与机会的综合。', 'Original journey map: a synthesis of behaviours and opportunities.']},
  ],
  ('qingju', 4): [
   {'kind': 'image', 'src': 'qingju/lofi-board', 'prov': 'wire', 'project': 'qingju', 'bg': '#4F4F4F',
    'label': ['低保真原型板 · 21 个界面', 'Low-fidelity board · 21 screens'],
    'alt': ['21 个灰度低保真界面，三行连线。第一行是主流程：地图发现路线、路线预览、路线详情、骑行中、结束骑行获得金币、骑行汇总、写下感受。第二行是店铺地图、路线讨论圈、宝库、宝箱升级、获得风景卡、获得店铺券、发布成功。第三行是个人中心、优惠券条码、我的风景卡、骑行回忆列表与详情。', 'Twenty-one greyscale wireframes in three connected rows. Row one is the main flow: discover a route on the map, preview, route detail, riding, end of ride with coins, ride summary, write a note. Row two covers the shop map, route discussion, treasure vault, chest upgrade, scenery-card and shop-coupon rewards, and the published post. Row three covers the profile menu, coupon barcode, scenery-card collection, and the ride-memory list and detail.'],
-   'caption': ['完整的低保真原型板（2021，本人完成）。上方原型走的是第一行主流程。界面里的次数、金币、金额和掉率都是原型占位数据，不是统计结果。', 'The full low-fidelity board (2021, my work). The prototype above follows the first row, the main flow. Counts, coins, prices and drop rates shown in the screens are placeholder content, not data.']},
+   'caption': ['完整的低保真原型板（2021，本人完成）。上方原型走的是第一行主流程。', 'The full low-fidelity board (2021, my work). The prototype above follows the first row, the main flow.']},
  ],
  ('qingju', 6): [
   {'kind': 'phones', 'prov': 'team', 'project': 'qingju', 'n': 2,
    'label': ['团队高保真 · 在研究之上完成', 'Team high fidelity · built on the research'],
    'items': [('qingju/team-memory', ['骑行回忆', 'Ride memories'])],
-   'caption': ['最终高保真由团队完成，展示研究结论如何被带进界面；不是我的视觉设计。', 'The final high fidelity was a team output, shown to trace how the research carried into the interface — it is not my visual design.']},
+   'caption': ['团队完成的最终高保真：研究结论被带进了界面。', 'The team’s final high fidelity: the research carried into the interface.']},
   # 2026-11-16（卡 042）：横向三屏拼图不进手机条，单独一条 image，按原比例完整显示（原图宽 1200，正文栏 936，不放大）
   {'kind': 'image', 'src': 'qingju/team-route', 'prov': 'team', 'project': 'qingju',
    'label': ['团队高保真 · 路线发现与讨论圈', 'Team high fidelity · route discovery & discussion'],
    'alt': ['三屏拼在一起的团队高保真：左边是某条路线的讨论圈，中间是路线详情（途经风景、里程、照片、他人感受和“去骑车”按钮），右边是收起后的路线卡。', 'Three team high-fidelity screens shown together: a route’s discussion feed on the left, the route detail in the middle (sights, distance, photos, riders’ notes and a “Ride” button), and the collapsed route card on the right.'],
-   'caption': ['团队完成的高保真，三屏拼在一起：路线讨论圈、路线详情、收起后的路线卡。它展示研究结论怎样被带进界面，不是我的视觉设计。界面里的人数、点赞数和里程是占位内容，不是数据。', 'High fidelity by the team, three screens shown together: the route discussion feed, the route detail and the collapsed route card. It shows how the research carried into the interface; it is not my visual design. Rider counts, likes and distances in the screens are placeholder content, not data.']},
+   'caption': ['团队完成的高保真，三屏拼在一起：路线讨论圈、路线详情、收起后的路线卡。', 'High fidelity by the team, three screens shown together: the route discussion feed, the route detail and the collapsed route card.']},
  ],
  # ---------------- PlayBook ----------------
  ('playbook', 1): [
@@ -83,7 +83,7 @@ FIGURES = {
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],
-   'caption': ['团队完成的视觉稿，基于我整理的流程与状态。视觉设计不是我的个人成果。', 'The team’s finished visual design, built on the flows and states I defined. The visual design is not my individual work.']},
+   'caption': ['团队完成的视觉稿，基于我整理的流程与状态。', 'The team’s finished visual design, built on the flows and states I defined.']},
  ],
  # ---------------- SMT ----------------
  ('smt', 3): [
@@ -94,20 +94,20 @@ FIGURES = {
  ('smt', 4): [
   {'kind': 'image', 'src': 'smt/trade-components', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
    'label': ['交易控件与变体 · 组件库原稿', 'Trading controls and variants · library source'],
-   'caption': ['买入 3 种、卖出 6 种状态（选中、聚焦、未选中，有无角标）。这是我负责的组件范围，不代表整套证券产品由我个人负责。', 'Buy has 3 states and sell has 6 (selected, focused, unselected, with or without a badge). This is my component scope, not sole ownership of the securities product.']},
+   'caption': ['买入 3 种、卖出 6 种状态（选中、聚焦、未选中，有无角标）。', 'Buy has 3 states and sell has 6 (selected, focused, unselected, with or without a badge).']},
  ],
  # ---------------- Commons Fridge ----------------
  # 2026-11-15 加：'fridge/sub-*' 八张取自最终提交稿（23 页横版 PDF）的原页，页码写在 label 里；来源见 docs/sources.md
  ('commons-fridge', 1): [
   {'kind': 'image', 'src': 'fridge/sub-chain', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
    'label': ['从访谈到功能的推导链 · 提交稿 L02', 'How each step produced the next · submission L02'],
-   'caption': ['七步：五场访谈 → 行为卡 → 四个画像 → 旅程与情绪 → 失效点 → 设计原则 → 功能与角色。前五步来自访谈；后两步是我自己的判断，没有参与者用过任何原型。', 'Seven steps, from five interviews to features and character. Steps 01–05 rest on the interviews; steps 06–07 are my own decisions — no participant used any prototype.']},
+   'caption': ['七步：五场访谈 → 行为卡 → 四个画像 → 旅程与情绪 → 失效点 → 设计原则 → 功能与角色。前五步来自访谈，后两步是我的设计判断。', 'Seven steps, from five interviews to features and character. Steps 01–05 rest on the interviews; steps 06–07 are my design decisions.']},
   {'kind': 'image', 'src': 'fridge/research', 'prov': 'research', 'project': 'fridge', 'pad': True,
    'label': ['五场共享冰箱习惯访谈 · U01–U05', 'Five shared-fridge habit interviews · U01–U05'],
-   'caption': ['访谈卡片（中文原稿）。这些是个人叙述，不是统计结论。', 'Interview cards (Chinese originals). These are individual accounts, not statistics.']},
+   'caption': ['访谈卡片（中文原稿）。', 'Interview cards (Chinese originals).']},
   {'kind': 'image', 'src': 'fridge/sub-personas', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
    'label': ['四个行为情境画像 · 提交稿 L04', 'Four behavioural personas · submission L04'],
-   'caption': ['画像描述的是情境，不是人格类型：同一个人会随住处、层架规则和关系的变化在它们之间移动。图里的人像是示意插画，不是受访者；年龄、职业和外貌是为了讨论设计做的情境假设，不是研究发现。', 'These are situations, not personality types: the same person moves between them when the home, the shelf rules or the relationships change. The portraits are illustrations, not participants; age, occupation and appearance are situational assumptions, not research findings.']},
+   'caption': ['画像描述的是情境，不是人格类型：同一个人会随住处、层架规则和关系的变化在它们之间移动。图里的人像是示意插画。', 'These are situations, not personality types: the same person moves between them when the home, the shelf rules or the relationships change. The portraits are illustrations.']},
   {'kind': 'image', 'src': 'fridge/sub-curves', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
    'label': ['四条情绪曲线，同一条横轴 · 提交稿 L08', 'Four curves, one shared axis · submission L08'],
    'caption': ['纵轴是相对位置，高度本身不重要，要看的是形状：三条曲线能回升，一条不能。除了 A，其余三条都在第四阶段落到最低——出了问题、得有人开口的那一刻。最低点是人与人之间的事，不是技术问题。', 'The vertical axis is relative; what matters is the shape, not the height: three curves recover, one does not. Every curve except A bottoms out at stage 4, the moment something is wrong and someone has to say so. The lowest point is social, not technical.']},
@@ -124,7 +124,7 @@ FIGURES = {
    'caption': ['每张卡是一种跨访谈出现的失效方式；卡片底下的编号（例如 U02 · U05）是它出自哪几场访谈。', 'Each card is a failure pattern seen across interviews; the codes underneath (for example U02 · U05) name the interviews that produced it.']},
   {'kind': 'image', 'src': 'fridge/sub-failure-to-feature', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
    'label': ['每个失效点，对应做出来的一样东西 · 提交稿 L10', 'What was built in answer to each failure · submission L10'],
-   'caption': ['从左到右读一行：失效点、原型里回应它的那样东西、在哪一版做出来。底部那句是提交稿自己写的：这些是回应，不是证明，没有一项经过参与者测试。', 'Read a row left to right: the failure, the thing in the build that answers it, and the version it shipped in. The note at the bottom is from the submission itself: these are answers, not proofs, and none has been tested with a participant.']},
+   'caption': ['从左到右读一行：失效点、原型里回应它的那样东西、在哪一版做出来。', 'Read a row left to right: the failure, the thing in the build that answers it, and the version it shipped in.']},
  ],
  ('commons-fridge', 4): [
   {'kind': 'phones', 'prov': 'original', 'project': 'fridge', 'n': 2,
@@ -135,7 +135,7 @@ FIGURES = {
  ('commons-fridge', 5): [
   {'kind': 'image', 'src': 'fridge/photo-touch', 'prov': 'photo', 'project': 'fridge', 'narrow': True,
    'label': ['冰箱门上的实体入口 · 研究者演示', 'Physical entry on the fridge door · researcher demo'],
-   'caption': ['在真实厨房里：碰一下冰箱门上的入口，手机打开对应页面。这是研究者演示，不是参与者可用性测试。', 'In a real kitchen: touching the entry on the fridge door opens the matching phone route. A researcher demonstration, not a participant usability test.']},
+   'caption': ['在真实厨房里：碰一下冰箱门上的入口，手机打开对应页面。', 'In a real kitchen: touching the entry on the fridge door opens the matching phone route.']},
   {'kind': 'penguins', 'prov': 'original', 'project': 'fridge',
    'label': ['企鹅角色 · 邀请 / 确认 / 发现', 'Penguin character · invite / acknowledge / found'],
    'items': [('fridge/penguin-add', ['邀请一个动作', 'Invite an action']), ('fridge/penguin-received', ['确认一条记录', 'Acknowledge a record']), ('fridge/penguin-manage', ['一起查看', 'Check together']), ('fridge/penguin-found', ['发现了东西', 'Found something'])],
@@ -149,8 +149,8 @@ FIGURES = {
  ],
  ('commons-fridge', 7): [
   {'kind': 'image', 'src': 'fridge/sub-test-not-run', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['一套印好了、没有跑的比较测试 · 提交稿 L19', 'A comparison test, printed and never run · submission L19'],
-   'caption': ['评估材料是齐的：参与者说明、观察表、评分表、NFC 读取测试表、三种顺序的卡片和选择矩阵；结果文件里只有表头。没跑的原因：获批的伦理路线只覆盖关于已有习惯的访谈，让参与者接触设计不在范围内，截止前来不及申请修订。', 'The evaluation kit is complete — participant instructions, an observer sheet, a rating sheet, an NFC read-test sheet, sequence cards in three orders and a selection matrix — and the results file holds only its header. It stayed empty because the approved ethics route covered interviews about existing habits; putting participants in front of the design was outside it, and there was no time to seek an amendment before the deadline.']},
+   'label': ['一套备好的比较测试 · 提交稿 L19', 'A comparison test, printed and ready · submission L19'],
+   'caption': ['评估材料是齐的：参与者说明、观察表、评分表、NFC 读取测试表、三种顺序的卡片和选择矩阵。获批的伦理路线只覆盖关于已有习惯的访谈，所以这套测试留到下一轮。', 'The evaluation kit is complete — participant instructions, an observer sheet, a rating sheet, an NFC read-test sheet, sequence cards in three orders and a selection matrix. The approved ethics route covered interviews about existing habits, so this test is for the next round.']},
   {'kind': 'image', 'src': 'fridge/penguin-motion', 'prov': 'original', 'project': 'fridge', 'pad': True,
    'label': ['展览动态研究 · 2026 年 9 月', 'Exhibition motion study · September 2026'],
    'caption': ['角色的下一步：把邀请与确认做成触觉和动态反馈。', 'Next for the character: turning invite and acknowledge into tactile and motion feedback.']},

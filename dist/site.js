@@ -22,13 +22,48 @@ if ('IntersectionObserver' in window && reveal.length) {
   reveal.forEach(el => io.observe(el));
 } else reveal.forEach(el => el.classList.add('is-in'));
 
-/* hero: method steps light up the matching pin on the portrait */
-const pins = [...document.querySelectorAll('.portrait .pin')];
-document.querySelectorAll('.method__step').forEach(step => {
-  const on = v => () => { pins.forEach(p => p.classList.toggle('is-active', v && p.dataset.pin === step.dataset.pin)); step.classList.toggle('is-active', v); };
-  step.addEventListener('mouseenter', on(true)); step.addEventListener('mouseleave', on(false));
-  step.addEventListener('focus', on(true)); step.addEventListener('blur', on(false));
-});
+/* hero: the objects in the portrait and the method steps point at each other.
+   Hover / focus shows a note beside the object and dims the rest; a tap pins it (touch has no hover). */
+const hot = document.querySelector('.portrait .hot');
+if (hot) {
+  const dim = hot.querySelector('.hot__dim'), note = hot.querySelector('.hot__note');
+  const spots = [...hot.querySelectorAll('.hot__spot')], steps = [...document.querySelectorAll('.method__step')];
+  let pinned = null;
+  const show = key => {
+    const mine = spots.filter(s => s.dataset.key === key), step = steps.find(s => s.dataset.key === key);
+    if (!mine.length || !step) return;
+    const w = hot.clientWidth;
+    // one round hole in the dim layer per object
+    const holes = mine.map(s => { const r = s.dataset.r * w / 100; return `radial-gradient(circle at ${s.dataset.x}% ${s.dataset.y}%, transparent ${r}px, #000 ${r + 16}px)`; }).join(',');
+    dim.style.maskImage = dim.style.webkitMaskImage = holes;
+    dim.style.maskComposite = 'intersect'; dim.style.webkitMaskComposite = 'source-in';
+    note.querySelector('b').textContent = step.querySelector('b').textContent;
+    note.querySelector('span').textContent = step.querySelector('small').textContent;
+    // which side of the object the note sits on, so it never leaves the frame
+    const { x, y, r, side } = mine[0].dataset, X = +x, Y = +y, R = +r;
+    note.style.cssText = '';
+    if (side === 'right') { note.style.left = (X + R + 2) + '%'; note.style.top = (Y - 6) + '%'; }
+    if (side === 'left') { note.style.right = (100 - X + R + 2) + '%'; note.style.top = (Y - 6) + '%'; }
+    if (side === 'below') { note.style.right = (100 - X - R) + '%'; note.style.top = (Y + R + 2) + '%'; }
+    hot.classList.add('is-on');
+    spots.forEach(s => s.classList.toggle('is-active', s.dataset.key === key));
+    steps.forEach(s => s.classList.toggle('is-active', s.dataset.key === key));
+  };
+  const clear = () => {
+    if (pinned) return show(pinned);
+    hot.classList.remove('is-on');
+    spots.forEach(s => s.classList.remove('is-active')); steps.forEach(s => s.classList.remove('is-active'));
+  };
+  [...spots, ...steps].forEach(el => {
+    el.addEventListener('mouseenter', () => show(el.dataset.key));
+    el.addEventListener('mouseleave', clear);
+    el.addEventListener('focus', () => show(el.dataset.key));
+    el.addEventListener('blur', clear);
+    el.addEventListener('click', e => { e.stopPropagation(); pinned = pinned === el.dataset.key ? null : el.dataset.key; pinned ? show(pinned) : clear(); });
+  });
+  document.addEventListener('click', () => { if (pinned) { pinned = null; clear(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && pinned) { pinned = null; clear(); } });
+}
 
 /* case contents: highlight the section being read */
 const tocLinks = [...document.querySelectorAll('.toc a')];

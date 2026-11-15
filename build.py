@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20260919'
+VERSION = '20261115'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -173,8 +173,10 @@ def collage(slug, lang):
                 + '</div>')
     return ''
 
-PORTRAIT_PINS = [  # (x%, y%) on the avatar illustration, in method order
-    (12.2, 63.5), (88.2, 45.5), (70.2, 10.5), (74.5, 32.5), (11.5, 29.0)]
+# 自画像上的五个物件，顺序和 METHOD 一致：(x%, y%, 半径%, 说明纸条贴在物件的哪一侧)
+# 2026-11-15 本人要求：去掉图上的数字圆点。平时只有很小的呼吸点，碰到或点到物件才压暗其余部分并贴出说明。
+PORTRAIT_SPOTS = [
+    (12.2, 63.5, 9, 'right'), (88.2, 44.5, 6.5, 'left'), (70.2, 10.5, 8, 'below'), (74.5, 32.5, 9, 'left'), (11.5, 29.0, 10, 'right')]
 METHOD = [
     (['看清情境', 'Read the context'], ['指南针 · 研究', 'compass · research']),
     (['问清卡在哪', 'Ask why it hurts'], ['问号 · 问题定义', 'question mark · framing']),
@@ -189,8 +191,9 @@ def home(lang):
              t('把复杂的系统，设计得让人看得懂。精选青桔、PlayBook、兴业 SMT 与 The Commons Fridge 项目，附基于原始界面的可操作原型。',
                'I make complex systems understandable. Selected work — Qingju, PlayBook, Industrial Securities SMT and The Commons Fridge — with prototypes you can try, built from the original screens.', lang), lang, path)
     h += topbar(lang, path)
-    pins = ''.join(f'<span class="pin" data-pin="{n+1}" style="left:{x}%;top:{y}%">{n+1}</span>' for n, (x, y) in enumerate(PORTRAIT_PINS))
-    method = ''.join(f'<button type="button" class="method__step" data-pin="{n+1}"><span class="pin">{n+1}</span><span><b>{T(a, lang)}</b><small>{T(b, lang)}</small></span></button>' for n, (a, b) in enumerate(METHOD))
+    spots = ''.join(f'<button type="button" class="hot__spot" data-key="{n+1}" data-x="{x}" data-y="{y}" data-r="{r}" data-side="{side}" style="left:{x}%;top:{y}%;--r:{r}%" aria-label="{escape(T(METHOD[n][1], lang))}: {escape(T(METHOD[n][0], lang))}"><i></i></button>'
+                    for n, (x, y, r, side) in enumerate(PORTRAIT_SPOTS))
+    method = ''.join(f'<button type="button" class="method__step" data-key="{n+1}"><span class="thumb" style="--x:{PORTRAIT_SPOTS[n][0]};--y:{PORTRAIT_SPOTS[n][1]};--r:{PORTRAIT_SPOTS[n][2]}" aria-hidden="true"></span><span><b>{T(a, lang)}</b><small>{T(b, lang)}</small></span></button>' for n, (a, b) in enumerate(METHOD))
     h += f'''<main id="main">
 <section class="hero"><div class="wrap">
  <div class="hero__grid">
@@ -201,9 +204,8 @@ def home(lang):
    <div class="hero__ctas"><a class="btn" href="#work">{t('看作品', 'See the work', lang)} <span aria-hidden="true">↓</span></a><a class="btn btn--ghost" href="/assets/Yucheng-Feng-Portfolio.pdf" target="_blank" rel="noopener">{t('PDF 作品集', 'Portfolio PDF', lang)}</a></div>
   </div>
   <figure class="portrait frame-block reveal" data-component="Annotated figure">
-   {frame_label(t('自画像.png — 已标注', 'self-portrait.png — annotated', lang), '500 × 500', '', 'tobie')}
-   <div class="frame">{img('tobie/avatar', t('Tobie 的插画自画像：戴眼镜、穿牛仔外套，周围是指南针、问号、灯泡、Figma 与 ChatGPT 图标', 'Tobie’s illustrated self-portrait: glasses and a denim jacket, surrounded by a compass, a question mark, a light bulb and the Figma and ChatGPT logos', lang), lazy=False)}<div class="pin-layer" aria-hidden="true">{pins}</div></div>
-   <figcaption class="sr-only">{t('图上的数字对应下方“我怎么工作”的五个步骤。', 'Numbers on the portrait match the five steps of “How I work” below.', lang)}</figcaption>
+   <div class="frame hot">{img('tobie/avatar', t('Tobie 的插画自画像：戴眼镜、穿牛仔外套，周围是指南针、问号、灯泡、Figma 与 ChatGPT 图标', 'Tobie’s illustrated self-portrait: glasses and a denim jacket, surrounded by a compass, a question mark, a light bulb and the Figma and ChatGPT logos', lang), lazy=False)}<div class="hot__dim" aria-hidden="true"></div>{spots}<div class="hot__note" aria-live="polite"><b></b><span></span></div></div>
+   <figcaption class="hot__hint">{t('图上的小物件可以碰一碰：每一件对应我工作的一步。', 'Hover or tap the objects in the picture — each one is a step in how I work.', lang)}</figcaption>
   </figure>
  </div>
  <div class="method" data-component="Method strip"><p class="method__title label">{t('我怎么工作', 'How I work', lang)}</p>{method}</div>

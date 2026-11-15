@@ -128,13 +128,13 @@ PROJECTS = [
   'title': ['让成长体系，回到骑行本身。', 'Make growth part of the ride.'],
   'summary': ['把“提高活跃度”的业务目标，变成围绕休闲骑行的发现、记录与奖励——从研究一路做到低保真流程。', 'An engagement brief turned into discovery, memories and rewards around leisure riding — carried from research to a low-fidelity flow.'],
   'chips': [['用户研究', '旅程图', '低保真原型'], ['User research', 'Journey mapping', 'Lo-fi prototyping']],
-  'label': ['青桔 · 低保真主流程，2021', 'Qingju · low-fidelity main flow, 2021'], 'prov': 'wire'},
+  'label': ['青桔 · 寻宝地图与路线讨论圈，2021', 'Qingju · treasure map and route discussion, 2021'], 'prov': 'original'},
  {'slug': 'playbook', 'project': 'playbook', 'name': 'PlayBook', 'year': '2023–24',
   'type': ['创业团队 · 创作者平台', 'Startup · creator platform'],
   'title': ['把复杂规则，变成可参与的体验。', 'Turn creator rules into fan experiences.'],
   'summary': ['创作者在 Studio 里编辑规则，粉丝在 App 里参与、收集与合成。我让同一条规则在两端都能被理解。', 'Creators build rules in Studio; fans take part, collect and craft in the App. I made the same rule understandable on both sides.'],
   'chips': [['Studio UX/UI', 'App UX', '交互原型'], ['Studio UX/UI', 'App UX', 'Prototyping']],
-  'label': ['PlayBook · Studio 编辑器 + App 合成', 'PlayBook · Studio editor + App crafting'], 'prov': 'original'},
+  'label': ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions'], 'prov': 'original'},
  {'slug': 'smt', 'project': 'smt', 'name': 'Industrial Securities · 兴业 SMT', 'year': '2022–23',
   'type': ['在职项目 · 证券桌面软件', 'In-house · securities software'],
   'title': ['从业务单元，建立界面秩序。', 'Let business meaning set component boundaries.'],
@@ -152,15 +152,20 @@ PROJECTS = [
 def collage(slug, lang):
     """Compositions made only of original screens and photos."""
     if slug == 'qingju':
-        return (f'<div class="collage" style="--bg:#4F4F4F">'
-                + img('qingju/lofi-r0c0', t('低保真：地图发现路线', 'Lo-fi: discover a route on the map', lang), 'collage__phone').replace('<img', '<img style="left:7%;top:9%;width:25%"')
-                + img('qingju/lofi-r0c2', t('低保真：路线详情', 'Lo-fi: route detail', lang), 'collage__phone').replace('<img', '<img style="left:37.5%;top:4%;width:25%"')
-                + img('qingju/lofi-r0c5', t('低保真：结束骑行', 'Lo-fi: end of ride', lang), 'collage__phone').replace('<img', '<img style="left:68%;top:14%;width:25%"')
+        # 2026-11-16（本人定）：封面用团队高保真，不用低保真线框。三块都裁自 2021 年的方案展示页，底色和原稿一致。
+        plain = 'border-radius:0;box-shadow:none'
+        return (f'<div class="collage" style="--bg:#404040">'
+                + img('qingju/hifi-map', t('高保真：寻宝地图，地图上散落着不同等级的宝箱', 'High fidelity: the treasure map, with chests of different tiers on the map', lang)).replace('<img', f'<img style="left:4%;top:5%;width:42%;{plain}"')
+                + img('qingju/hifi-route', t('高保真：路线讨论圈与路线详情', 'High fidelity: route discussion and route detail', lang)).replace('<img', f'<img style="left:51%;top:6%;width:42%;{plain}"')
+                + img('qingju/hifi-chests', t('三个等级的宝箱：铜、银、金', 'Three chest tiers: bronze, silver and gold', lang)).replace('<img', f'<img style="left:62%;top:84%;width:30%;{plain}"')
                 + '</div>')
     if slug == 'playbook':
+        # 2026-11-16（本人定）：封面用成品界面。Studio 活动页是本人做的，两屏 App 是团队的成品。
+        phone = 'aspect-ratio:390/844;object-fit:cover;object-position:top'
         return (f'<div class="collage" style="--bg:#F4F1EC">'
-                + img('playbook/studio-editor', t('PlayBook Studio 合成配方编辑器', 'PlayBook Studio Craft Recipes editor', lang)).replace('<img', '<img style="left:4%;top:8%;width:72%"')
-                + img('playbook/app-craft-ready', t('PlayBook App 合成页：材料齐全', 'PlayBook App crafting: requirements met', lang), 'collage__phone').replace('<img', '<img style="left:71%;top:10%;width:23%"')
+                + img('playbook/studio-campaign', t('PlayBook Studio 活动页', 'PlayBook Studio campaign page', lang)).replace('<img', '<img style="left:3%;top:13%;width:62%"')
+                + img('playbook/team-mission', t('PlayBook App 任务页（成品界面）', 'PlayBook App mission page (finished UI)', lang), 'collage__phone').replace('<img', f'<img style="left:55%;top:21%;width:20%;{phone}"')
+                + img('playbook/team-home', t('PlayBook App 首页（成品界面）', 'PlayBook App home (finished UI)', lang), 'collage__phone').replace('<img', f'<img style="left:77%;top:7%;width:20%;{phone}"')
                 + '</div>')
     if slug == 'smt':
         return (f'<div class="collage" style="--bg:#F2F2F3;aspect-ratio:16/9">'
@@ -274,8 +279,8 @@ def home(lang):
 
 # ------------------------------------------------------------------ case
 CASE_HERO = {
-    'qingju': ('wire', ['青桔 · 低保真主流程 · 2021', 'Qingju · low-fidelity main flow · 2021']),
-    'playbook': ('original', ['PlayBook · Studio 编辑器 + App 合成', 'PlayBook · Studio editor + App crafting']),
+    'qingju': ('original', ['青桔 · 寻宝地图与路线讨论圈 · 2021', 'Qingju · treasure map and route discussion · 2021']),
+    'playbook': ('original', ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions']),
     'smt': ('original', ['SMT-MAX · 资产与持仓工作区', 'SMT-MAX · assets & positions workspace']),
     'commons-fridge': ('photo', ['The Commons Fridge · 研究者演示', 'The Commons Fridge · researcher demonstration']),
 }

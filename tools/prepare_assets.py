@@ -37,6 +37,10 @@ JOBS = {
     # PlayBook — 2023–24
     'playbook/studio-editor': (EXP / 'studio-editor.png', 2400, 84),
     'playbook/studio-campaign': (EXP / 'studio-campaign.png', 1464, 84),
+    # cover: team high-fidelity screens cut from the 2021 showcase page (Figma lfqzkEzhH33yq5kvIkNEqW 2206:20841), 2026-11-16
+    'qingju/hifi-map': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 86),
+    'qingju/hifi-route': (SRC / 'work' / 'qingju-hifi' / 'route.png', 795, 86),
+    'qingju/hifi-chests': (SRC / 'work' / 'qingju-hifi' / 'chests.png', 890, 88),
     'playbook/app-craft-missing': (EXP / 'app-craft-insufficient.png', 780, 86),
     'playbook/app-craft-ready': (EXP / 'app-craft-ready.png', 780, 86),
     'playbook/app-craft-confirm': (EXP / 'app-craft-confirm.png', 780, 86),

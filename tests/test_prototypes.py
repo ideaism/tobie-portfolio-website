@@ -4,6 +4,8 @@ Run: python3 -m unittest discover tests
 """
 import json
 import re
+import shutil
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -11,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from prototypes import FLOWS, TOUR, SMT_ROWS, SMT_HEAD, SMT_COLS, section_demo  # noqa: E402
+from prototypes import FLOWS, TOUR, SMT_ROWS, SMT_HEAD, SMT_COLS, STUDIO, REBUILT, REBUILT_TAG, section_demo  # noqa: E402
 from figures import FIGURES, PROV  # noqa: E402
 
 MANIFEST = json.loads((ROOT / 'dist' / 'assets' / 'work' / 'manifest.json').read_text())
@@ -63,37 +65,6 @@ class FlowTests(unittest.TestCase):
                         reached.add(go); todo.append(go)
             self.assertEqual(reached, set(flow['screens']), f'{key}: unreachable {set(flow["screens"]) - reached}')
 
-    def test_drags_and_drawn_regions_follow_the_recording(self):
-        for key, flow in FLOWS.items():
-            W, H = flow['size']
-            for sid, screen in flow['screens'].items():
-                for h in screen['hotspots']:
-                    if 'drop' in h:
-                        x, y, w, hh = h['drop']
-                        self.assertTrue(0 <= x and 0 <= y and x + w <= W and y + hh <= H, f'{key}/{sid}: drop {h["drop"]} outside {W}x{H}')
-                        self.assertIn(h.get('go'), flow['screens'], f'{key}/{sid}: a drag must land on an existing frame')
-                        self.assertEqual(len(h['miss']), 2, f'{key}/{sid}: a drag needs a bilingual hint for a missed drop')
-                    if h.get('draw'):
-                        self.assertIn('draw', flow, f'{key}/{sid}: a drawn region needs a reply-box definition')
-                        self.assertIn(h.get('go'), flow['screens'], f'{key}/{sid}: a tap on the region must still follow the recording')
-
-    def test_rebuilt_reply_box_is_cut_from_an_exported_frame(self):
-        for key, flow in FLOWS.items():
-            if 'draw' not in flow:
-                continue
-            d = flow['draw']
-            self.assertIn(asset_name(d['src']), MANIFEST, f'{key}: the reply box must be cut from an exported frame')
-            BW, BH = d['base']
-            dx, dy, dw, dh = d['dialog']
-            for part in ('dialog', 'avatar'):
-                x, y, w, h = d[part]
-                self.assertTrue(0 <= x and 0 <= y and x + w <= BW and y + h <= BH, f'{key}: {part} outside the frame')
-            for part in ('field', 'send', 'cancel'):   # live controls sit exactly on the recorded ones
-                x, y, w, h = d[part]
-                self.assertTrue(dx <= x and dy <= y and x + w <= dx + dw and y + h <= dy + dh, f'{key}: {part} outside the reply box')
-            self.assertIn('复刻', flow['provenance'][0], f'{key}: the provenance line must say the components are rebuilt')
-            self.assertIn('rebuilt', flow['provenance'][1], f'{key}: the provenance line must say the components are rebuilt')
-
     def test_bilingual_copy_present(self):
         for key, flow in FLOWS.items():
             for field in ('title', 'intro', 'label', 'prov', 'provenance'):
@@ -101,6 +72,178 @@ class FlowTests(unittest.TestCase):
             for sid, s in flow['screens'].items():
                 for field in ('step', 'alt', 'note', 'next'):
                     self.assertTrue(all(s[field]), f'{key}/{sid}.{field}')
+
+
+class StudioTests(unittest.TestCase):
+    """The three PlayBook Studio demos rebuilt in code (docs/design-system.md §5, rule 8):
+    free to operate inside limits, labelled as a rebuild, interface from the source, no invented data."""
+
+    def test_every_rebuilt_demo_says_it_is_a_rebuild(self):
+        for needle in ('2026', '重做', '不是当年的交付物', '界面元素取自原稿'):
+            self.assertIn(needle, REBUILT[0])
+        for needle in ('2026', 'rebuilt in code', 'not a deliverable from the time', 'taken from the source'):
+            self.assertIn(needle, REBUILT[1])
+        for key, d in STUDIO.items():
+            self.assertTrue(d['provenance'][0].startswith(REBUILT[0]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')
+            self.assertTrue(d['provenance'][1].startswith(REBUILT[1]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')
+        for lang, n in (('zh', 0), ('en', 1)):
+            html = section_demo('playbook', 2, lang)
+            self.assertEqual(html.count(f'<p class="proto__prov">{REBUILT[n]}'), len(STUDIO), lang)
+            self.assertEqual(html.count(f'<span class="prov prov--retro">{REBUILT_TAG[n]}</span>'), len(STUDIO), lang)
+            self.assertIn('data-clips', html, 'the original recordings stay below the rebuilt demos')
+
+    def test_pictures_and_parts_come_from_exported_frames(self):
+        def paths(v):
+            if isinstance(v, str):
+                if v.startswith('/assets/'):
+                    yield v
+            elif isinstance(v, dict):
+                for x in v.values():
+                    yield from paths(x)
+            elif isinstance(v, (list, tuple)):
+                for x in v:
+                    yield from paths(x)
+        for key, d in STUDIO.items():
+            found = list(paths(d))
+            self.assertGreaterEqual(len(found), 2, key)
+            for src in found:
+                self.assertIn(asset_name(src), MANIFEST, f'{key}: {src} is not an exported source asset')
+
+    def test_recipe_uses_only_the_library_items_and_starts_inside_its_limits(self):
+        d = STUDIO['playbook-recipe']
+        ids = [i[0] for i in d['items']]
+        self.assertEqual(len(ids), 8)
+        self.assertEqual(len(set(ids)), 8)
+        w, h = MANIFEST[asset_name(d['icons'])]
+        self.assertEqual(w, h * len(ids), 'one square icon per library item, cut from the recording frame')
+        lim = d['limits']
+        for name in ('start', 'sample'):
+            spec = d[name]
+            self.assertLessEqual(len(spec['require']), lim['require'], name)
+            self.assertLessEqual(len(spec['optional']), lim['optional'], name)
+            self.assertLessEqual(len(spec['groups']), lim['groups'], name)
+            inputs = spec['require'] + spec['optional']
+            outputs = [i for g in spec['groups'] for i, pct in g['items']]
+            for side in (inputs, outputs):
+                self.assertEqual(len(side), len(set(side)), f'{name}: the same item twice on one side')
+                self.assertLessEqual(set(side), set(ids), f'{name}: an item that is not in the library')
+            for g in spec['groups']:
+                self.assertTrue(1 <= len(g['items']) <= lim['group'], name)
+                for i, pct in g['items']:
+                    self.assertTrue(0 <= pct <= 100 and pct % 5 == 0, f'{name}: {i} {pct}')
+            self.assertEqual(len(spec['joins']), max(0, len(spec['groups']) - 1), name)
+        # probabilities the demo hands out are the recording's; the two items it never shows as outputs get the stated default
+        shown = {i: pct for i, _, _, pct, _ in d['items'] if pct is not None}
+        self.assertEqual(shown, {'charge': 20, 'battery': 80, 'gamepad': 100, 'pink': 10, 'blue': 10, 'yellow': 10})
+
+    def test_recipe_limits_fit_the_frame(self):
+        """With every area filled to its limit, nothing can overflow or overlap (sizes in frame pixels)."""
+        d = STUDIO['playbook-recipe']
+        lim, g = d['limits'], d['geo']
+        for zone in ('require', 'optional'):
+            n = lim[zone]
+            need = n * g['in-item'] + (n - 1) * g['in-gap']
+            self.assertLessEqual(need, g[f'{zone}-h'] - g['box-tab'], f'{zone}: {n} items need {need}px')
+        n = lim['group']
+        stack = n * g['tile-h'] + (n - 1) * (g['pill-h'] + 2 * g['pill-gap']) + 2 * g['group-pad']
+        chosen = n * g['tile-choose-h'] + (n - 1) * (g['pill-h'] + 2 * g['pill-gap']) + 2 * g['group-pad'] + g['choose-h']
+        self.assertLessEqual(max(stack, chosen), g['panel-h'] - 2 * g['box-tab'], f'a full group is {max(stack, chosen)}px tall')
+        self.assertEqual(len(d['output_w']), lim['groups'] + 1, 'one Output width per number of groups')
+        self.assertEqual(d['output_w'][0], g['out-min'])
+        for groups in range(1, lim['groups'] + 1):
+            chain = groups * (g['tile-w'] + 2 * g['group-pad'] + 2) + (groups - 1) * (g['pill-w'] + 2 * g['chain-gap'])
+            self.assertLessEqual(chain + 2 * g['group-pad'], d['output_w'][groups], f'{groups} groups need {chain}px')
+        # Output grows to the left over the Condition area, as in the recording; Condition must not vanish or be overlapped
+        frame_w, condition_left, gap_and_margin = d['frame'][0], 386 + 327, 16 + 14      # as laid out in dist/styles.css (.rz-panel--cond)
+        left_for_condition = frame_w - condition_left - gap_and_margin - max(d['output_w'])
+        self.assertEqual(left_for_condition, d['condition_min'])
+        self.assertGreaterEqual(left_for_condition, 120)
+
+    def test_items_invent_no_detail(self):
+        d = STUDIO['playbook-items']
+        W, H = d['frame']
+        grid = d['grid']
+        self.assertEqual(set(d['detail'].values()), {'crane', 'phones'}, 'the source drew a detail view for two items only')
+        self.assertEqual(set(d['webs']), set(d['detail'].values()))
+        self.assertEqual(set(d['frames']), {'closed', *d['detail'].values()})
+        self.assertLessEqual({int(k) for k in d['detail']}, set(range(grid['count'])))
+        for layout in ('open', 'closed'):
+            L = grid[layout]
+            cells = [((k + 1) % L['cols'], (k + 1) // L['cols']) for k in range(grid['count'])]
+            self.assertLess(max(r for c, r in cells), len(L['rows']), layout)
+            for c, r in cells:
+                x, y, half = grid['x0'] + c * grid['dx'], L['rows'][r], grid['size'] / 2
+                self.assertTrue(half <= x <= W - half and half <= y <= H - half, f'{layout}: cell {c},{r} outside the frame')
+            self.assertLessEqual(grid['size'], grid['dx'], 'neighbouring items must not overlap')
+        x0, y0, x1, y1 = d['web']['bounds']
+        cx, cy, cw, ch = d['web']['cover']
+        half = d['web']['node'] / 2
+        self.assertTrue(cx <= x0 - half and x1 + half <= cx + cw and cy <= y0 - half, 'the web boundary keeps every node on the web area')
+        self.assertLessEqual(y1 + d['web']['radius'], H, 'a node at the bottom boundary still shows its artwork')
+        for key, web in d['webs'].items():
+            names = [n[0] for n in web['nodes']]
+            self.assertEqual(len(names), len(set(names)), key)
+            self.assertIn(key, names, f'{key}: the open item sits in its own web')
+            for name, x, y, detail in web['nodes']:
+                self.assertIn(name, d['sprites'], f'{key}: {name} has no picture cut from the frames')
+                self.assertIn(name, d['node_names'])
+                self.assertTrue(x0 <= x <= x1 and y0 <= y <= y1, f'{key}: {name} starts outside the boundary')
+                self.assertIn(detail, (None, *d['detail'].values()), f'{key}: {name} links to a detail view the source does not have')
+            for a, b, colour, bend in web['edges']:
+                self.assertIn(a, names); self.assertIn(b, names)
+                self.assertIn(key, (a, b), f'{key}: every line in the recording touches the open item')
+                self.assertIn(colour, ('red', 'blue'))
+        for view in d['views'].values():
+            x, y, w, h = view
+            self.assertTrue(0 <= x and 0 <= y and x + w <= W and y + h <= H, view)
+
+    def test_comment_boundaries(self):
+        d = STUDIO['playbook-comments']
+        W, H = d['frame']
+        rx, ry, rw, rh = d['region']
+        self.assertTrue(0 <= rx and 0 <= ry and rx + rw <= W and ry + rh <= H)
+        dx, dy, dw, dh = d['dialog']
+        for part in ('dialog', 'avatar'):
+            x, y, w, h = d[part]
+            self.assertTrue(0 <= x and 0 <= y and x + w <= W and y + h <= H, f'{part} outside the frame')
+        for part in ('field', 'send', 'cancel'):   # live controls sit exactly on the recorded ones
+            x, y, w, h = d[part]
+            self.assertTrue(dx <= x and dy <= y and x + w <= dx + dw and y + h <= dy + dh, f'{part} outside the reply box')
+        self.assertTrue(1 <= d['limits']['marks'] <= 9)
+        self.assertTrue(10 <= d['limits']['chars'] <= 120)
+        vx, vy, vw, vh = d['view']
+        self.assertTrue(0 <= vx <= rx and 0 <= vy <= ry and rx + rw <= vx + vw <= W and ry + rh <= vy + vh <= H, 'the narrow-screen view shows the whole image')
+
+    def test_bilingual_copy_and_placeholders(self):
+        for key, d in STUDIO.items():
+            for field in ('tab', 'label', 'title', 'intro', 'note', 'provenance'):
+                self.assertEqual(len(d[field]), 2, f'{key}.{field}')
+                self.assertTrue(all(d[field]), f'{key}.{field}')
+            for pair in d['how']:
+                self.assertEqual(len(pair), 2, key)
+            for name, pair in d['t'].items():
+                self.assertEqual(len(pair), 2, f'{key}.t.{name}')
+                self.assertTrue(all(pair), f'{key}.t.{name}')
+                self.assertEqual(sorted(re.findall(r'\{\w+\}', pair[0])), sorted(re.findall(r'\{\w+\}', pair[1])), f'{key}.t.{name}: placeholders differ between languages')
+
+    def test_engine_has_no_fixed_path_left(self):
+        """The frame-by-frame player of 2026-11-15 (one legal next step per screen) must not come back for these demos."""
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        for gone in ('dragSetup', 'drawSetup', 'data-action="do"'):
+            self.assertNotIn(gone, js)
+        for key in STUDIO:
+            self.assertNotIn(key, FLOWS, f'{key} must not be a click-through flow')
+        for name in ('recipeRules', 'recipeLab', 'itemsLab', 'commentLab'):
+            self.assertIn(f'function {name}(' if name != 'recipeRules' else 'const recipeRules', js)
+
+    def test_recipe_rules_hold_the_boundary(self):
+        """Limits, illegal drops and 10,000 random operations, run against the shipped engine in Node."""
+        node = shutil.which('node')
+        if not node:
+            self.skipTest('node is not installed')
+        run = subprocess.run([node, str(ROOT / 'tests' / 'recipe_rules.test.js')], capture_output=True, text=True, encoding='utf-8')
+        self.assertEqual(run.returncode, 0, run.stderr[-2000:])
+        self.assertIn('checks passed', run.stdout)
 
 
 class TourTests(unittest.TestCase):

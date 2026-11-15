@@ -530,10 +530,14 @@ p,li{text-wrap:pretty}
 .studio__how{margin:var(--s-3) 0 0;padding-left:1.1em;font-size:var(--fs-small);color:var(--ink-2);display:grid;gap:6px}
 .studio__right{display:grid;gap:var(--s-4)}
 .studio__right .proto__note{min-height:0}
-.studio__read{margin:0;font-size:var(--fs-small);line-height:1.6;color:var(--ink);padding:10px 12px;border-left:3px solid var(--teal);background:#fff;border-radius:0 8px 8px 0}
+.studio__read{margin:0;font-size:var(--fs-small);line-height:1.6;color:var(--ink);padding:10px 12px;border-left:3px solid var(--teal);background:#fff;border-radius:0 8px 8px 0;min-height:3.6em}
 .proto[data-studio] .proto__tools{padding-top:0;border-top:0}
-.proto[data-studio]:fullscreen{background:var(--canvas);overflow:auto;padding:var(--s-5)}
-.proto[data-studio]:fullscreen .studio__stage{width:min(100%,calc((100vh - 15rem) * 16 / 9));margin:0 auto}
+html.studio-open{overflow:hidden}
+.proto[data-big]{position:fixed;inset:0;z-index:200;margin:0;padding:56px var(--s-5) var(--s-5);background:var(--canvas);overflow:auto;overscroll-behavior:contain}
+.proto[data-big]:not([data-compact]) .studio__stage{width:min(100%,calc((100vh - 17rem) * 16 / 9));margin:0 auto}
+.studio__close{display:none}
+.proto[data-big] .studio__close{display:inline-flex;position:fixed;top:10px;right:16px;z-index:201}
+.proto[data-compact] [data-action="big"]{display:none}
 /* the frame must not clip: on small screens the row of buttons stays in view while the canvas scrolls */
 .proto[data-studio] .frame{overflow:visible}
 .proto[data-studio] .proto__prov{border-radius:0 0 var(--r-frame) var(--r-frame)}
@@ -596,7 +600,7 @@ p,li{text-wrap:pretty}
 .rz__inert--tools{left:calc(655 * var(--u));top:calc(920 * var(--u));width:calc(918 * var(--u));height:calc(126 * var(--u))}
 .rz__inert--upload{left:calc(1732 * var(--u));top:calc(961 * var(--u));width:calc(156 * var(--u));height:calc(48 * var(--u))}
 /* narrow screens: the same parts, stacked, and big enough for a finger */
-.proto[data-compact] .rz{aspect-ratio:auto;display:flex;flex-direction:column;gap:calc(16 * var(--u));padding:calc(16 * var(--u));--chain-gap:8!important;--tile-h:186!important;--tile-choose-h:156!important;--box-tab:42!important}
+.proto[data-compact] .rz{aspect-ratio:auto;display:flex;flex-direction:column;gap:calc(16 * var(--u));padding:calc(16 * var(--u));--chain-gap:8!important;--group-pad:6!important;--tile-h:186!important;--tile-choose-h:156!important;--box-tab:42!important}
 .proto[data-compact] .rz__chrome,.proto[data-compact] .rz__inert{display:none}
 .proto[data-compact] .rz__title{display:block;text-align:center;font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:calc(30 * var(--u));padding:calc(6 * var(--u)) 0}
 .proto[data-compact] .rz__lib{position:static;width:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:calc(12 * var(--u)) calc(6 * var(--u));padding:calc(16 * var(--u)) calc(8 * var(--u));background:#FBFBFA;border:1px solid #D0D7D9;border-radius:calc(5 * var(--u))}

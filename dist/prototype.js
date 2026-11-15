@@ -411,11 +411,22 @@ function studioShell(root) {
     new ResizeObserver(run).observe(stage);
     run();
   };
+  // "Enlarge": the demo takes over the window, so the parts are big enough to grab on a laptop
   const big = root.querySelector('[data-action="big"]');
-  if (big && document.fullscreenEnabled && root.requestFullscreen) {
+  if (big) {
+    const close = el('button', 'studio__close btn btn--small', '✕ ' + big.dataset.on);
+    close.type = 'button';
+    root.append(close);
+    const enlarge = on => {
+      root.toggleAttribute('data-big', on);
+      document.documentElement.classList.toggle('studio-open', on);
+      big.textContent = '⤢ ' + (on ? big.dataset.on : big.dataset.off);
+      if (on) { root.scrollTop = 0; close.focus({ preventScroll: true }); } else { big.focus({ preventScroll: true }); root.scrollIntoView({ block: 'nearest' }); }
+    };
     big.hidden = false;
-    big.addEventListener('click', () => (document.fullscreenElement === root ? document.exitFullscreen() : root.requestFullscreen().catch(() => {})));
-    document.addEventListener('fullscreenchange', () => { big.textContent = '⤢ ' + (document.fullscreenElement === root ? big.dataset.on : big.dataset.off); });
+    big.addEventListener('click', () => enlarge(!root.hasAttribute('data-big')));
+    close.addEventListener('click', () => enlarge(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !e.defaultPrevented && root.hasAttribute('data-big')) enlarge(false); });
   }
   stage.replaceChildren();   // the still picture is only for pages without JavaScript
   return { stage, bar, status, say, button, tool, keepFocus, watch, cfg: JSON.parse(root.dataset.config) };
@@ -638,7 +649,7 @@ function recipeLab(root) {
     if (held) hold(null);
   });
   root.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && held) hold(null);
+    if (e.key === 'Escape' && held) { e.preventDefault(); hold(null); }
     const uid = e.target.dataset && e.target.dataset.uid;
     if (uid && (e.key === 'Delete' || e.key === 'Backspace')) { e.preventDefault(); take(uid); }
   });

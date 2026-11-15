@@ -289,7 +289,7 @@ STUDIO = {
   'short': {'crane': ['纸鹤', 'Paper crane'], 'phones': ['红耳机', 'Red headphones']},
   'handle': {'open': [1886, 925, 44, 186], 'closed': [2836, 925, 44, 186]},
   'web': {'cover': [1925, 975, 955, 645], 'bg': '#FBFBFB', 'title': [1930, 950, 330, 62], 'title_src': 'phones',
-          'bounds': [1990, 1090, 2815, 1566], 'node': 132, 'radius': 46, 'red': '#F4524D', 'blue': '#486CFF'},
+          'bounds': [1995, 1090, 2810, 1566], 'node': 132, 'radius': 46, 'red': '#F4524D', 'blue': '#486CFF'},
   # a cursor left in two of the frames: covered with the page's own fill / with the same spot from the other frame
   'patches': {'closed': [{'box': [2030, 630, 130, 140], 'fill': '#FBFBFB'}], 'phones': [{'box': [1345, 590, 150, 150], 'from': 'crane'}]},
   'webs': {
@@ -303,7 +303,7 @@ STUDIO = {
   'node_names': {'phones': ['红耳机', 'Red headphones'], 'crane': ['纸鹤', 'Paper crane'], 'gamepad': ['黄色手柄', 'Yellow gamepad'], 'purple': ['紫色纸鹤', 'Purple paper crane'],
                  'cassette': ['磁带', 'Cassette'], 'rocket': ['火箭', 'Rocket'], 'cat': ['猫', 'Cat']},
   # narrow screens show one part of the page at a time
-  'views': {'grid': [520, 300, 1400, 600], 'detail': [1880, 330, 1000, 1290]},
+  'views': {'grid': [520, 300, 1400, 600], 'detail': [1880, 300, 1000, 1320]},
   't': {
     'item': ['物品库第 {n} 件', 'Library item {n}'],
     'item_none': ['物品库第 {n} 件（原稿没有画详情）', 'Library item {n} (no detail view in the source)'],
@@ -397,12 +397,12 @@ def studio(key, lang):
 <div class="frame frame--canvas">
  <div class="studio">
   <div class="studio__stage" data-stage style="{geo}"><img class="studio__still" src="{still}" width="{W}" height="{H}" alt="{escape(t(*alt, lang))}" loading="lazy"></div>
+  <p class="studio__read" data-read hidden></p>
   <div class="studio__bar"><div class="studio__controls" data-bar></div><p class="studio__status" data-status role="status"></p></div>
   <div class="studio__side">
    <div class="proto__intro"><span class="label label--teal">{t('可以自由操作', 'Free to play with', lang)}</span><h3>{t(*d['title'], lang)}</h3><p>{t(*d['intro'], lang)}</p>
     <ul class="studio__how">{how}</ul></div>
    <div class="studio__right">{_note(t(*d['note'], lang), t('Tobie 的注释', 'Tobie’s note', lang))}
-    <p class="studio__read" data-read hidden></p>
     <div class="proto__tools" data-tools><button type="button" class="tool-btn" data-action="reset">↺ {T('reset')}</button><button type="button" class="tool-btn" data-action="big" data-on="{T('small')}" data-off="{T('big')}" hidden>⤢ {T('big')}</button></div></div>
   </div>
  </div>

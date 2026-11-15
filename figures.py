@@ -24,11 +24,12 @@ FIGURES = {
  # ---------------- Qingju ----------------
  ('qingju', 2): [
   {'kind': 'image', 'src': 'qingju/research', 'prov': 'research', 'project': 'qingju',
-   'label': ['研究摘要 · 2021 原稿', 'Research summary · 2021 original'],
-   'caption': ['原始研究摘要（中文原稿）。样本数量来自当年的项目记录；以休闲骑行为主的样本并不代表全部骑行者。', 'Original research summary (in Chinese, as produced). Sample counts come from the historical project record; the leisure-focused sample does not represent all riders.']},
+   'label': ['访谈摘要 · 2021 原稿（中文）', 'Interview summary · 2021 original (Chinese)'],
+   'alt': ['2021 年访谈摘要原稿（中文）：访谈提纲说明；11 位受访者关键表述的气泡；一个标为“没有注意过用户成长体系”的百分比；以及两组关键词——成长体系关注点（权益、优惠、收集、社交）与休闲骑行影响因素（自我情感、社交、环境）。', 'Original 2021 interview summary, in Chinese: the interview guide; speech bubbles with key remarks from 11 interviewees; a percentage labelled “had not noticed the growth system”; and two keyword chains — what riders look for in a growth system (status, discounts, collecting, sharing) and what shapes a leisure ride (personal feelings, social needs, environment).'],
+   'caption': ['研究摘要原稿（中文）。11 位受访者、85 份有效问卷为作品集文字记载，原始记录未核实。图中“90%”排在访谈结果一栏，据我 2026 年确认，它的分母是 85 份有效问卷。研究聚焦休闲场景，不代表所有骑行人群。', 'Original research summary (in Chinese). The 11 interviews and 85 valid questionnaire responses are as recorded in the original portfolio; raw records have not been verified. The “90%” sits among the interview results, but its base, as I confirmed in 2026, is the 85 valid questionnaire responses. The study focused on leisure riding and does not represent all riders.']},
   {'kind': 'image', 'src': 'qingju/field', 'prov': 'photo', 'project': 'qingju',
-   'label': ['实地观察 · 武汉东湖', 'Field observation · East Lake, Wuhan'],
-   'caption': ['实地观察（2021 年 5 月，武汉东湖）：投放的车很多，真正在骑的很少——当时的产品在休闲场景里缺少引导和关联。', 'Field observation (May 2021, East Lake, Wuhan): plenty of bikes, few being ridden — in this leisure setting the product offered little guidance or relevance.']},
+   'label': ['实地观察 · 武汉藏龙岛湿地公园', 'Field observation · Canglongdao Wetland Park, Wuhan'],
+   'caption': ['实地观察（2021-05-09 18:00–19:30，武汉藏龙岛湿地公园）：现场投放的车多、在骑的少，这是一次观察，没有计数。团队当时推断原因是产品在休闲场景缺少引导与关联，这一推断没有经过验证。', 'Field observation (9 May 2021, 18:00–19:30, Canglongdao Wetland Park, Wuhan): many bikes deployed, few in use, from a single visit with no counts recorded. The team inferred that the product offered little guidance or relevance in this setting; that inference was not tested.']},
  ],
  ('qingju', 3): [
   {'kind': 'image', 'src': 'qingju/journey', 'prov': 'research', 'project': 'qingju',
@@ -38,13 +39,19 @@ FIGURES = {
  ('qingju', 4): [
   {'kind': 'image', 'src': 'qingju/lofi-board', 'prov': 'wire', 'project': 'qingju', 'bg': '#4F4F4F',
    'label': ['低保真原型板 · 21 个界面', 'Low-fidelity board · 21 screens'],
-   'caption': ['完整的低保真原型板（本人完成）。上方原型走的是第一行的主流程。', 'The full low-fidelity board (my work). The prototype above follows its first row, the main flow.']},
+   'alt': ['21 个灰度低保真界面，三行连线。第一行是主流程：地图发现路线、路线预览、路线详情、骑行中、结束骑行获得金币、骑行汇总、写下感受。第二行是店铺地图、路线讨论圈、宝库、宝箱升级、获得风景卡、获得店铺券、发布成功。第三行是个人中心、优惠券条码、我的风景卡、骑行回忆列表与详情。', 'Twenty-one greyscale wireframes in three connected rows. Row one is the main flow: discover a route on the map, preview, route detail, riding, end of ride with coins, ride summary, write a note. Row two covers the shop map, route discussion, treasure vault, chest upgrade, scenery-card and shop-coupon rewards, and the published post. Row three covers the profile menu, coupon barcode, scenery-card collection, and the ride-memory list and detail.'],
+   'caption': ['完整的低保真原型板（2021，本人完成）。上方原型走的是第一行主流程。界面里的次数、金币、金额和掉率都是原型占位数据，不是统计结果。', 'The full low-fidelity board (2021, my work). The prototype above follows the first row, the main flow. Counts, coins, prices and drop rates shown in the screens are placeholder content, not data.']},
  ],
  ('qingju', 6): [
   {'kind': 'phones', 'prov': 'team', 'project': 'qingju', 'n': 2,
    'label': ['团队高保真 · 在研究之上完成', 'Team high fidelity · built on the research'],
-   'items': [('qingju/team-memory', ['骑行回忆', 'Ride memories']), ('qingju/team-route', ['路线发现与讨论圈', 'Route discovery & discussion'])],
+   'items': [('qingju/team-memory', ['骑行回忆', 'Ride memories'])],
    'caption': ['最终高保真由团队完成，展示研究结论如何被带进界面；不是我的视觉设计。', 'The final high fidelity was a team output, shown to trace how the research carried into the interface — it is not my visual design.']},
+  # 2026-11-16（卡 042）：横向三屏拼图不进手机条，单独一条 image，按原比例完整显示（原图宽 1200，正文栏 936，不放大）
+  {'kind': 'image', 'src': 'qingju/team-route', 'prov': 'team', 'project': 'qingju',
+   'label': ['团队高保真 · 路线发现与讨论圈', 'Team high fidelity · route discovery & discussion'],
+   'alt': ['三屏拼在一起的团队高保真：左边是某条路线的讨论圈，中间是路线详情（途经风景、里程、照片、他人感受和“去骑车”按钮），右边是收起后的路线卡。', 'Three team high-fidelity screens shown together: a route’s discussion feed on the left, the route detail in the middle (sights, distance, photos, riders’ notes and a “Ride” button), and the collapsed route card on the right.'],
+   'caption': ['团队完成的高保真，三屏拼在一起：路线讨论圈、路线详情、收起后的路线卡。它展示研究结论怎样被带进界面，不是我的视觉设计。界面里的人数、点赞数和里程是占位内容，不是数据。', 'High fidelity by the team, three screens shown together: the route discussion feed, the route detail and the collapsed route card. It shows how the research carried into the interface; it is not my visual design. Rider counts, likes and distances in the screens are placeholder content, not data.']},
  ],
  # ---------------- PlayBook ----------------
  ('playbook', 1): [

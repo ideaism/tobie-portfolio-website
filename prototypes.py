@@ -185,7 +185,7 @@ STUDIO = {
   'intro': ['没有固定顺序。左边八样物品随便拖进 Require、Optional、Output，放进去的可以再挪、再拿掉。',
             'There is no fixed order. Drag any of the eight items on the left into Require, Optional or Output; anything placed can be moved again or taken out.'],
   'how': [['拖：物品拖进三个栏；放进去的拖到别的栏、别的组，或者拖回左边物品库拿掉。', 'Drag: items go into the three areas; a placed item can be dragged to another area or group, or back to the library to remove it.'],
-          ['点：And / Or 点一下就切换；点一组的边框，变成「几选一」；点一样放进去的物品，在画面下方改概率、调先后。', 'Click: And / Or toggles on a click; click the frame of a group to make it “choose 1 out of N”; click a placed item to change its probability or order below the canvas.'],
+          ['点：And / Or 点一下就切换；点一样放进去的物品，在画面下方改概率、调先后，或者把它那一组变成「几选一」（直接点那一组的边框也行）。', 'Click: And / Or toggles on a click; click a placed item to change its probability or order below the canvas, or to make its group “choose 1 out of N” (clicking the frame of the group does the same).'],
           ['不拖也行：先点左边的物品，再点要放的栏，或者用画面下方的按钮。', 'No dragging needed: click an item on the left, then the area it goes to, or use the buttons below the canvas.']],
   'note': ['当年想让创作者看得见的，就是这条规则本身：要交什么、能得到什么、几样里给哪样。所以它被画成能摆弄的积木，而不是一张表单。',
            'What creators needed to see was the rule itself: what to hand in, what comes out, which one of several. That is why it is drawn as blocks to move around rather than as a form.'],

@@ -534,10 +534,13 @@ p,li{text-wrap:pretty}
 .proto[data-studio] .proto__tools{padding-top:0;border-top:0}
 .proto[data-studio]:fullscreen{background:var(--canvas);overflow:auto;padding:var(--s-5)}
 .proto[data-studio]:fullscreen .studio__stage{width:min(100%,calc((100vh - 15rem) * 16 / 9));margin:0 auto}
+/* the frame must not clip: on small screens the row of buttons stays in view while the canvas scrolls */
+.proto[data-studio] .frame{overflow:visible}
+.proto[data-studio] .proto__prov{border-radius:0 0 var(--r-frame) var(--r-frame)}
 @media (max-width:820px){
   .studio{padding:var(--s-4) var(--s-3)}
   .studio__side{grid-template-columns:minmax(0,1fr)}
-  .studio__bar{min-height:0}
+  .studio__bar{min-height:0;position:sticky;bottom:0;z-index:5;margin:0 calc(-1 * var(--s-3));padding:var(--s-3);background:#F6F8F6;box-shadow:0 -1px 0 var(--rule),0 -10px 18px -14px rgba(14,42,39,.4)}
 }
 
 /* -- recipe editor (.rz): frame pixels × --u ------------------------------------------- */
@@ -617,7 +620,7 @@ p,li{text-wrap:pretty}
 .proto[data-compact] .rz-pct{font-size:calc(17 * var(--u));height:calc(24 * var(--u))}
 .proto[data-compact] .rz-pill{font-size:calc(21 * var(--u))}
 .proto[data-compact] .rz-pill::after{inset:-12px -4px}
-.proto[data-compact] .rz-choose{font-size:calc(19 * var(--u))}
+.proto[data-compact] .rz-choose{font-size:calc(19 * var(--u));max-width:calc(var(--tile-w) * var(--u));height:auto;white-space:normal;line-height:1.1;text-align:center;padding:0 0 calc(4 * var(--u))}
 .proto[data-compact] .rz-n{font-size:calc(15 * var(--u))}
 
 /* -- items and their relationship web (.iz): the page is a recording frame ---------------- */

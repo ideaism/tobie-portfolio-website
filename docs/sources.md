@@ -55,3 +55,11 @@ Existing 27-page portfolio PDF is offered as a companion download; it is not rep
 - `playbook/early-ui`（走查第 3 条，左右各裁约 2%）没有动：它是另一位设计师的 390 × 812 整屏，换成 390 × 844 等于改别人的稿子。
 - SMT 公司名：按 `04-shared/CLAUDE.md` 小改动第 2 条，「优品财富 / Youpin Wealth」改为「武汉优品楚鼎科技有限公司 / Wuhan Youpin Chuding Technology」（英文写法取自 `cv-pm/master/` 英文简历）。
 - 分享卡片 `dist/assets/share-zh.jpg`、`share-en.jpg`：由 `tools/share-card.html` 截图得到，只用了首页已有的标题和自画像。
+
+## 2026-11-15：Commons Fridge 加八页提交稿原页，新增第 03 节
+- 来源：最终提交稿 `03_The-Commons-Fridge__Landscape-EN__23pp.pdf`（私有仓库 `04-shared/外部原件/毕业设计/最终交付/06-正式提交包-Final-Submission/03-补充材料-Optional-Supporting/`），23 页横版，842 × 595 pt。
+- 用到的页：L02（推导链）、L04（四个画像）、L08（情绪曲线）、L09（九种失效）、L10（失效点对功能）、L15（否掉出图的理由）、L16（四轮修改）、L19（没跑的比较测试）。
+- 处理：PyMuPDF 按 2.6 倍渲染成 PNG，裁掉 560 pt 以下的页脚和四周空白，内容没有改。原图 `sources/work/fridge/sub-L02-chain.png` 等八张，导出为 `fridge/sub-*`（最宽 2000）。
+- 新增的正文（第 03 节两段和注释、第 05 节一段）和八条图注都是这八页原文的转述或翻译，没有加新事实。「没有一项经过参与者测试」「前两轮被直接否掉」「获批的伦理路线只覆盖关于已有习惯的访谈」分别出自 L10、L16、L19。
+- 没用的：三次转向、刻意没做的三件事、v0.9 版本对照。它们只在 Figma 内部整理页（`lx9WbYRybWceTemdXVkoJj` 的 01、05 页）和竖版草稿里，最终提交稿里没有，等本人确认后再定。
+- `figures.py` 的 `PROV` 新增一个标签 `submission`（提交稿原页 / Submitted page）。

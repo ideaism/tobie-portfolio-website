@@ -64,6 +64,9 @@ JOBS = {
     'playbook/live-comments-01': (SRC / 'work' / 'playbook-live' / 'comments-01.png', 1440, 76),
     'playbook/live-comments-02': (SRC / 'work' / 'playbook-live' / 'comments-02.png', 1440, 76),
     'playbook/live-comments-03': (SRC / 'work' / 'playbook-live' / 'comments-03.png', 1440, 76),
+    # 2026-11-16：重做的三个演示用到的小部件，裁自上面的画面（tools/extract_playbook_parts.py）
+    'playbook/live-recipe-icons': (SRC / 'work' / 'playbook-live' / 'parts' / 'recipe-icons.png', 768, 90),
+    'playbook/live-items-nodes': (SRC / 'work' / 'playbook-live' / 'parts' / 'items-nodes.png', 924, 90),
     'playbook/app-home': (SRC / 'work' / 'playbook' / 'app-home@2x.png', 780, 88),   # 2 倍原稿，见 docs/sources.md 2026-11-15
     'playbook/app-inventory': (EXP / 'app-inventory.png', 390, 88),
     'playbook/app-reward': (EXP / 'app-reward.png', 330, 88),

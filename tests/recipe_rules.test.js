@@ -8,7 +8,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
-const { recipeRules: R } = require(path.join(ROOT, 'dist', 'prototype.js'));
+const { recipeRules: R } = require(process.env.PROTOTYPE_JS || path.join(ROOT, 'dist', 'prototype.js'));   // the variable lets a deliberately broken copy be tried
 
 const page = fs.readFileSync(path.join(ROOT, 'dist', 'work', 'playbook', 'index.html'), 'utf8');
 const raw = /data-studio="recipe" data-config="([^"]+)"/.exec(page);

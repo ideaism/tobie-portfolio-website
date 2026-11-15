@@ -10,18 +10,18 @@ Design system **“Annotated”** (v3, 2026-09-19): the site is a working canvas
 | `build.py` | Page templates (home, case pages, shell) |
 | `cases.py` | Case study text (paired zh / en) |
 | `figures.py` | Evidence figures per case section, with provenance |
-| `prototypes.py` | Demos built on original screens: click-through flows, guided tour, SMT component replica, live Fridge prototype |
+| `prototypes.py` | Demos built on original screens: click-through flows, guided tour, SMT component replica, live Fridge prototype; and the three PlayBook Studio interactions rebuilt in code (`STUDIO`: free to operate inside limits, labelled as a 2026 rebuild) |
 | `tools/prepare_assets.py` | Exports original screens/photos to `dist/assets/work/` (+ `manifest.json`) |
 | `dist/styles.css` | Tokens and components |
 | `dist/site.js` · `dist/prototype.js` | Navigation, lightbox, reveal · demo engine |
-| `tests/test_prototypes.py` | Enforces the demo fidelity rules |
+| `tests/test_prototypes.py` · `tests/recipe_rules.test.js` | Enforce the demo fidelity rules · the limits of the rebuilt recipe editor, run against the shipped engine |
 | `docs/sources.md` | Where every source came from; factual boundaries |
 
 ## Build and check
 ```
 python3 tools/prepare_assets.py      # only when source images change
 python3 build.py
-python3 -m unittest discover tests
+python3 -m unittest discover tests   # also runs node tests/recipe_rules.test.js
 python3 -m http.server 4173 --bind 127.0.0.1 --directory dist
 python3 verify.py                     # with the server running
 node --check dist/site.js dist/prototype.js

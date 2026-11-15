@@ -138,33 +138,286 @@ FLOWS = {
  },
 }
 
+# --------------------------------------------------------------------------
+# PlayBook Studio: the three recorded interactions, playable (added 2026-11-15)
+#
+# Every screen is one still frame of the original recordings (see
+# tools/extract_playbook_frames.py). A drag or a tap moves to the frame the
+# recording itself reaches next; no state is drawn that the recording lacks.
+# Boxes are measured on the 1920×1080 frame and scaled to the exported size.
+
+LIVE_SIZE = [1440, 810]
+
+
+def _b(x, y, w, h):
+    k = LIVE_SIZE[0] / 1920
+    return [round(x * k), round(y * k), round(w * k), round(h * k)]
+
+
+def _live(clip, n):
+    return f'/assets/work/playbook/live-{clip}-{n:02d}.webp'
+
+
+_LIB = {  # item library icons, same place in every editor frame
+    'key': _b(30, 364, 140, 140), 'crates': _b(204, 364, 140, 140),
+    'charge': _b(30, 540, 140, 140), 'battery': _b(204, 540, 140, 140),
+    'gamepad': _b(30, 718, 140, 140), 'pink': _b(204, 718, 140, 140),
+    'blue': _b(30, 894, 140, 140), 'yellow': _b(204, 894, 140, 140),
+}
+_REQUIRE = _b(424, 150, 256, 430)
+_MISS_REQ = ['要放进左边第一栏的 Require（必需）。', 'Drop it into Require, the first column on the left.']
+_MISS_OUT = ['要放进最右边的 Output（产出）栏。', 'Drop it into Output, the column on the right.']
+
+
+def _drag(item, label, drop, go, miss):
+    return {'box': _LIB[item], 'drop': drop, 'go': go, 'label': label, 'miss': miss}
+
+
+LIVE_FLOWS = {
+ 'playbook-recipe': {
+  'project': 'playbook', 'size': LIVE_SIZE, 'layout': 'wide',
+  'title': ['亲手搭一条合成配方', 'Build a crafting recipe yourself'],
+  'intro': ['照当年录屏里的顺序走一遍：建配方、填基本信息、把物品拖进画布。物品可以拖，也可以直接点。',
+            'Follow the order of the original recording: create a recipe, fill in the basics, drag items onto the canvas. You can drag an item or simply tap it.'],
+  'label': ['PlayBook Studio · 配方编辑', 'PlayBook Studio · Recipe editor'],
+  'prov': ['原始录屏的画面', 'Frames from the original recording'],
+  'provenance': ['每一屏都是当年录屏里的一帧，界面来自 PlayBook Studio 原稿（UX 与 UI 均为我的工作）。拖动和点击是 2026 年为作品集加的；每一步落到的画面，都是录屏里本来就有的状态，没有新增。',
+                 'Every screen is a still frame of the original recording of the PlayBook Studio design (UX and UI are both my work). Dragging and tapping were added in 2026 for this portfolio; each step lands on a state the recording already contains, and nothing was invented.'],
+  'start': 'campaign',
+  'end': ['录屏到这里结束：一条带「三选一」和概率的配方搭好了。', 'The recording ends here, with a recipe that has a “choose 1 of 3” group and probabilities.'],
+  'screens': {
+   'campaign': {'src': _live('recipe', 0), 'step': ['活动页', 'Campaign'],
+     'alt': ['PlayBook Studio 活动页，右侧「合成配方」栏里只有一个 Create 按钮', 'PlayBook Studio campaign page; the Crafting Recipes panel holds a single Create button'],
+     'note': ['从活动页开始。「合成配方」这一栏还是空的，只有一个入口。', 'It starts on the campaign page. The Crafting Recipes panel is still empty, with one way in.'],
+     'next': ['点右边「Crafting Recipes」栏里的 Create。', 'Tap Create in the Crafting Recipes panel on the right.'],
+     'hotspots': [{'box': _b(1548, 896, 164, 44), 'go': 'form', 'label': ['Create（新建配方）', 'Create (new recipe)']}]},
+   'form': {'src': _live('recipe', 1), 'step': ['基本信息', 'Basics'],
+     'alt': ['新建合成配方的基本信息表单，各项都还是空的', 'The Basic Information form for a new crafting recipe, still empty'],
+     'note': ['进画布之前，先给配方起名字，选它属于哪个活动、什么时候截止。', 'Before the canvas, the recipe gets a name, a campaign and a time limit.'],
+     'next': ['点最上面的名称输入框，填上录屏里的内容。', 'Tap the name field at the top to fill in what the recording typed.'],
+     'hotspots': [
+       {'box': _b(372, 240, 900, 48), 'go': 'filled', 'label': ['配方名称输入框', 'Recipe name field']},
+       {'box': _b(1400, 1012, 116, 48), 'label': ['Next（还没填）', 'Next (nothing filled in yet)'],
+        'note': ['录屏里是填完才点 Next。先点上面的名称输入框。', 'In the recording, Next comes after the form is filled in. Tap the name field first.']}]},
+   'filled': {'src': _live('recipe', 2), 'step': ['填好了', 'Filled in'],
+     'alt': ['基本信息表单已填写：名称 ABC、编号 123、一段说明和一张封面图', 'The form filled in: name ABC, ID 123, a description and a cover image'],
+     'note': ['名称、编号、说明和封面都填上了。', 'Name, ID, description and cover are in.'],
+     'next': ['点右下角的 Next，进入配方画布。', 'Tap Next at the bottom right to open the recipe canvas.'],
+     'hotspots': [{'box': _b(1400, 1010, 116, 50), 'go': 'empty', 'label': ['Next', 'Next']}]},
+   'empty': {'src': _live('recipe', 3), 'step': ['空画布', 'Empty canvas'],
+     'alt': ['配方编辑器：左侧物品库，右侧 Input、Condition、Output 三栏都是空的', 'Recipe editor: item library on the left; Input, Condition and Output columns all empty'],
+     'note': ['左边是物品库，右边三栏：输入、条件、产出。输入又分成「必需」和「可选」。', 'The item library is on the left; on the right are three columns: input, condition and output. Input is split into Require and Optional.'],
+     'next': ['把 Crates（宝箱）拖进 Require 栏，或者直接点它。', 'Drag Crates into Require, or just tap it.'],
+     'hotspots': [_drag('crates', ['Crates（宝箱）', 'Crates'], _REQUIRE, 'crate', _MISS_REQ)]},
+   'crate': {'src': _live('recipe', 4), 'step': ['放入宝箱', 'Crate in'],
+     'alt': ['Require 栏里有了一个宝箱', 'Require now holds a crate'],
+     'note': ['宝箱进了必需栏：粉丝合成时必须交出它。', 'The crate is in Require: fans must hand it over to craft.'],
+     'next': ['再把 Key（钥匙）拖进 Require 栏。', 'Now drag Key into Require.'],
+     'hotspots': [_drag('key', ['Key（钥匙）', 'Key'], _REQUIRE, 'key', _MISS_REQ)]},
+   'key': {'src': _live('recipe', 5), 'step': ['放入钥匙', 'Key in'],
+     'alt': ['Require 栏里有宝箱和钥匙', 'Require holds a crate and a key'],
+     'note': ['两样必需材料齐了。接下来定义能得到什么。', 'Both required materials are in. Next: what the fan gets.'],
+     'next': ['把 Gamepad（手柄）拖进最右边的 Output 栏。', 'Drag Gamepad into Output, on the far right.'],
+     'hotspots': [_drag('gamepad', ['Gamepad（手柄）', 'Gamepad'], _b(1640, 80, 250, 820), 'gamepad', _MISS_OUT)]},
+   'gamepad': {'src': _live('recipe', 6), 'step': ['产出手柄', 'Gamepad out'],
+     'alt': ['Output 栏里有一个手柄，标着 100%', 'Output holds a gamepad marked 100%'],
+     'note': ['手柄进了产出，概率是 100%。', 'The gamepad is an output, at 100%.'],
+     'next': ['把 Pink Paint（粉色颜料）也拖进 Output。', 'Drag Pink Paint into Output as well.'],
+     'hotspots': [_drag('pink', ['Pink Paint（粉色颜料）', 'Pink Paint'], _b(1510, 80, 380, 820), 'pink', _MISS_OUT)]},
+   'pink': {'src': _live('recipe', 7), 'step': ['加粉色颜料', 'Pink paint'],
+     'alt': ['手柄和粉色颜料之间出现 And，颜料标着 10%', 'An And appears between the gamepad and the pink paint, which is marked 10%'],
+     'note': ['第二样产出和手柄之间自动连上了 And：两样都给。颜料的概率是 10%。', 'The second output is joined to the gamepad with And: both are given. The paint is at 10%.'],
+     'next': ['把物品库最下面一排左边的 Blue Paint（蓝色颜料）拖进 Output。', 'Drag Blue Paint, bottom left of the library, into Output.'],
+     'hotspots': [_drag('blue', ['Blue Paint（蓝色颜料）', 'Blue Paint'], _b(1305, 80, 585, 820), 'blue', _MISS_OUT)]},
+   'blue': {'src': _live('recipe', 8), 'step': ['加蓝色颜料', 'Blue paint'],
+     'alt': ['粉色和蓝色颜料上下排列，中间是 Or', 'Pink and blue paint stacked, with Or between them'],
+     'note': ['两种颜料上下排在一起，之间是 Or。', 'The two paints stack, with Or between them.'],
+     'next': ['把旁边的 Yellow Paint（黄色颜料）也拖进 Output。', 'Drag Yellow Paint, next to it, into Output too.'],
+     'hotspots': [_drag('yellow', ['Yellow Paint（黄色颜料）', 'Yellow Paint'], _b(1315, 80, 575, 820), 'yellow', _MISS_OUT)]},
+   'yellow': {'src': _live('recipe', 9), 'step': ['加黄色颜料', 'Yellow paint'],
+     'alt': ['三种颜料排成一组，各标着 10%', 'Three paints form a group, each marked 10%'],
+     'note': ['三种颜料成了一组，各 10%。', 'The three paints form a group, 10% each.'],
+     'next': ['把 Normal Battery（电池）拖进 Output。', 'Drag Normal Battery into Output.'],
+     'hotspots': [_drag('battery', ['Normal Battery（电池）', 'Normal Battery'], _b(1310, 80, 580, 820), 'battery', _MISS_OUT)]},
+   'battery': {'src': _live('recipe', 10), 'step': ['加电池', 'Battery'],
+     'alt': ['颜料组后面接上了电池，标着 80%', 'A battery follows the paint group, marked 80%'],
+     'note': ['电池接在颜料组后面，概率 80%。', 'The battery follows the paint group, at 80%.'],
+     'next': ['把 Super Charge（增压器）拖进 Output。', 'Drag Super Charge into Output.'],
+     'hotspots': [_drag('charge', ['Super Charge（增压器）', 'Super Charge'], _b(1110, 80, 780, 820), 'charge', _MISS_OUT)]},
+   'charge': {'src': _live('recipe', 11), 'step': ['加增压器', 'Supercharger'],
+     'alt': ['电池和增压器之间是 Or，分别标着 80% 和 20%', 'Or sits between the battery and the supercharger, marked 80% and 20%'],
+     'note': ['电池和增压器之间是 Or：80% 对 20%，二选一。', 'Or sits between battery and supercharger: 80% against 20%, one or the other.'],
+     'next': ['点中间那一组三种颜料。', 'Tap the group of three paints in the middle.'],
+     'hotspots': [{'box': _b(1250, 180, 150, 610), 'go': 'choose', 'label': ['三种颜料这一组', 'The group of three paints']}]},
+   'choose': {'src': _live('recipe', 12), 'step': ['三选一', 'Choose 1 of 3'],
+     'alt': ['颜料组顶上出现 Choose 1 Out Of 3，三个 10% 标签消失', 'The paint group is now headed Choose 1 Out Of 3 and the three 10% tags are gone'],
+     'note': ['这一组变成了 Choose 1 Out Of 3：三种颜料里给一种，不再各算各的概率。', 'The group became Choose 1 Out Of 3: one of the three paints is given, instead of each having its own odds.'],
+     'next': ['点手柄右边的 And。', 'Tap the And to the right of the gamepad.'],
+     'hotspots': [{'box': _b(1145, 478, 72, 48), 'go': 'or1', 'label': ['手柄右边的 And', 'The And next to the gamepad']}]},
+   'or1': {'src': _live('recipe', 13), 'step': ['改成 Or', 'And to Or'],
+     'alt': ['手柄和颜料组之间的 And 变成了 Or', 'The And between the gamepad and the paint group is now Or'],
+     'note': ['手柄和颜料组之间，从「都给」变成了「给其中一样」。', 'Between the gamepad and the paint group, “both” became “one of them”.'],
+     'next': ['再点颜料组右边的 And。', 'Now tap the And to the right of the paint group.'],
+     'hotspots': [{'box': _b(1407, 478, 72, 48), 'go': 'or2', 'label': ['颜料组右边的 And', 'The And after the paint group']}]},
+   'or2': {'src': _live('recipe', 14), 'step': ['配方完成', 'Done'],
+     'alt': ['完成的配方：手柄 Or 三选一颜料组 Or 电池与增压器', 'The finished recipe: gamepad Or the choose-one paint group Or battery and supercharger'],
+     'note': ['整条规则从左到右读得出来：交出宝箱和钥匙，得到手柄，或三种颜料之一，或电池与增压器之一。', 'The whole rule reads left to right: hand in a crate and a key, get the gamepad, or one of three paints, or one of battery and supercharger.'],
+     'next': ['这是录屏的最后一帧。点右下角的 Upload 收尾。', 'This is the last frame of the recording. Tap Upload at the bottom right to finish.'],
+     'hotspots': [{'box': _b(1728, 960, 164, 48), 'go': '@end', 'label': ['Upload', 'Upload']}]},
+  },
+ },
+ 'playbook-items': {
+  'project': 'playbook', 'size': LIVE_SIZE, 'layout': 'wide',
+  'title': ['点开一件物品，看它连着什么', 'Open an item and see what it connects to'],
+  'intro': ['从活动页进物品库，点开一件物品。原稿里只给纸鹤和红耳机做了详情，其余物品点了没有下一屏。',
+            'Go from the campaign page into the item library and open an item. Only the paper crane and the red headphones have a detail view in the source; other items lead nowhere.'],
+  'label': ['PlayBook Studio · 物品与关系网', 'PlayBook Studio · Items and their relationship web'],
+  'prov': ['原始录屏的画面', 'Frames from the original recording'],
+  'provenance': ['每一屏都是当年录屏里的一帧，界面来自 PlayBook Studio 原稿（UX 与 UI 均为我的工作）。热点只放在录屏里真的点过的控件上，没有新增状态。',
+                 'Every screen is a still frame of the original recording of the PlayBook Studio design (UX and UI are both my work). Hotspots sit only on controls the recording actually uses; no states were invented.'],
+  'start': 'campaign', 'end': None,
+  'screens': {
+   'campaign': {'src': _live('items', 0), 'step': ['活动页', 'Campaign'],
+     'alt': ['PlayBook Studio 活动页，中间一栏是 Item Rewards 物品列表', 'PlayBook Studio campaign page with the Item Rewards list in the middle'],
+     'note': ['活动页上，物品只露出一小部分。', 'On the campaign page only some of the items are visible.'],
+     'next': ['点「Item Rewards」标题右边的展开图标。', 'Tap the expand icon to the right of the Item Rewards title.'],
+     'hotspots': [{'box': _b(1262, 442, 48, 48), 'go': 'library', 'label': ['展开物品列表', 'Expand the item list']}]},
+   'library': {'src': _live('items', 1), 'step': ['物品库', 'Library'],
+     'alt': ['物品库页面，标题写着 You Have 2093 Results', 'The item library, headed You Have 2093 Results'],
+     'note': ['展开以后是这个活动的全部物品，页面上写着 2093 件。', 'Expanded, it lists every item in the campaign: 2093, the page says.'],
+     'next': ['点第一排的纸鹤（第三个）。', 'Tap the paper crane, third in the first row.'],
+     'hotspots': [
+       {'box': _b(548, 224, 72, 72), 'go': 'crane', 'label': ['纸鹤', 'Paper crane']},
+       {'box': _b(730, 224, 72, 72), 'go': 'phones', 'label': ['红耳机', 'Red headphones']},
+       {'box': _b(376, 78, 84, 40), 'go': 'campaign', 'label': ['返回活动页（Lofi Girls）', 'Back to the campaign (Lofi Girls)']},
+       {'box': _b(280, 316, 1560, 76), 'label': ['第二排的物品', 'Items in the second row'],
+        'note': ['原稿里只给纸鹤和红耳机做了详情，其余物品点了没有下一屏。', 'Only the paper crane and the red headphones have a detail view in the source; the other items lead nowhere.']}]},
+   'crane': {'src': _live('items', 2), 'step': ['纸鹤', 'Paper crane'],
+     'alt': ['纸鹤的详情：三档价格和一张关系网', 'Paper crane detail: three price tiers and a relationship web'],
+     'note': ['右边出现详情：三档价格各有进度；下面的「关系网」画出这件物品和哪些物品连着。', 'Details appear on the right: three price tiers, each with its progress. The relationship web below shows which items this one is linked to.'],
+     'next': ['再点红耳机（纸鹤右边第二个），看另一件的关系网。', 'Now tap the red headphones, two to the right, to see another web.'],
+     'hotspots': [
+       {'box': _b(730, 224, 72, 72), 'go': 'phones', 'label': ['红耳机', 'Red headphones']},
+       {'box': _b(376, 78, 84, 40), 'go': 'campaign', 'label': ['返回活动页（Lofi Girls）', 'Back to the campaign (Lofi Girls)']}]},
+   'phones': {'src': _live('items', 3), 'step': ['红耳机', 'Headphones'],
+     'alt': ['红耳机的详情：三档价格和一张更密的关系网', 'Red headphones detail: three price tiers and a denser relationship web'],
+     'note': ['红耳机的关系网更密，连着更多物品。', 'The headphones have a denser web, linked to more items.'],
+     'next': ['点左上角的 Lofi Girls 回到活动页。', 'Tap Lofi Girls at the top left to return to the campaign.'],
+     'hotspots': [
+       {'box': _b(548, 224, 72, 72), 'go': 'crane', 'label': ['纸鹤', 'Paper crane']},
+       {'box': _b(376, 78, 84, 40), 'go': 'campaign', 'label': ['返回活动页（Lofi Girls）', 'Back to the campaign (Lofi Girls)']}]},
+  },
+ },
+ 'playbook-comments': {
+  'project': 'playbook', 'size': LIVE_SIZE, 'layout': 'wide',
+  'title': ['把意见落在画面的具体位置上', 'Pin a comment to a place on the image'],
+  'intro': ['创作者审粉丝投稿时，在图上框出一处、写一句话。电脑上可以自己拖框、打字；窄屏上直接点图，按录屏里的那一处走。',
+            'When a creator reviews a fan submission, they mark an area and write a line. On a wide screen you can draw your own box and type; on a narrow one, tap the image to follow the spot used in the recording.'],
+  'label': ['PlayBook Studio · 二创投稿的评论', 'PlayBook Studio · Commenting on a remix submission'],
+  'prov': ['原始录屏的画面 · 三个部件按原稿复刻', 'Frames from the original recording · three components rebuilt'],
+  'provenance': ['底图和各步画面是当年录屏里的帧，界面来自 PlayBook Studio 原稿（UX 与 UI 均为我的工作）。自己拖框时出现的选框、回复框和圆点标记，是 2026 年按原稿复刻的：回复框直接取自录屏画面，位置和你输入的文字随你的操作变化。',
+                 'The image and each step are frames of the original recording of the PlayBook Studio design (UX and UI are both my work). When you draw your own box, the selection, the reply box and the marker are rebuilt in 2026 from the source: the reply box is taken straight from the recording, while its position and the text follow what you do.'],
+  'start': 'clean', 'end': None,
+  'draw': {
+    'base': [1920, 1080], 'src': _live('comments', 1),
+    'dialog': [628, 688, 424, 286], 'field': [640, 820, 400, 100], 'send': [976, 934, 66, 28], 'cancel': [896, 934, 60, 28],
+    'avatar': [638, 778, 28, 28], 'gap': [24, 16], 'pin': 24, 'colour': '#486CFF', 'who': 'Lofi girl (you)',
+    'placeholder': 'Add Comments',
+    'field_label': ['回复内容', 'Your reply'], 'send_label': ['Send（发送）', 'Send'], 'cancel_label': ['Cancel（取消）', 'Cancel'],
+    'pin_label': ['你留下的标记，点开看留言', 'Your marker; tap to read the comment'],
+    'sent': ['你框的那一处收成了一个圆点，留言跟着它。这三个部件是按原稿复刻的。', 'The area you marked collapsed into a dot that carries your comment. These three components are rebuilt from the source.'],
+    'sent_next': ['点圆点可以收起或展开留言；再拖一个框可以重来。', 'Tap the dot to hide or show the comment; draw another box to start again.'],
+  },
+  'screens': {
+   'clean': {'src': _live('comments', 0), 'step': ['投稿页', 'Submission'],
+     'alt': ['一张粉丝投稿的大图，右侧是按版本排列的留言栏', 'A large fan submission image with a comment panel on the right, grouped by revision'],
+     'note': ['创作者在审一张粉丝投稿。想说的话要落在画面的具体位置上，而不是笼统地说「这张图」。', 'A creator is reviewing a fan submission. A comment should land on a specific place in the image, not on “the picture” in general.'],
+     'next': ['在图上拖出一个框，圈出想说的地方。窄屏上直接点图。', 'Drag a box on the image around the area you mean. On a narrow screen, just tap the image.'],
+     'hotspots': [{'box': _b(64, 232, 1366, 788), 'go': 'reply', 'draw': True, 'label': ['在图上框选一处', 'Mark an area on the image']}]},
+   'reply': {'src': _live('comments', 1), 'step': ['写回复', 'Reply'],
+     'alt': ['图上有一个蓝色选框，旁边弹出 Reply 回复框', 'A blue selection on the image with a Reply box next to it'],
+     'note': ['框选以后，回复框贴着选区弹出来：写的是这一处，不是整张图。', 'After marking, the reply box opens next to the selection: the comment is about this area, not the whole image.'],
+     'next': ['点回复框右下角的 Send。', 'Tap Send at the bottom right of the reply box.'],
+     'hotspots': [
+       {'box': _b(964, 924, 90, 44), 'go': 'bubble', 'label': ['Send（发送）', 'Send']},
+       {'box': _b(880, 924, 80, 44), 'go': 'clean', 'label': ['Cancel（取消）', 'Cancel']}]},
+   'bubble': {'src': _live('comments', 2), 'step': ['留下标记', 'Marker'],
+     'alt': ['选区收成一个蓝色圆点，旁边的气泡显示留言', 'The selection has become a blue dot with a bubble showing the comment'],
+     'note': ['发出以后，选区收成一个圆点，旁边带着刚写的那句话。', 'Once sent, the selection collapses into a dot that carries the line just written.'],
+     'next': ['点图上别的地方，气泡收起来。', 'Tap elsewhere on the image and the bubble closes.'],
+     'hotspots': [{'box': _b(64, 232, 1366, 380), 'go': 'pin', 'label': ['图上别的地方', 'Elsewhere on the image']}]},
+   'pin': {'src': _live('comments', 3), 'step': ['只留圆点', 'Dot only'],
+     'alt': ['图上只剩一个蓝色圆点', 'Only a blue dot remains on the image'],
+     'note': ['圆点留在图上，不挡画面。右边的留言栏按版本归档。', 'The dot stays on the image without covering it. The panel on the right files comments by revision.'],
+     'next': ['点圆点可以再看一次留言。', 'Tap the dot to read the comment again.'],
+     'hotspots': [{'box': _b(596, 668, 52, 52), 'go': 'bubble', 'label': ['圆点标记', 'The marker']}]},
+  },
+ },
+}
+FLOWS.update(LIVE_FLOWS)
+
+
+def live_set(lang):
+    """The three playable recordings, one visible at a time."""
+    tabs = [('playbook-recipe', t('配方编辑', 'Recipe editor', lang)), ('playbook-items', t('物品交互', 'Item interaction', lang)), ('playbook-comments', t('评论交互', 'Comment interaction', lang))]
+    buttons = ''.join(f'<button type="button" data-live-tab="{k}" aria-pressed="{str(n == 0).lower()}">{label}</button>' for n, (k, label) in enumerate(tabs))
+    panels = ''.join(f'<div data-live-panel="{k}" {"hidden" if n else ""}>{flow(k, lang, "try-" + k.split("-")[1])}</div>' for n, (k, label) in enumerate(tabs))
+    return f'''<div class="liveset" data-liveset data-component="Playable recordings">
+<div class="liveset__head"><span class="label label--teal">{t('亲手试', 'Try it', lang)}</span>
+<p>{t('当年录屏里的三段交互，现在可以自己做一遍。原始录屏在下面，可以对照。', 'The three interactions from the original recordings, now playable. The recordings themselves are below for comparison.', lang)}</p>
+<div class="clips__tabs" role="group" aria-label="{t('选择一段交互', 'Choose an interaction', lang)}">{buttons}</div></div>
+{panels}</div>'''
+
+
+def _pct(box, W, H):
+    return {'x': box[0] / W * 100, 'y': box[1] / H * 100, 'w': box[2] / W * 100, 'h': box[3] / H * 100}
+
+
+def _hot(h, W, H, lang):
+    d = {**_pct(h['box'], W, H), 'go': h.get('go'), 'label': t(*h['label'], lang), 'note': t(*h['note'], lang) if 'note' in h else None}
+    if 'drop' in h:   # a drag: `box` is the thing picked up, `drop` is where it has to land
+        d['drop'] = _pct(h['drop'], W, H)
+        d['miss'] = t(*h['miss'], lang)
+    if h.get('draw'):  # a region the visitor can draw a selection in
+        d['draw'] = True
+    return d
+
+
 def flow(key, lang, anchor):
     f = FLOWS[key]
     W, H = f['size']
     screens_html = ''
     data = {'start': f['start'], 'screens': {}, 'end': f['end'][0 if lang == 'zh' else 1] if f['end'] else None,
             'labels': {'restart': t('重新开始', 'Restart', lang), 'hint': t('显示可点区域', 'Show tap targets', lang)}}
+    if 'draw' in f:
+        dr = f['draw']
+        data['draw'] = {k: dr[k] for k in ('base', 'src', 'dialog', 'field', 'send', 'cancel', 'avatar', 'gap', 'pin', 'colour', 'who', 'placeholder')}
+        for k in ('field_label', 'send_label', 'cancel_label', 'pin_label', 'sent', 'sent_next'):
+            data['draw'][k] = t(*dr[k], lang)
     for i, (sid, s) in enumerate(f['screens'].items()):
         screens_html += (f'<img class="proto__screen" data-screen="{sid}" src="{s["src"]}" width="{W}" height="{H}" '
                          f'alt="{escape(t(*s["alt"], lang))}" {"loading=\"lazy\"" if i else ""} {"" if sid == f["start"] else "data-hidden"}>')
         data['screens'][sid] = {
             'note': t(*s['note'], lang), 'next': t(*s['next'], lang),
-            'hotspots': [{'x': h['box'][0] / W * 100, 'y': h['box'][1] / H * 100, 'w': h['box'][2] / W * 100, 'h': h['box'][3] / H * 100,
-                          'go': h.get('go'), 'label': t(*h['label'], lang), 'note': t(*h['note'], lang) if 'note' in h else None}
-                         for h in s['hotspots']]}
+            'hotspots': [_hot(h, W, H, lang) for h in s['hotspots']]}
     rail = ''.join(f'<li><button type="button" data-go="{sid}"><span class="pin">{n+1}</span><span>{t(*s["step"], lang)}</span></button></li>'
                    for n, (sid, s) in enumerate(f['screens'].items()))
     first = f['screens'][f['start']]
-    return f'''<section class="proto frame-block" id="{anchor}" data-proto="{_json(data)}" data-component="Prototype player">
+    inner = f'<div class="proto__screens">{screens_html}<div class="proto__hotspots"></div></div>'
+    wide = f.get('layout') == 'wide'   # a desktop screen instead of a phone
+    do = f'<button type="button" class="btn btn--small proto__do" data-action="do">{t("照做这一步", "Do this step", lang)} →</button>' if wide else ''
+    device = (f'<div class="proto__device"><div class="window">{inner}</div></div>' if wide else
+              f'<div class="proto__device"><div class="phone"><div class="phone__screen">{inner}</div></div></div>')
+    return f'''<section class="proto frame-block" id="{anchor}"{' data-layout="wide"' if wide else ''} data-proto="{_json(data)}" data-component="Prototype player">
 {_frame_label(t(*f['label'], lang), t(*f['prov'], lang), '', f['project'])}
 <div class="frame frame--canvas">
  <div class="proto__stage">
-  <div class="proto__device"><div class="phone"><div class="phone__screen"><div class="proto__screens">{screens_html}<div class="proto__hotspots"></div></div></div></div></div>
+  {device}
   <div class="proto__side">
    <div class="proto__intro"><span class="label label--teal">{t('可操作原型', 'Try it', lang)}</span><h3>{t(*f['title'], lang)}</h3><p>{t(*f['intro'], lang)}</p></div>
    <ol class="rail" aria-label="{t('原型步骤', 'Prototype steps', lang)}">{rail}</ol>
    {_note(t(*first['note'], lang), t('Tobie 的注释', 'Tobie’s note', lang))}
-   <p class="proto__next" data-next>{t(*first['next'], lang)}</p>
+   <p class="proto__next" data-next>{t(*first['next'], lang)}</p>{do}
    <div class="proto__tools"><button type="button" class="tool-btn" data-action="hint">◎ {data['labels']['hint']}</button><button type="button" class="tool-btn" data-action="restart">↺ {data['labels']['restart']}</button></div>
   </div>
  </div>
@@ -319,7 +572,7 @@ def clips(lang):
 def section_demo(slug, number, lang):
     """Which demo sits in which case section (1-based)."""
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
-    if slug == 'playbook' and number == 2: return studio_tour(lang, 'try') + clips(lang)
+    if slug == 'playbook' and number == 2: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
     if slug == 'playbook' and number == 3: return flow('playbook-craft', lang, 'try-app')
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 6: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06

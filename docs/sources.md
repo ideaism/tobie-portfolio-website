@@ -63,3 +63,11 @@ Existing 27-page portfolio PDF is offered as a companion download; it is not rep
 - 新增的正文（第 03 节两段和注释、第 05 节一段）和八条图注都是这八页原文的转述或翻译，没有加新事实。「没有一项经过参与者测试」「前两轮被直接否掉」「获批的伦理路线只覆盖关于已有习惯的访谈」分别出自 L10、L16、L19。
 - 没用的：三次转向、刻意没做的三件事、v0.9 版本对照。它们只在 Figma 内部整理页（`lx9WbYRybWceTemdXVkoJj` 的 01、05 页）和竖版草稿里，最终提交稿里没有，等本人确认后再定。
 - `figures.py` 的 `PROV` 新增一个标签 `submission`（提交稿原页 / Submitted page）。
+
+## PlayBook Studio · 三段录屏的可操作演示（2026-11-15）
+
+- 画面：`sources/playbook-video/recipe.gif`（15 帧）、`items.gif`（4 帧）、`comments.gif`（4 帧），帧号写在 `tools/extract_playbook_frames.py`；导出为 `dist/assets/work/playbook/live-*.webp`，1440×810。每一屏都是录屏里的一帧，没有合成。
+- 依据：本人 2026-11-15 在审核卡 20261115-033 上的意见：给投资人演示的 ProtoPie 原型还在，但会员过期；希望用 Claude 把当年视频里的交互在网页里补一遍。
+- 事实边界：拖动、点击、框选是 2026 年为作品集加的，不是当年的交付物。配方编辑和物品交互不新增任何状态。评论演示里访客自己拖框时出现的选框、回复框、圆点是按原稿复刻的部件（回复框裁自 `comments.gif` 第 144 帧，圆点颜色 `#486CFF` 取自第 352 帧），位置和文字随访客的操作变化；窄屏上不提供自己拖框，只按录屏那一处走。
+- 画面里的 Lofi Girl 图和名字：本人在审核卡 20261115-031 上选了「可以直接用」。
+

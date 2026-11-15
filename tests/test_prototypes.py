@@ -63,6 +63,37 @@ class FlowTests(unittest.TestCase):
                         reached.add(go); todo.append(go)
             self.assertEqual(reached, set(flow['screens']), f'{key}: unreachable {set(flow["screens"]) - reached}')
 
+    def test_drags_and_drawn_regions_follow_the_recording(self):
+        for key, flow in FLOWS.items():
+            W, H = flow['size']
+            for sid, screen in flow['screens'].items():
+                for h in screen['hotspots']:
+                    if 'drop' in h:
+                        x, y, w, hh = h['drop']
+                        self.assertTrue(0 <= x and 0 <= y and x + w <= W and y + hh <= H, f'{key}/{sid}: drop {h["drop"]} outside {W}x{H}')
+                        self.assertIn(h.get('go'), flow['screens'], f'{key}/{sid}: a drag must land on an existing frame')
+                        self.assertEqual(len(h['miss']), 2, f'{key}/{sid}: a drag needs a bilingual hint for a missed drop')
+                    if h.get('draw'):
+                        self.assertIn('draw', flow, f'{key}/{sid}: a drawn region needs a reply-box definition')
+                        self.assertIn(h.get('go'), flow['screens'], f'{key}/{sid}: a tap on the region must still follow the recording')
+
+    def test_rebuilt_reply_box_is_cut_from_an_exported_frame(self):
+        for key, flow in FLOWS.items():
+            if 'draw' not in flow:
+                continue
+            d = flow['draw']
+            self.assertIn(asset_name(d['src']), MANIFEST, f'{key}: the reply box must be cut from an exported frame')
+            BW, BH = d['base']
+            dx, dy, dw, dh = d['dialog']
+            for part in ('dialog', 'avatar'):
+                x, y, w, h = d[part]
+                self.assertTrue(0 <= x and 0 <= y and x + w <= BW and y + h <= BH, f'{key}: {part} outside the frame')
+            for part in ('field', 'send', 'cancel'):   # live controls sit exactly on the recorded ones
+                x, y, w, h = d[part]
+                self.assertTrue(dx <= x and dy <= y and x + w <= dx + dw and y + h <= dy + dh, f'{key}: {part} outside the reply box')
+            self.assertIn('复刻', flow['provenance'][0], f'{key}: the provenance line must say the components are rebuilt')
+            self.assertIn('rebuilt', flow['provenance'][1], f'{key}: the provenance line must say the components are rebuilt')
+
     def test_bilingual_copy_present(self):
         for key, flow in FLOWS.items():
             for field in ('title', 'intro', 'label', 'prov', 'provenance'):

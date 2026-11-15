@@ -47,3 +47,11 @@ Existing 27-page portfolio PDF is offered as a companion download; it is not rep
 - Source GIF bytes downloaded through Figma asset tool. Web MP4 versions transcode the original recordings with no new animation/content. Silent source clips. Three-frame inspection confirms the respective recipe creation, item detail/relationship and contextual comment flows.
 - User confirms one PlayBook demonstration was made in ProtoPie; tool metadata alone cannot identify which clip, so individual clip tool attribution is not invented.
 - New inline browser demos are retrospective, operable explanations of the documented design rules; historical design authorship/launch boundaries remain unchanged.
+
+## 2026-11-15：两张手机截图换成 2 倍原稿，SMT 公司名
+起因是走查报告 `04-shared/qa/walkthrough/2026-10-27-browser.md` 第 4、5 条（图被放大显示）。只换分辨率，画面内容没有变：新图缩回原尺寸后和旧图逐像素比较，平均差异分别是 1.2 和 3.1（满分 255），差在缩放的边缘。
+- `playbook/app-home`：App UX 文件 `3IhJOmCVR6WC8mJYbbYLA7`，节点 `704:52540`「首页/每日任务(完成未领取）」，390 × 1617，按 2 倍导出为 780 × 3234。原图 `sources/work/playbook/app-home@2x.png`。
+- `qingju/team-memory`：旧作品集文件 `lfqzkEzhH33yq5kvIkNEqW`，节点 `2206:21339`「iPhone 11 Pro / X - 1」（骑行回忆 + 引导浮层），400 × 866，按 2 倍导出为 800 × 1733。里面的界面截图是团队高保真的位图，原始宽度 750，所以不是严格的 2 倍清晰度。原图 `sources/work/qingju/team-memory@2x.png`。
+- `playbook/early-ui`（走查第 3 条，左右各裁约 2%）没有动：它是另一位设计师的 390 × 812 整屏，换成 390 × 844 等于改别人的稿子。
+- SMT 公司名：按 `04-shared/CLAUDE.md` 小改动第 2 条，「优品财富 / Youpin Wealth」改为「武汉优品楚鼎科技有限公司 / Wuhan Youpin Chuding Technology」（英文写法取自 `cv-pm/master/` 英文简历）。
+- 分享卡片 `dist/assets/share-zh.jpg`、`share-en.jpg`：由 `tools/share-card.html` 截图得到，只用了首页已有的标题和自画像。

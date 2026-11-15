@@ -40,5 +40,6 @@ for path in sorted(checked):
    if r.status!=200:errors.append(f'{path}: {r.status}')
  except Exception as e:errors.append(f'{path}: {e}')
 report={'pages':len(pages),'local_urls_checked':len(checked),'errors':errors}
-Path('qa/static-verification.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+Path('qa').mkdir(exist_ok=True)   # qa/ 不进仓库，新克隆的电脑上没有这个文件夹
+Path('qa/static-verification.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(report,ensure_ascii=False,indent=2));assert not errors

@@ -30,7 +30,7 @@ node --check dist/site.js dist/prototype.js
 `dist/` is the complete portable site. Fonts (Atkinson Hyperlegible Next / Mono, OFL) and images are self-hosted. The only external request is the Commons Fridge prototype, loaded into the page only when a visitor presses “Run the prototype here”.
 
 ## Publish (2026-10-20)
-`tools/publish.sh check` runs build → tests → JS syntax → `verify.py` (starts a temporary server on 4173 if none is running); `tools/publish.sh deploy` additionally deploys `dist/` to Vercel production. Case changes arrive as handoff files from the project folders; see [`docs/handoff-contract.md`](docs/handoff-contract.md).
+`tools/publish.sh check` runs build → tests → JS syntax → `verify.py` (starts a temporary server on 4173 if none is running); `tools/publish.sh deploy` (the old Vercel deploy) is retired since 2026-11-14; the live site www.tobiefeng.com is updated with `~/其他任务/部署中心/tools/部署国内版.sh`, after the owner says so. Case changes arrive as handoff files from the project folders; see [`docs/handoff-contract.md`](docs/handoff-contract.md).
 
 ## Source images
 `sources/` (original screens, avatar, recordings used by `tools/prepare_assets.py`) is not part of this public repository. It is kept in the owner's private workspace and restored next to this folder before re-exporting assets. `dist/` already contains every exported image, so building the site does not need `sources/`.

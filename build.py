@@ -16,11 +16,12 @@ from prototypes import section_demo
 
 ROOT = Path(__file__).parent
 OUT = ROOT / 'dist'
-MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text())
-LEGACY = json.loads((ROOT / 'assets.json').read_text())          # exploration images
+MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(encoding='utf-8'))
+LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
 VERSION = '20260919'
+SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
 def T(pair, lang): return pair[0] if lang == 'zh' else pair[1]
@@ -45,6 +46,7 @@ def frame_label(name, prov_text, prov_cls='', project='explore'):
 # ------------------------------------------------------------------ shell
 def head(title, desc, lang, path):
     other = ('/en' + path) if lang == 'zh' else (path[3:] or '/')
+    zh_path, en_path = (path, other) if lang == 'zh' else (other, path)
     return f'''<!doctype html>
 <html lang="{'zh-CN' if lang == 'zh' else 'en'}">
 <head>
@@ -53,10 +55,20 @@ def head(title, desc, lang, path):
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(desc)}">
 <meta name="theme-color" content="#ECF0ED">
+<link rel="canonical" href="{SITE}{path}">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Tobie · Yucheng Feng">
+<meta property="og:locale" content="{'zh_CN' if lang == 'zh' else 'en_GB'}">
+<meta property="og:url" content="{SITE}{path}">
 <meta property="og:title" content="{escape(title)}">
 <meta property="og:description" content="{escape(desc)}">
-<link rel="alternate" hreflang="{'en' if lang == 'zh' else 'zh-CN'}" href="{other}">
+<meta property="og:image" content="{SITE}/assets/share-{lang}.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" hreflang="zh-CN" href="{SITE}{zh_path}">
+<link rel="alternate" hreflang="en" href="{SITE}{en_path}">
+<link rel="alternate" hreflang="x-default" href="{SITE}{en_path}">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E2A27'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23F7775F'/%3E%3C/svg%3E">
 <link rel="preload" href="/assets/fonts/AtkinsonHyperlegibleNext-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css?v={VERSION}">
@@ -353,11 +365,26 @@ def case_page(slug, lang):
 def save(route, html):
     p = OUT / route / 'index.html'
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(html)
+    # 明确写 UTF-8 和 \n：Windows 上不指定的话会按系统编码写、并把换行改成 \r\n
+    p.write_text(html, encoding='utf-8', newline='\n')
+
+def sitemap():
+    """站点地图：每页一条，带中英文互指。"""
+    rows = []
+    for slug in [''] + [p['slug'] for p in PROJECTS]:
+        zh, en = SITE + url(slug, 'zh'), SITE + url(slug, 'en')
+        alt = (f'<xhtml:link rel="alternate" hreflang="zh-CN" href="{zh}"/>'
+               f'<xhtml:link rel="alternate" hreflang="en" href="{en}"/>')
+        rows += [f' <url><loc>{zh}</loc>{alt}</url>', f' <url><loc>{en}</loc>{alt}</url>']
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+            + '\n'.join(rows) + '\n</urlset>\n')
 
 if __name__ == '__main__':
     for lang in ('zh', 'en'):
         save('' if lang == 'zh' else 'en', home(lang))
         for p in PROJECTS:
             save(('en/' if lang == 'en' else '') + 'work/' + p['slug'], case_page(p['slug'], lang))
-    print('Built 10 pages.')
+    (OUT / 'sitemap.xml').write_text(sitemap(), encoding='utf-8', newline='\n')
+    (OUT / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n', encoding='utf-8', newline='\n')
+    print('Built 10 pages, sitemap.xml and robots.txt.')

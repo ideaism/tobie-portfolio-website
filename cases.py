@@ -68,8 +68,8 @@ CASES = {
  ]},
 'smt': {
  'title':['兴业 SMT：从业务单元，建立界面秩序。','Industrial Securities SMT: a shared structure for financial workflows.'],
- 'deck':['在优品财富的工作中，我与同事共同研究业务模块的拆分，负责相关 Figma 组件、使用规范与维护，让高密度金融界面能够复用。','At Youpin Wealth, I worked with colleagues to break down business modules, then designed and maintained the relevant Figma components and specifications.'],
- 'facts':[['项目背景','Context','优品财富工作 · 兴业 SMT','Youpin Wealth · Industrial Securities SMT'],['我的职责','My role','组件设计、使用规范与维护','Component design, specifications & maintenance'],['协作方式','Collaboration','与同事共同研究业务单元拆分','Collaborative business-unit decomposition'],['交付范围','Delivery','Figma 组件与规范','Figma components & guidelines']],
+ 'deck':['在武汉优品楚鼎科技有限公司任职期间，我与同事共同研究业务模块的拆分，负责相关 Figma 组件、使用规范与维护，让高密度金融界面能够复用。','At Wuhan Youpin Chuding Technology, I worked with colleagues to break down business modules, then designed and maintained the relevant Figma components and specifications.'],
+ 'facts':[['项目背景','Context','武汉优品楚鼎科技有限公司 · 兴业 SMT','Wuhan Youpin Chuding Technology · Industrial Securities SMT'],['我的职责','My role','组件设计、使用规范与维护','Component design, specifications & maintenance'],['协作方式','Collaboration','与同事共同研究业务单元拆分','Collaborative business-unit decomposition'],['交付范围','Delivery','Figma 组件与规范','Figma components & guidelines']],
  'image':'smt-overview','source':'https://www.figma.com/design/RXWxFWgHwWEXBBcLQ6LlZB?node-id=0-5802',
  'sections':[
  {'label':['01 / 问题','01 / The challenge'],'title':['一张表格承载的，是一项业务任务。','A table carries a task, not just data.'],'text':[

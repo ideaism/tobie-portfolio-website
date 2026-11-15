@@ -7,7 +7,8 @@ photo or recording poster. Nothing is redrawn. The only edits are:
     board's teal flow arrows removed (sources/work/clean_qingju_lines.py);
   * tobie/face.webp: a circular crop of the existing avatar illustration.
 
-Run:  python3 tools/prepare_assets.py
+Run:  python3 tools/prepare_assets.py                      (all assets)
+      python3 tools/prepare_assets.py playbook/app-home    (only the named ones; the rest stay byte-identical)
 Output: dist/assets/work/<project>/*.webp and dist/assets/work/manifest.json
 """
 from pathlib import Path
@@ -31,7 +32,7 @@ JOBS = {
     'qingju/journey': (V2 / 'qingju-journey.png', 1920, 84),
     'qingju/field': (V2 / 'qingju-field.png', 1920, 82),
     'qingju/team-route': (V2 / 'qingju-final.png', 1200, 84),
-    'qingju/team-memory': (V2 / 'qingju-memory.png', 400, 86),
+    'qingju/team-memory': (SRC / 'work' / 'qingju' / 'team-memory@2x.png', 800, 86),   # 2 倍原稿，见 docs/sources.md 2026-11-15
     'qingju/lofi-board': (SRC / 'work' / 'qingju-lofi-board-raw.png', 2400, 80),
     # PlayBook — 2023–24
     'playbook/studio-editor': (EXP / 'studio-editor.png', 2400, 84),
@@ -39,7 +40,7 @@ JOBS = {
     'playbook/app-craft-missing': (EXP / 'app-craft-insufficient.png', 780, 86),
     'playbook/app-craft-ready': (EXP / 'app-craft-ready.png', 780, 86),
     'playbook/app-craft-confirm': (EXP / 'app-craft-confirm.png', 780, 86),
-    'playbook/app-home': (EXP / 'app-home.png', 390, 88),
+    'playbook/app-home': (SRC / 'work' / 'playbook' / 'app-home@2x.png', 780, 88),   # 2 倍原稿，见 docs/sources.md 2026-11-15
     'playbook/app-inventory': (EXP / 'app-inventory.png', 390, 88),
     'playbook/app-reward': (EXP / 'app-reward.png', 330, 88),
     'playbook/app-missions': (V2 / 'app-missions.png', 390, 88),
@@ -105,10 +106,23 @@ def face():
 
 
 if __name__ == '__main__':
-    manifest = {}
-    for name, (src, max_w, q) in JOBS.items():
-        manifest[name] = export(name, src, max_w, q)
-    manifest['tobie/face'] = face()
-    (OUT / 'manifest.json').write_text(json.dumps(manifest, indent=1, sort_keys=True))
+    import sys
+    only = sys.argv[1:]          # 只重导指定的几张：python3 tools/prepare_assets.py playbook/app-home qingju/team-memory
+    path = OUT / 'manifest.json'
+    if only:
+        unknown = [n for n in only if n not in JOBS]
+        if unknown:
+            sys.exit(f'JOBS 里没有：{", ".join(unknown)}')
+        manifest = json.loads(path.read_text(encoding='utf-8'))
+        for name in only:
+            src, max_w, q = JOBS[name]
+            manifest[name] = export(name, src, max_w, q)
+            print(f'{name}: {manifest[name][0]} × {manifest[name][1]}')
+    else:
+        manifest = {}
+        for name, (src, max_w, q) in JOBS.items():
+            manifest[name] = export(name, src, max_w, q)
+        manifest['tobie/face'] = face()
+    path.write_text(json.dumps(manifest, indent=1, sort_keys=True), encoding='utf-8', newline='\n')
     total = sum(p.stat().st_size for p in OUT.rglob('*.webp'))
     print(f'{len(manifest)} assets, {total/1e6:.1f} MB')

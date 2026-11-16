@@ -107,6 +107,22 @@
   800,
   1467
  ],
+ "playbook/app-barter-consume": [
+  390,
+  868
+ ],
+ "playbook/app-barter-market": [
+  390,
+  868
+ ],
+ "playbook/app-barter-received": [
+  390,
+  868
+ ],
+ "playbook/app-barter-request": [
+  390,
+  868
+ ],
  "playbook/app-craft-confirm": [
   780,
   1754
@@ -119,13 +135,37 @@
   780,
   1754
  ],
+ "playbook/app-furnace-draft": [
+  780,
+  2160
+ ],
  "playbook/app-home": [
   780,
   3234
  ],
+ "playbook/app-home-events-only": [
+  780,
+  2658
+ ],
  "playbook/app-inventory": [
   390,
   1045
+ ],
+ "playbook/app-market-buy-confirm": [
+  390,
+  868
+ ],
+ "playbook/app-market-home": [
+  390,
+  1203
+ ],
+ "playbook/app-market-listings": [
+  390,
+  868
+ ],
+ "playbook/app-market-trend": [
+  390,
+  868
  ],
  "playbook/app-missions": [
   390,
@@ -136,8 +176,8 @@
   933
  ],
  "playbook/app-reward": [
-  330,
-  453
+  660,
+  906
  ],
  "playbook/app-search": [
   390,
@@ -146,6 +186,22 @@
  "playbook/app-search-creators": [
   390,
   844
+ ],
+ "playbook/app-showcase-empty": [
+  780,
+  2176
+ ],
+ "playbook/app-showcase-filled": [
+  780,
+  2176
+ ],
+ "playbook/app-showcase-pick": [
+  780,
+  1540
+ ],
+ "playbook/app-showcase-visitor": [
+  780,
+  2176
  ],
  "playbook/app-unowned": [
   390,
@@ -158,6 +214,10 @@
  "playbook/early-ui": [
   390,
   812
+ ],
+ "playbook/feature-map": [
+  1920,
+  1778
  ],
  "playbook/flow-before-after-en": [
   1920,

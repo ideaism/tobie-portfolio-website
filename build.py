@@ -133,13 +133,13 @@ PROJECTS = [
   'type': ['创业团队 · 创作者平台', 'Startup · creator platform'],
   'title': ['把复杂规则，变成可参与的体验。', 'Turn creator rules into fan experiences.'],
   'summary': ['创作者在 Studio 里编辑规则，粉丝在 App 里参与、收集与合成。我让同一条规则在两端都能被理解。', 'Creators build rules in Studio; fans take part, collect and craft in the App. I made the same rule understandable on both sides.'],
-  'chips': [['Studio UX/UI', 'App UX', '交互原型'], ['Studio UX/UI', 'App UX', 'Prototyping']],
+  'chips': [['Studio UX/UI', 'App UX', '交互原型', '竞品分析'], ['Studio UX/UI', 'App UX', 'Prototyping', 'Competitive analysis']],
   'label': ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions'], 'prov': 'original'},
  {'slug': 'smt', 'project': 'smt', 'name': 'Industrial Securities · 兴业 SMT', 'year': '2022–23',
   'type': ['在职项目 · 证券桌面软件', 'In-house · securities software'],
   'title': ['从业务单元，建立界面秩序。', 'Let business meaning set component boundaries.'],
   'summary': ['与同事一起拆分业务单元，我负责组件、状态与使用规范，让高密度的金融界面可以复用。', 'With colleagues I broke the product into business units; I designed and maintained the components, states and usage rules that let a dense financial interface be reused.'],
-  'chips': [['业务拆分', '组件设计', '规范维护'], ['Business decomposition', 'Components', 'Specifications']],
+  'chips': [['业务拆分', '组件设计', '规范维护', '需求对接'], ['Business decomposition', 'Components', 'Specifications', 'Requirements liaison']],
   'label': ['SMT-MAX · 资产与持仓', 'SMT-MAX · assets & positions'], 'prov': 'original'},
  {'slug': 'commons-fridge', 'project': 'fridge', 'name': 'The Commons Fridge', 'year': '2026',
   'type': ['硕士毕业设计', 'MA final project'],
@@ -197,7 +197,7 @@ METHOD = [
 
 def home(lang):
     path = url('', lang)
-    h = head(t('Tobie 冯渝程 — 用户体验与交互设计', 'Tobie (Yucheng Feng) — UX & interaction designer', lang),
+    h = head(t('Tobie 冯渝程 — 产品与体验设计', 'Tobie (Yucheng Feng) — Product & experience design', lang),
              t('把复杂的系统，设计得让人看得懂。精选青桔、PlayBook、兴业 SMT 与 The Commons Fridge 项目，附基于原始界面的可操作原型。',
                'I make complex systems understandable. Selected work — Qingju, PlayBook, Industrial Securities SMT and The Commons Fridge — with prototypes you can try, built from the original screens.', lang), lang, path)
     h += topbar(lang, path)
@@ -208,7 +208,7 @@ def home(lang):
 <section class="hero"><div class="wrap">
  <div class="hero__grid">
   <div class="reveal">
-   <p class="label path"><span>{t('用户体验与交互设计师', 'UX & interaction designer', lang)}</span><span>{t('英国南安普顿', 'Southampton, UK', lang)}</span></p>
+   <p class="label path"><span>{t('产品与体验设计', 'Product & experience design', lang)}</span><span>{t('英国南安普顿', 'Southampton, UK', lang)}</span></p>
    <h1 class="hero__title">{t('把复杂的系统，<br>设计得<em>让人看得懂。</em>', 'I make complex systems <em>understandable.</em>', lang)}</h1>
    <p class="lead hero__lead">{t('我把产品背后的结构，和人们在其中做出的决定连接起来——从创作者工具、证券软件，到走廊尽头那台共享冰箱。', 'I connect the structure behind a product to the decisions people make inside it — in creator tools, securities software and the shared fridge down the hall.', lang)}</p>
    <div class="hero__ctas"><a class="btn" href="#work">{t('看作品', 'See the work', lang)} <span aria-hidden="true">↓</span></a><a class="btn btn--ghost" href="/assets/Yucheng-Feng-Portfolio.pdf" target="_blank" rel="noopener">{t('PDF 作品集', 'Portfolio PDF', lang)}</a></div>

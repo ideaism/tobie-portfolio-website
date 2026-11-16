@@ -40,7 +40,7 @@ FIGURES = {
    'label': ['访谈摘要 · 2021 原稿（中文）', 'Interview summary · 2021 original (Chinese)'],
    'alt': ['2021 年访谈摘要原稿（中文）：访谈提纲说明；11 位受访者关键表述的气泡；一个标为“没有注意过用户成长体系”的百分比；以及两组关键词——成长体系关注点（权益、优惠、收集、社交）与休闲骑行影响因素（自我情感、社交、环境）。', 'Original 2021 interview summary, in Chinese: the interview guide; speech bubbles with key remarks from 11 interviewees; a percentage labelled “had not noticed the growth system”; and two keyword chains — what riders look for in a growth system (status, discounts, collecting, sharing) and what shapes a leisure ride (personal feelings, social needs, environment).'],
    'caption': ['研究摘要原稿（中文），聚焦休闲骑行场景。', 'Original research summary (in Chinese), focused on leisure riding.']},
-  {'kind': 'image', 'src': 'qingju/field', 'prov': 'photo', 'project': 'qingju',
+  {'kind': 'image', 'src': 'qingju/field', 'prov': 'photo', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
    'label': ['实地观察 · 武汉藏龙岛湿地公园', 'Field observation · Canglongdao Wetland Park, Wuhan'],
    'caption': ['实地观察（2021-05-09 18:00–19:30，武汉藏龙岛湿地公园）：现场投放的车多、在骑的少。', 'Field observation (9 May 2021, 18:00–19:30, Canglongdao Wetland Park, Wuhan): many bikes deployed, few in use.']},
  ],

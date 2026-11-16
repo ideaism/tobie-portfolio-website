@@ -316,8 +316,8 @@ def figure_html(f, lang):
     if kind == 'phones':
         items = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang), "screen")}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
         # 'partials'：弹窗、卡片这类不是整屏的局部图。不加 screen 类（不套竖屏框、不裁切），按原比例完整显示，
-        # 显示宽度不超过原图宽度（.claude/agents/walkthrough.md R1、R3）。已经是原图大小，所以不带放大按钮。
-        items += ''.join(f'<figure class="partial" style="max-width:{MANIFEST[src][0]}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f.get('partials', []))
+        # 显示宽度不超过原图宽度（.claude/agents/walkthrough.md R1、R3）。放大按钮留着：手机上这一格比原图窄，点开能看原图大小。
+        items += ''.join(f'<figure class="partial" style="max-width:{MANIFEST[src][0]}px"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f.get('partials', []))
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip" style="--n:{f["n"]}">{items}</div></div>{cap}</figure>'
     if kind == 'pair':
         (wsrc, wl), (psrc, pl) = f['wide'], f['phone']

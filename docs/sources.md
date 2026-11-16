@@ -131,3 +131,11 @@ PlayBook
 - 青桔封面三块：`qingju/hifi-map`、`qingju/hifi-route`、`qingju/hifi-chests`，都裁自旧作品集文件 `lfqzkEzhH33yq5kvIkNEqW` 节点 `2206:20841`（2021 年方案展示页，原尺寸 1920 × 4980）的导出图。裁切范围：地图 (100,1270)–(900,2230)，路线讨论圈 (130,3860)–(925,4800)，宝箱 (930,1960)–(1820,2200)。封面底色 #404040 取自原稿。界面是团队高保真。原图 `sources/work/qingju-hifi/`，私有备份 `04-shared/网站原图/work/qingju-hifi/`。
 - PlayBook 封面：`playbook/studio-campaign`（Studio 活动页，本人做的）+ `playbook/team-mission`、`playbook/team-home`（App 成品界面，团队做的），封面里两屏 App 各只显示第一屏（按 390:844 从顶部裁）。原来的 `playbook/studio-editor` 和 `playbook/app-craft-ready` 不再用作封面，正文里照旧。
 - 封面标签：青桔「青桔 · 寻宝地图与路线讨论圈 · 2021」，PlayBook「PlayBook · Studio 活动页 + App 首页与任务页」。
+
+## 2026-11-16：青桔新增第 07 节「2026 复盘」
+
+- 依据：`03-qingju/portfolio/handoff.md` 第 2 节「新增 07」；本人在审核卡 20261116-004 上读过并通过，2026-11-16 在青桔会话里说「先合 07 节复盘」。交接单整体还是 draft，这次只合这一节，其他条目没动。
+- 性质：07 节是本人 2026 年的回看判断，不含当年数据或效果数据。label 和标题里说明是 2026 年的回看，正文四段不带「2026 判断 ·」前缀（根 `CLAUDE.md`「通用」）。
+- 第 4 段按本人在卡 20261116-004 上的批注改短，只留「没有请骑行者试用，低保真流程只在团队内部测过」；这句只有本人的话为据，没有记录。
+- 提到的当年触点出自旧作品集 Figma `lfqzkEzhH33yq5kvIkNEqW`：`2206:20028`（定义活跃用户：试用、体验、习惯、分享四个阶段）、`2206:20579`（成长体系构建：入口 / 成长形式 / 出口）、`2206:20709`（电梯宣言与用户流程）、`2206:20841`（首页 banner、地图类型、寻宝地图、路线讨论圈）、`2206:21324`（骑行回忆）、`2206:21364`（合并记录、线下店铺、宝箱随机掉落、金银铜宝箱升级）。文字层摘录在 `03-qingju/research/ux-fit-2026-09-19/figma-evidence-1.json`。
+- 落点：`cases.py` → `CASES['qingju']['sections']` 第 7 项，接在 06 之后；06 仍是 outcome 节，07 不加 `outcome`，没有图，`figures.py`、`prototypes.py` 没有改。

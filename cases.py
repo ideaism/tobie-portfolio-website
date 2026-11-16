@@ -131,7 +131,9 @@ CASES = {
  ['买入、卖出、确认、取消和输入控件具有相关结构，但它们不是同一种动作。我维护这些组件与规范，让重复模块有一致基础，同时保留任务之间的区别。','Buy, sell, confirm, cancel and input controls have related structures, but are not the same action. I maintained components and specifications to give repeated modules a consistent foundation while preserving these distinctions.'],
  ['组件被用于跨项目复用与日夜主题适配。','The components supported cross-project reuse and day/night theme adaptation.']],
  'image':'smt-trade-components','caption':['原始控件与变体：我负责设计与维护的组件。','Original controls and variants: the components I designed and maintained.']},
- {'label':['05 / 交付与反思','05 / Outcome & reflection'],'title':['可复用的设计基础，来自明确的边界。','A reusable design foundation starts with clear boundaries.'],'text':[
+ {'label':['05 / 界面','05 / Screens'],'title':['从组件到整页。','From components to full screens.'],'text':[
+ ['除了组件，我还画了这套系统里的整页界面：资产首页、快速挂单、篮子下单和网格策略。每一页都由同一批组件拼成：账户选择栏、下单板、盘口和持仓表，在不同页面里长得一样、位置也一样。','Beyond the components, I designed full screens for the system: the asset home, quick order, basket order and grid strategy. Each screen is assembled from the same set of components — the account selector, order panel, order book and positions table look the same and sit in the same place from one screen to the next.']]},
+ {'label':['06 / 交付与反思','06 / Outcome & reflection'],'title':['可复用的设计基础，来自明确的边界。','A reusable design foundation starts with clear boundaries.'],'text':[
  ['这些组件和规范用在兴业证券 SMT 5.0 交易系统的改造里，系统已开发上线。我交付 Figma 组件、使用规范与维护，并参与了方法研究和业务拆分。','The components and guidelines went into the redesign of Industrial Securities’ SMT 5.0 trading system, which was built and launched. I delivered the Figma components, usage guidelines and their maintenance, and contributed to the shared method research and business decomposition.'],
  ['如果继续验证这套方法，我会比较重复模块的组装时间、遗漏状态的数量，以及一次修改同步到多个实例的维护成本。它们能更具体地判断复用是否真正帮助了团队。','To evaluate this approach further, I would compare repeated-module assembly time, omitted states and the effort needed to carry a change across instances. These measures would show more concretely whether reuse helps the team.']], 'outcome':True}
  ]},

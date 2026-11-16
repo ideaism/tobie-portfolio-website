@@ -110,15 +110,45 @@ FIGURES = {
    'caption': ['团队完成的视觉稿，基于我整理的流程与状态。', 'The team’s finished visual design, built on the flows and states I defined.']},
  ],
  # ---------------- SMT ----------------
+ # 2026-11-16（卡 20261116-014）：夜间版原稿导出的 8 张，1 倍，按原比例整张显示（kind 'image'，不进手机条）。
+ # 02 节 1 张、03 节接 2 张、新 05 节「界面」5 张；原 05 顺延成 06。来源和打码见 docs/sources.md
+ ('smt', 2): [
+  {'kind': 'image', 'src': 'smt/credit-order-panel', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['信用交易下单板 · 按业务拆出的 13 个变体', 'Margin-trading order panel · 13 variants by business'],
+   'caption': ['同一块下单板按业务拆出的 13 个变体，三行分别是担保品、融资、融券。', 'Thirteen variants of one order panel; the three rows are collateral, margin financing and securities lending.']},
+ ],
  ('smt', 3): [
   {'kind': 'image', 'src': 'smt/states', 'prov': 'original', 'project': 'smt', 'pad': True,
    'label': ['原稿截图 · 行状态', 'Source crop · row states'],
    'caption': ['上方复刻所依据的原稿行状态截图（默认、选中、悬停）；无数据变体在原稿中保留行高。', 'The source crop the replica follows (default, selected, hover); the no-data variant keeps the row height in the source.']},
+  {'kind': 'image', 'src': 'smt/level-variants', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['买卖档位 · 8 个变体', 'Bid/ask levels · 8 variants'],
+   'caption': ['买卖档位的 8 个变体：五档和十档、展开和收起、横排和竖排。', 'Eight variants of the bid/ask levels: five or ten levels, expanded or collapsed, horizontal or vertical.']},
+  {'kind': 'image', 'src': 'smt/market-components', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['行情组件', 'Market-data components'],
+   'caption': ['行情类组件排在一起：股票详情头、买卖档位、委托队列、分笔成交、资金流向等。', 'Market-data components side by side: stock header, bid/ask levels, order queue, time and sales, capital flow and more.']},
  ],
  ('smt', 4): [
   {'kind': 'image', 'src': 'smt/trade-components', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
    'label': ['交易控件与变体 · 组件库原稿', 'Trading controls and variants · library source'],
    'caption': ['买入 3 种、卖出 6 种状态（选中、聚焦、未选中，有无角标）。', 'Buy has 3 states and sell has 6 (selected, focused, unselected, with or without a badge).']},
+ ],
+ ('smt', 5): [
+  {'kind': 'image', 'src': 'smt/screen-asset-home', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['资产首页', 'Asset home'],
+   'caption': ['资产首页：上面是多账户总览，下面是持仓，右边是快捷入口。', 'Asset home: multi-account overview on top, positions below, quick entries on the right.']},
+  {'kind': 'image', 'src': 'smt/screen-main-menu', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['主菜单', 'Main menu'],
+   'caption': ['主菜单展开：T+0 套利、网格交易、套利工具、策略研发四组入口。', 'Main menu open: four groups of entries — T+0 arbitrage, grid trading, arbitrage tools and strategy research.']},
+  {'kind': 'image', 'src': 'smt/screen-quick-order', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['快速挂单', 'Quick order'],
+   'caption': ['快速挂单：左边下单板，中间十档盘口和分时图，右边分笔成交，下面持仓表。', 'Quick order: order panel on the left, ten-level order book and intraday chart in the middle, time and sales on the right, positions below.']},
+  {'kind': 'image', 'src': 'smt/screen-basket-order', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['篮子下单', 'Basket order'],
+   'caption': ['篮子算法 · 篮子下单：左边设组合、方向、算法和时段，右边逐只调整成分股的委托方向、数量和权重。', 'Basket algorithm · basket order: set the portfolio, direction, algorithm and time window on the left; adjust each constituent’s side, quantity and weight on the right.']},
+  {'kind': 'image', 'src': 'smt/screen-grid-strategy', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['网格策略', 'Grid strategy'],
+   'caption': ['网格策略 · 多档预埋：左边设基准价、价差、档位数和每档数量，右边是运行中的网格任务，下面是任务明细。', 'Grid strategy · multi-level pre-set orders: base price, spread, number of levels and quantity per level on the left; running grid tasks on the right; task details below.']},
  ],
  # ---------------- Commons Fridge ----------------
  # 2026-11-15 加：'fridge/sub-*' 八张取自最终提交稿（23 页横版 PDF）的原页，页码写在 label 里；来源见 docs/sources.md

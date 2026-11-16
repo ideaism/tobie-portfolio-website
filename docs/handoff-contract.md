@@ -5,7 +5,7 @@ publisher 是唯一改动本仓库的 agent。输入是三份交接单：
 - `../01-commons-fridge/portfolio/handoff.md` → `CASES['commons-fridge']`
 - `../02-playbook/portfolio/handoff.md` → `CASES['playbook']`
 - `../03-qingju/portfolio/handoff.md` → `CASES['qingju']`
-- SMT 没有交接单，小改动列在 `../04-shared/CLAUDE.md`。
+- `../04-shared/SMT-交接单.md` → `CASES['smt']`
 
 只处理 `status: ready` 的交接单；第 6 节“待本人确认”里未勾选的条目不上线。
 

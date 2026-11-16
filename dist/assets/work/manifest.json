@@ -439,7 +439,39 @@
   153,
   170
  ],
+ "smt/credit-order-panel": [
+  1840,
+  1542
+ ],
+ "smt/level-variants": [
+  1510,
+  842
+ ],
+ "smt/market-components": [
+  3309,
+  4113
+ ],
  "smt/overview": [
+  1920,
+  1080
+ ],
+ "smt/screen-asset-home": [
+  1920,
+  1080
+ ],
+ "smt/screen-basket-order": [
+  1920,
+  1080
+ ],
+ "smt/screen-grid-strategy": [
+  1920,
+  1080
+ ],
+ "smt/screen-main-menu": [
+  1920,
+  1080
+ ],
+ "smt/screen-quick-order": [
   1920,
   1080
  ],

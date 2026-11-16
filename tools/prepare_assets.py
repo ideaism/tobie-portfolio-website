@@ -100,6 +100,15 @@ JOBS = {
     'smt/trade-components': (EXP / 'smt-trade-components.png', 1797, 86),
     'smt/buy': (V2 / 'smt-buy.png', 153, 92),
     'smt/sell': (V2 / 'smt-sell.png', 263, 92),
+    # 2026-11-16：夜间版 Figma 原稿导出的 8 张（1 倍，最大宽 = 原图宽，不放大）。整页 5 张用的是打过码的版本（文件名带 -masked），见 docs/sources.md
+    'smt/credit-order-panel': (SRC / 'work' / 'smt' / 'night-credit-order-panel-683-24828.png', 1840, 88),
+    'smt/level-variants': (SRC / 'work' / 'smt' / 'night-level-variants-517-54278.png', 1510, 88),
+    'smt/market-components': (SRC / 'work' / 'smt' / 'night-market-components-2492-69029.png', 3309, 86),   # 整张，不裁
+    'smt/screen-asset-home': (SRC / 'work' / 'smt' / 'night-asset-home-0-1110-masked.png', 1920, 88),
+    'smt/screen-main-menu': (SRC / 'work' / 'smt' / 'night-asset-home-menu-213-5799-masked.png', 1920, 88),
+    'smt/screen-quick-order': (SRC / 'work' / 'smt' / 'night-quick-order-656-24252-masked.png', 1920, 88),
+    'smt/screen-basket-order': (SRC / 'work' / 'smt' / 'night-basket-order-1759-63399-masked.png', 1920, 88),
+    'smt/screen-grid-strategy': (SRC / 'work' / 'smt' / 'night-grid-strategy-1727-54810-masked.png', 1920, 88),
     # The Commons Fridge — 2026
     'fridge/photo-fridge': (EXP / 'fridge-p1-0.jpg', 2000, 78),
     'fridge/photo-touch': (EXP / 'fridge-p18-1.jpg', 1400, 78),

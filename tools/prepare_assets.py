@@ -28,8 +28,8 @@ JOBS = {
     'tobie/avatar': (SRC / 'tobie-avatar.png', 500, 90),
     # Qingju — 2021
     'qingju/cover': (SRC / 'qingju-cover.png', 1920, 82),
-    'qingju/research': (V2 / 'qingju-research.png', 1920, 82),
-    'qingju/journey': (V2 / 'qingju-journey.png', 1920, 84),
+    'qingju/research': (SRC / 'work' / 'qingju' / 'research-2021.png', 1920, 82),
+    'qingju/journey': (SRC / 'work' / 'qingju' / 'journey-2021.png', 1920, 84),
     'qingju/field': (V2 / 'qingju-field.png', 1920, 82),
     'qingju/team-route': (V2 / 'qingju-final.png', 1200, 84),
     'qingju/team-memory': (SRC / 'work' / 'qingju' / 'team-memory@2x.png', 800, 86),   # 2 倍原稿，见 docs/sources.md 2026-11-15

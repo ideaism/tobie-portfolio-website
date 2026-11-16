@@ -87,7 +87,10 @@ JOBS = {
     'playbook/app-inventory': (EXP / 'app-inventory.png', 390, 88),
     'playbook/app-reward': (SRC / 'work' / 'playbook' / 'app-reward@2x.png', 660, 88),   # 2026-11-16 换成 2 倍图（原来是 EXP 里 330 宽的那张）；页面上显示宽度仍不超过 330
     # 2026-11-16 第三批：02-playbook/portfolio/figures/ 里 2026-11-16 从 Figma 导出后切出来的图，只切、没改内容，见 docs/sources.md
-    'playbook/feature-map': (SRC / 'work' / 'playbook' / 'feature-map-2024.png', 1920, 86),
+    'playbook/feature-map': (SRC / 'work' / 'playbook' / 'feature-map-2024.png', 1920, 86),   # 2026-11-17 起页面不再引用（换成下面两张重画版），留着只为整批重导时不出错
+    # 2026-11-17：功能架构图重画版，内容照 2024 年那张，只换呈现方式；中英文各一张（2800×1944，导出 2 倍），见 docs/sources.md
+    'playbook/feature-map-zh': (SRC / 'work' / 'playbook' / 'feature-map-zh.png', 1920, 86),
+    'playbook/feature-map-en': (SRC / 'work' / 'playbook' / 'feature-map-en.png', 1920, 86),
     'playbook/app-furnace-draft': (SRC / 'work' / 'playbook' / 'app-furnace-draft@2x.png', 780, 88),
     'playbook/app-home-events-only': (SRC / 'work' / 'playbook' / 'app-home-events-only@2x.png', 780, 88),
     'playbook/app-showcase-empty': (SRC / 'work' / 'playbook' / 'app-showcase-empty@2x.png', 780, 88),

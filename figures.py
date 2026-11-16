@@ -97,11 +97,11 @@ FIGURES = {
    'label': ['用户动线 · 从五个平行视图到一条链路', 'User flow · from five parallel views to one loop'],
    'alt': ['用户动线前后对比：上半是客户方需求文档里的五个平行视图，下半是我按一次回访整理的五步参与链路', 'User flow before and after: the client’s five parallel views above, and the five-step participation loop I organised around a single visit below'],
    'caption': ['上：客户方需求文档里的 App 结构。下：我按粉丝一次回访整理的参与链路，每个节点对应一组 App 中保真线框。', 'Top: the app structure in the client’s requirements. Bottom: the participation loop I organised around one fan visit; each node maps to a set of mid-fidelity wireframes.']},
-  # 2026-11-16 第三批：功能架构图，2024 年秋整理作品集时画的；图里的字是中文，中英文页用同一张
-  {'kind': 'image', 'src': 'playbook/feature-map', 'prov': 'research', 'project': 'playbook',
+  # 功能架构图：内容是 2024 年秋整理作品集时画的；2026-11-17 照原图重画，只换呈现方式（卡 20261117-001），中英文各一张
+  {'kind': 'image', 'src': 'playbook/feature-map-zh', 'src_en': 'playbook/feature-map-en', 'prov': 'research', 'project': 'playbook',
    'label': ['App 功能架构图 · 2024 年整理', 'App feature map · compiled in 2024'],
    'alt': ['功能树：主页面、物品百科、物品合成、社区、任务五个入口，以及个人主页、搜索、通知，各自展开到下一级页面', 'A feature tree: Home, Item catalogue, Crafting, Community and Missions, plus Profile, Search and Notifications, each expanded to its sub-pages'],
-   'caption': ['App 的功能架构：五个入口，加上个人主页、搜索和通知。2024 年秋整理。', 'The app’s feature map: five entry points plus profile, search and notifications. Compiled in autumn 2024; labels are in Chinese.']},
+   'caption': ['App 的功能架构：五个入口，加上个人主页、搜索和通知。2024 年秋整理。', 'The app’s feature map: five entry points plus profile, search and notifications. Compiled in autumn 2024.']},
  ],
  ('playbook', 4): [
   # 2026-11-16 第三批：加熔炉废案稿。它是 390×1080 的长屏，熔炉在最底部，不能裁成一屏高，放在 'whole'（整张显示），

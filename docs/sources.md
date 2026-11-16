@@ -139,6 +139,12 @@ PlayBook
 - 第 4 段按本人在卡 20261116-004 上的批注改短，只留「没有请骑行者试用，低保真流程只在团队内部测过」；这句只有本人的话为据，没有记录。
 - 提到的当年触点出自旧作品集 Figma `lfqzkEzhH33yq5kvIkNEqW`：`2206:20028`（定义活跃用户：试用、体验、习惯、分享四个阶段）、`2206:20579`（成长体系构建：入口 / 成长形式 / 出口）、`2206:20709`（电梯宣言与用户流程）、`2206:20841`（首页 banner、地图类型、寻宝地图、路线讨论圈）、`2206:21324`（骑行回忆）、`2206:21364`（合并记录、线下店铺、宝箱随机掉落、金银铜宝箱升级）。文字层摘录在 `03-qingju/research/ux-fit-2026-09-19/figma-evidence-1.json`。
 - 落点：`cases.py` → `CASES['qingju']['sections']` 第 7 项，接在 06 之后；06 仍是 outcome 节，07 不加 `outcome`，没有图，`figures.py`、`prototypes.py` 没有改。
+- 07 节的两张图（2026-11-16 加，卡 20261116-012：本人写「内容可以但是感觉可以加一些图表说明」，随后在青桔会话里说「做这两张」；交接单「07 节的两张图」一小节，交接单整体还是 draft，这次只加这两张图）：
+  - 指标树 `qingju/retro-metric-tree-zh`、`-en`：原图 `03-qingju/portfolio/figures/retro-metric-tree-zh.png`、`-en.png`（2800×2136）。
+  - 奖励时机实验 `qingju/retro-experiment-zh`、`-en`：原图 `03-qingju/portfolio/figures/retro-experiment-zh.png`、`-en.png`（2800×1488）。
+  - 四张都由 `03-qingju/portfolio/figures/src/build_retro.mjs` 生成（HTML 排版，无头浏览器按 2 倍截图），2026-11-16。是 2026 年新画的图，不是当年的原稿。图里的内容只来自 07 节正文（四个阶段和三个数、三组触点出自段 1，保留 / 砍掉出自段 2，分组、主指标、成本出自段 3），没有新增事实和数字。
+  - 复制到 `sources/work/qingju/`，导出成 1920×1465 和 1920×1020（正文栏 936 的 2 倍），只缩放和压缩，没有裁切。中文页取 `src`，英文页取 `src_en`。
+  - 来源标签：`figures.py` 的 `PROV` 新增键 `retro`（2026 复盘图 / 2026 diagram），两张图都用它。`figures.py` 新增 `('qingju', 7)`，先指标树、后实验。07 节文字没有动。交接单给的 `alt` 记在条目上，`build.py` 现在不读 `alt` 键（同上一节「没接上的」那条），替代文字用的是 `label`。
 
 ## 2026-11-16：PlayBook 第二批文字（6 节变 8 节、三个决策块、动线图、奖励弹窗显示）
 

@@ -17,6 +17,7 @@ PROV = {
     'photo': (['实拍', 'Photo'], ''),
     'mixed': (['原稿对比', 'Source comparison'], ''),
     'submission': (['提交稿原页', 'Submitted page'], ''),     # 学术提交稿里的一页，英文原文，只裁掉页脚和空白
+    'retro': (['2026 复盘图', '2026 diagram'], ''),           # 2026 年回看时新画的图，不是当年的原稿，也不是研究材料
 }
 
 # (slug, section number) -> list of figures
@@ -52,6 +53,17 @@ FIGURES = {
    'label': ['团队高保真 · 路线发现与讨论圈', 'Team high fidelity · route discovery & discussion'],
    'alt': ['三屏拼在一起的团队高保真：左边是某条路线的讨论圈，中间是路线详情（途经风景、里程、照片、他人感受和“去骑车”按钮），右边是收起后的路线卡。', 'Three team high-fidelity screens shown together: a route’s discussion feed on the left, the route detail in the middle (sights, distance, photos, riders’ notes and a “Ride” button), and the collapsed route card on the right.'],
    'caption': ['团队完成的高保真，三屏拼在一起：路线讨论圈、路线详情、收起后的路线卡。', 'High fidelity by the team, three screens shown together: the route discussion feed, the route detail and the collapsed route card.']},
+ ],
+ # 2026-11-16（卡 20261116-012）：07 节「2026 复盘」的两张图，只把正文里已有的内容画出来；中英文各一张（'src' 中文页，'src_en' 英文页）
+ ('qingju', 7): [
+  {'kind': 'image', 'src': 'qingju/retro-metric-tree-zh', 'src_en': 'qingju/retro-metric-tree-en', 'prov': 'retro', 'project': 'qingju',
+   'label': ['指标树 · 激活 / 频次 / 留存', 'Metric tree · activation / frequency / retention'],
+   'alt': ['一张指标树。最上面一行是 2021 原稿的四个阶段：试用、体验、习惯、分享。往下分成三个数：激活（第一次从路线入口完成骑行）、频次（每周骑行次数）、留存（30 天内是否回来再骑）。每个数下面列出 2021 方案里的触点：激活是首页 banner、寻宝地图、路线讨论圈；频次是骑行后的金币、宝箱、店铺券，其中“奖励跟着骑行结算”标为保留，“宝箱升级”标为砍掉；留存是骑行回忆（保留）和风景卡。', 'A metric tree. The top row shows the four stages from the 2021 deck: trial, first rides, habit, advocacy. Below, three numbers: activation (a first ride started from a route entry point), frequency (rides per week) and retention (riding again within 30 days). Under each are the touchpoints from the 2021 proposal: home banner, treasure map and route discussions for activation; post-ride coins, chests and shop coupons for frequency, with post-ride rewards marked keep and chest upgrades marked cut; ride memories (keep) and scenery cards for retention.'],
+   'caption': ['2026 年画的指标树：把当年的四个阶段收成三个数，再把 2021 方案里的触点逐一归位，标出今天会保留和砍掉的部分。', 'A metric tree drawn in 2026: the four 2021 stages reduced to three numbers, with each touchpoint from the 2021 proposal put in its place and marked keep or cut.']},
+  {'kind': 'image', 'src': 'qingju/retro-experiment-zh', 'src_en': 'qingju/retro-experiment-en', 'prov': 'retro', 'project': 'qingju',
+   'label': ['第一个实验 · 奖励什么时候给', 'First experiment · when the reward arrives'],
+   'alt': ['一张实验设计图。骑行用户按用户随机分成两组：A 组锁车后立即结算，时间线上奖励落在锁车那一刻；B 组奖励延后、汇总再发放，时间线上奖励落在锁车之后。两组汇到右边一个框：主指标是 7 天复骑率，同时盯住每次复骑对应的奖励成本。', 'An experiment design. Riders are randomised by user into two groups: group A is rewarded the moment the bike is locked; group B receives a batched reward later. Both lead to one box on the right: the primary metric is the 7-day repeat-ride rate, with reward cost per repeat ride as a guardrail.'],
+   'caption': ['2026 年的实验设计：按用户随机分两组，比较锁车后立即结算和延后汇总发放，主指标是 7 天复骑率。', 'An experiment designed in 2026: riders randomised into two groups to compare an immediate reward at lock with a batched one, judged on the 7-day repeat-ride rate.']},
  ],
  # ---------------- PlayBook ----------------
  ('playbook', 1): [

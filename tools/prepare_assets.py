@@ -34,6 +34,11 @@ JOBS = {
     'qingju/team-route': (V2 / 'qingju-final.png', 1200, 84),
     'qingju/team-memory': (SRC / 'work' / 'qingju' / 'team-memory@2x.png', 800, 86),   # 2 倍原稿，见 docs/sources.md 2026-11-15
     'qingju/lofi-board': (SRC / 'work' / 'qingju-lofi-board-raw.png', 2400, 80),
+    # 2026-11-16：07 节「2026 复盘」的两张图，中英文各一张（03-qingju/portfolio/figures/，2800 宽；正文栏 936，导出 2 倍），见 docs/sources.md
+    'qingju/retro-metric-tree-zh': (SRC / 'work' / 'qingju' / 'retro-metric-tree-zh.png', 1920, 86),
+    'qingju/retro-metric-tree-en': (SRC / 'work' / 'qingju' / 'retro-metric-tree-en.png', 1920, 86),
+    'qingju/retro-experiment-zh': (SRC / 'work' / 'qingju' / 'retro-experiment-zh.png', 1920, 86),
+    'qingju/retro-experiment-en': (SRC / 'work' / 'qingju' / 'retro-experiment-en.png', 1920, 86),
     # PlayBook — 2023–24
     'playbook/studio-editor': (EXP / 'studio-editor.png', 2400, 84),
     'playbook/studio-campaign': (EXP / 'studio-campaign.png', 1464, 84),

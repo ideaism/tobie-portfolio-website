@@ -123,14 +123,18 @@ FIGURES = {
    'caption': ['展示柜从空架子开始：点“一键展示”，系统从背包里推荐物品，选好后出现在个人主页上；别人来访时还能看到共同关注的创作者。', 'The showcase starts as an empty shelf. “One-click Show” recommends items from the inventory; once chosen they appear on the profile, and visitors also see the creators you both follow.']},
  ],
  ('playbook', 8): [
-  # 交易市场和以物换物各四屏，1 倍图（390 宽），2 倍图以后再换
+  # 交易市场和以物换物各四屏，1 倍图（390 宽），2 倍图以后再换。
+  # 七张 390×868 的屏只比竖屏框（390:844）高 3%，但底部正好是操作按钮（Refuse / Accept、List、Sure…），
+  # 套竖屏框会把按钮切掉一半，所以放在 'whole' 里整张显示；只有 390×1203 的社区首页照常裁成一屏高。
   {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
    'label': ['交易市场 · 我的 UX 线框', 'Marketplace · my UX wireframes'],
-   'items': [('playbook/app-market-home', ['社区首页：市场和以物换物的入口', 'Community home: entry to Market and Barter']), ('playbook/app-market-listings', ['物品行情：挂单列表', 'Item page: listings']), ('playbook/app-market-trend', ['价格走势与买卖盘', 'Price trend and order book']), ('playbook/app-market-buy-confirm', ['购买确认：数量、单价、应付总额', 'Purchase confirmation: quantity, price, total due'])],
-   'caption': ['', '']},
+   'items': [('playbook/app-market-home', ['社区首页：市场和以物换物的入口', 'Community home: entry to Market and Barter'])],
+   'whole': [('playbook/app-market-listings', ['物品行情：挂单列表', 'Item page: listings']), ('playbook/app-market-trend', ['价格走势与买卖盘', 'Price trend and order book']), ('playbook/app-market-buy-confirm', ['购买确认：数量、单价、应付总额', 'Purchase confirmation: quantity, price, total due'])],
+   'caption': ['', '']},     # 两条手机条共用下一条的图注
   {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
    'label': ['以物换物 · 我的 UX 线框', 'Barter · my UX wireframes'],
-   'items': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换：上面是会失去的，下面是想得到的', 'Posting a request: what you lose above, what you want below']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
+   'items': [],
+   'whole': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换：上面是会失去的，下面是想得到的', 'Posting a request: what you lose above, what you want below']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
    'caption': ['交易市场和以物换物共约 27 屏线框，这里各放四屏。', 'The marketplace and barter flows run to about 27 wireframes; four of each are shown here.']},
  ],
  ('playbook', 9): [

@@ -207,5 +207,6 @@ PlayBook
   - 04 节手机条从四张变五张，排一排（桌面每张约 155 宽）。
   - 奖励弹窗换 2 倍图以后，`'cap': {'playbook/app-reward': 330}` 把显示宽度上限留在 330。06 节手机条从两格变三格。
   - 08 节两条手机条共用后一条的图注；前一条的 `caption` 留空，`build.py` 不再输出空的图注行。
-  - `whole` 和 `partials` 里的图不在 `04-shared/tools/walkthrough/check_figures.py` 的检查范围里（它只看 `items`）；这三张（熔炉稿、推荐选择、奖励弹窗）的实际显示尺寸是在浏览器里量的。
+  - 08 节里七张 390×868 的屏也放在 `whole` 里整张显示：它们只比竖屏框高 3%，但底部正好是操作按钮（Refuse / Accept、Take Down / List、Initiate the trade、Sure），套竖屏框会把按钮切掉一半。交接单写的是「裁成一屏高即可」，这一处是 publisher 按图片显示规则 R4 定的。390×1203 的社区首页照常裁成一屏高。
+  - `whole` 和 `partials` 里的图不在 `04-shared/tools/walkthrough/check_figures.py` 的检查范围里（它只看 `items`）；这十张（熔炉稿、推荐选择、奖励弹窗、08 节七张）的实际显示尺寸是在浏览器里量的。
 - 没接上的（和第二批一样）：功能架构图的 `alt` 记在 `figures.py` 上，`build.py` 不读 `alt` 键，页面替代文字用的是 `label`。

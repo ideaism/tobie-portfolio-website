@@ -72,6 +72,9 @@ JOBS = {
     'playbook/live-recipe-icons': (SRC / 'work' / 'playbook-live' / 'parts' / 'recipe-icons.png', 768, 90),
     'playbook/live-items-nodes': (SRC / 'work' / 'playbook-live' / 'parts' / 'items-nodes.png', 924, 90),
     'playbook/app-home': (SRC / 'work' / 'playbook' / 'app-home@2x.png', 780, 88),   # 2 倍原稿，见 docs/sources.md 2026-11-15
+    # 2026-11-16：用户动线前后对比图，中英文各一张（02-playbook/portfolio/figures/，2800×2980；正文栏 936，导出 2 倍），见 docs/sources.md
+    'playbook/flow-before-after-zh': (SRC / 'work' / 'playbook' / 'flow-before-after-zh.png', 1920, 86),
+    'playbook/flow-before-after-en': (SRC / 'work' / 'playbook' / 'flow-before-after-en.png', 1920, 86),
     'playbook/app-inventory': (EXP / 'app-inventory.png', 390, 88),
     'playbook/app-reward': (EXP / 'app-reward.png', 330, 88),
     'playbook/app-missions': (V2 / 'app-missions.png', 390, 88),

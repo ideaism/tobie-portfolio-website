@@ -144,7 +144,7 @@ PlayBook
   - 奖励时机实验 `qingju/retro-experiment-zh`、`-en`：原图 `03-qingju/portfolio/figures/retro-experiment-zh.png`、`-en.png`（2800×1488）。
   - 四张都由 `03-qingju/portfolio/figures/src/build_retro.mjs` 生成（HTML 排版，无头浏览器按 2 倍截图），2026-11-16。是 2026 年新画的图，不是当年的原稿。图里的内容只来自 07 节正文（四个阶段和三个数、三组触点出自段 1，保留 / 砍掉出自段 2，分组、主指标、成本出自段 3），没有新增事实和数字。
   - 复制到 `sources/work/qingju/`，导出成 1920×1465 和 1920×1020（正文栏 936 的 2 倍），只缩放和压缩，没有裁切。中文页取 `src`，英文页取 `src_en`。
-  - 来源标签：`figures.py` 的 `PROV` 新增键 `retro`（2026 复盘图 / 2026 diagram），两张图都用它。`figures.py` 新增 `('qingju', 7)`，先指标树、后实验。07 节文字没有动。交接单给的 `alt` 记在条目上，`build.py` 现在不读 `alt` 键（同上一节「没接上的」那条），替代文字用的是 `label`。
+  - 来源标签：`figures.py` 的 `PROV` 新增键 `retro`（2026 复盘图 / 2026 diagram），两张图都用它。`figures.py` 新增 `('qingju', 7)`，先指标树、后实验。07 节文字没有动。交接单给的 `alt` 记在条目上，`build.py` 现在不读 `alt` 键（见下面 PlayBook 第二批一节「没接上的」那条），替代文字用的是 `label`。
 
 ## 2026-11-16：PlayBook 第二批文字（6 节变 8 节、三个决策块、动线图、奖励弹窗显示）
 

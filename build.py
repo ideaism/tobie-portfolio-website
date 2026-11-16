@@ -316,11 +316,22 @@ def figure_html(f, lang):
         return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang))}"><div{pad}>'
                 f'{img(src, T(f["label"], lang))}</div></button></div>{cap}</figure>')
     if kind == 'phones':
-        items = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang), "screen")}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
-        # 'partials'：弹窗、卡片这类不是整屏的局部图。不加 screen 类（不套竖屏框、不裁切），按原比例完整显示，
-        # 显示宽度不超过原图宽度（.claude/agents/walkthrough.md R1、R3）。不带放大按钮：桌面上就是原图大小，
-        # 手机上这条手机条改成上下排（styles.css），局部图接近原图大小，放大图标反而会盖住弹窗里的按钮。
-        items += ''.join(f'<figure class="partial" style="max-width:{MANIFEST[src][0]}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f.get('partials', []))
+        # 一条手机条里有三种格子，都不放大（显示宽度不超过原图宽度，.claude/agents/walkthrough.md R1、R3）：
+        #   'items'    整屏截图：套 390:844 竖屏框，长图只露一屏高，点开看全图。
+        #   'partials' 弹窗、卡片这类局部图：不套竖屏框、不裁切，按原比例完整显示，在格子里上下居中；不带放大按钮
+        #              （放大图标会盖住弹窗里的按钮）；带它的手机条在窄屏上改成上下排（styles.css）。
+        #   'whole'    和手机一样宽、但高度不是一屏的图（比一屏长很多的整页稿、比一屏短的半屏）：不套竖屏框，
+        #              按原比例整张显示，顶对齐，带放大按钮。
+        # 'partials' 和 'whole' 的条目可以带第三项：它在这一排里的位置（从 0 数）；不写就排在最后。
+        # 'cap'：{图名: 显示宽度上限（CSS 像素）}，2 倍图用它把上限定在 1 倍宽度；不写就是导出图的宽度。
+        cap_w = lambda src: f.get('cap', {}).get(src, MANIFEST[src][0])
+        zoom = lambda lbl: f'<button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">'
+        cells = [f'<figure>{zoom(lbl)}{img(src, T(lbl, lang), "screen")}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items']]
+        extra = [(pos[0] if pos else len(f['items']) + 99, f'<figure class="partial" style="max-width:{cap_w(src)}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>') for src, lbl, *pos in f.get('partials', [])]
+        extra += [(pos[0] if pos else len(f['items']) + 99, f'<figure class="whole" style="max-width:{cap_w(src)}px">{zoom(lbl)}{img(src, T(lbl, lang))}</button><figcaption>{T(lbl, lang)}</figcaption></figure>') for src, lbl, *pos in f.get('whole', [])]
+        for pos, cell in sorted(extra, key=lambda e: e[0]):
+            cells.insert(pos, cell)
+        items = ''.join(cells)
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip" style="--n:{f["n"]}">{items}</div></div>{cap}</figure>'
     if kind == 'pair':
         (wsrc, wl), (psrc, pl) = f['wide'], f['phone']

@@ -81,12 +81,20 @@ FIGURES = {
    'label': ['用户动线 · 从五个平行视图到一条链路', 'User flow · from five parallel views to one loop'],
    'alt': ['用户动线前后对比：上半是客户方需求文档里的五个平行视图，下半是我按一次回访整理的五步参与链路', 'User flow before and after: the client’s five parallel views above, and the five-step participation loop I organised around a single visit below'],
    'caption': ['上：客户方需求文档里的 App 结构。下：我按粉丝一次回访整理的参与链路，每个节点对应一组 App 中保真线框。', 'Top: the app structure in the client’s requirements. Bottom: the participation loop I organised around one fan visit; each node maps to a set of mid-fidelity wireframes.']},
+  # 2026-11-16 第三批：功能架构图，2024 年秋整理作品集时画的；图里的字是中文，中英文页用同一张
+  {'kind': 'image', 'src': 'playbook/feature-map', 'prov': 'research', 'project': 'playbook',
+   'label': ['App 功能架构图 · 2024 年整理', 'App feature map · compiled in 2024'],
+   'alt': ['功能树：主页面、物品百科、物品合成、社区、任务五个入口，以及个人主页、搜索、通知，各自展开到下一级页面', 'A feature tree: Home, Item catalogue, Crafting, Community and Missions, plus Profile, Search and Notifications, each expanded to its sub-pages'],
+   'caption': ['App 的功能架构：五个入口，加上个人主页、搜索和通知。2024 年秋整理。', 'The app’s feature map: five entry points plus profile, search and notifications. Compiled in autumn 2024; labels are in Chinese.']},
  ],
  ('playbook', 4): [
-  {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 4,
+  # 2026-11-16 第三批：加熔炉废案稿。它是 390×1080 的长屏，熔炉在最底部，不能裁成一屏高，放在 'whole'（整张显示），
+  # 第三项 1 是它在这一排里的位置：早期 UI 之后、配方列表之前。五张排一排。
+  {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 5,
    'label': ['合成界面的演变 · 谁做了什么', 'How the crafting screen evolved · who did what'],
    'items': [('playbook/early-ui', ['早期 UI · 另一位设计师', 'Early UI · another designer']), ('playbook/cauldron-list', ['配方列表 · 我的 UX', 'Recipe list · my UX']), ('playbook/app-craft-ready', ['配方详情 · 我的 UX', 'Recipe detail · my UX']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
-   'caption': ['早期视觉确立了方向；我的线框补全了任务、物品状态和决策点；最终视觉由团队完成。', 'The early UI set a visual direction; my wireframes filled in tasks, object states and decision points; the final visual design was a team effort.']},
+   'whole': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉（我的 UX）', 'Dropped · drag materials into a furnace (my UX)'], 1)],
+   'caption': ['早期视觉确立了方向。我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'The early UI set a visual direction. I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.']},
  ],
  ('playbook', 5): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
@@ -96,14 +104,36 @@ FIGURES = {
  ],
  ('playbook', 6): [
   # 2026-11-16（卡 20261115-026 选 B）：奖励弹窗是 330×453 的弹窗局部，不是整屏，从 items 挪到 partials：
-  # 不加 screen 类，按原比例完整显示，显示宽度不超过原图宽度（见 build.py figure_html）。2 倍原图以后由 playbook agent 导出再换。
-  {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 2,
+  # 不加 screen 类，按原比例完整显示（见 build.py figure_html）。第三批换成 2 倍图（660×906），'cap' 把显示宽度上限留在 330；
+  # 首页和弹窗之间加一张「领取之后」。
+  {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 3,
    'label': ['反馈的分量 · 轻提示与领取弹窗', 'Weight of feedback · light cue vs claim dialog'],
-   'items': [('playbook/app-home', ['日常进度：+5 · 2m 的小提示', 'Routine progress: a small “+5 · 2m” cue'])],
+   'items': [('playbook/app-home', ['日常进度：+5 · 2m 的小提示', 'Routine progress: a small “+5 · 2m” cue']), ('playbook/app-home-events-only', ['领取之后：每日任务离开首页', 'After claiming: daily tasks leave Home'])],
    'partials': [('playbook/app-reward', ['重要奖励：Acquire items 领取', 'A significant reward: “Acquire items”'])],
+   'cap': {'playbook/app-reward': 330},
    'caption': ['日常的小进度贴在任务旁边；只有值得停下来的奖励才用弹窗和一次明确的领取。', 'Routine progress stays next to the task; only a reward worth pausing for gets a dialog and a deliberate claim.']},
  ],
+ # 2026-11-16 第三批：07 节加展示柜四个状态；新增 08「交易与交换」，原 08「交付与反思」顺延为 09
+ ('playbook', 7): [
+  # 「推荐选择」那张是 390×770，不是整屏，放在 'whole'（不套竖屏框，按原比例整张显示），第三项 1 是它在这一排里的位置
+  {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
+   'label': ['展示柜的四个状态 · 我的 UX', 'Four showcase states · my UX'],
+   'items': [('playbook/app-showcase-empty', ['未填充：空架子和“一键展示”', 'Empty: a bare shelf and “One-click Show”']), ('playbook/app-showcase-filled', ['已填充', 'Filled']), ('playbook/app-showcase-visitor', ['访客视角：共同关注的创作者', 'Visitor’s view: creators you both follow'])],
+   'whole': [('playbook/app-showcase-pick', ['推荐选择：从背包里推荐', 'Choosing: recommended from the inventory'], 1)],
+   'caption': ['展示柜从空架子开始：点“一键展示”，系统从背包里推荐物品，选好后出现在个人主页上；别人来访时还能看到共同关注的创作者。', 'The showcase starts as an empty shelf. “One-click Show” recommends items from the inventory; once chosen they appear on the profile, and visitors also see the creators you both follow.']},
+ ],
  ('playbook', 8): [
+  # 交易市场和以物换物各四屏，1 倍图（390 宽），2 倍图以后再换
+  {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
+   'label': ['交易市场 · 我的 UX 线框', 'Marketplace · my UX wireframes'],
+   'items': [('playbook/app-market-home', ['社区首页：市场和以物换物的入口', 'Community home: entry to Market and Barter']), ('playbook/app-market-listings', ['物品行情：挂单列表', 'Item page: listings']), ('playbook/app-market-trend', ['价格走势与买卖盘', 'Price trend and order book']), ('playbook/app-market-buy-confirm', ['购买确认：数量、单价、应付总额', 'Purchase confirmation: quantity, price, total due'])],
+   'caption': ['', '']},
+  {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
+   'label': ['以物换物 · 我的 UX 线框', 'Barter · my UX wireframes'],
+   'items': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换：上面是会失去的，下面是想得到的', 'Posting a request: what you lose above, what you want below']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
+   'caption': ['交易市场和以物换物共约 27 屏线框，这里各放四屏。', 'The marketplace and barter flows run to about 27 wireframes; four of each are shown here.']},
+ ],
+ ('playbook', 9): [
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],

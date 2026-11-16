@@ -687,3 +687,5 @@ html.studio-open{overflow:hidden}
 
 /* a strip that holds a single phone: centre it instead of leaving half the frame empty (2026-11-16) */
 .phone-strip:has(> figure:only-child){grid-template-columns:minmax(0,300px);justify-content:center}
+/* 带局部图（partials）的手机条：窄屏上不左右滑，改成上下排，整屏图和局部图都能一眼看全（2026-11-16） */
+@media (max-width:520px){.phone-strip:has(> figure.partial){grid-template-columns:minmax(0,300px);justify-content:center;overflow-x:visible;scroll-snap-type:none}}

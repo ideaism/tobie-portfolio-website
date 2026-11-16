@@ -144,6 +144,7 @@ PlayBook
   - 奖励时机实验 `qingju/retro-experiment-zh`、`-en`：原图 `03-qingju/portfolio/figures/retro-experiment-zh.png`、`-en.png`（2800×1488）。
   - 四张都由 `03-qingju/portfolio/figures/src/build_retro.mjs` 生成（HTML 排版，无头浏览器按 2 倍截图），2026-11-16。是 2026 年新画的图，不是当年的原稿。图里的内容只来自 07 节正文（四个阶段和三个数、三组触点出自段 1，保留 / 砍掉出自段 2，分组、主指标、成本出自段 3），没有新增事实和数字。
   - 复制到 `sources/work/qingju/`，导出成 1920×1465 和 1920×1020（正文栏 936 的 2 倍），只缩放和压缩，没有裁切。中文页取 `src`，英文页取 `src_en`。
+  - 底色（2026-11-16 傍晚改）：四张原图重新生成，底色从白色改成网站页面底色 `#ECF0ED`（`--canvas`），只有方框是白的；内容、尺寸、文件名没变。原因是本人看过白底版，原话「在绿色页面上突然的白色有点突兀，内容没问题」（交接单「07 节的两张图」里「底色」一条）。新原图覆盖 `sources/work/qingju/` 里的同名文件，导出参数不变（宽 1920、质量 86）；导出后的 webp 四角实测 `#ECF1ED` / `#EDF0ED`（有损压缩差 1 级）。这两张图的图框跟着改成平铺：`figures.py` 条目加 `'bg': '#ECF0ED', 'flat': True`，`build.py` 的 `figure_html` 新增可选键 `flat`（给该图框加内联 `box-shadow:none`），没有白底、描边和投影；别的图框没有动，`styles.css` 没有改。label、alt、caption、来源标签、顺序、07 节文字都没动。
   - 来源标签：`figures.py` 的 `PROV` 新增键 `retro`（2026 复盘图 / 2026 diagram），两张图都用它。`figures.py` 新增 `('qingju', 7)`，先指标树、后实验。07 节文字没有动。交接单给的 `alt` 记在条目上，`build.py` 现在不读 `alt` 键（见下面 PlayBook 第二批一节「没接上的」那条），替代文字用的是 `label`。
 
 ## 2026-11-16：PlayBook 第二批文字（6 节变 8 节、三个决策块、动线图、奖励弹窗显示）

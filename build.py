@@ -307,7 +307,9 @@ def figure_html(f, lang):
     cap = f'<figcaption class="frame-caption">{T(f["caption"], lang)}</figcaption>'
     kind = f['kind']
     if kind == 'image':
-        style = f' style="background:{f["bg"]}"' if f.get('bg') else ''
+        # 'flat'：图本身就是页面底色时用，去掉图框的描边和投影，图直接落在页面上（配合 'bg' 把白底也换掉）。没有这个键的图框一个字都不变
+        css = ([f'background:{f["bg"]}'] if f.get('bg') else []) + (['box-shadow:none'] if f.get('flat') else [])
+        style = f' style="{";".join(css)}"' if css else ''
         pad = ' style="padding:24px"' if f.get('pad') else ''
         width = ' style="max-width:560px"' if f.get('narrow') else ''
         src = f['src_en'] if lang == 'en' and f.get('src_en') else f['src']    # 图里有文字、中英文各导一张时，英文页取 src_en

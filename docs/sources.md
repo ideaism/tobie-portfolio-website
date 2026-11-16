@@ -189,3 +189,23 @@ PlayBook
 - 04 节低保真一段开头加的一句（先画流程图）：节点 `2206:20709`（用户流程）。
 - 落点：`cases.py` → `CASES['qingju']` 的 `facts` 第 1、2 格，`sections` 第 1 项（01）和第 4 项（04）的 `text`；`build.py` → `PROJECTS` 青桔的 `type`。
 - 没动的：顶部三行摘要（brief）、标题、其他节、所有图和图注，`figures.py`、`prototypes.py`。带 74.8%、118.7% 的「核心使用场景」图没上（交接单记：分母对不上 85 或 128，等配图那一批再和本人确认）。
+
+## 2026-11-16：PlayBook 第三批配图和新 08 节「交易与交换」（8 节变 9 节）
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 0b 节「本批交付：第三批配图和『交易与交换』一节」。本人 2026-11-16 在会话里说「先出图」。只合到本机预览，没有部署；验收卡由 playbook agent 提。
+- 图都在 `02-playbook/portfolio/figures/`，2026-11-16 从 Figma 导出后切出来的，只切、没改内容；切法在 `02-playbook/portfolio/figures/src/build_batch3.py`，导出的原图在 `figures/src/figma-1x/`、`figma-2x/`。16 张复制到 `sources/work/playbook/`，在 `tools/prepare_assets.py` 登记，只缩放和压缩，没有再裁。
+- 节号：新增 08「交易与交换」，原 08「交付与反思」顺延为 09；`figures.py` 的 `('playbook', 8)` 改成 `('playbook', 9)`，新增 `('playbook', 7)`、`('playbook', 8)`。`prototypes.py` 里按节号匹配的演示在 03、04 节，没有变。
+- `playbook/app-furnace-draft`（04 节，熔炉废案稿）：App UX `3IhJOmCVR6WC8mJYbbYLA7` 废案页，画框 `656:15668`「Inventory View (Global)」，2 倍导出（780×2160）。本人画的（卡 20261115-022）。
+- `playbook/app-reward`（06 节，换成 2 倍图 660×906）、`playbook/app-home-events-only`（06 节，780×2658）：同文件分区 `704:52105`（首页状态组）2 倍导出后切出；分区里各画框的节点号没有逐个查。原来 330 宽的 `04-shared/output/portfolio/assets/app-reward.png` 不再用，文件还在。「领取之后：每日任务离开首页」这个小标是 playbook agent 看图定的，等本人在验收卡上确认。
+- `playbook/app-showcase-empty`、`-pick`、`-filled`、`-visitor`（07 节）：同文件分区 `704:55397`（个人主页与展示柜）2 倍导出后切出。
+- `playbook/app-market-home`、`-listings`、`-trend`、`-buy-confirm`，`playbook/app-barter-market`、`-request`、`-consume`、`-received`（08 节）：同文件分区 `704:61174`（交易市场与以物换物）1 倍截图后切出（390 宽，2 倍图以后再换）。评审过并保留（卡 20261115-029）；中文版可以放挂单和价格走势（卡 20261115-030）。
+- `playbook/feature-map`（02 节）：旧作品集 `lfqzkEzhH33yq5kvIkNEqW` 节点 `2234:20235`，2024 年秋整理作品集时画的（卡 20261115-032），不是当年的交付物；页面图注只写「2024 年秋整理」。图里的字是中文，中英文页用同一张。来源标签用「研究材料」。
+- 新 08 节文字：「约 27 屏」出自 `04-shared/figma-盘点-2026-11-15/figma-盘点-playbook.md` 第 25 条；第 2 段两条确认规则是线框里看得到的（`app-market-buy-confirm`、`app-barter-request`）；第 3 段：卡 20261115-029。**这三段是 playbook agent 2026-11-16 新起草的，本人还没读过**，等验收卡。页面不写交易功能已上线或有人用过。
+- 导出日期都是 2026-11-16。
+- 显示上的处理（`build.py` 的 `figure_html`、`figures.py`）：
+  - 熔炉废案稿是 390×1080 的长屏，熔炉在最底部；「推荐选择」是 390×770，不到一屏。两张都放在手机条的新键 `whole` 里：不套 390:844 的竖屏框，按原比例整张显示，顶对齐，带放大按钮。条目的第三项是它在这一排里的位置。
+  - 04 节手机条从四张变五张，排一排（桌面每张约 155 宽）。
+  - 奖励弹窗换 2 倍图以后，`'cap': {'playbook/app-reward': 330}` 把显示宽度上限留在 330。06 节手机条从两格变三格。
+  - 08 节两条手机条共用后一条的图注；前一条的 `caption` 留空，`build.py` 不再输出空的图注行。
+  - `whole` 和 `partials` 里的图不在 `04-shared/tools/walkthrough/check_figures.py` 的检查范围里（它只看 `items`）；这三张（熔炉稿、推荐选择、奖励弹窗）的实际显示尺寸是在浏览器里量的。
+- 没接上的（和第二批一样）：功能架构图的 `alt` 记在 `figures.py` 上，`build.py` 不读 `alt` 键，页面替代文字用的是 `label`。

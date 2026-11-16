@@ -304,7 +304,7 @@ CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
 def figure_html(f, lang):
     prov_text, prov_cls = PROV[f['prov']]
     label = frame_label(T(f['label'], lang), T(prov_text, lang), prov_cls, f['project'])
-    cap = f'<figcaption class="frame-caption">{T(f["caption"], lang)}</figcaption>'
+    cap = f'<figcaption class="frame-caption">{T(f["caption"], lang)}</figcaption>' if T(f['caption'], lang) else ''    # 图注留空（['', '']）就不出这一行：两条手机条共用后一条的图注时用
     kind = f['kind']
     if kind == 'image':
         # 'flat'：图本身就是页面底色时用，去掉图框的描边和投影，图直接落在页面上（配合 'bg' 把白底也换掉）。没有这个键的图框一个字都不变

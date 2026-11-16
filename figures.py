@@ -61,25 +61,36 @@ FIGURES = {
    'phone': ('playbook/app-missions', ['App：参与任务（我的 UX）', 'App: take part in missions (my UX)']),
    'caption': ['左：创作者端 Studio 活动页原稿。右：粉丝端 App 任务页的 UX 稿。', 'Left: the creator-side Studio campaign page. Right: the fan-side App missions screen, UX version.']},
  ],
- ('playbook', 3): [
+ # 2026-11-16：新增 02「用户与动线」、07「收藏与展示」，原 02–06 顺延为 03–06、08（07 这一批没有图）
+ ('playbook', 2): [
+  # 动线图中英文各一张：'src' 是中文页用的，'src_en' 是英文页用的（build.py figure_html 按语言取）
+  {'kind': 'image', 'src': 'playbook/flow-before-after-zh', 'src_en': 'playbook/flow-before-after-en', 'prov': 'mixed', 'project': 'playbook',
+   'label': ['用户动线 · 从五个平行视图到一条链路', 'User flow · from five parallel views to one loop'],
+   'alt': ['用户动线前后对比：上半是客户方需求文档里的五个平行视图，下半是我按一次回访整理的五步参与链路', 'User flow before and after: the client’s five parallel views above, and the five-step participation loop I organised around a single visit below'],
+   'caption': ['上：客户方需求文档里的 App 结构。下：我按粉丝一次回访整理的参与链路，每个节点对应一组 App 中保真线框。', 'Top: the app structure in the client’s requirements. Bottom: the participation loop I organised around one fan visit; each node maps to a set of mid-fidelity wireframes.']},
+ ],
+ ('playbook', 4): [
   {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 4,
    'label': ['合成界面的演变 · 谁做了什么', 'How the crafting screen evolved · who did what'],
    'items': [('playbook/early-ui', ['早期 UI · 另一位设计师', 'Early UI · another designer']), ('playbook/cauldron-list', ['配方列表 · 我的 UX', 'Recipe list · my UX']), ('playbook/app-craft-ready', ['配方详情 · 我的 UX', 'Recipe detail · my UX']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
    'caption': ['早期视觉确立了方向；我的线框补全了任务、物品状态和决策点；最终视觉由团队完成。', 'The early UI set a visual direction; my wireframes filled in tasks, object states and decision points; the final visual design was a team effort.']},
  ],
- ('playbook', 4): [
+ ('playbook', 5): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
    'label': ['创作者上下文与搜索 · 我的 UX', 'Creator context and search · my UX'],
    'items': [('playbook/app-home', ['首页：上下文与进度', 'Home: context + progress']), ('playbook/app-inventory', ['背包：相关物品', 'Inventory: related items']), ('playbook/app-search', ['全局搜索：分类筛选', 'Global search: categories']), ('playbook/app-search-creators', ['搜索结果：创作者', 'Results: creators'])],
    'caption': ['日常任务保留创作者上下文；2023 年 10 月的评审后，搜索改为跨社区的全局入口。', 'Everyday tasks keep the creator context; after the October 2023 review, search became a global, cross-community entry point.']},
  ],
- ('playbook', 5): [
+ ('playbook', 6): [
+  # 2026-11-16（卡 20261115-026 选 B）：奖励弹窗是 330×453 的弹窗局部，不是整屏，从 items 挪到 partials：
+  # 不加 screen 类，按原比例完整显示，显示宽度不超过原图宽度（见 build.py figure_html）。2 倍原图以后由 playbook agent 导出再换。
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 2,
    'label': ['反馈的分量 · 轻提示与领取弹窗', 'Weight of feedback · light cue vs claim dialog'],
-   'items': [('playbook/app-home', ['日常进度：+5 · 2m 的小提示', 'Routine progress: a small “+5 · 2m” cue']), ('playbook/app-reward', ['重要奖励：Acquire items 领取', 'A significant reward: “Acquire items”'])],
+   'items': [('playbook/app-home', ['日常进度：+5 · 2m 的小提示', 'Routine progress: a small “+5 · 2m” cue'])],
+   'partials': [('playbook/app-reward', ['重要奖励：Acquire items 领取', 'A significant reward: “Acquire items”'])],
    'caption': ['日常的小进度贴在任务旁边；只有值得停下来的奖励才用弹窗和一次明确的领取。', 'Routine progress stays next to the task; only a reward worth pausing for gets a dialog and a deliberate claim.']},
  ],
- ('playbook', 6): [
+ ('playbook', 8): [
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],

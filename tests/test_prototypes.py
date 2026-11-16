@@ -88,7 +88,7 @@ class StudioTests(unittest.TestCase):
             self.assertTrue(d['provenance'][0].startswith(REBUILT[0]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')
             self.assertTrue(d['provenance'][1].startswith(REBUILT[1]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')
         for lang, n in (('zh', 0), ('en', 1)):
-            html = section_demo('playbook', 2, lang)
+            html = section_demo('playbook', 3, lang)
             self.assertEqual(html.count(f'<p class="proto__prov">{REBUILT[n]}'), len(STUDIO), lang)
             self.assertEqual(html.count(f'<span class="prov prov--retro">{REBUILT_TAG[n]}</span>'), len(STUDIO), lang)
             self.assertIn('data-clips', html, 'the original recordings stay below the rebuilt demos')
@@ -276,6 +276,8 @@ class FigureTests(unittest.TestCase):
             for f in figs:
                 self.assertIn(f['prov'], PROV, f'{slug}/{n}')
                 srcs = [f['src']] if 'src' in f else [i[0] for i in f.get('items', [])]
+                srcs += [f['src_en']] if 'src_en' in f else []        # 英文页另取的图
+                srcs += [i[0] for i in f.get('partials', [])]         # 不是整屏的局部图
                 if f['kind'] == 'pair':
                     srcs = [f['wide'][0], f['phone'][0]]
                 for s in srcs:

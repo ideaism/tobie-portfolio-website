@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261115'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261116'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -291,6 +291,8 @@ CASE_HERO = {
 }
 
 BRIEF_LABELS = [['问题', 'Problem'], ['我的关键决定', 'Key decisions'], ['结果', 'Outcome']]   # 案例开头三行摘要（2026-11-16）
+# 决策块（2026-11-16）：section 上的可选键 'decision'，四行，每行 [zh, en]；沿用开头摘要的细线表格样式，放在正文之后、图之前
+DECISION_LABELS = [['问题', 'Problem'], ['考虑过的方案', 'Alternative considered'], ['为什么没选', 'Why not'], ['结果', 'Outcome']]
 
 CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
     'qingju': ['让成长体系，回到骑行本身。', 'Connect cycling rewards to the reasons people ride.'],
@@ -308,10 +310,14 @@ def figure_html(f, lang):
         style = f' style="background:{f["bg"]}"' if f.get('bg') else ''
         pad = ' style="padding:24px"' if f.get('pad') else ''
         width = ' style="max-width:560px"' if f.get('narrow') else ''
+        src = f['src_en'] if lang == 'en' and f.get('src_en') else f['src']    # 图里有文字、中英文各导一张时，英文页取 src_en
         return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang))}"><div{pad}>'
-                f'{img(f["src"], T(f["label"], lang))}</div></button></div>{cap}</figure>')
+                f'{img(src, T(f["label"], lang))}</div></button></div>{cap}</figure>')
     if kind == 'phones':
         items = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang), "screen")}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
+        # 'partials'：弹窗、卡片这类不是整屏的局部图。不加 screen 类（不套竖屏框、不裁切），按原比例完整显示，
+        # 显示宽度不超过原图宽度（.claude/agents/walkthrough.md R1、R3）。已经是原图大小，所以不带放大按钮。
+        items += ''.join(f'<figure class="partial" style="max-width:{MANIFEST[src][0]}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f.get('partials', []))
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip" style="--n:{f["n"]}">{items}</div></div>{cap}</figure>'
     if kind == 'pair':
         (wsrc, wl), (psrc, pl) = f['wide'], f['phone']
@@ -355,6 +361,8 @@ def case_page(slug, lang):
         h += f'\n<section class="case-section" id="section-{n+1}"><p class="label label--teal">{n+1:02d} · {label}</p><h2>{s["title"][i]}</h2>'
         body = ''.join(f'<p>{para[i]}</p>' for para in s['text'])
         h += f'<div class="{"outcome" if s.get("outcome") else "prose"}">{body}</div>'
+        if 'decision' in s:
+            h += '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, s['decision'])) + '</dl>'
         if 'insight' in s:
             h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
         if 'steps' in s:

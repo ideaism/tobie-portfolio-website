@@ -613,8 +613,9 @@ def clips(lang):
 def section_demo(slug, number, lang):
     """Which demo sits in which case section (1-based)."""
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
-    if slug == 'playbook' and number == 2: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
-    if slug == 'playbook' and number == 3: return flow('playbook-craft', lang, 'try-app')
+    # 2026-11-16：PlayBook 前面插了一节「用户与动线」，Studio 从 02 顺延为 03，App 从 03 顺延为 04
+    if slug == 'playbook' and number == 3: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
+    if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 6: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06
     return ''

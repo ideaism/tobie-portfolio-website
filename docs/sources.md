@@ -224,3 +224,10 @@ PlayBook
 - label、alt、caption 照交接单 2g。原稿把「达成特定成就」写成了「达成特点成就」，图不改，图注按正确的字写（交接单记）。`alt` 记在条目上，页面替代文字用的还是 `label`（同上面几节）。
 - 没动的：正文、事实卡、其他图。② 下半「核心使用场景」（74.8%、118.7%）没有导、没有上。
 - 2026-11-17 改底色：三张图的白底换成页面底色 `#ECF0ED`，原因是本人在卡 20261117-002 上写「可以的话把白底去掉」。做法见 `03-qingju/portfolio/figures/src/remove_white.py`：把白色当透明算出来再叠到页面底色上，黑字和青绿色差 0–2 级，浅色块按比例略深，原稿里白色填充的方框变成只有描边；不改内容和位置。文件名、尺寸（3558×1829、3625×3026、3662×2616）和导出参数（宽 1920、质量 86）都没变，只重导这三张；导出的 webp 四个角是 `#EDF0ED`、`#ECF1ED`、`#ECF1ED`、`#ECF1ED`（和 `#ECF0ED` 差 1 级，三张一样）。`figures.py` 这三条各加 `'bg': '#ECF0ED', 'flat': True`（图框无白底、无投影，和 07 节两张图一样），所以上面「落点」一条里的「普通图框」不再适用；label、alt、caption、prov、顺序没动，`build.py` 没改。私有备份 `04-shared/网站原图/work/qingju/` 同步换成新图。
+
+## 2026-11-17：PlayBook 02 节功能架构图换成重画版
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 0b 节「02 · 用户与动线：加功能架构图」（2026-11-17 改过）。本人在验收卡 20261117-001 上打回上一版，原话「这个图可以重新做一遍内容不变单纯的改一下呈现方式」。
+- `playbook/feature-map-zh`（中文页）、`playbook/feature-map-en`（英文页）：原图 `02-playbook/portfolio/figures/feature-map-zh.png`、`feature-map-en.png`（2800×1944），源文件 `02-playbook/portfolio/figures/src/build_feature_map.py`。内容出自旧作品集 `lfqzkEzhH33yq5kvIkNEqW` 节点 `2234:20235`（2024 年秋整理，卡 20261115-032），节点和从属关系照原图（34 个节点），只换了版式和颜色，另做了英文版。导出成 1920×1333，只缩放和压缩。
+- 页面：`figures.py` 里按语言取图（`src` / `src_en`）；label 不变；英文图注去掉了「labels are in Chinese」。来源标签仍是「研究材料」。重画这件事只记在这里，页面图注只写「2024 年秋整理」。
+- 上一版 `playbook/feature-map`（`feature-map-2024.png`）页面不再引用；原图、JOBS 和 `dist/assets/work/playbook/feature-map.webp` 都还在，没有删。

@@ -149,6 +149,11 @@ PROJECTS = [
   'label': ['The Commons Fridge · 冰箱前的研究者演示', 'The Commons Fridge · researcher demo at the fridge'], 'prov': 'photo'},
 ]
 
+# 首页「精选作品」和案例页底部「下一个项目」的先后顺序。改顺序只改这一行。
+# 2026-11-16 本人定：PlayBook 排最前。其余三个保持原来的先后。
+PROJECT_ORDER = ['playbook', 'qingju', 'smt', 'commons-fridge']
+PROJECTS.sort(key=lambda p: PROJECT_ORDER.index(p['slug']))
+
 def collage(slug, lang):
     """Compositions made only of original screens and photos."""
     if slug == 'qingju':

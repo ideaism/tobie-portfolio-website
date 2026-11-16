@@ -23,6 +23,17 @@ PROV = {
 # (slug, section number) -> list of figures
 FIGURES = {
  # ---------------- Qingju ----------------
+ # 2026-11-16 夜（交接单 2g）：01、04 节的三张 2021 原稿配图，白底原稿，普通图框；label / alt / caption 照交接单
+ ('qingju', 1): [
+  {'kind': 'image', 'src': 'qingju/growth-system-2021', 'prov': 'research', 'project': 'qingju',
+   'label': ['成长体系痛点分析 · 2021 原稿（中文）', 'Growth-system pain points · 2021 original (Chinese)'],
+   'alt': ['2021 原稿「成长体系痛点分析」：左边三条问题，层级深、模块多、感知度弱；右边一张结构图，入口、成长形式、出口三列，任务中心、骑行累积、每日签到三个入口各自连到“达成特定成就”。', 'The 2021 “growth-system pain points” page: three problems on the left (too deep, too many modules, low visibility) and a diagram on the right with three columns (entry, mechanism, outcome), where the task centre, ride accumulation and daily check-in each lead separately to an achievement.'],
+   'caption': ['2021 年对当时青桔成长体系的梳理：任务中心、骑行累积、每日签到三个入口，各自通向“达成特定成就”，彼此不相连。问题归为三点：层级深、模块多（任务、等级、勋章、积分四套）、感知弱。', 'A 2021 map of Qingju’s growth system at the time: three entry points (task centre, ride accumulation, daily check-in) each lead separately to “achievement unlocked”, with nothing linking them. Three problems are named: buried too deep, too many modules (tasks, levels, badges, points) and low visibility.']},
+  {'kind': 'image', 'src': 'qingju/active-user-stages-2021', 'prov': 'research', 'project': 'qingju',
+   'label': ['定义活跃用户 · 2021 原稿（中文）', 'Defining an active rider · 2021 original (Chinese)'],
+   'alt': ['2021 原稿「定义活跃用户」：四列阶段，试用单车（1–3 天）、体验骑行（7 天）、习惯使用（30 天）、分享推荐（3 个月以上）；每列往下是主要指标和主要标准；最下面归成潜力用户、活跃用户、忠实用户。', 'The 2021 “defining an active rider” page: four stage columns, trial (days 1–3), first rides (day 7), habit (day 30) and advocacy (three months and beyond), each with indicators and a threshold beneath; at the bottom, riders are grouped as potential, active or loyal.'],
+   'caption': ['把“提高活跃度”拆成四个阶段：试用单车（1–3 天）、体验骑行（7 天）、习惯使用（30 天）、分享推荐（3 个月以上）。每个阶段写了主要指标和判断标准，再归成潜力、活跃、忠实三类用户。', 'The brief to “increase engagement”, broken into four stages: trial (days 1–3), first rides (day 7), habit (day 30) and advocacy (three months and beyond). Each stage has indicators and a threshold, and riders are grouped as potential, active or loyal.']},
+ ],
  ('qingju', 2): [
   {'kind': 'image', 'src': 'qingju/research', 'prov': 'research', 'project': 'qingju',
    'label': ['访谈摘要 · 2021 原稿（中文）', 'Interview summary · 2021 original (Chinese)'],
@@ -38,6 +49,10 @@ FIGURES = {
    'caption': ['原始旅程图：行为与机会的综合。', 'Original journey map: a synthesis of behaviours and opportunities.']},
  ],
  ('qingju', 4): [
+  {'kind': 'image', 'src': 'qingju/user-flow-2021', 'prov': 'research', 'project': 'qingju',
+   'label': ['用户流程 · 2021 原稿（中文）', 'User flow · 2021 original (Chinese)'],
+   'alt': ['2021 原稿「用户流程」流程图：选择路线或店铺、扫码开始骑行、结束骑行、获得宝藏、前往宝库查看、使用金币升级宝箱；下方分支是合并路线、发布骑行感受、发布至讨论圈或查看骑行回忆，以及查看风景卡和优惠券。', 'The 2021 user-flow chart: choose a route or shop, scan to start, end the ride, receive treasure, open the vault, upgrade chests with coins; lower branches cover merging routes, writing up the ride, publishing to the route discussion or viewing ride memories, and viewing scenery cards and coupons.'],
+   'caption': ['低保真之前的整条路径：选择路线或店铺 → 扫码骑行 → 结束骑行 → 获得宝藏（优惠券、风景卡、金币）→ 去宝库查看 → 用金币升级宝箱。另一支是记录：可以合并多条路线，发布骑行感受，公开的进讨论圈，不公开的进骑行回忆。', 'The whole path before wireframing: choose a route or shop → scan and ride → end the ride → receive treasure (coupons, scenery cards, coins) → open the vault → upgrade chests with coins. A second branch covers recording: merge several routes, write up the ride, then publish it to the route discussion or keep it in ride memories.']},
   {'kind': 'image', 'src': 'qingju/lofi-board', 'prov': 'wire', 'project': 'qingju', 'bg': '#4F4F4F',
    'label': ['低保真原型板 · 21 个界面', 'Low-fidelity board · 21 screens'],
    'alt': ['21 个灰度低保真界面，三行连线。第一行是主流程：地图发现路线、路线预览、路线详情、骑行中、结束骑行获得金币、骑行汇总、写下感受。第二行是店铺地图、路线讨论圈、宝库、宝箱升级、获得风景卡、获得店铺券、发布成功。第三行是个人中心、优惠券条码、我的风景卡、骑行回忆列表与详情。', 'Twenty-one greyscale wireframes in three connected rows. Row one is the main flow: discover a route on the map, preview, route detail, riding, end of ride with coins, ride summary, write a note. Row two covers the shop map, route discussion, treasure vault, chest upgrade, scenery-card and shop-coupon rewards, and the published post. Row three covers the profile menu, coupon barcode, scenery-card collection, and the ride-memory list and detail.'],

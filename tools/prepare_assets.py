@@ -39,6 +39,10 @@ JOBS = {
     'qingju/retro-metric-tree-en': (SRC / 'work' / 'qingju' / 'retro-metric-tree-en.png', 1920, 86),
     'qingju/retro-experiment-zh': (SRC / 'work' / 'qingju' / 'retro-experiment-zh.png', 1920, 86),
     'qingju/retro-experiment-en': (SRC / 'work' / 'qingju' / 'retro-experiment-en.png', 1920, 86),
+    # 2026-11-16 夜：01、04 节的三张 2021 原稿配图（交接单 2g；03-qingju/portfolio/figures/，只缩放压缩，不裁切），见 docs/sources.md
+    'qingju/growth-system-2021': (SRC / 'work' / 'qingju' / 'growth-system-2021.png', 1920, 86),
+    'qingju/active-user-stages-2021': (SRC / 'work' / 'qingju' / 'active-user-stages-2021.png', 1920, 86),
+    'qingju/user-flow-2021': (SRC / 'work' / 'qingju' / 'user-flow-2021.png', 1920, 86),
     # PlayBook — 2023–24
     'playbook/studio-editor': (EXP / 'studio-editor.png', 2400, 84),
     'playbook/studio-campaign': (EXP / 'studio-campaign.png', 1464, 84),

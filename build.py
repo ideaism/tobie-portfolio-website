@@ -124,7 +124,7 @@ def footer(lang):
 # ------------------------------------------------------------------ home
 PROJECTS = [
  {'slug': 'qingju', 'project': 'qingju', 'name': 'Qingju · 青桔', 'year': '2021',
-  'type': ['商业委托 · 训练营结项', 'Commercial brief · capstone'],
+  'type': ['青桔（滴滴）商业委托 · 训练营结项', 'Commercial brief from Qingju (DiDi) · Programme capstone'],
   'title': ['让成长体系，回到骑行本身。', 'Make growth part of the ride.'],
   'summary': ['把“提高活跃度”的业务目标，变成围绕休闲骑行的发现、记录与奖励——从研究一路做到低保真流程。', 'An engagement brief turned into discovery, memories and rewards around leisure riding — carried from research to a low-fidelity flow.'],
   'chips': [['用户研究', '旅程图', '低保真原型'], ['User research', 'Journey mapping', 'Lo-fi prototyping']],

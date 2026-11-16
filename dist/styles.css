@@ -307,7 +307,7 @@ p,li{text-wrap:pretty}
 .phone-strip figure{margin:0}
 .phone-strip img{border-radius:12px;box-shadow:0 16px 30px -18px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06)}
 .phone-strip img.screen{aspect-ratio:390/844;object-fit:cover;object-position:top;width:100%}
-.phone-strip figure.partial{align-self:center;justify-self:center}   /* 不是整屏的局部图：按原比例完整显示，宽度上限（原图宽）写在元素上 */
+.phone-strip figure.partial{align-self:center;justify-self:center;width:100%}   /* 不是整屏的局部图：按原比例完整显示，宽度上限（原图宽）写在元素上 */
 .phone-strip figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
 .phone-strip figcaption b{color:var(--teal);font-weight:700;margin-right:6px}
 .outcome{background:var(--frame);border-radius:var(--r-card);padding:var(--s-6);box-shadow:inset 0 0 0 1px var(--rule);max-width:46em}

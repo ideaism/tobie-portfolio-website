@@ -23,6 +23,21 @@ Author: Yucheng Feng / Tobie. User confirmed UP NO.1 is a colleague's account; d
 - https://www.figma.com/design/RXWxFWgHwWEXBBcLQ6LlZB?node-id=0-5802
 - Existing exported assets from output/portfolio/assets. SMT overview is the portfolio asset with account identifiers already masked.
 - Components, guidelines and maintenance; collaborative business decomposition. No code implementation or measured efficiency claims.
+- 2026-11-16 加 8 张图、新开 05 节「界面」（原 05 顺延成 06）。依据：`04-shared/SMT-交接单.md`「本次可合并」一节；这次只合这一节，交接单其余部分（T2–T5、F3 等）没合，事实卡、deck、摘要、01–04 节文字、原 05 节文字都没动。
+  - Figma 文件：夜间版 `On3eDCRN7DKUpwuvGjd8rF`「兴业项目-兴业SMT (Copy)」（节点编号和日间版源文件 `RXWxFWgHwWEXBBcLQ6LlZB` 一样）。2026-11-16 导出，1 倍（导出工具最多给节点原尺寸）。原件在 `04-shared/SMT-导图-2026-11-16/`，复制到 `sources/work/smt/`，导出时只压缩成 WebP，没有缩放、没有裁切。
+  - `smt/credit-order-panel`：节点 `683:24828`，信用交易下单板 13 个变体，1840×1542，02 节。
+  - `smt/level-variants`：节点 `517:54278`，买卖档位 8 个变体（五档 4 个、十档 4 个），1510×842，03 节。
+  - `smt/market-components`：节点 `2492:69029`，行情组件全集，3309×4113，03 节，整张放。
+  - `smt/screen-asset-home`：节点 `0:1110`「资产总览-展开」，1920×1080，05 节。
+  - `smt/screen-main-menu`：节点 `213:5799`，资产首页上展开的主菜单，1920×1080，05 节。
+  - `smt/screen-quick-order`：节点 `656:24252`，快速挂单整页，1920×1080，05 节。
+  - `smt/screen-basket-order`：节点 `1759:63399`，篮子算法 · 篮子下单，1920×1080，05 节。
+  - `smt/screen-grid-strategy`：节点 `1727:54810`，网格策略 · 多档预埋，1920×1080，05 节。
+  - 打码：整页 5 张（`smt/screen-*`）的账号和姓名用 `04-shared/SMT-导图-2026-11-16/mask.py` 打了马赛克，网站用的是 `打码/` 文件夹里的版本（`sources/work/smt/` 里文件名带 `-masked`），不是 `原图/` 里同名的未打码文件。组件 3 张上没有账号姓名，用的是 `原图/` 里的。
+  - 本人确认：卡 20261115-008（卡上六页是本人画的）、20261115-019（下单板和行情组件算本人范围）、20261116-010（用夜间版）、20261116-014（验收通过，原话「前面正常第九张不放」）。
+  - 没放的：日间版下单板（`原图/day-credit-order-panel-683-24828.png`），字段名在日间版里看不见，本人定不放。
+  - 05 节正文第一句的依据是卡 20261115-008 第 2 版；第二句（每一页由同一批组件拼成）是 SMT 会话照图写的，本人在卡 20261116-014 上读过。label、caption 照交接单「0 号更新 · 甲″」的表逐字用；英文术语（T+0 arbitrage、pre-set orders、time and sales 等）是 SMT 会话译的。
+  - 落点：`cases.py` → `CASES['smt']['sections']` 第 5 项（新）和第 6 项的 label；`figures.py` 新增 `('smt', 2)`、`('smt', 5)`，`('smt', 3)` 后面接两张；`tools/prepare_assets.py` 的 `JOBS` 加 8 行。`prototypes.py`（复刻演示在第 3 节）和 `build.py` 没有改。
 
 ## Commons Fridge
 - https://www.figma.com/design/lx9WbYRybWceTemdXVkoJj?node-id=190-148

@@ -105,6 +105,13 @@ JOBS = {
     'playbook/app-barter-request': (SRC / 'work' / 'playbook' / 'app-barter-request.png', 390, 88),
     'playbook/app-barter-consume': (SRC / 'work' / 'playbook' / 'app-barter-consume.png', 390, 88),
     'playbook/app-barter-received': (SRC / 'work' / 'playbook' / 'app-barter-received.png', 390, 88),
+    # 2026-11-17（卡 20261115-031、20261117-011）：新 09 节「二创与联名 / Remix」五张 Studio 定稿，2880 宽的 2 倍图，
+    # 设置照 playbook/studio-editor（最大宽 2400，质量 84），只缩放压缩，不裁切。来源见 docs/sources.md
+    'playbook/studio-remix-fan-challenges': (SRC / 'work' / 'playbook' / 'studio-remix-fan-challenges@2x.png', 2400, 84),
+    'playbook/studio-remix-new-challenge': (SRC / 'work' / 'playbook' / 'studio-remix-new-challenge@2x.png', 2400, 84),
+    'playbook/studio-remix-challenge-page': (SRC / 'work' / 'playbook' / 'studio-remix-challenge-page@2x.png', 2400, 84),
+    'playbook/studio-remix-submission-detail': (SRC / 'work' / 'playbook' / 'studio-remix-submission-detail@2x.png', 2400, 84),
+    'playbook/studio-remix-creator-collab': (SRC / 'work' / 'playbook' / 'studio-remix-creator-collab@2x.png', 2400, 84),
     'playbook/app-missions': (V2 / 'app-missions.png', 390, 88),
     'playbook/app-owned': (V2 / 'app-owned.png', 390, 88),
     'playbook/app-unowned': (V2 / 'app-unowned.png', 390, 88),

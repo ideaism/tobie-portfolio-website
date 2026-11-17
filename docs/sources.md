@@ -247,3 +247,11 @@ PlayBook
 - 来源：Figma App UX 文件 `3IhJOmCVR6WC8mJYbbYLA7`，节点 `744:22420`（三句问题）和 `744:22486`（三个页面名），2026-11-17 截图逐字核对，截图存 `02-playbook/portfolio/figures/src/figma-1x/note-barter-744-22420.png`、`note-barter-744-22486.png`。便签是本人写的；引导句「和客户方讨论之后，我把自己还没想清楚的问题记在了线框旁边」出自卡 20261115-028 本人的结论。
 - 原稿里「1 对 1」「1 对多」数字两侧的空格不一致，页面上统一成数字两侧各一个空格，别的没动（包括小写的 steam）。英文是译文，段内注明 translated from my Chinese notes。
 - 只合到本机预览，没有部署；验收卡由 playbook agent 提，本人通过再关卡 20261115-028。
+
+## 2026-11-17：PlayBook 新增 09 节「二创与联名 / Remix」（9 节变 10 节）
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 4 节「② 新增 09 节「二创与联名 / Remix」」；卡 20261115-031（本人定：Remix 定稿画面直接用，不打码）、卡 20261117-011（本人选 A，五张画面没说要换）。label、title、三段 text、五张图的小标和图注照交接单逐字用，没有 insight、decision。
+- 图来源：Figma Studio 文件 `XDyOn5545LrSOsCwqUcED7`，分区 `5708:61179`，画框 `5671:57098`（挑战列表）、`5671:57226`（新建挑战）、`5671:58157`（挑战页）、`5671:58242`（作品详情）、`5706:58922`（创作者联名），2026-11-17 用 `download_assets` 逐张 2 倍导出，原件在 `02-playbook/portfolio/figures/src/figma-2x/remix-*.png`。网站用的是 `02-playbook/portfolio/figures/studio-remix-*@2x.png` 五张（2880×1620、2880×2130、2880×2948、2880×3108、2880×1620），复制到 `sources/work/playbook/`，私有备份 `04-shared/网站原图/work/playbook/` 手工复制了一份（本机没有 rsync）。
+- 文字依据：本人 2024 年在旧作品集（Figma `lfqzkEzhH33yq5kvIkNEqW` 节点 `2159:23058`）里写的四段 Remix 说明，加上这五张画面里看得到的东西（表单字段、框选留言、按版本记录、两处「选为获胜者」按钮、三个页签）。画面里的创作者名字和插画是原稿里的示例，本人在卡 20261115-031 上定了直接用。原稿里的小毛病（第 4 张「测试」气泡和 Cencel、第 5 张菜单高亮 Campaign、第 2 张两个中文标签）照原样留着。
+- 落点：`cases.py` → `CASES['playbook']['sections']` 第 9 项（新）和第 10 项的 label（`09 /` → `10 /`）；`figures.py` 新增 `('playbook', 9)` 五条 `image`（`prov: original`，整张显示、不裁切），原 `('playbook', 9)`（团队 UI 三张）改成 `('playbook', 10)`；`tools/prepare_assets.py` 的 `JOBS` 加 5 行（最大宽 2400、质量 84，照 `playbook/studio-editor`）。`prototypes.py`（playbook 只按 3、4 节匹配）、`build.py` 的 `CASE_HERO`（不按节号）、`tests/`、`verify.py` 都没有写死 PlayBook 的节数或 9 / 10 节号，没有改。
+- 只合到本机预览，没有部署。

@@ -153,7 +153,26 @@ FIGURES = {
    'whole': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换：上面是会失去的，下面是想得到的', 'Posting a request: what you lose above, what you want below']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
    'caption': ['交易市场和以物换物共约 27 屏线框，这里各放四屏。', 'The marketplace and barter flows run to about 27 wireframes; four of each are shown here.']},
  ],
+ # 2026-11-17（卡 20261115-031、20261117-011）：新增 09「二创与联名 / Remix」，原 09「交付与反思」顺延为 10。
+ # 五张 Studio 定稿（UX + UI 都是本人），1440 宽画框的 2 倍图，按原比例整张显示，不裁切；3、4 两张高大于宽，也整张显示。
  ('playbook', 9): [
+  {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
+   'label': ['粉丝挑战列表', 'Fan challenges'],
+   'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']},
+  {'kind': 'image', 'src': 'playbook/studio-remix-new-challenge', 'prov': 'original', 'project': 'playbook',
+   'label': ['新建挑战', 'New challenge'],
+   'caption': ['名称、说明、可提交的文件类型和数量、阶段时间、给粉丝的分成。', 'Name, description, accepted file types and counts, phase timing and the fan’s share.']},
+  {'kind': 'image', 'src': 'playbook/studio-remix-challenge-page', 'prov': 'original', 'project': 'playbook',
+   'label': ['挑战页', 'Challenge page'],
+   'caption': ['当前阶段、剩余天数和全部投稿，创作者从这里选出获胜者。', 'The current phase, days left and all submissions. The creator picks the winner here.']},
+  {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook',
+   'label': ['作品详情', 'Submission detail'],
+   'caption': ['在画面上框出一块留修改意见，右侧按版本记录往来。', 'Mark an area of the image to comment on it. The side panel keeps the feedback by revision.']},
+  {'kind': 'image', 'src': 'playbook/studio-remix-creator-collab', 'prov': 'original', 'project': 'playbook',
+   'label': ['创作者联名', 'Creator collaborations'],
+   'caption': ['已联名的物品按合作的创作者分组，另有待审批和收到的申请两个页签。', 'Collaborated items grouped by partner creator, with tabs for pending approvals and incoming requests.']},
+ ],
+ ('playbook', 10): [
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],

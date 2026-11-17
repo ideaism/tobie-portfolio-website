@@ -150,8 +150,9 @@ PROJECTS = [
 ]
 
 # 首页「精选作品」和案例页底部「下一个项目」的先后顺序。改顺序只改这一行。
-# 2026-11-16 本人定：PlayBook 排最前。其余三个保持原来的先后。
-PROJECT_ORDER = ['playbook', 'qingju', 'smt', 'commons-fridge']
+# 2026-11-17 本人定（卡 20261115-049 第 2 版选 C）：PlayBook → 兴业 SMT → 冰箱 → 青桔。
+# PlayBook 最前是 11-16 说的，后面三个照 11-15 选的先后。Agent 矩阵进来以后放第一个（卡 20261115-003）。
+PROJECT_ORDER = ['playbook', 'smt', 'commons-fridge', 'qingju']
 PROJECTS.sort(key=lambda p: PROJECT_ORDER.index(p['slug']))
 
 def collage(slug, lang):

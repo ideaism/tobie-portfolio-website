@@ -60,16 +60,28 @@ FIGURES = {
    'alt': ['21 个灰度低保真界面，三行连线。第一行是主流程：地图发现路线、路线预览、路线详情、骑行中、结束骑行获得金币、骑行汇总、写下感受。第二行是店铺地图、路线讨论圈、宝库、宝箱升级、获得风景卡、获得店铺券、发布成功。第三行是个人中心、优惠券条码、我的风景卡、骑行回忆列表与详情。', 'Twenty-one greyscale wireframes in three connected rows. Row one is the main flow: discover a route on the map, preview, route detail, riding, end of ride with coins, ride summary, write a note. Row two covers the shop map, route discussion, treasure vault, chest upgrade, scenery-card and shop-coupon rewards, and the published post. Row three covers the profile menu, coupon barcode, scenery-card collection, and the ride-memory list and detail.'],
    'caption': ['完整的低保真原型板（2021，本人完成）。上方原型走的是第一行主流程。', 'The full low-fidelity board (2021, my work). The prototype above follows the first row, the main flow.']},
  ],
+ # 2026-11-17（卡 20261117-021 选 A，交接单 3c）：06 节改成四块，按一次骑行的先后：寻宝地图 → 路线发现与讨论圈 → 宝库与宝箱 → 记录与回忆
  ('qingju', 6): [
-  {'kind': 'phones', 'prov': 'team', 'project': 'qingju', 'n': 2,
-   'label': ['团队高保真 · 在研究之上完成', 'Team high fidelity · built on the research'],
-   'items': [('qingju/team-memory', ['骑行回忆', 'Ride memories'])],
-   'caption': ['团队完成的最终高保真：研究结论被带进了界面。', 'The team’s final high fidelity: the research carried into the interface.']},
+  {'kind': 'image', 'src': 'qingju/team-treasure-map', 'prov': 'team', 'project': 'qingju', 'bg': '#404040', 'narrow': True,
+   'label': ['团队高保真 · 寻宝地图', 'Team high fidelity · treasure map'],
+   'alt': ['两屏叠放的高保真：前面是美景地图，路线沿途标着不同等级的宝箱；后面是美食地图，店铺围成的范围中间有一个宝箱。底部分栏选中“寻找宝藏”。', 'Two high-fidelity screens, overlapping: in front, the scenery map with chests of different tiers along its routes; behind, the food map, where a chest sits inside a cluster of shops. The bottom tab “Find treasure” is selected.'],
+   'caption': ['寻宝地图放在首页的一级分栏里。美景地图按路线走，骑完一条路线开宝箱；美食地图按范围打卡，到范围内任意一家店就算完成。', 'The treasure map sits in a first-level tab on the home screen. The scenery map works by route: finish a route to open its chest. The food map works by area: reach any shop inside the area to check in.']},
   # 2026-11-16（卡 042）：横向三屏拼图不进手机条，单独一条 image，按原比例完整显示（原图宽 1200，正文栏 936，不放大）
   {'kind': 'image', 'src': 'qingju/team-route', 'prov': 'team', 'project': 'qingju',
    'label': ['团队高保真 · 路线发现与讨论圈', 'Team high fidelity · route discovery & discussion'],
    'alt': ['三屏拼在一起的团队高保真：左边是某条路线的讨论圈，中间是路线详情（途经风景、里程、照片、他人感受和“去骑车”按钮），右边是收起后的路线卡。', 'Three team high-fidelity screens shown together: a route’s discussion feed on the left, the route detail in the middle (sights, distance, photos, riders’ notes and a “Ride” button), and the collapsed route card on the right.'],
    'caption': ['团队完成的高保真，三屏拼在一起：路线讨论圈、路线详情、收起后的路线卡。', 'High fidelity by the team, three screens shown together: the route discussion feed, the route detail and the collapsed route card.']},
+  {'kind': 'image', 'src': 'qingju/team-vault', 'prov': 'team', 'project': 'qingju', 'bg': '#404040',
+   'label': ['团队高保真 · 宝库与宝箱', 'Team high fidelity · vault and chests'],
+   'alt': ['左边是宝库一屏：顶部是金币数，中间是当前的骑行宝箱和升级按钮，下面是“我的优惠券”和“我的风景卡”两个分栏。右边是金、银、铜三个等级的宝箱。', 'On the left, the vault screen: the coin balance at the top, the current ride chest with an upgrade button in the middle, and two tabs below, “My coupons” and “My scenery cards”. On the right, the three chest tiers: gold, silver and bronze.'],
+   'caption': ['骑行结束后，金币、店铺券和风景卡都收进宝库。金币可以用来升级宝箱，宝箱分金、银、铜三级。', 'After a ride, coins, shop coupons and scenery cards all land in the vault. Coins upgrade the chest, which comes in three tiers: gold, silver and bronze.']},
+  {'kind': 'phones', 'prov': 'team', 'project': 'qingju', 'n': 4,
+   'label': ['团队高保真 · 记录与回忆', 'Team high fidelity · recording and memories'],
+   'items': [('qingju/team-publish', ['发布成功', 'Published']),
+             ('qingju/team-merge', ['合并发布', 'Merge and publish']),
+             ('qingju/team-memory-list', ['回忆列表', 'Memory list']),
+             ('qingju/team-memory', ['骑行回忆', 'Ride memories'])],
+   'caption': ['骑行结束后可以把多条路线合并成一篇发布。骑行回忆里每次骑行一张卡，有风景卡的用风景卡做封面，点开能看到感受、照片和路线。', 'After a ride, several routes can be merged into one post. In ride memories each ride is a card, with a scenery card as its cover when there is one; opening it shows the note, photos and route.']},
  ],
  # 2026-11-16（卡 20261116-012）：07 节「2026 复盘」的两张图，只把正文里已有的内容画出来；中英文各一张（'src' 中文页，'src_en' 英文页）
  # 同日傍晚：本人看了白底版觉得在绿色页面上突兀，原图底色改成页面底色 #ECF0ED（--canvas）；图框跟着用 'bg' + 'flat'（无白底、无投影）

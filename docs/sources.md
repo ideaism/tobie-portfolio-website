@@ -232,6 +232,18 @@ PlayBook
 - 没动的：正文、事实卡、其他图。② 下半「核心使用场景」（74.8%、118.7%）没有导、没有上。
 - 2026-11-17 改底色：三张图的白底换成页面底色 `#ECF0ED`，原因是本人在卡 20261117-002 上写「可以的话把白底去掉」。做法见 `03-qingju/portfolio/figures/src/remove_white.py`：把白色当透明算出来再叠到页面底色上，黑字和青绿色差 0–2 级，浅色块按比例略深，原稿里白色填充的方框变成只有描边；不改内容和位置。文件名、尺寸（3558×1829、3625×3026、3662×2616）和导出参数（宽 1920、质量 86）都没变，只重导这三张；导出的 webp 四个角是 `#EDF0ED`、`#ECF1ED`、`#ECF1ED`、`#ECF1ED`（和 `#ECF0ED` 差 1 级，三张一样）。`figures.py` 这三条各加 `'bg': '#ECF0ED', 'flat': True`（图框无白底、无投影，和 07 节两张图一样），所以上面「落点」一条里的「普通图框」不再适用；label、alt、caption、prov、顺序没动，`build.py` 没改。私有备份 `04-shared/网站原图/work/qingju/` 同步换成新图。
 
+## 2026-11-17：青桔 06 节加四张团队高保真（交接单 3c）
+
+- 依据：`03-qingju/portfolio/handoff.md`「3c. 待合进网站：06 节加四张团队高保真」；卡 20261117-021，本人 2026-11-17 20:44 北京时间选 A，没写意见。label、alt、caption 照交接单 3c 逐字用。
+- 出处：旧作品集 Figma `lfqzkEzhH33yq5kvIkNEqW`，2026-11-17 用 download_assets 2 倍导出整页，本机用 03-qingju/portfolio/figures/src/crop_team_hifi.py 裁出（只裁切、拼排，不改界面像素；手机屏圆角外的底色填成 `#F6F8F6`；品牌标志照原稿保留）。裁切框是 2 倍像素：
+  - `qingju/team-treasure-map`：节点 `2206:20841`，裁 (139, 2504, 1823, 4492)；原稿深灰底 `#404040`。原图 `03-qingju/portfolio/figures/team-treasure-map-2021.png`，1684×1988。
+  - `qingju/team-vault`：节点 `2206:21364`，宝库一屏 (396, 4684, 1196, 6416) 和三个宝箱 (1756, 5828, 3583, 6333) 两块裁图并排放在原稿深灰底上的拼排。原图 `team-vault-2021.png`，2000×1303。
+  - `qingju/team-publish`：节点 `2206:21364`，裁 (1758, 414, 2558, 2146)。原图 `team-publish-2021.png`，800×1732。
+  - `qingju/team-merge`：节点 `2206:21364`，裁 (2758, 414, 3558, 2146)。原图 `team-merge-2021.png`，800×1732。
+  - `qingju/team-memory-list`：节点 `2206:21324`，裁 (1268, 294, 2068, 2026)。原图 `team-memory-list-2021.png`，800×1732。
+- 网站处理：五张复制到 `sources/work/qingju/`，在 `tools/prepare_assets.py` 登记（质量 86；寻宝地图宽 1120、宝库与宝箱宽 1920、三张手机屏宽 800），导出 1120×1322、1920×1251、800×1732 ×3，只缩放和压缩，没有再裁。私有备份 `04-shared/网站原图/work/qingju/`。
+- 落点：`figures.py` 的 `('qingju', 6)` 改成四块，按一次骑行的先后：寻宝地图（`image`，`bg: #404040`，`narrow`）→ 路线发现与讨论圈（原有 `qingju/team-route`，没改）→ 宝库与宝箱（`image`，`bg: #404040`）→ 记录与回忆（原有手机条，`n` 2 → 4，四屏：发布成功、合并发布、回忆列表、骑行回忆；label 和 caption 换成 3c 的新文字，`qingju/team-memory` 这张图没换）。都是 `prov: team`。06 节正文、`build.py` 没有改。
+
 ## 2026-11-17：PlayBook 02 节功能架构图换成重画版
 
 - 依据：`02-playbook/portfolio/handoff.md` 第 0b 节「02 · 用户与动线：加功能架构图」（2026-11-17 改过）。本人在验收卡 20261117-001 上打回上一版，原话「这个图可以重新做一遍内容不变单纯的改一下呈现方式」。

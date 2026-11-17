@@ -43,6 +43,12 @@ JOBS = {
     'qingju/growth-system-2021': (SRC / 'work' / 'qingju' / 'growth-system-2021.png', 1920, 86),
     'qingju/active-user-stages-2021': (SRC / 'work' / 'qingju' / 'active-user-stages-2021.png', 1920, 86),
     'qingju/user-flow-2021': (SRC / 'work' / 'qingju' / 'user-flow-2021.png', 1920, 86),
+    # 2026-11-17：06 节新增的团队高保真（卡 20261117-021，交接单 3c），见 docs/sources.md
+    'qingju/team-treasure-map': (SRC / 'work' / 'qingju' / 'team-treasure-map-2021.png', 1120, 86),
+    'qingju/team-vault': (SRC / 'work' / 'qingju' / 'team-vault-2021.png', 1920, 86),
+    'qingju/team-publish': (SRC / 'work' / 'qingju' / 'team-publish-2021.png', 800, 86),
+    'qingju/team-merge': (SRC / 'work' / 'qingju' / 'team-merge-2021.png', 800, 86),
+    'qingju/team-memory-list': (SRC / 'work' / 'qingju' / 'team-memory-list-2021.png', 800, 86),
     # PlayBook — 2023–24
     'playbook/studio-editor': (EXP / 'studio-editor.png', 2400, 84),
     'playbook/studio-campaign': (EXP / 'studio-campaign.png', 1464, 84),

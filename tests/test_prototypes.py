@@ -302,7 +302,21 @@ class FigureTests(unittest.TestCase):
                     self.assertIn('class="shot-scroll__view" tabindex="0" role="region" aria-label="', html)
                     self.assertIn(hint, html)
                     self.assertEqual(html.count('data-enlarge'), 1)
-                    self.assertEqual(html.count('<img '), 1)
+                    fixed = f.get('fixed')
+                    self.assertEqual(html.count('<img '), 2 if fixed else 1)
+                    if fixed:   # v3: the unscrolled copy is decorative, clipped to the fixed chrome, and comes after the scrolling picture
+                        self.assertIn('<img aria-hidden="true" src=', html)
+                        self.assertIn('alt="" class="shot-scroll__fixed" style="clip-path:polygon(', html)
+                        self.assertLess(html.index('shot-scroll__view'), html.index('shot-scroll__fixed'))
+        for (slug, n), figs in FIGURES.items():   # 'fixed' only goes with 'scroll', in source pixels that fit the picture's first 16:9 screen
+            for f in figs:
+                fx = f.get('fixed')
+                if not fx:
+                    continue
+                self.assertTrue(f.get('scroll'), f'{slug}/{n}')
+                self.assertLessEqual(set(fx), {'of', 'top', 'left', 'right'})
+                self.assertLess(fx.get('left', 0) + fx.get('right', 0), fx['of'])
+                self.assertLess(fx.get('top', 0), fx['of'] * 9 / 16)
         plain = dict(FIGURES[('playbook', 9)][0])
         self.assertNotIn('scroll', plain)
         self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default

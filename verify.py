@@ -24,7 +24,7 @@ for p,v in pages.items():
  if v.h1!=1:errors.append(f'{p}: h1 count {v.h1}')
  if v.lang not in ['en','zh-CN']:errors.append(f'{p}: lang missing')
  for img in v.imgs:
-  if 'src' in img and not img.get('alt'):errors.append(f'{p}: missing alt')
+  if 'src' in img and not img.get('alt') and img.get('aria-hidden')!='true':errors.append(f'{p}: missing alt')   # aria-hidden copies (scroll 'fixed' layer) are decorative
  for ref in v.refs:
   u=urlsplit(ref)
   if u.scheme or ref.startswith('//'):continue

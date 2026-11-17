@@ -56,6 +56,12 @@ JOBS = {
     'qingju/hifi-map': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 86),
     'qingju/hifi-route': (SRC / 'work' / 'qingju-hifi' / 'route.png', 795, 86),
     'qingju/hifi-chests': (SRC / 'work' / 'qingju-hifi' / 'chests.png', 890, 88),
+    # cover pieces (2026-11-17, card 20261117-020; reused 2026-11-18 for card 20261118-013): single screens cut from the
+    # same two exports (see CROP), and the three chests with the page background removed by tools/cut_qingju_chests.py
+    'qingju/hifi-phone-map': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 90),
+    'qingju/hifi-phone-food': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 90),
+    'qingju/hifi-phone-discussion': (SRC / 'work' / 'qingju-hifi' / 'route.png', 800, 90),
+    'qingju/hifi-chests-cut': (SRC / 'work' / 'qingju-hifi' / 'chests-cut.png', 890, 92),
     'playbook/app-craft-missing': (EXP / 'app-craft-insufficient.png', 780, 86),
     'playbook/app-craft-ready': (EXP / 'app-craft-ready.png', 780, 86),
     'playbook/app-craft-confirm': (EXP / 'app-craft-confirm.png', 780, 86),
@@ -215,6 +221,9 @@ for r in range(3):
 # their frame: the export keeps a grey margin and lets overflowing layers hang outside the frame.
 CROP = {
     'playbook/studio-campaign': (20, 20, 1460, 830),   # the 1440×810 Studio frame (2026-11-16)
+    'qingju/hifi-phone-map': (33, 47, 433, 912),          # the front phone on the map crop (2026-11-17)
+    'qingju/hifi-phone-food': (433, 101, 750, 857),       # what shows of the phone behind it: its left edge is hidden in the original
+    'qingju/hifi-phone-discussion': (9, 42, 409, 905),    # the discussion phone on the route crop
 }
 
 

@@ -503,9 +503,25 @@
   890,
   240
  ],
+ "qingju/hifi-chests-cut": [
+  890,
+  240
+ ],
  "qingju/hifi-map": [
   800,
   960
+ ],
+ "qingju/hifi-phone-discussion": [
+  400,
+  863
+ ],
+ "qingju/hifi-phone-food": [
+  317,
+  756
+ ],
+ "qingju/hifi-phone-map": [
+  400,
+  865
  ],
  "qingju/hifi-route": [
   795,

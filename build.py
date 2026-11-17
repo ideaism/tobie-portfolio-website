@@ -165,12 +165,17 @@ PROJECTS.sort(key=lambda p: PROJECT_ORDER.index(p['slug']))
 def collage(slug, lang):
     """Compositions made only of original screens and photos."""
     if slug == 'qingju':
-        # 2026-11-16（本人定）：封面用团队高保真，不用低保真线框。三块都裁自 2021 年的方案展示页，底色和原稿一致。
-        plain = 'border-radius:0;box-shadow:none'
-        return (f'<div class="collage" style="--bg:#404040">'
-                + img('qingju/hifi-map', t('高保真：寻宝地图，地图上散落着不同等级的宝箱', 'High fidelity: the treasure map, with chests of different tiers on the map', lang)).replace('<img', f'<img style="left:4%;top:5%;width:42%;{plain}"')
-                + img('qingju/hifi-route', t('高保真：路线讨论圈与路线详情', 'High fidelity: route discussion and route detail', lang)).replace('<img', f'<img style="left:51%;top:6%;width:42%;{plain}"')
-                + img('qingju/hifi-chests', t('三个等级的宝箱：铜、银、金', 'Three chest tiers: bronze, silver and gold', lang)).replace('<img', f'<img style="left:62%;top:84%;width:30%;{plain}"')
+        # 2026-11-16（本人定）：封面用团队高保真，不用低保真线框。
+        # 2026-11-18（卡 20261118-013 第 2 版）：等距斜放。三屏手机平躺在一块斜着看的台面上、一级比一级高，宝箱立在前面。
+        # 三屏和宝箱是从同一份高保真里单独裁出来的（tools/prepare_assets.py 的 CROP、tools/cut_qingju_chests.py），不改颜色和内容。
+        def lay(name, alt, i):
+            return img(name, alt, 'iso__phone collage__phone').replace('<img', f'<img style="--i:{i}"')
+        return ('<div class="collage collage--iso" style="--bg:#CFF3EA"><div class="iso__plane">'
+                + lay('qingju/hifi-phone-discussion', t('高保真：路线讨论圈', 'High fidelity: route discussion', lang), 0)
+                + lay('qingju/hifi-phone-map', t('高保真：寻宝地图，地图上散落着不同等级的宝箱', 'High fidelity: the treasure map, with chests of different tiers on the map', lang), 1)
+                + lay('qingju/hifi-phone-food', t('高保真：按美食筛选的地图', 'High fidelity: the map filtered by food', lang), 2)
+                + '</div>'
+                + img('qingju/hifi-chests-cut', t('三个等级的宝箱：铜、银、金', 'Three chest tiers: bronze, silver and gold', lang), 'iso__chests')
                 + '</div>')
     if slug == 'playbook':
         # 2026-11-17（本人定，卡 20261117-020 选 A）：深色舞台，一叠真实界面斜着往后排开，鼠标移上去散开一点。
@@ -187,13 +192,39 @@ def collage(slug, lang):
                 + piece('playbook/team-mission', t('PlayBook App 任务页（成品界面）', 'PlayBook App mission page (finished UI)', lang), 1, f'left:54%;top:24%;width:19.5%;{phone}', 'collage__phone')
                 + '</div></div>')
     if slug == 'smt':
-        return (f'<div class="collage" style="--bg:#F2F2F3;aspect-ratio:16/9">'
-                + img('smt/overview', t('SMT-MAX 资产与持仓界面', 'SMT-MAX assets and positions screen', lang)).replace('<img', '<img style="left:0;top:0;width:100%;border-radius:0;box-shadow:none"')
+        # 2026-11-18（卡 20261118-013 第 2 版）：拼格（Bento）。藏青底上大小不一的格子，每格放一块真实界面的局部，角上标这是什么。
+        # 界面只裁切和放大，全部平放。本人要求每张封面的呈现方式都不一样，这张是唯一一张拼格。
+        def tile(area, name, alt, label, style, cls=''):
+            return (f'<figure class="bento__tile {cls}" style="grid-area:{area}">'
+                    + img(name, alt).replace('<img', f'<img style="{style}"')
+                    + f'<figcaption class="bento__label">{label}</figcaption></figure>')
+        phone = 'position:static;width:62%;height:auto'
+        return ('<div class="collage collage--bento" style="--bg:#0E1830">'
+                + tile('a', 'smt/screen-asset-home', t('SMT-MAX 资产首页：多账户总览和持仓', 'SMT-MAX asset home: multi-account overview and positions', lang),
+                       t('资产首页', 'Asset home', lang), 'left:0;top:0;width:165%')
+                + tile('b', 'smt/screen-quick-order', t('SMT-MAX 快速挂单：下单板和盘口', 'SMT-MAX quick order: order panel and order book', lang),
+                       t('快速挂单', 'Quick order', lang), 'left:0;top:-9%;width:250%')
+                + tile('c', 'smt/level-variants', t('买卖档位的 8 个变体', 'Eight variants of the bid/ask levels', lang),
+                       t('档位 · 8 个变体', 'Levels · 8 variants', lang), 'left:0;top:0;width:175%')
+                + '<figure class="bento__tile bento__tile--phones" style="grid-area:d"><div class="bento__phones">'
+                + img('smt/daton-buy-care', t('买入页 · 关怀版', 'Buy screen · Care mode', lang)).replace('<img', f'<img style="{phone}"')
+                + img('smt/daton-buy-standard', t('买入页 · 原版', 'Buy screen · Standard', lang)).replace('<img', f'<img style="{phone}"')
+                + f'</div><figcaption class="bento__label">{t("关怀版 / 原版", "Care / Standard", lang)}</figcaption></figure>'
                 + '</div>')
     if slug == 'commons-fridge':
-        return (f'<div class="collage" style="--bg:#1F2B28">'
-                + img('fridge/photo-fridge', t('我在共享冰箱前演示手机原型', 'Me demonstrating the phone prototype at a shared fridge', lang)).replace('<img', '<img style="left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;border-radius:0;box-shadow:none"')
-                + img('fridge/cf-home', t('Commons Fridge 原型首页', 'Commons Fridge prototype home', lang), 'collage__phone').replace('<img', '<img style="right:5%;top:9%;width:21%"')
+        # 2026-11-18（卡 20261118-013 第 2 版）：手账拼贴。两张实拍照片像拍立得一样带白边、贴胶带、微微歪着，
+        # 原型首页压在上面，小企鹅当贴纸。照片和界面只裁切、缩放、转一点角度。
+        def snap(name, alt, note, style, img_style):
+            return (f'<figure class="scrap__snap" style="{style}"><span class="scrap__tape" aria-hidden="true"></span>'
+                    + img(name, alt).replace('<img', f'<img style="{img_style}"')
+                    + f'<figcaption>{note}</figcaption></figure>')
+        return ('<div class="collage collage--scrap" style="--bg:#EFE9DC">'
+                + snap('fridge/photo-fridge', t('我在共享冰箱前演示手机原型', 'Me demonstrating the phone prototype at a shared fridge', lang),
+                       t('在共享冰箱前', 'At the shared fridge', lang), 'left:4%;top:13%;width:51%;--r:-4deg', 'aspect-ratio:4/3;object-position:50% 40%')
+                + snap('fridge/photo-touch', t('碰一下冰箱门上的入口，手机打开对应页面', 'Touching the entry on the fridge door opens the matching page', lang),
+                       t('碰一下就打开', 'Tap and it opens', lang), 'left:51%;top:19%;width:24%;--r:5deg', 'aspect-ratio:3/4;object-position:45% 55%')
+                + img('fridge/cf-home', t('Commons Fridge 原型首页', 'Commons Fridge prototype home', lang), 'scrap__phone collage__phone')
+                + img('fridge/penguin-add', t('小企鹅贴纸', 'Penguin sticker', lang), 'scrap__sticker')
                 + '</div>')
     return ''
 

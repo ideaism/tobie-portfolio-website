@@ -9,11 +9,17 @@ Rules (docs/design-system.md §5):
   5. The three PlayBook Studio demos rebuilt in code (STUDIO, rule 8) may be
      operated freely inside stated limits; they say they are a 2026 rebuild,
      take their interface from the source, and invent no data.
+  6. The campaign drafting assistant (PlayBook 11, DRAFTER) is not a rebuild:
+     it is a new design concept from 2026 and says so (CONCEPT). Its creators,
+     items and campaigns are fictional and come from one JSON file in
+     02-playbook, read at build time; the page makes no request for it.
 
 Coordinates are in the pixel space of the exported screen (see manifest).
 """
 import json
+from functools import lru_cache
 from html import escape
+from pathlib import Path
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
 
@@ -610,12 +616,145 @@ def clips(lang):
 <div class="frame frame--canvas"><div class="clips__tabs" role="group" aria-label="{t('选择录屏', 'Choose a recording', lang)}">{tabs}</div>{figs}</div></section>'''
 
 
+# --------------------------------------------------------------------------
+# PlayBook 11: campaign drafting assistant (a new design concept, 2026)
+#
+# 交接单 02-playbook/portfolio/handoff.md 第 4 节 ⑤；本人的结论在卡 20261116-001（做）、
+# 20261116-013（B 档：能点的示意加评分结果）、20261117-003（打分「都通过」）、20261117-024（「放上画布」选 A）。
+# 不属于 docs/design-system.md 规则 8 管的三个重做演示：这是 2026 年新做的设计，物品、创作者、活动都是虚构的。
+# 数据只有一份：02-playbook 里的 JSON，构建时读进来写进页面（data-config），页面运行时不发任何请求。
+# 「放上画布」只读地画出配方编辑器的三栏，样式沿用 03 节的 .rz，结构用 03 节的 recipeRules 验；
+# 不新建 recipeLab，不碰 STUDIO（03 节的测试要求那里正好三个演示、八样物品）。
+# 引擎：dist/prototype.js 的 draftRules（纯函数，tests/draft_rules.test.js 在 Node 里跑）和 drafterLab。
+# --------------------------------------------------------------------------
+DRAFT_DATA = Path(__file__).resolve().parent.parent / '02-playbook' / 'case-study' / 'ai-起草助手-数据.json'
+CONCEPT = ['2026 年新做的设计示意', 'New design concept, 2026']
+
+
+@lru_cache(maxsize=1)
+def draft_data():
+    return json.loads(DRAFT_DATA.read_text(encoding='utf-8'))
+
+
+def _pick(v, lang):
+    """Every {'zh': …, 'en': …} in the data becomes the page's language."""
+    if isinstance(v, dict):
+        if set(v) == {'zh', 'en'}:
+            return v[lang]
+        return {k: _pick(x, lang) for k, x in v.items()}
+    if isinstance(v, list):
+        return [_pick(x, lang) for x in v]
+    return v
+
+
+DRAFTER = {
+ 'anchor': 'try-drafter',
+ 'label': ['PlayBook · 活动起草助手', 'PlayBook · Campaign drafting assistant'],
+ 'title': ['选一个目标，改一份草案', 'Pick a goal, edit a draft'],
+ 'intro': ['选一个创作者目标，看助手起草的活动。每个任务、每条配方都可以接受、改数量或删掉；改过以后，下面会按现在的样子重新检查。配方可以放上画布，看它摆进 Studio 配方编辑器的样子。',
+           'Pick a creator’s goal and read the campaign the assistant drafted. Every mission and every recipe can be accepted, edited (quantities only) or removed; once you change something, the draft is checked again as it now stands. A recipe can be put on the canvas to see how it would sit in the Studio recipe editor.'],
+ 'score': ['评分结果', 'Score'],
+ 'score_text': ['三份草案 × 五条检查 = 十五项，全部通过', '3 drafts × 5 checks = 15 checks, all passed'],
+ 'score_checks': ['五条检查', 'The five checks'],
+ 't': {
+   'pick': ['选一个创作者目标', 'Pick a creator’s goal'],
+   'draft': ['草案{n}', 'Draft {n}'],
+   'nums': [['一', '二', '三', '四', '五', '六', '七', '八', '九'], ['1', '2', '3', '4', '5', '6', '7', '8', '9']],
+   'task': ['任务 {n}', 'Mission {n}'],
+   'recipe': ['配方{n}', 'Recipe {n}'],
+   'days': ['{n} 天', '{n} days'],
+   'h_self': ['助手起草时的自查', 'The assistant’s own check while drafting'],
+   'h_tasks': ['任务', 'Missions'], 'h_items': ['物品', 'Items'], 'h_recipes': ['配方', 'Recipes'],
+   'h_why': ['为什么这样配', 'Why it is set up this way'],
+   'h_recheck': ['按现在的改动重新检查', 'Checked again with your changes'],
+   'h_canvas': ['放上画布', 'On the canvas'],
+   'col_platform': ['在哪做', 'Where'], 'col_what': ['做什么', 'What'], 'col_freq': ['频率', 'How often'], 'col_reward': ['奖励', 'Reward'],
+   'col_item': ['物品', 'Item'], 'col_rarity': ['普通或稀有', 'Common or rare'], 'col_source': ['怎么得到', 'How to get it'],
+   'common': ['普通', 'Common'], 'rare': ['稀有', 'Rare'],
+   'req': ['必需材料', 'Required'], 'opt': ['可选材料', 'Optional'], 'out': ['产出', 'Output'], 'none': ['无', 'None'],
+   'choose': ['{n} 选 1', 'Choose 1 of {n}'],
+   'qty': ['{name} × {n}', '{name} × {n}'],
+   'sep': ['、', ', '], 'colon': ['：', ': '], 'dash': ['：', ': '], 'gap': ['', ' '],
+   'accept': ['接受', 'Accept'], 'accepted': ['已接受', 'Accepted'],
+   'edit': ['修改', 'Edit'], 'edit_done': ['改好了', 'Done'],
+   'remove': ['删除', 'Remove'], 'restore': ['恢复', 'Restore'], 'restore_all': ['全部恢复', 'Restore all'],
+   'place': ['放上画布', 'Put on canvas'], 'placed': ['在画布上', 'On the canvas'],
+   'act': ['{act}：{name}', '{act}: {name}'],
+   'edit_hint': ['只改数量，1 到 9。', 'Quantities only, 1 to 9.'],
+   'less': ['{name} 减 1', 'One fewer {name}'], 'more': ['{name} 加 1', 'One more {name}'],
+   'at_min': ['最少 1 个。', 'At least 1.'], 'at_max': ['最多 9 个。', 'At most 9.'],
+   're_none': ['没有发现问题。', 'No problems found.'],
+   're_no_source': ['{item}没有任务会发。', 'No mission gives {item}.'],
+   're_short': ['{item}最多拿到 {max} 个，这条配方要 {need} 个。', '{item}: at most {max} can be earned, and this recipe needs {need}.'],
+   're_contention': ['{item}不够同时合这几条配方，只能选一条。', 'There is not enough {item} for these recipes together; only one of them can be crafted.'],
+   're_platform': ['剩下的 {n} 个任务里，只有 {k} 个在原平台上，不到一半。', 'Only {k} of the {n} remaining missions happen on the home platforms, which is less than half.'],
+   're_no_tasks': ['一个任务都不剩了。', 'No missions are left.'],
+   're_structure': ['放不进画布：{why}', 'Does not fit on the canvas: {why}'],
+   're_removed': ['删掉的 {n} 项不参与检查。', 'The {n} removed part(s) are left out of the check.'],
+   'canvas_ro': ['只读示意', 'Read-only sketch'],
+   'canvas_empty': ['点一条配方的「放上画布」，它会按 Studio 配方编辑器的三栏摆在这里。', 'Click “Put on canvas” on a recipe to lay it out here in the three areas of the Studio recipe editor.'],
+   'canvas_gone': ['{name}已经删掉，画布上不再摆它。', '{name} has been removed, so it is no longer on the canvas.'],
+   'said_pick': ['换成了{name}，之前的改动都清空了。', 'Switched to {name}; earlier changes are cleared.'],
+   'said_accept': ['{name} 标成已接受。', '{name} is marked as accepted.'],
+   'said_unaccept': ['{name} 取消了接受。', '{name} is no longer marked as accepted.'],
+   'said_qty': ['{name}：{item}改成 {n} 个。', '{name}: {item} set to {n}.'],
+   'said_removed': ['{name} 删掉了，不再参与检查。', '{name} removed; it is left out of the check.'],
+   'said_restored': ['{name} 恢复了。', '{name} restored.'],
+   'said_restore_all': ['删掉的都恢复了。', 'Everything removed is back.'],
+   'said_placed': ['{name} 放上了画布（只读）。', '{name} is on the canvas (read-only).'],
+   'sum_some': ['重新检查：{n} 个问题。', 'Checked again: {n} problem(s).'],
+   'sum_none': ['重新检查：没有发现问题。', 'Checked again: no problems found.'],
+ },
+}
+
+
+def _drafter_config(lang):
+    """What drafterLab needs, already in the page's language."""
+    d = draft_data()
+    i = 0 if lang == 'zh' else 1
+    recipe = STUDIO['playbook-recipe']
+    read_keys = ('read', 'read_in', 'read_no_in', 'read_opt', 'read_out', 'read_no_out', 'read_and', 'read_or', 'read_sep', 'read_choose', 'read_wrap',
+                 'no_full', 'no_dup', 'no_groups', 'no_groupfull', 'no_nowhere')
+    return {
+        'constraints': {c['id']: c['label'][lang] for c in d['constraints']},
+        'drafts': _pick(d['drafts'], lang),
+        # 结构合法：用 03 节配方编辑器的同一份上限和规则验（recipeRules）
+        'limits': recipe['limits'],
+        'geo': recipe['geo'],
+        't': {**{k: v[i] for k, v in DRAFTER['t'].items()}, **{k: recipe['t'][k][i] for k in read_keys}},
+    }
+
+
+def drafter(lang):
+    d = draft_data()
+    T = lambda pair: t(*pair, lang)
+    checks = ''.join(f'<li>{escape(c["label"][lang])}</li>' for c in d['checks'])
+    score = (f'<dl class="case-brief case-decision dz-score" data-component="Score">'
+             f'<div><dt>{T(DRAFTER["score"])}</dt><dd><strong>{T(DRAFTER["score_text"])}</strong></dd></div>'
+             f'<div><dt>{T(DRAFTER["score_checks"])}</dt><dd><ol class="dz-score__list">{checks}</ol></dd></div></dl>')
+    return f'''<section class="proto frame-block" id="{DRAFTER['anchor']}" data-drafter data-config="{_json(_drafter_config(lang))}" data-component="Design concept">
+{_frame_label(T(DRAFTER['label']), T(CONCEPT), '', 'playbook')}
+<div class="frame frame--canvas">
+ <div class="drafter">
+  <div class="proto__intro"><span class="label label--teal">{t('可以点的示意', 'Try it', lang)}</span><h3>{T(DRAFTER['title'])}</h3><p>{T(DRAFTER['intro'])}</p></div>
+  <div class="dz-pick" role="group" aria-label="{T(DRAFTER['t']['pick'])}" data-goals></div>
+  <div class="dz-draft" data-draft></div>
+  <div class="dz-bar"><p class="studio__status" data-status role="status"></p><div class="dz-bar__tools" data-tools></div></div>
+  {score}
+ </div>
+ <p class="proto__prov">{T(CONCEPT)}</p>
+</div>
+<noscript><p class="frame-caption">{t('启用 JavaScript 后可以操作这个示意。', 'Enable JavaScript to use this concept.', lang)}</p></noscript>
+</section>'''
+
+
 def section_demo(slug, number, lang):
     """Which demo sits in which case section (1-based)."""
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
     # 2026-11-16：PlayBook 前面插了一节「用户与动线」，Studio 从 02 顺延为 03，App 从 03 顺延为 04
     if slug == 'playbook' and number == 3: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
     if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
+    if slug == 'playbook' and number == 11: return drafter(lang)   # 2026-11-17：最后一节「2026 回看 · 活动起草助手」（交接单 ⑤）
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 6: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06
     return ''

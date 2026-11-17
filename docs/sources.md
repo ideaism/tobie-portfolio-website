@@ -269,6 +269,16 @@ PlayBook
 - 只合到本机预览，没有部署。
 - 第 2 版（交接单第 4 节 ③）：作品详情、创作者联名这两张 2026-11-17 按本人在卡 20261117-017 上的要求在导出图上修了三处（拼写、测试气泡、菜单高亮），原始导出和修补脚本在 `02-playbook/portfolio/figures/src/`。新建挑战、挑战页、作品详情三张比 16:9 高，`figures.py` 加 `'scroll': True`，放进 16:9 窗口里上下滑动看（本人原话：「这种一屏放不下的就做滑动效果，可以上下滑动查看，不需要在一屏放下」）。
 
+## 2026-11-17：PlayBook 新增 11 节「2026 回看 · 活动起草助手」（10 节变 11 节，只合到本机）
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑤ 新增最后一节「2026 回看 · 活动起草助手」」；本人的结论见卡 20261116-001（做）、20261116-013（做到 B 档：能点的示意加评分结果）、20261117-003（本人打分，原话「都通过」）、20261117-024（「放上画布」选 A：新一节里只读地画出三栏，03 节演示不动）。创始人同意做这一节（本人在卡 20261116-001 上说的）。
+- 文字：label、title、五段 text 照交接单逐字用，没有 insight、decision。
+- 方案和数据：方案 `02-playbook/case-study/ai-起草助手-方案.md`、草案 `ai-起草助手-三份草案.md`、数据 `ai-起草助手-数据.json`（三条约束、五条检查、评分结果、三份草案，中英成对；中文逐字来自本人打过分的草案文件）。草案由 Claude 生成，创作者、物品、活动都是虚构的。评分是本人打的：三份草案、十五项检查，全部通过。
+- 数据怎么进页面：网站仓库里没有副本。`prototypes.py` 构建时读 `../02-playbook/case-study/ai-起草助手-数据.json`，按页面语言挑出中文或英文，写进演示的 `data-config`；页面运行时不发请求。数据里的字原样用，没改。页面上的按钮、状态提示、「重新检查」的句子、评分结果那一行（「三份草案 × 五条检查 = 十五项，全部通过」，英文页 “3 drafts × 5 checks = 15 checks, all passed”）是 `prototypes.py` 的 `DRAFTER`，「读作」沿用 03 节配方演示的同一组句子。
+- 落点：`cases.py` → `CASES['playbook']['sections']` 第 11 项；`prototypes.py` 新增 `DRAFT_DATA`、`CONCEPT`、`DRAFTER`、`drafter()`，`section_demo` 加一行（playbook 第 11 节）；`dist/prototype.js` 新增 `draftRules`（纯函数）和 `drafterLab`，初始化挂 `[data-drafter]`；`dist/styles.css` 末尾一段 `.drafter` / `.dz-*`；`tests/draft_rules.test.js`、`tests/test_drafter.py` 新增；`docs/design-system.md` 补规则 9 和组件表一行。03 节的 `STUDIO`、`recipeRules`、`recipeLab` 和它们的测试没动。
+- 重新检查的规则（交接单 ⑤ 第 4 条）：一次性任务和「仅周五」算 1 次，每天一次算活动天数；只比「只来自任务」的材料的数量（另一条剩下的配方也会产出的材料不比）；某样材料单条配方已经不够时，不再另报争用。「全部恢复」只恢复删掉的项，改过的数量不回退（换一个目标会全部清空）。
+- 只合到本机预览，没有部署。
+
 ## 2026-11-17：新增第五个案例 Agent Matrix（只合到本机，没部署、没推送）
 
 - 交接单：`../05-agent-matrix/portfolio/handoff.md`（`status: ready`）和同目录 `案例大纲.md`。每句事实的原文摘句和行号在工作区外的出处表 `~/其他任务/claudestudy/evidence/2026-11-14-矩阵案例大纲-出处.md`，交接单每段后面的「出处 n」对应它的第 n 行。

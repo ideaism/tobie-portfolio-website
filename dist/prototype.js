@@ -349,6 +349,83 @@ const recipeRules = (() => {
   return { blank, load, find, check, add, move, remove, nudge, toggleJoin, toggleChoose, setPct, count };
 })();
 
+/* 6a'. Campaign drafting assistant (PlayBook 11): a new design concept from 2026, not one of
+   the three rebuilds. Plain data in, plain data out, so tests/draft_rules.test.js runs it in Node.
+   A draft comes from 02-playbook/case-study/ai-起草助手-数据.json (prototypes.py writes it into the page).
+   The visitor's changes are { tasks: {id: {qty, removed, accepted}}, recipes: {id: {qty: {item: n}, removed, accepted}} }. */
+const draftRules = (() => {
+  const R = recipeRules;
+  const MIN = 1, MAX = 9;
+  const times = (task, days) => (task.frequency.kind === 'daily' ? days : 1);   // once, Fridays only: 1
+  function fresh(d) {
+    const st = { tasks: {}, recipes: {} };
+    d.tasks.forEach(t => { st.tasks[t.id] = { qty: t.reward.qty, removed: false, accepted: false }; });
+    d.recipes.forEach(r => { st.recipes[r.id] = { qty: Object.fromEntries(r.require.map(m => [m.item, m.qty])), removed: false, accepted: false }; });
+    return st;
+  }
+  // has the visitor changed or removed anything? (accepting alone is not a change)
+  const changed = (d, st) => d.tasks.some(t => st.tasks[t.id].removed || st.tasks[t.id].qty !== t.reward.qty)
+    || d.recipes.some(r => st.recipes[r.id].removed || r.require.some(m => st.recipes[r.id].qty[m.item] !== m.qty));
+  const removedCount = (d, st) => d.tasks.filter(t => st.tasks[t.id].removed).length + d.recipes.filter(r => st.recipes[r.id].removed).length;
+  // a quantity between 1 and 9; false when it would leave that range or the part is removed
+  function setQty(d, st, kind, id, item, n) {
+    const s = (kind === 'task' ? st.tasks : st.recipes)[id];
+    if (!s || s.removed || !Number.isFinite(n) || n < MIN || n > MAX) return false;
+    if (kind === 'task') { if (d.tasks.find(t => t.id === id).reward.item !== item) return false; s.qty = n; }
+    else { if (!(item in s.qty)) return false; s.qty[item] = n; }
+    return true;
+  }
+  // the draft as it stands: removed parts left out, quantities as changed
+  const tasksLeft = (d, st) => d.tasks.filter(t => !st.tasks[t.id].removed).map(t => ({ ...t, reward: { ...t.reward, qty: st.tasks[t.id].qty } }));
+  const asChanged = (r, st) => ({ ...r, require: r.require.map(m => ({ ...m, qty: st.recipes[r.id].qty[m.item] })) });
+  const recipesLeft = (d, st) => d.recipes.filter(r => !st.recipes[r.id].removed).map(r => asChanged(r, st));
+  // the most of each item the remaining missions can hand out over the campaign
+  function supply(d, tasks) {
+    const max = {};
+    tasks.forEach(t => { max[t.reward.item] = (max[t.reward.item] || 0) + t.reward.qty * times(t, d.campaign.days); });
+    return max;
+  }
+  // a recipe laid out with the recipe editor's own rules and limits (03 section): the first reason it does not fit, if any
+  function canvas(r, lim) {
+    const s = R.blank();
+    let why = null;
+    const put = (item, to, pct) => { const code = R.add(s, item, to, lim, pct); if (code && !why) why = { code, zone: to.zone, item }; };
+    r.require.forEach(m => put(m.item, { zone: 'require', index: 99 }));
+    (r.optional || []).forEach(m => put(m.item, { zone: 'optional', index: 99 }));
+    r.output.items.forEach((o, i) => put(o.item, r.output.choose_one && i && s.groups.length ? { zone: 'output', group: s.groups.length - 1, index: 99 } : { zone: 'output', group: null, index: 99 }, o.pct));
+    if (r.output.choose_one && s.groups.length) R.toggleChoose(s, s.groups.length - 1);
+    return { state: s, why };
+  }
+  // the three constraints, again, on the draft as it stands
+  function check(d, st, lim) {
+    const out = [];
+    const tasks = tasksLeft(d, st), recipes = recipesLeft(d, st);
+    const max = supply(d, tasks);
+    recipes.forEach(r => { const { why } = canvas(r, lim); if (why) out.push({ rule: 'structure', code: 'structure', recipe: r.id, why: why.code, zone: why.zone, item: why.item }); });
+    const short = new Set(), uses = {};
+    recipes.forEach(r => {
+      const crafted = new Set(recipes.filter(o => o.id !== r.id).flatMap(o => o.output.items.map(x => x.item)));   // made by another remaining recipe
+      r.require.forEach(m => {
+        if (!(m.item in max) && !crafted.has(m.item)) { out.push({ rule: 'reachable', code: 'no_source', recipe: r.id, item: m.item }); return; }
+        if (crafted.has(m.item)) return;            // not only from missions: no count to compare against
+        if (m.qty > max[m.item]) { short.add(m.item); out.push({ rule: 'reachable', code: 'short', recipe: r.id, item: m.item, max: max[m.item], need: m.qty }); return; }
+        (uses[m.item] = uses[m.item] || []).push({ recipe: r.id, need: m.qty });
+      });
+    });
+    Object.entries(uses).forEach(([item, list]) => {
+      const need = list.reduce((n, u) => n + u.need, 0);
+      if (!short.has(item) && list.length > 1 && need > max[item]) out.push({ rule: 'reachable', code: 'contention', item, recipes: list.map(u => u.recipe), max: max[item], need });
+    });
+    if (!tasks.length) out.push({ rule: 'platform', code: 'no_tasks' });
+    else {
+      const k = tasks.filter(t => d.home_platforms.includes(t.platform)).length;
+      if (k * 2 < tasks.length) out.push({ rule: 'platform', code: 'platform', n: tasks.length, k });
+    }
+    return out;
+  }
+  return { MIN, MAX, times, fresh, changed, removedCount, setQty, tasksLeft, recipesLeft, asChanged, supply, canvas, check };
+})();
+
 /* 6b. Shared pieces of the three demos */
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
 const fillIn = (s, vars) => s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
@@ -1081,6 +1158,306 @@ function commentLab(root) {
   paint();
 }
 
+/* 6e. Campaign drafting assistant (PlayBook 11). Pick a goal, read the draft, accept / edit (quantities
+   only) / remove each mission and recipe, see it checked again, and put a recipe on a read-only canvas
+   drawn with the recipe editor's own pieces (.rz). Nothing is sent anywhere. */
+function drafterLab(root) {
+  const cfg = JSON.parse(root.dataset.config), T = cfg.t, D = draftRules, LIM = cfg.limits;
+  const goals = root.querySelector('[data-goals]'), view = root.querySelector('[data-draft]');
+  const status = root.querySelector('[data-status]'), tools = root.querySelector('[data-tools]');
+  const say = text => { status.textContent = text; };
+  const num = n => T.nums[n - 1] || String(n);
+  let pick = 0, st = D.fresh(cfg.drafts[0]), editing = new Set(), placed = null;
+  const draft = () => cfg.drafts[pick];
+  const itemName = id => (draft().items.find(i => i.id === id) || { name: id }).name;
+  const taskName = id => fillIn(T.task, { n: id });
+  const recipeName = r => fillIn(T.recipe, { n: num(r.id) }) + ' · ' + r.name;
+  const qty = (id, n) => fillIn(T.qty, { name: itemName(id), n });
+
+  // a button in the portfolio's own style; a blocked one says why instead of going dead
+  const btn = (text, fn, o = {}) => {
+    const b = el('button', 'studio__btn' + (o.cls ? ' ' + o.cls : ''), text);
+    b.type = 'button';
+    if (o.key) b.dataset.key = o.key;
+    if (o.label) b.setAttribute('aria-label', o.label);
+    if (o.pressed != null) b.setAttribute('aria-pressed', String(o.pressed));
+    if (o.expanded != null) b.setAttribute('aria-expanded', String(o.expanded));
+    if (o.off) b.setAttribute('aria-disabled', 'true');
+    b.addEventListener('click', () => (o.off ? say(o.off) : fn()));
+    return b;
+  };
+  const findings = () => D.check(draft(), st, LIM);
+  const summary = () => {
+    if (!D.changed(draft(), st)) return '';
+    const n = findings().length;
+    return T.gap + (n ? fillIn(T.sum_some, { n }) : T.sum_none);
+  };
+
+  /* 1. the three goals */
+  cfg.drafts.forEach((d, i) => {
+    const b = el('button', 'dz-goal');
+    b.type = 'button';
+    b.dataset.key = 'goal:' + i;
+    b.append(el('span', 'dz-goal__n', fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.creator), el('span', 'dz-goal__goal', d.goal), el('span', 'dz-goal__persona', d.persona));
+    b.addEventListener('click', () => {
+      if (i === pick) return;
+      pick = i; st = D.fresh(d); editing = new Set(); placed = null;
+      draw();
+      say(fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
+      // the assistant's own check sits at the top of the draft: bring it into view (draft two's problem must be seen at once)
+      view.querySelector('.dz-self')?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+    });
+    goals.append(b);
+  });
+  const restoreAll = el('button', 'tool-btn', '↺ ' + T.restore_all);
+  restoreAll.type = 'button';
+  restoreAll.addEventListener('click', () => {
+    Object.values(st.tasks).concat(Object.values(st.recipes)).forEach(s => { s.removed = false; });
+    draw();
+    say(T.said_restore_all + summary());
+  });
+  tools.append(restoreAll);
+
+  /* 3. accept / edit / remove */
+  const partOf = (kind, id) => (kind === 'task' ? st.tasks : st.recipes)[id];
+  const nameOf = (kind, id) => (kind === 'task' ? taskName(id) : recipeName(draft().recipes.find(r => r.id === id)));
+  function accept(kind, id) {
+    const s = partOf(kind, id);
+    s.accepted = !s.accepted;
+    draw();
+    say(fillIn(s.accepted ? T.said_accept : T.said_unaccept, { name: nameOf(kind, id) }));
+  }
+  function toggleEdit(kind, id) {
+    const k = kind + ':' + id;
+    if (editing.has(k)) editing.delete(k); else editing.add(k);
+    draw();
+  }
+  function remove(kind, id) {
+    const s = partOf(kind, id);
+    s.removed = !s.removed;
+    if (s.removed) { s.accepted = false; editing.delete(kind + ':' + id); }
+    draw();
+    say(fillIn(s.removed ? T.said_removed : T.said_restored, { name: nameOf(kind, id) }) + summary());
+  }
+  function setQty(kind, id, item, n) {
+    if (!D.setQty(draft(), st, kind, id, item, n)) { say(n < D.MIN ? T.at_min : T.at_max); return; }
+    draw();
+    say(fillIn(T.said_qty, { name: nameOf(kind, id), item: itemName(item), n }) + summary());
+  }
+  function place(id) {
+    placed = id;
+    draw();
+    say(fillIn(T.said_placed, { name: nameOf('recipe', id) }));
+    const c = view.querySelector('[data-canvas]');
+    if (c) c.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+  }
+  function actions(kind, id, extra = []) {
+    const s = partOf(kind, id), k = kind + ':' + id, name = nameOf(kind, id);
+    const lbl = act => fillIn(T.act, { act, name });
+    const box = el('div', 'dz-acts');
+    if (!s.removed) {
+      box.append(btn(s.accepted ? '✓ ' + T.accepted : T.accept, () => accept(kind, id), { key: k + ':accept', pressed: s.accepted, label: lbl(T.accept) }),
+                 btn(editing.has(k) ? T.edit_done : T.edit, () => toggleEdit(kind, id), { key: k + ':edit', expanded: editing.has(k), label: lbl(T.edit) }), ...extra);
+    }
+    box.append(btn(s.removed ? T.restore : T.remove, () => remove(kind, id), { key: k + ':remove', cls: 'studio__btn--quiet', label: lbl(s.removed ? T.restore : T.remove) }));
+    return box;
+  }
+  function editor(kind, id, rows) {
+    const box = el('div', 'dz-edit');
+    box.append(el('span', 'studio__hint', T.edit_hint));
+    rows.forEach(([item, n]) => {
+      const sp = el('span', 'studio__stepper'), key = `${kind}:${id}:${item}`;
+      sp.append(el('span', 'studio__lbl', itemName(item)),
+                btn('−', () => setQty(kind, id, item, n - 1), { key: key + ':less', label: fillIn(T.less, { name: itemName(item) }), off: n <= D.MIN ? T.at_min : '' }),
+                el('b', '', '× ' + n),
+                btn('+', () => setQty(kind, id, item, n + 1), { key: key + ':more', label: fillIn(T.more, { name: itemName(item) }), off: n >= D.MAX ? T.at_max : '' }));
+      box.append(sp);
+    });
+    return box;
+  }
+
+  /* 2. the draft */
+  const block = (title, cls) => { const b = el('section', 'dz-block' + (cls ? ' ' + cls : '')); b.append(el('h4', 'label dz-block__title', title)); return b; };
+  const cell = (k, v, cls) => {
+    const c = el('span', 'dz-cell' + (cls ? ' ' + cls : ''));
+    c.append(el('span', 'dz-k', k));
+    const value = el('span', 'dz-v');
+    if (v instanceof Node) value.append(v); else value.textContent = v;
+    c.append(value);
+    return c;
+  };
+  const headRow = cols => { const h = el('li', 'dz-row dz-row--head'); h.setAttribute('aria-hidden', 'true'); cols.forEach(c => h.append(el('span', 'dz-cell', c))); return h; };
+  const mark = (li, s) => { li.toggleAttribute('data-removed', s.removed); li.toggleAttribute('data-accepted', s.accepted && !s.removed); };
+
+  function head() {
+    const d = draft(), h = el('div', 'dz-head');
+    h.append(el('h3', '', d.campaign.name), el('p', 'meta', `${fillIn(T.draft, { n: num(pick + 1) })} · ${d.creator} · ${fillIn(T.days, { n: d.campaign.days })}`));
+    return h;
+  }
+  function selfCheck() {
+    const b = block(T.h_self, 'dz-self'), ul = el('ul', 'dz-checks');
+    draft().self_check.forEach(c => {
+      const li = el('li', 'dz-check dz-check--' + c.kind);
+      li.append(el('span', 'dz-check__k', (c.kind === 'ok' ? '✓ ' : c.kind === 'problem' ? '! ' : '') + c.label), el('span', 'dz-check__text', c.text));
+      ul.append(li);
+    });
+    b.append(ul);
+    return b;
+  }
+  function tasksBlock() {
+    const b = block(T.h_tasks), ol = el('ol', 'dz-rows dz-rows--tasks');
+    ol.append(headRow(['', T.col_platform, T.col_what, T.col_freq, T.col_reward, '']));
+    draft().tasks.forEach(t => {
+      const s = st.tasks[t.id], li = el('li', 'dz-row');
+      mark(li, s);
+      li.append(el('span', 'dz-row__id', taskName(t.id)), cell(T.col_platform, el('span', 'chip', t.platform)), cell(T.col_what, t.what, 'dz-cell--main'),
+                cell(T.col_freq, t.frequency.label), cell(T.col_reward, qty(t.reward.item, s.qty)), actions('task', t.id));
+      if (editing.has('task:' + t.id) && !s.removed) li.append(editor('task', t.id, [[t.reward.item, s.qty]]));
+      ol.append(li);
+    });
+    b.append(ol);
+    return b;
+  }
+  function itemsBlock() {
+    const b = block(T.h_items), ol = el('ol', 'dz-rows dz-rows--items');
+    ol.append(headRow([T.col_item, T.col_rarity, T.col_source]));
+    draft().items.forEach(i => {
+      const li = el('li', 'dz-row');
+      li.append(cell(T.col_item, i.name, 'dz-cell--main'), cell(T.col_rarity, T[i.rarity] || i.rarity), cell(T.col_source, i.source));
+      ol.append(li);
+    });
+    b.append(ol);
+    return b;
+  }
+  function recipesBlock() {
+    const b = block(T.h_recipes), ol = el('ol', 'dz-rows dz-rows--recipes');
+    draft().recipes.forEach(r => {
+      const s = st.recipes[r.id], li = el('li', 'dz-row dz-recipe');
+      mark(li, s);
+      const title = el('div', 'dz-recipe__title');
+      title.append(el('span', 'dz-row__id', fillIn(T.recipe, { n: num(r.id) })), el('strong', '', r.name));
+      const parts = el('dl', 'dz-recipe__parts');
+      const part = (k, v) => { const p = el('div'); p.append(el('dt', '', k), el('dd', '', v)); parts.append(p); };
+      part(T.req, r.require.map(m => qty(m.item, s.qty[m.item])).join(T.sep));
+      part(T.opt, r.optional.length ? r.optional.map(m => qty(m.item, m.qty) + T.dash + m.effect).join(T.sep) : T.none);
+      part(T.out, (r.output.choose_one ? fillIn(T.choose, { n: r.output.items.length }) + T.colon : '') + r.output.items.map(o => `${itemName(o.item)} ${o.pct}%`).join(T.sep));
+      const onCanvas = placed === r.id;
+      const put = btn(onCanvas ? T.placed : T.place, () => place(r.id), { key: `recipe:${r.id}:place`, pressed: onCanvas, label: fillIn(T.act, { act: T.place, name: nameOf('recipe', r.id) }) });
+      li.append(title, parts, actions('recipe', r.id, [put]));
+      if (editing.has('recipe:' + r.id) && !s.removed) li.append(editor('recipe', r.id, r.require.map(m => [m.item, s.qty[m.item]])));
+      ol.append(li);
+    });
+    b.append(ol);
+    return b;
+  }
+  function whyBlock() {
+    const b = block(T.h_why), ul = el('ul', 'dz-why');
+    draft().why.forEach(w => ul.append(el('li', '', w)));
+    b.append(ul);
+    return b;
+  }
+  /* 4. checked again, only once something has been changed or removed */
+  function recheck() {
+    const d = draft(), b = block(T.h_recheck, 'dz-recheck');
+    if (!D.changed(d, st)) { b.hidden = true; return b; }
+    const list = findings(), ul = el('ul', 'dz-findings');
+    const rName = id => fillIn(T.recipe, { n: num(id) }) + ' · ' + d.recipes.find(r => r.id === id).name;
+    const zone = { require: 'Require', optional: 'Optional', output: 'Output' };
+    list.forEach(f => {
+      let where = '', text = '';
+      if (f.code === 'no_source') { where = rName(f.recipe); text = fillIn(T.re_no_source, { item: itemName(f.item) }); }
+      else if (f.code === 'short') { where = rName(f.recipe); text = fillIn(T.re_short, { item: itemName(f.item), max: f.max, need: f.need }); }
+      else if (f.code === 'contention') { where = f.recipes.map(rName).join(T.sep); text = fillIn(T.re_contention, { item: itemName(f.item) }); }
+      else if (f.code === 'platform') text = fillIn(T.re_platform, { n: f.n, k: f.k });
+      else if (f.code === 'no_tasks') text = T.re_no_tasks;
+      else if (f.code === 'structure') {
+        where = rName(f.recipe);
+        const n = f.why === 'full' ? LIM[f.zone] : f.why === 'groups' ? LIM.groups : LIM.group;
+        text = fillIn(T.re_structure, { why: fillIn(T['no_' + f.why] || T.no_nowhere, { name: itemName(f.item), zone: zone[f.zone] || '', n }) });
+      }
+      const li = el('li', 'dz-finding');
+      li.append(el('span', 'dz-finding__rule', cfg.constraints[f.rule] || f.rule), el('span', 'dz-finding__text', (where ? where + T.colon : '') + text));
+      ul.append(li);
+    });
+    if (!list.length) ul.append(el('li', 'dz-finding dz-finding--ok', T.re_none));
+    b.append(ul);
+    const gone = D.removedCount(d, st);
+    if (gone) b.append(el('p', 'meta', fillIn(T.re_removed, { n: gone })));
+    return b;
+  }
+  /* 5. the recipe on a read-only canvas: the recipe editor's three areas, drawn with its own pieces */
+  function canvasBlock() {
+    const b = block(T.h_canvas, 'dz-canvas');
+    b.dataset.canvas = '';
+    b.querySelector('.dz-block__title').append(' ', el('span', 'chip dz-ro', T.canvas_ro));
+    const r = placed == null ? null : draft().recipes.find(x => x.id === placed);
+    if (!r) { b.append(el('p', 'dz-empty', T.canvas_empty)); return b; }
+    if (st.recipes[r.id].removed) { b.append(el('p', 'dz-empty', fillIn(T.canvas_gone, { name: recipeName(r) }))); return b; }
+    const cur = D.asChanged(r, st), { state } = D.canvas(cur, LIM);
+    const count = {};
+    cur.require.forEach(m => { count['require:' + m.item] = m.qty; });
+    cur.optional.forEach(m => { count['optional:' + m.item] = m.qty; });
+    const stage = el('div', 'rz dz-rz');
+    Object.entries(cfg.geo).forEach(([k, v]) => stage.style.setProperty('--' + k, v));
+    stage.setAttribute('aria-label', recipeName(r));
+    stage.setAttribute('role', 'group');
+    const tile = (id, zone) => { const t = el('div', 'rz-tile dz-tile'); t.append(el('span', 'rz-name', itemName(id)), el('b', 'rz-n', String(count[zone + ':' + id]))); return t; };
+    const column = (name, zone) => {
+      const c = el('div', 'rz-box dz-col'), slots = el('div', 'dz-slots');
+      c.append(el('div', 'rz-tab', name));
+      const list = state[zone].map(p => tile(p.id, zone));
+      slots.append(...(list.length ? list : [el('span', 'dz-none', '—')]));
+      c.append(slots);
+      return c;
+    };
+    const pill = kind => el('span', 'rz-pill', kind === 'and' ? 'And' : 'Or');
+    const out = el('div', 'rz-panel rz-panel--out dz-col'), chain = el('div', 'rz-chain dz-chain');
+    out.append(el('div', 'rz-tab', 'Output'));
+    state.groups.forEach((g, gi) => {
+      if (gi) chain.append(pill(state.joins[gi - 1]));
+      const ge = el('div', 'rz-group');
+      ge.toggleAttribute('data-multi', g.items.length > 1);
+      ge.toggleAttribute('data-choose', g.choose);
+      if (g.choose) ge.append(el('span', 'rz-choose', `Choose 1 Out Of ${g.items.length}`));
+      g.items.forEach((p, i) => {
+        if (i) ge.append(pill(g.joins[i - 1]));
+        const t = el('div', 'rz-tile dz-tile');
+        t.append(el('span', 'rz-pct', p.pct + '%'), el('span', 'rz-name', itemName(p.id)));
+        ge.append(t);
+      });
+      chain.append(ge);
+    });
+    out.append(chain);
+    stage.append(column('Require', 'require'), column('Optional', 'optional'), out);
+    b.append(stage, el('p', 'studio__read', reads(state, count)));
+    return b;
+  }
+  // "Reads as": the same wording the recipe editor in section 03 uses
+  function reads(s, count) {
+    const names = (list, zone) => list.map(p => qty(p.id, count[zone + ':' + p.id])).join(T.read_sep);
+    let text = T.read + (s.require.length ? fillIn(T.read_in, { list: names(s.require, 'require') }) : T.read_no_in);
+    if (s.optional.length) text += fillIn(T.read_opt, { list: names(s.optional, 'optional') });
+    if (!s.groups.length) return text + T.read_no_out;
+    const word = k => (k === 'and' ? T.read_and : T.read_or);
+    const parts = s.groups.map(g => {
+      const each = g.items.map(p => `${itemName(p.id)} ${p.pct}%`);
+      if (g.choose) return fillIn(T.read_choose, { list: each.join(T.read_sep) });
+      const inner = each.map((x, i) => (i ? word(g.joins[i - 1]) : '') + x).join('');
+      return g.items.length > 1 && s.groups.length > 1 ? fillIn(T.read_wrap, { list: inner }) : inner;
+    });
+    return text + fillIn(T.read_out, { list: parts.map((p, i) => (i ? word(s.joins[i - 1]) : '') + p).join('') });
+  }
+
+  function draw() {
+    const key = root.contains(document.activeElement) ? document.activeElement.dataset.key : null;
+    goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === pick)));
+    view.replaceChildren(head(), selfCheck(), tasksBlock(), itemsBlock(), recipesBlock(), whyBlock(), recheck(), canvasBlock());
+    restoreAll.hidden = !D.removedCount(draft(), st);
+    if (key) root.querySelector(`[data-key="${key}"]`)?.focus({ preventScroll: true });
+  }
+  draw();
+}
+
 /* ---------- 7. The three rebuilt demos: one visible at a time ---------- */
 function liveset(root) {
   const tabs = [...root.querySelectorAll('[data-live-tab]')];
@@ -1095,9 +1472,10 @@ if (inBrowser) {
   document.querySelectorAll('[data-proto]').forEach(flowPlayer);
   document.querySelectorAll('[data-studio]').forEach(root => labs[root.dataset.studio]?.(root));
   document.querySelectorAll('[data-liveset]').forEach(liveset);
+  document.querySelectorAll('[data-drafter]').forEach(drafterLab);
   document.querySelectorAll('[data-tour]').forEach(tour);
   document.querySelectorAll('[data-smt]').forEach(smt);
   document.querySelectorAll('[data-live]').forEach(live);
   document.querySelectorAll('[data-clips]').forEach(clips);
 }
-if (typeof module !== 'undefined' && module.exports) module.exports = { recipeRules };
+if (typeof module !== 'undefined' && module.exports) module.exports = { recipeRules, draftRules };

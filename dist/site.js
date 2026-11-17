@@ -31,14 +31,14 @@ if (hot) {
   let pinned = null;
   const show = key => {
     const mine = spots.filter(s => s.dataset.key === key), step = steps.find(s => s.dataset.key === key);
-    if (!mine.length || !step) return;
+    if (!mine.length || (!step && !mine[0].dataset.title)) return;
     const w = hot.clientWidth;
     // one round hole in the dim layer per object
     const holes = mine.map(s => { const r = s.dataset.r * w / 100; return `radial-gradient(circle at ${s.dataset.x}% ${s.dataset.y}%, transparent ${r}px, #000 ${r + 16}px)`; }).join(',');
     dim.style.maskImage = dim.style.webkitMaskImage = holes;
     dim.style.maskComposite = 'intersect'; dim.style.webkitMaskComposite = 'source-in';
-    note.querySelector('b').textContent = step.querySelector('b').textContent;
-    note.querySelector('span').textContent = step.querySelector('small').textContent;
+    note.querySelector('b').textContent = step ? step.querySelector('b').textContent : mine[0].dataset.title;   // objects that are not a method step carry their own note
+    note.querySelector('span').textContent = step ? step.querySelector('small').textContent : mine[0].dataset.sub;
     // which side of the object the note sits on, so it never leaves the frame
     const { x, y, r, side } = mine[0].dataset, X = +x, Y = +y, R = +r;
     note.style.cssText = '';

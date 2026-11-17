@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261116'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261117p'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -166,13 +166,18 @@ def collage(slug, lang):
                 + img('qingju/hifi-chests', t('三个等级的宝箱：铜、银、金', 'Three chest tiers: bronze, silver and gold', lang)).replace('<img', f'<img style="left:62%;top:84%;width:30%;{plain}"')
                 + '</div>')
     if slug == 'playbook':
-        # 2026-11-16（本人定）：封面用成品界面。Studio 活动页是本人做的，两屏 App 是团队的成品。
+        # 2026-11-17（本人定，卡 20261117-020 选 A）：深色舞台，一叠真实界面斜着往后排开，鼠标移上去散开一点。
+        # 界面只斜放，不改颜色和内容。Studio 活动页是本人做的，三屏 App 是团队的成品。
         phone = 'aspect-ratio:390/844;object-fit:cover;object-position:top'
-        return (f'<div class="collage" style="--bg:#F4F1EC">'
-                + img('playbook/studio-campaign', t('PlayBook Studio 活动页', 'PlayBook Studio campaign page', lang)).replace('<img', '<img style="left:3%;top:13%;width:62%"')
-                + img('playbook/team-mission', t('PlayBook App 任务页（成品界面）', 'PlayBook App mission page (finished UI)', lang), 'collage__phone').replace('<img', f'<img style="left:55%;top:21%;width:20%;{phone}"')
-                + img('playbook/team-home', t('PlayBook App 首页（成品界面）', 'PlayBook App home (finished UI)', lang), 'collage__phone').replace('<img', f'<img style="left:77%;top:7%;width:20%;{phone}"')
-                + '</div>')
+        def piece(name, alt, i, style, cls=''):
+            return img(name, alt, ('stage__item ' + cls).strip()).replace('<img', f'<img style="--i:{i};{style}"')
+        return ('<div class="collage collage--stage" style="--bg:#15100F;--glow:249,87,87">'
+                '<span class="stage__word" aria-hidden="true">PlayBook</span><div class="stage__stack">'
+                + piece('playbook/team-inventory', t('PlayBook App 物品库（成品界面）', 'PlayBook App inventory (finished UI)', lang), 3, f'left:83%;top:15%;width:17.5%;{phone}', 'collage__phone')
+                + piece('playbook/team-home', t('PlayBook App 首页（成品界面）', 'PlayBook App home (finished UI)', lang), 2, f'left:69%;top:19%;width:18.5%;{phone}', 'collage__phone')
+                + piece('playbook/team-mission', t('PlayBook App 任务页（成品界面）', 'PlayBook App mission page (finished UI)', lang), 1, f'left:54%;top:24%;width:19.5%;{phone}', 'collage__phone')
+                + piece('playbook/studio-campaign', t('PlayBook Studio 活动页', 'PlayBook Studio campaign page', lang), 0, 'left:4%;top:32%;width:60%')
+                + '</div></div>')
     if slug == 'smt':
         return (f'<div class="collage" style="--bg:#F2F2F3;aspect-ratio:16/9">'
                 + img('smt/overview', t('SMT-MAX 资产与持仓界面', 'SMT-MAX assets and positions screen', lang)).replace('<img', '<img style="left:0;top:0;width:100%;border-radius:0;box-shadow:none"')
@@ -188,6 +193,12 @@ def collage(slug, lang):
 # 2026-11-15 本人要求：去掉图上的数字圆点。平时只有很小的呼吸点，碰到或点到物件才压暗其余部分并贴出说明。
 PORTRAIT_SPOTS = [
     (12.2, 63.5, 9, 'right'), (88.2, 44.5, 6.5, 'left'), (70.2, 10.5, 8, 'below'), (74.5, 32.5, 9, 'left'), (11.5, 29.0, 10, 'right')]
+# 肩上的两个小人是 MBTI（卡 20261115-053，本人答：INTP 和 ENTP，偏 INTP 一点）。
+# 它们不对应「我怎么工作」的步骤，只在图上能碰：(key, x%, y%, 半径%, 纸条贴哪一侧, 四个字母, 小字)
+PORTRAIT_MBTI = [
+    ('mbti-intp', 28.5, 55.0, 12.5, 'right', 'INTP', ['MBTI · 更偏这一型', 'MBTI · I lean this way']),
+    ('mbti-entp', 78.0, 56.5, 12.0, 'left', 'ENTP', ['MBTI · 有时是这一型', 'MBTI · sometimes this one']),
+]
 METHOD = [
     (['看清情境', 'Read the context'], ['指南针 · 研究', 'compass · research']),
     (['问清卡在哪', 'Ask why it hurts'], ['问号 · 问题定义', 'question mark · framing']),
@@ -204,6 +215,8 @@ def home(lang):
     h += topbar(lang, path)
     spots = ''.join(f'<button type="button" class="hot__spot" data-key="{n+1}" data-x="{x}" data-y="{y}" data-r="{r}" data-side="{side}" style="left:{x}%;top:{y}%;--r:{r}%" aria-label="{escape(T(METHOD[n][1], lang))}: {escape(T(METHOD[n][0], lang))}"><i></i></button>'
                     for n, (x, y, r, side) in enumerate(PORTRAIT_SPOTS))
+    spots += ''.join(f'<button type="button" class="hot__spot hot__spot--extra" data-key="{key}" data-x="{x}" data-y="{y}" data-r="{r}" data-side="{side}" data-title="{escape(title)}" data-sub="{escape(T(sub, lang))}" style="left:{x}%;top:{y}%;--r:{r}%" aria-label="MBTI: {escape(title)}"><i></i></button>'
+                     for key, x, y, r, side, title, sub in PORTRAIT_MBTI)
     method = ''.join(f'<button type="button" class="method__step" data-key="{n+1}"><span class="thumb" style="--x:{PORTRAIT_SPOTS[n][0]};--y:{PORTRAIT_SPOTS[n][1]};--r:{PORTRAIT_SPOTS[n][2]}" aria-hidden="true"></span><span><b>{T(a, lang)}</b><small>{T(b, lang)}</small></span></button>' for n, (a, b) in enumerate(METHOD))
     h += f'''<main id="main">
 <section class="hero"><div class="wrap">
@@ -216,7 +229,7 @@ def home(lang):
   </div>
   <figure class="portrait frame-block reveal" data-component="Annotated figure">
    <div class="frame hot">{img('tobie/avatar', t('Tobie 的插画自画像：戴眼镜、穿牛仔外套，周围是指南针、问号、灯泡、Figma 与 ChatGPT 图标', 'Tobie’s illustrated self-portrait: glasses and a denim jacket, surrounded by a compass, a question mark, a light bulb and the Figma and ChatGPT logos', lang), lazy=False)}<div class="hot__dim" aria-hidden="true"></div>{spots}<div class="hot__note" aria-live="polite"><b></b><span></span></div></div>
-   <figcaption class="hot__hint">{t('图上的小物件可以碰一碰：每一件对应我工作的一步。', 'Hover or tap the objects in the picture — each one is a step in how I work.', lang)}</figcaption>
+   <figcaption class="hot__hint">{t('图上的小物件可以碰一碰：五件是我工作的五步，两个小人是我的 MBTI。', 'Hover or tap the objects in the picture — five are steps in how I work, and the two little figures are my MBTI types.', lang)}</figcaption>
   </figure>
  </div>
  <div class="method" data-component="Method strip"><p class="method__title label">{t('我怎么工作', 'How I work', lang)}</p>{method}</div>

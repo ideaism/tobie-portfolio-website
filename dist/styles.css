@@ -191,6 +191,7 @@ p,li{text-wrap:pretty}
 .hot__spot i{width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 1.5px var(--teal),0 1px 4px rgba(14,42,39,.35);position:relative;transition:opacity var(--t-fast),transform var(--t-fast)}
 .hot__spot i::after{content:'';position:absolute;inset:-7px;border-radius:50%;border:1.5px solid var(--teal);opacity:0;animation:hot-pulse 2.8s var(--ease) infinite}
 .hot__spot:nth-of-type(2) i::after{animation-delay:.5s}.hot__spot:nth-of-type(3) i::after{animation-delay:1s}.hot__spot:nth-of-type(4) i::after{animation-delay:1.5s}.hot__spot:nth-of-type(5) i::after{animation-delay:2s}
+.hot__spot--extra i{width:7px;height:7px;box-shadow:0 0 0 1.5px var(--beak),0 1px 4px rgba(14,42,39,.35)}.hot__spot--extra i::after{border-color:var(--beak);animation-delay:1.25s}
 @keyframes hot-pulse{0%{transform:scale(.5);opacity:.9}70%,100%{transform:scale(1.7);opacity:0}}
 .hot__spot:hover i,.hot__spot:focus-visible i{transform:scale(1.35)}
 .hot__spot:focus-visible{outline:2px solid var(--beak);outline-offset:2px}
@@ -240,6 +241,17 @@ p,li{text-wrap:pretty}
 .collage{position:relative;aspect-ratio:16/10.5;overflow:hidden;border-radius:var(--r-frame);background:var(--bg,#F6F8F6)}
 .collage img{position:absolute;display:block;border-radius:6px;box-shadow:0 22px 40px -22px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06)}
 .collage .collage__phone{border-radius:14px}
+/* stage cover (2026-11-17, card 20261117-020): a dark stage with the real screens standing in a receding row.
+   Screens are only tilted, never recoloured. Sizes use cqw so the tilt looks the same at every cover width. */
+.collage--stage{container-type:inline-size;background:radial-gradient(62% 78% at 66% 46%,rgba(var(--glow),.30),rgba(var(--glow),0) 72%),var(--bg)}
+.stage__word{position:absolute;left:4.5%;top:4%;font:800 15cqw/1 var(--sans);letter-spacing:-.035em;color:rgba(255,255,255,.085);white-space:nowrap;pointer-events:none;user-select:none}
+.stage__stack{position:absolute;inset:0;perspective:150cqw;perspective-origin:42% 46%}
+.collage .stage__item{border-radius:.9cqw;box-shadow:0 3cqw 5cqw -2cqw rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.10);transform:translateX(calc(var(--i)*var(--spread,0cqw))) rotateY(24deg) rotateX(2deg);transform-origin:50% 50%;transition:transform var(--t-reveal) var(--ease);backface-visibility:hidden}
+.collage .stage__item.collage__phone{border-radius:1.9cqw}
+.work-item__visual>a:hover .collage--stage,.case-hero .collage--stage:hover{--spread:1.7cqw}
+.js .reveal:not(.is-in) .collage--stage{--spread:-3.2cqw}
+@media (prefers-reduced-motion:reduce){.collage .stage__item{transition:none}.js .reveal:not(.is-in) .collage--stage{--spread:0cqw}}
+@media (max-width:640px){.collage--stage{aspect-ratio:4/3.1}.stage__stack{transform:scale(1.22);transform-origin:80% 54%}}
 
 .explore-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gutter)}
 .explore h3{font-size:var(--fs-h3);margin:var(--s-4) 0 var(--s-2)}

@@ -818,3 +818,29 @@ html.studio-open{overflow:hidden}
   .dz-bar .studio__status:empty{display:none}
   .dz-self{scroll-margin-bottom:120px}   /* 换草案时自查要露出来，别被贴底的状态栏挡住 */
 }
+
+/* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
+
+/* ---------- 方案 A：手机条在手机宽度下折成两列，不再左右滑（2026-11-17 修法对比） ----------
+   原来第 483–484 行（≤860px）让手机条每张至少 160px、横向滚动、scroll-snap，手机上只露出前一两张，后面的没有任何提示。
+   ≤520px 时改成固定两列，多出来的格子自动折到下一行：3 张 = 2+1，4 张 = 2+2，5 张 = 2+2+1。
+   最后一行只剩一张时它落在左列，和上面同宽，不拉宽。521–860px 仍按原来的横向滑动。
+   不受影响的两种（靠优先级自然保留，不需要 !important）：
+   - 只有一张图的（第 689 行 .phone-strip:has(> figure:only-child)，优先级更高，照旧居中 300px）
+   - 带局部图 figure.partial 的（第 691 行 .phone-strip:has(> figure.partial)，优先级更高，照旧单列上下排） */
+@media (max-width:520px){
+  .phone-strip{grid-template-columns:repeat(2,minmax(0,1fr));overflow-x:visible;scroll-snap-type:none}
+  .phone-strip figure{scroll-snap-align:none}
+}
+
+/* ---------- 图组标题：手机宽度下允许折行，不再省略号（2026-11-17 修法对比） ----------
+   原来第 127 行 .frame-label__name span 是单行 + 省略号，英文长标题会被截成「Trading home · Care mode…」。
+   ≤520px 时改成可以折行；左边的小方块和右边的来源标签都对齐第一行，折成两行也整齐。 */
+@media (max-width:520px){
+  .frame-label{align-items:flex-start}                                   /* 原来是 baseline：改成顶端对齐，标签不会跟着第二行往下掉 */
+  .frame-label__name{align-items:flex-start}                             /* 小方块不再在两行中间居中，而是对齐第一行 */
+  .frame-label__name::before{margin-top:calc((1.4em - 8px) / 2)}         /* 1.4em = 标题行高，小方块落在第一行正中 */
+  .frame-label__name span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+  .prov{margin-top:-2px}                                                 /* 标签盒子比文字行高 4px 左右，往上提一点让两边文字在一条线上 */
+  .prov:not(.prov--retro){white-space:nowrap}                            /* 普通来源标签保持一行；重做演示的长标签仍按第 693 行允许折行 */
+}

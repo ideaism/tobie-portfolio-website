@@ -1173,6 +1173,17 @@ function drafterLab(root) {
   const taskName = id => fillIn(T.task, { n: id });
   const recipeName = r => fillIn(T.recipe, { n: num(r.id) }) + ' · ' + r.name;
   const qty = (id, n) => fillIn(T.qty, { name: itemName(id), n });
+  // the item's picture: decorative (its name is always next to it), lazy, and only ever for the draft on screen
+  const itemArt = (id, cls) => {
+    const im = el('img', 'dz-art' + (cls ? ' ' + cls : ''));
+    im.alt = '';
+    im.setAttribute('aria-hidden', 'true');
+    im.loading = 'lazy';
+    im.decoding = 'async';
+    im.width = im.height = 192;
+    im.src = fillIn(cfg.item_src, { draft: draft().id, item: id });
+    return im;
+  };
 
   // a button in the portfolio's own style; a blocked one says why instead of going dead
   const btn = (text, fn, o = {}) => {
@@ -1323,10 +1334,12 @@ function drafterLab(root) {
     ol.append(headRow([T.col_item, T.col_rarity, T.col_source]));
     draft().items.forEach(i => {
       const li = el('li', 'dz-row');
-      li.append(cell(T.col_item, i.name, 'dz-cell--main'), cell(T.col_rarity, T[i.rarity] || i.rarity), cell(T.col_source, i.source));
+      const name = el('span', 'dz-item');
+      name.append(itemArt(i.id, 'dz-art--row'), el('span', '', i.name));
+      li.append(cell(T.col_item, name, 'dz-cell--main'), cell(T.col_rarity, T[i.rarity] || i.rarity), cell(T.col_source, i.source));
       ol.append(li);
     });
-    b.append(ol);
+    b.append(ol, el('p', 'meta dz-note', T.items_note));
     return b;
   }
   function recipesBlock() {
@@ -1401,7 +1414,8 @@ function drafterLab(root) {
     Object.entries(cfg.geo).forEach(([k, v]) => stage.style.setProperty('--' + k, v));
     stage.setAttribute('aria-label', recipeName(r));
     stage.setAttribute('role', 'group');
-    const tile = (id, zone) => { const t = el('div', 'rz-tile dz-tile'); t.append(el('span', 'rz-name', itemName(id)), el('b', 'rz-n', String(count[zone + ':' + id]))); return t; };
+    const ico = id => { const c = el('span', 'rz-tile__ico dz-tile__ico'); c.append(itemArt(id)); return c; };
+    const tile = (id, zone) => { const t = el('div', 'rz-tile dz-tile'); t.append(ico(id), el('span', 'rz-name', itemName(id)), el('b', 'rz-n', String(count[zone + ':' + id]))); return t; };
     const column = (name, zone) => {
       const c = el('div', 'rz-box dz-col'), slots = el('div', 'dz-slots');
       c.append(el('div', 'rz-tab', name));
@@ -1422,7 +1436,7 @@ function drafterLab(root) {
       g.items.forEach((p, i) => {
         if (i) ge.append(pill(g.joins[i - 1]));
         const t = el('div', 'rz-tile dz-tile');
-        t.append(el('span', 'rz-pct', p.pct + '%'), el('span', 'rz-name', itemName(p.id)));
+        t.append(el('span', 'rz-pct', p.pct + '%'), ico(p.id), el('span', 'rz-name', itemName(p.id)));
         ge.append(t);
       });
       chain.append(ge);

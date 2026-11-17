@@ -196,6 +196,16 @@ JOBS = {
 }
 for n in range(5):
     JOBS[f'fridge/submission-{n}'] = (EXP / f'fridge-p22-{n}.jpg', 800, 82)
+# 2026-11-18：PlayBook 11 节起草助手的 17 张物品图（交接单第 4 节 ⑥；02-playbook/portfolio/figures/items/，512×512 透明底，Codex 生成）。
+# 文件名 = 草案 id + 物品 id（两个草案都有 sticker、badge）。宽 192（页面上显示 32–72 像素），保留透明，见 docs/sources.md
+DRAFTER_ITEMS = {
+    'halloween': ('candy', 'sticker', 'jack', 'hat', 'badge'),
+    'move': ('box', 'sticker', 'key', 'stub', 'plate', 'badge'),
+    'newsong': ('note', 'card', 'headphones', 'record', 'signed', 'gold'),
+}
+for draft, item_ids in DRAFTER_ITEMS.items():
+    for item in item_ids:
+        JOBS[f'playbook/drafter-items/{draft}-{item}'] = (SRC / 'work' / 'playbook' / 'drafter-items' / f'{draft}-{item}.png', 192, 88)
 for r in range(3):
     for c in range(7):
         JOBS[f'qingju/lofi-r{r}c{c}'] = (SRC / 'work' / 'qingju-screens' / f'r{r}c{c}.png', 400, 88)

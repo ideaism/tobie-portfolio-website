@@ -629,6 +629,7 @@ def clips(lang):
 # --------------------------------------------------------------------------
 DRAFT_DATA = Path(__file__).resolve().parent.parent / '02-playbook' / 'case-study' / 'ai-起草助手-数据.json'
 CONCEPT = ['2026 年新做的设计示意', 'New design concept, 2026']
+DRAFTER_ITEM_SRC = '/assets/work/playbook/drafter-items/{draft}-{item}.webp'   # 2026-11-18：17 张物品图（Codex 生成，交接单 ⑥）
 
 
 @lru_cache(maxsize=1)
@@ -691,6 +692,7 @@ DRAFTER = {
    're_no_tasks': ['一个任务都不剩了。', 'No missions are left.'],
    're_structure': ['放不进画布：{why}', 'Does not fit on the canvas: {why}'],
    're_removed': ['删掉的 {n} 项不参与检查。', 'The {n} removed part(s) are left out of the check.'],
+   'items_note': ['物品图是用 Codex 生成的示意图，照 03 节 Studio 图标的风格画的。', 'Item art was generated with Codex as illustration, drawn to match the Studio icons in section 03.'],
    'canvas_ro': ['只读示意', 'Read-only sketch'],
    'canvas_empty': ['点一条配方的「放上画布」，它会按 Studio 配方编辑器的三栏摆在这里。', 'Click “Put on canvas” on a recipe to lay it out here in the three areas of the Studio recipe editor.'],
    'canvas_gone': ['{name}已经删掉，画布上不再摆它。', '{name} has been removed, so it is no longer on the canvas.'],
@@ -721,6 +723,8 @@ def _drafter_config(lang):
         # 结构合法：用 03 节配方编辑器的同一份上限和规则验（recipeRules）
         'limits': recipe['limits'],
         'geo': recipe['geo'],
+        # 2026-11-18（交接单 ⑥）：物品图的地址由草案 id + 物品 id 拼出来，数据文件不用改；图由 tools/prepare_assets.py 导出
+        'item_src': DRAFTER_ITEM_SRC,
         't': {**{k: v[i] for k, v in DRAFTER['t'].items()}, **{k: recipe['t'][k][i] for k in read_keys}},
     }
 

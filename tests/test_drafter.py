@@ -87,6 +87,34 @@ class DrafterTests(unittest.TestCase):
         page = (ROOT / 'dist' / 'work' / 'playbook' / 'index.html').read_text(encoding='utf-8')
         self.assertNotIn('链上', page)
 
+    def test_every_item_has_its_picture(self):
+        # 2026-11-18（交接单 ⑥）：17 张物品图，地址由草案 id + 物品 id 拼出来；和 tools/prepare_assets.py 的 JOBS 一一对应
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import prepare_assets
+        from prototypes import DRAFTER_ITEM_SRC
+        manifest = json.loads((ROOT / 'dist' / 'assets' / 'work' / 'manifest.json').read_text(encoding='utf-8'))
+        want = set()
+        for dr in draft_data()['drafts']:
+            for i in dr['items']:
+                name = f'playbook/drafter-items/{dr["id"]}-{i["id"]}'
+                want.add(name)
+                src = DRAFTER_ITEM_SRC.format(draft=dr['id'], item=i['id'])
+                self.assertEqual(src, f'/assets/work/{name}.webp')
+                self.assertTrue((ROOT / 'dist' / src.lstrip('/')).is_file(), src)
+                self.assertIn(name, manifest)
+        self.assertEqual(len(want), 17)
+        self.assertEqual({k for k in prepare_assets.JOBS if k.startswith('playbook/drafter-items/')}, want)
+        for lang in ('zh', 'en'):
+            cfg = section_demo('playbook', 11, lang)
+            self.assertIn('drafter-items', cfg)
+        note = DRAFTER['t']['items_note']
+        self.assertEqual(note, ['物品图是用 Codex 生成的示意图，照 03 节 Studio 图标的风格画的。',
+                                'Item art was generated with Codex as illustration, drawn to match the Studio icons in section 03.'])
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        art = js[js.index('const itemArt'):js.index('return im;', js.index('const itemArt'))]
+        for must in ("im.alt = ''", "setAttribute('aria-hidden', 'true')", "im.loading = 'lazy'"):
+            self.assertIn(must, art)
+
     def test_draft_rules_in_node(self):
         node = shutil.which('node')
         if not node:

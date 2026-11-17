@@ -127,7 +127,7 @@ Existing 27-page portfolio PDF is offered as a companion download; it is not rep
 - 实地观察地点是藏龙岛湿地公园，2021-05-09 18:00–19:30：卡 20261115-043；Figma 2206:20149 / 2206:20163 的文字层。
 - 「约九成」的分母是 85 份有效问卷：卡 20261115-041，本人 2026 年回忆；原稿（Figma 2206:20210）只写 90%，原始问卷未核实。不写 77 份、90.6%。
 - 低保真界面里的数字是原型占位（Figma 2206:20837）。
-- `qingju/team-route`：原图 `qingju-final.png`，1200×867，团队高保真；按原比例完整显示（卡 20261115-042）。Figma 节点应为 2206:21317，未回 Figma 核对。
+- `qingju/team-route`：原图 `sources/work/qingju/team-route-2021.png`（由 `qingju-final.png` 换底得来），1200×867，团队高保真；按原比例完整显示（卡 20261115-042）。Figma 节点应为 2206:21317，未回 Figma 核对。2026-11-18：原稿底色换成 #F6F8F6（卡 20261118-003），脚本 03-qingju/portfolio/figures/src/crop_team_hifi.py。
 
 PlayBook
 - 手机端改版从 2023 年 10 月下旬开始、做了三到四周：卡 20261115-009；内容清单第 1 条；两份会议逐字稿的文件名（2023-10-21、2023-10-23）。
@@ -236,8 +236,8 @@ PlayBook
 
 - 依据：`03-qingju/portfolio/handoff.md`「3c. 待合进网站：06 节加四张团队高保真」；卡 20261117-021，本人 2026-11-17 20:44 北京时间选 A，没写意见。label、alt、caption 照交接单 3c 逐字用。
 - 出处：旧作品集 Figma `lfqzkEzhH33yq5kvIkNEqW`，2026-11-17 用 download_assets 2 倍导出整页，本机用 03-qingju/portfolio/figures/src/crop_team_hifi.py 裁出（只裁切、拼排，不改界面像素；手机屏圆角外的底色填成 `#F6F8F6`；品牌标志照原稿保留）。裁切框是 2 倍像素：
-  - `qingju/team-treasure-map`：节点 `2206:20841`，裁 (139, 2504, 1823, 4492)；原稿深灰底 `#404040`。原图 `03-qingju/portfolio/figures/team-treasure-map-2021.png`，1684×1988。
-  - `qingju/team-vault`：节点 `2206:21364`，宝库一屏 (396, 4684, 1196, 6416) 和三个宝箱 (1756, 5828, 3583, 6333) 两块裁图并排放在原稿深灰底上的拼排。原图 `team-vault-2021.png`，2000×1303。
+  - `qingju/team-treasure-map`：节点 `2206:20841`，裁 (139, 2504, 1823, 4492)；原稿深灰底 `#404040`。原图 `03-qingju/portfolio/figures/team-treasure-map-2021.png`，1684×1988。2026-11-18：原稿底色换成 #F6F8F6（卡 20261118-003），脚本 03-qingju/portfolio/figures/src/crop_team_hifi.py。
+  - `qingju/team-vault`：节点 `2206:21364`，宝库一屏 (396, 4684, 1196, 6416) 和三个宝箱 (1756, 5828, 3583, 6333) 两块裁图并排放在原稿深灰底上的拼排。原图 `team-vault-2021.png`，2000×1303。2026-11-18：原稿底色换成 #F6F8F6（卡 20261118-003），脚本 03-qingju/portfolio/figures/src/crop_team_hifi.py。
   - `qingju/team-publish`：节点 `2206:21364`，裁 (1758, 414, 2558, 2146)。原图 `team-publish-2021.png`，800×1732。
   - `qingju/team-merge`：节点 `2206:21364`，裁 (2758, 414, 3558, 2146)。原图 `team-merge-2021.png`，800×1732。
   - `qingju/team-memory-list`：节点 `2206:21324`，裁 (1268, 294, 2068, 2026)。原图 `team-memory-list-2021.png`，800×1732。

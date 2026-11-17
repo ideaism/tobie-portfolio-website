@@ -89,7 +89,7 @@ if (box) {
     const btn = e.target.closest('[data-enlarge]');
     if (!btn) return;
     trigger = btn;
-    const pic = btn.querySelector('img');
+    const pic = btn.querySelector('img') || btn.closest('.frame').querySelector('img');   // 'scroll' figures: the button sits beside the picture, not around it
     img.src = pic.currentSrc || pic.src; img.alt = pic.alt; link.href = img.src;
     cap.textContent = btn.closest('figure')?.querySelector('figcaption')?.textContent || pic.alt;
     box.showModal(); document.body.style.overflow = 'hidden';
@@ -98,6 +98,17 @@ if (box) {
   box.addEventListener('click', e => { if (e.target === box || e.target.classList.contains('lightbox__inner')) box.close(); });
   box.addEventListener('close', () => { document.body.style.overflow = ''; img.removeAttribute('src'); trigger?.focus(); });
 }
+
+/* figures with 'scroll': the picture scrolls inside a 16:9 window (CSS only);
+   this just hides the "scroll to see more" hint once the bottom has been reached */
+document.querySelectorAll('[data-scroll-shot]').forEach(shot => {
+  const view = shot.querySelector('.shot-scroll__view');
+  const update = () => shot.classList.toggle('is-end', view.scrollHeight - view.scrollTop - view.clientHeight < 4);
+  view.addEventListener('scroll', update, { passive: true });
+  view.querySelector('img')?.addEventListener('load', update);
+  window.addEventListener('resize', update, { passive: true });
+  update();
+});
 
 /* structure mode: shows the components this page is built from */
 const structure = document.querySelector('.structure-toggle');

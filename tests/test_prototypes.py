@@ -287,6 +287,26 @@ class FigureTests(unittest.TestCase):
                     self.assertIn(s, MANIFEST, f'{slug}/{n}: {s}')
                 self.assertEqual(len(f['caption']), 2)
 
+    def test_scroll_window_only_for_tall_images_and_reachable(self):
+        """'scroll' (2026-11-17): only single images taller than 16:9; the window is focusable and named, the enlarge button stays."""
+        from build import figure_html
+        for (slug, n), figs in FIGURES.items():
+            for f in figs:
+                if not f.get('scroll'):
+                    continue
+                self.assertEqual(f['kind'], 'image', f'{slug}/{n}')
+                w, h = MANIFEST[f['src']]
+                self.assertGreater(h / w, 9 / 16, f'{slug}/{n}: {f["src"]} fits 16:9 already')
+                for lang, hint in (('zh', '可上下滑动'), ('en', 'Scroll to see more')):
+                    html = figure_html(f, lang)
+                    self.assertIn('class="shot-scroll__view" tabindex="0" role="region" aria-label="', html)
+                    self.assertIn(hint, html)
+                    self.assertEqual(html.count('data-enlarge'), 1)
+                    self.assertEqual(html.count('<img '), 1)
+        plain = dict(FIGURES[('playbook', 9)][0])
+        self.assertNotIn('scroll', plain)
+        self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default
+
 
 class PageTests(unittest.TestCase):
     def test_no_invented_demo_vocabulary_left(self):

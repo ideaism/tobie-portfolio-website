@@ -313,6 +313,15 @@ def figure_html(f, lang):
         pad = ' style="padding:24px"' if f.get('pad') else ''
         width = ' style="max-width:560px"' if f.get('narrow') else ''
         src = f['src_en'] if lang == 'en' and f.get('src_en') else f['src']    # 图里有文字、中英文各导一张时，英文页取 src_en
+        if f.get('scroll'):
+            # 'scroll'（2026-11-17，PlayBook 09 节）：比 16:9 高的整页稿放进一个 16:9 的窗口，图按窗口宽度整张显示，
+            # 超出的部分在窗口里上下滑动看（滚动只靠 CSS；site.js 只管滑到底以后把提示藏起来）。
+            # 窗口可以 Tab 聚焦、方向键滚动；放大按钮挪到窗口右下角，点开仍是整张图。没有这个键的图一个字都不变
+            name = escape(T(f['label'], lang))
+            return (f'<figure class="figure frame-block"{width}>{label}<div class="frame shot-scroll" data-scroll-shot{style}>'
+                    f'<div class="shot-scroll__view" tabindex="0" role="region" aria-label="{name}{t("（可上下滑动）", " (scroll to see more)", lang)}">{img(src, T(f["label"], lang))}</div>'
+                    f'<span class="shot-scroll__hint" aria-hidden="true">{t("可上下滑动", "Scroll to see more", lang)}</span>'
+                    f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
         return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang))}"><div{pad}>'
                 f'{img(src, T(f["label"], lang))}</div></button></div>{cap}</figure>')
     if kind == 'phones':

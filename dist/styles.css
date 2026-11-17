@@ -139,6 +139,17 @@ p,li{text-wrap:pretty}
 .enlarge{display:block;width:100%;cursor:zoom-in;position:relative}
 .enlarge::after{content:'';position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7'/%3E%3C/svg%3E") center/16px no-repeat;opacity:.85;transition:opacity var(--t-fast),transform var(--t-fast)}
 .enlarge:hover::after{opacity:1;transform:scale(1.06)}
+/* image figure with 'scroll' (2026-11-17): a 16:9 window; the picture keeps the window's width and scrolls up and down inside it.
+   Wheel, touch and arrow keys are the browser's own; at either end the page carries on scrolling. */
+.shot-scroll::after{content:'';position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.75));pointer-events:none;transition:opacity var(--t-fast)}
+.shot-scroll__view{aspect-ratio:16/9;overflow-x:hidden;overflow-y:auto;scroll-behavior:auto;overscroll-behavior:auto}
+.shot-scroll__view:focus-visible{outline-offset:-2px;box-shadow:none;border-radius:var(--r-frame)}
+.shot-scroll:has(.shot-scroll__view:focus-visible){box-shadow:0 0 0 6px rgba(247,119,95,.55)}
+.shot-scroll__view img{width:100%;max-width:none}
+.shot-scroll__hint{position:absolute;left:12px;bottom:12px;z-index:1;font-family:var(--mono);font-size:var(--fs-micro);line-height:1;padding:7px 10px;border-radius:var(--r-pill);box-shadow:inset 0 0 0 1px var(--rule-strong);color:var(--ink-2);background:rgba(255,255,255,.92);pointer-events:none;transition:opacity var(--t-fast)}
+.shot-scroll.is-end .shot-scroll__hint,.shot-scroll.is-end::after{opacity:0}
+.enlarge.shot-scroll__zoom{position:absolute;right:0;bottom:0;z-index:1;width:58px;height:58px}
+@media print{.shot-scroll__view{aspect-ratio:auto;overflow:visible}.shot-scroll__hint,.shot-scroll__zoom,.shot-scroll::after{display:none}}
 
 /* phone + browser shells (device frames hold original screens only) */
 .phone{position:relative;border-radius:var(--r-phone);background:#111;padding:9px;box-shadow:0 30px 60px -30px rgba(14,42,39,.6),0 0 0 1px rgba(0,0,0,.2)}

@@ -129,7 +129,7 @@ PROJECTS = [
   'title': ['十四个 agent 都在等我，所以我先设计它们怎么问我。', 'Fourteen agents were waiting on me, so I designed how they ask.'],
   'summary': ['我一个人带 14 个 AI agent 做一个游戏。它们做得很快，我看不过来。这个案例讲我怎么设计「agent 怎么问我、我怎么答、答案怎么回去」，以及我不在线的时候，哪些地方还离不开我、我怎么补。', 'I direct 14 AI agents building a game. They produce faster than I can review. This case is about designing how agents ask me, how I answer, and how the answer gets back to them, and about where the system still needed me when I was not there, and how I closed each gap.'],
   'chips': [['问题定义', '协作流程', '复盘'], ['Problem framing', 'Workflow design', 'Retrospective']],
-  'label': ['Agent Matrix · 谁在等我、九个问题、分工、信任等级', 'Agent Matrix · who waits, nine problems, roles, trust levels'], 'prov': 'diagram'},
+  'label': ['Agent Matrix · 当时在等的六张卡（临时封面）', 'Agent Matrix · the six cards that were waiting (temporary cover)'], 'prov': 'diagram'},
  {'slug': 'qingju', 'project': 'qingju', 'name': 'Qingju · 青桔', 'year': '2021',
   'type': ['青桔（滴滴）商业委托 · 训练营结项', 'Commercial brief from Qingju (DiDi) · Programme capstone'],
   'title': ['让成长体系，回到骑行本身。', 'Make growth part of the ride.'],
@@ -197,24 +197,17 @@ def collage(slug, lang):
     return ''
 
 def matrix_cover(lang):
-    """Agent Matrix 的封面（2026-11-17）。和 PlayBook 同一种摆法：深色舞台，一叠斜着往后排开。
-    这个案例的三张界面截图还没有（卡 20261115-005），叠的是它已经通过的四张图，中英文页各用各的；图只斜放，不改内容。
-    最前一张整张显示，后面三张只露上半张。截图到了以后可以把审核卡界面换到最前面。"""
-    sfx = 'zh' if lang == 'zh' else 'en'
-    sheet = 'aspect-ratio:16/10;object-fit:cover;object-position:top'
-    def piece(name, alt, i, style):
-        return img(f'agent-matrix/{name}-{sfx}', alt, 'stage__item').replace('<img', f'<img style="--i:{i};{style}"')
-    return ('<div class="collage collage--stage collage--matrix" style="--bg:#0B1716;--glow:8,109,112">'
-            '<span class="stage__word" aria-hidden="true" style="font-size:11cqw">Agent Matrix</span><div class="stage__stack">'
-            + piece('fig-trust', t('图：四级信任等级和台账', 'Diagram: four trust levels and the ledger', lang), 3, f'left:57%;top:11%;width:42%;{sheet}')
-            + piece('fig-agents', t('图：十四个 agent 的分工和流水线', 'Diagram: fourteen agents, their roles and pipeline', lang), 2, f'left:41%;top:17%;width:47%;{sheet}')
-            + piece('fig-sequence', t('图：九个问题，各引出一个机制', 'Diagram: nine problems, one mechanism each', lang), 1, f'left:24%;top:24%;width:52%;{sheet}')
-            + piece('fig-who-waits', t('图：当时在等的六张卡，三张可以先走，三张仍然要我', 'Diagram: the six cards that were waiting — three can go ahead, three still need me', lang), 0, 'left:3%;top:40%;width:64%')
-            + '</div></div>')
+    """Agent Matrix 的临时封面（2026-11-17）：一张已经通过的图平放，整张显示，中英文页各用各的。
+    本人在卡 20261117-020 第 3 版上说封面不要全用一种风格（深色舞台那种只给 PlayBook），首页也要改版（卡 20261117-025），
+    所以这里不做新摆法；等首页改版定了、三张界面截图到了（卡 20261115-005）再正式做。"""
+    name = 'agent-matrix/fig-who-waits-' + ('zh' if lang == 'zh' else 'en')
+    w, h = MANIFEST[name]
+    return (f'<div class="collage" style="--bg:#FFFFFF;aspect-ratio:{w}/{h}">'
+            + img(name, t('图：当时在等的六张卡，三张可以先走，三张仍然要我', 'Diagram: the six cards that were waiting — three can go ahead, three still need me', lang)).replace('<img', '<img style="left:0;top:0;width:100%;border-radius:0;box-shadow:none"')
+            + '</div>')
 
 def cover(slug, lang):
-    """首页卡片和案例页顶部的封面入口。Agent Matrix 的封面单独写在 matrix_cover()，其余四张走 collage()。
-    分开写是因为另外三张封面的新写法还在预览分支上等本人验收（提交 8a5747a，整段重写了 collage()）；它合进来以后，可以把 matrix_cover() 并回 collage()。"""
+    """首页卡片和案例页顶部的封面入口。Agent Matrix 的临时封面单独写在 matrix_cover()，其余四张走 collage()。"""
     return matrix_cover(lang) if slug == 'agent-matrix' else collage(slug, lang)
 
 def has_try(slug):
@@ -331,7 +324,7 @@ def home(lang):
 
 # ------------------------------------------------------------------ case
 CASE_HERO = {
-    'agent-matrix': ('diagram', ['Agent Matrix · 谁在等我、九个问题、分工、信任等级', 'Agent Matrix · who waits, nine problems, roles, trust levels']),
+    'agent-matrix': ('diagram', ['Agent Matrix · 当时在等的六张卡（临时封面）', 'Agent Matrix · the six cards that were waiting (temporary cover)']),
     'qingju': ('original', ['青桔 · 寻宝地图与路线讨论圈 · 2021', 'Qingju · treasure map and route discussion · 2021']),
     'playbook': ('original', ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions']),
     'smt': ('original', ['SMT-MAX · 资产与持仓工作区', 'SMT-MAX · assets & positions workspace']),

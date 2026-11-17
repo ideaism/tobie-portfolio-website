@@ -29,7 +29,7 @@
   --beak-wash:#FDE6DF;
   --structure:#7B61FF;   /* structure mode only */
   /* project tags — sampled from each product's own UI, used only as 8px identifiers */
-  --p-qingju:#10D0B0;--p-playbook:#F95757;--p-app:#4D21E8;--p-smt:#4E71FF;--p-fridge:#264846;--p-tobie:var(--beak);--p-explore:#8A9A94;
+  --p-qingju:#10D0B0;--p-playbook:#F95757;--p-app:#4D21E8;--p-smt:#4E71FF;--p-fridge:#264846;--p-matrix:#086D70;--p-tobie:var(--beak);--p-explore:#8A9A94;
 
   /* type */
   --sans:'Atkinson Hyperlegible Next','PingFang SC','Hiragino Sans GB','Noto Sans SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
@@ -714,3 +714,5 @@ html.studio-open{overflow:hidden}
 @media (max-width:520px){.phone-strip:has(> figure.partial){grid-template-columns:minmax(0,300px);justify-content:center;overflow-x:visible;scroll-snap-type:none}}
 /* 重做演示的来源标签英文很长（Rebuilt in code, 2026 · interface from the source），窄屏上放不下会把整页撑出横向滚动：允许它收窄、折行（2026-11-16） */
 @media (max-width:520px){.prov--retro{flex:0 1 auto;min-width:0}}
+/* Agent Matrix 的封面（2026-11-17）：最前一张是横着的整张图，窄屏上整叠不朝右边放大，免得它左边被切掉 */
+@media (max-width:640px){.collage--matrix .stage__stack{transform:scale(1.06);transform-origin:20% 60%}}

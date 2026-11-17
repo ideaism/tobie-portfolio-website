@@ -1,4 +1,36 @@
 {
+ "agent-matrix/fig-agents-en": [
+  1800,
+  1570
+ ],
+ "agent-matrix/fig-agents-zh": [
+  1800,
+  1570
+ ],
+ "agent-matrix/fig-sequence-en": [
+  1800,
+  1706
+ ],
+ "agent-matrix/fig-sequence-zh": [
+  1800,
+  1666
+ ],
+ "agent-matrix/fig-trust-en": [
+  1800,
+  1438
+ ],
+ "agent-matrix/fig-trust-zh": [
+  1800,
+  1398
+ ],
+ "agent-matrix/fig-who-waits-en": [
+  1800,
+  948
+ ],
+ "agent-matrix/fig-who-waits-zh": [
+  1800,
+  948
+ ],
  "fridge/cf-add": [
   480,
   1104

@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261117p'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261117q'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -123,6 +123,13 @@ def footer(lang):
 
 # ------------------------------------------------------------------ home
 PROJECTS = [
+ # 2026-11-17 新增第五个案例（交接单 05-agent-matrix/portfolio/handoff.md 第 0 节；标题是卡 20261115-002 选的 A）
+ {'slug': 'agent-matrix', 'project': 'matrix', 'name': 'Agent Matrix', 'year': '2026',
+  'type': ['个人项目 · 多 agent 协作', 'Personal project · Multi-agent workflow'],
+  'title': ['十四个 agent 都在等我，所以我先设计它们怎么问我。', 'Fourteen agents were waiting on me, so I designed how they ask.'],
+  'summary': ['我一个人带 14 个 AI agent 做一个游戏。它们做得很快，我看不过来。这个案例讲我怎么设计「agent 怎么问我、我怎么答、答案怎么回去」，以及我不在线的时候，哪些地方还离不开我、我怎么补。', 'I direct 14 AI agents building a game. They produce faster than I can review. This case is about designing how agents ask me, how I answer, and how the answer gets back to them, and about where the system still needed me when I was not there, and how I closed each gap.'],
+  'chips': [['问题定义', '协作流程', '复盘'], ['Problem framing', 'Workflow design', 'Retrospective']],
+  'label': ['Agent Matrix · 谁在等我、九个问题、分工、信任等级', 'Agent Matrix · who waits, nine problems, roles, trust levels'], 'prov': 'diagram'},
  {'slug': 'qingju', 'project': 'qingju', 'name': 'Qingju · 青桔', 'year': '2021',
   'type': ['青桔（滴滴）商业委托 · 训练营结项', 'Commercial brief from Qingju (DiDi) · Programme capstone'],
   'title': ['让成长体系，回到骑行本身。', 'Make growth part of the ride.'],
@@ -151,8 +158,8 @@ PROJECTS = [
 
 # 首页「精选作品」和案例页底部「下一个项目」的先后顺序。改顺序只改这一行。
 # 2026-11-17 本人定（卡 20261115-049 第 2 版选 C）：PlayBook → 兴业 SMT → 冰箱 → 青桔。
-# PlayBook 最前是 11-16 说的，后面三个照 11-15 选的先后。Agent 矩阵进来以后放第一个（卡 20261115-003）。
-PROJECT_ORDER = ['playbook', 'smt', 'commons-fridge', 'qingju']
+# PlayBook 最前是 11-16 说的，后面三个照 11-15 选的先后。Agent 矩阵 2026-11-17 进来，放第一个（卡 20261115-003 选 A）。
+PROJECT_ORDER = ['agent-matrix', 'playbook', 'smt', 'commons-fridge', 'qingju']
 PROJECTS.sort(key=lambda p: PROJECT_ORDER.index(p['slug']))
 
 def collage(slug, lang):
@@ -189,6 +196,31 @@ def collage(slug, lang):
                 + '</div>')
     return ''
 
+def matrix_cover(lang):
+    """Agent Matrix 的封面（2026-11-17）。和 PlayBook 同一种摆法：深色舞台，一叠斜着往后排开。
+    这个案例的三张界面截图还没有（卡 20261115-005），叠的是它已经通过的四张图，中英文页各用各的；图只斜放，不改内容。
+    最前一张整张显示，后面三张只露上半张。截图到了以后可以把审核卡界面换到最前面。"""
+    sfx = 'zh' if lang == 'zh' else 'en'
+    sheet = 'aspect-ratio:16/10;object-fit:cover;object-position:top'
+    def piece(name, alt, i, style):
+        return img(f'agent-matrix/{name}-{sfx}', alt, 'stage__item').replace('<img', f'<img style="--i:{i};{style}"')
+    return ('<div class="collage collage--stage collage--matrix" style="--bg:#0B1716;--glow:8,109,112">'
+            '<span class="stage__word" aria-hidden="true" style="font-size:11cqw">Agent Matrix</span><div class="stage__stack">'
+            + piece('fig-trust', t('图：四级信任等级和台账', 'Diagram: four trust levels and the ledger', lang), 3, f'left:57%;top:11%;width:42%;{sheet}')
+            + piece('fig-agents', t('图：十四个 agent 的分工和流水线', 'Diagram: fourteen agents, their roles and pipeline', lang), 2, f'left:41%;top:17%;width:47%;{sheet}')
+            + piece('fig-sequence', t('图：九个问题，各引出一个机制', 'Diagram: nine problems, one mechanism each', lang), 1, f'left:24%;top:24%;width:52%;{sheet}')
+            + piece('fig-who-waits', t('图：当时在等的六张卡，三张可以先走，三张仍然要我', 'Diagram: the six cards that were waiting — three can go ahead, three still need me', lang), 0, 'left:3%;top:40%;width:64%')
+            + '</div></div>')
+
+def cover(slug, lang):
+    """首页卡片和案例页顶部的封面入口。Agent Matrix 的封面单独写在 matrix_cover()，其余四张走 collage()。
+    分开写是因为另外三张封面的新写法还在预览分支上等本人验收（提交 8a5747a，整段重写了 collage()）；它合进来以后，可以把 matrix_cover() 并回 collage()。"""
+    return matrix_cover(lang) if slug == 'agent-matrix' else collage(slug, lang)
+
+def has_try(slug):
+    """这个案例有没有可以亲手试的演示（页面里有没有 #try 这个锚点）。没有的案例不出「试原型」的按钮。"""
+    return any('id="try"' in section_demo(slug, n + 1, 'zh') for n in range(len(CASES[slug]['sections'])))
+
 # 自画像上的五个物件，顺序和 METHOD 一致：(x%, y%, 半径%, 说明纸条贴在物件的哪一侧)
 # 2026-11-15 本人要求：去掉图上的数字圆点。平时只有很小的呼吸点，碰到或点到物件才压暗其余部分并贴出说明。
 PORTRAIT_SPOTS = [
@@ -210,8 +242,8 @@ METHOD = [
 def home(lang):
     path = url('', lang)
     h = head(t('Tobie 冯渝程 — 产品与体验设计', 'Tobie (Yucheng Feng) — Product & experience design', lang),
-             t('把复杂的系统，设计得让人看得懂。精选青桔、PlayBook、兴业 SMT 与 The Commons Fridge 项目，附基于原始界面的可操作原型。',
-               'I make complex systems understandable. Selected work — Qingju, PlayBook, Industrial Securities SMT and The Commons Fridge — with prototypes you can try, built from the original screens.', lang), lang, path)
+             t('把复杂的系统，设计得让人看得懂。精选 Agent Matrix、PlayBook、兴业 SMT、The Commons Fridge 与青桔项目，附基于原始界面的可操作原型。',
+               'I make complex systems understandable. Selected work — Agent Matrix, PlayBook, Industrial Securities SMT, The Commons Fridge and Qingju — with prototypes you can try, built from the original screens.', lang), lang, path)
     h += topbar(lang, path)
     spots = ''.join(f'<button type="button" class="hot__spot" data-key="{n+1}" data-x="{x}" data-y="{y}" data-r="{r}" data-side="{side}" style="left:{x}%;top:{y}%;--r:{r}%" aria-label="{escape(T(METHOD[n][1], lang))}: {escape(T(METHOD[n][0], lang))}"><i></i></button>'
                     for n, (x, y, r, side) in enumerate(PORTRAIT_SPOTS))
@@ -236,21 +268,22 @@ def home(lang):
 </div></section>
 
 <section class="section" id="work"><div class="wrap">
- <div class="section-head"><h2>{t('精选作品', 'Selected work', lang)}</h2><p>{t('2021–2026 年的四个项目。每张图都是原始设计；每个可操作原型都运行在原始界面上，不做重新“美化”。', 'Four projects, 2021–2026. Every image is the original design, and every prototype runs on the original screens — nothing is re-skinned.', lang)}</p></div>
+ <div class="section-head"><h2>{t('精选作品', 'Selected work', lang)}</h2><p>{t('2021–2026 年的五个项目。每张图都是原始设计；每个可操作原型都运行在原始界面上，不做重新“美化”。', 'Five projects, 2021–2026. Every image is the original design, and every prototype runs on the original screens — nothing is re-skinned.', lang)}</p></div>
  <div class="work">'''
     for p in PROJECTS:
         prov_text, prov_cls = PROV[p['prov']]
         chips = ''.join(f'<li class="chip">{c}</li>' for c in T(p['chips'], lang))
+        try_link = f'<a class="link" href="{url(p["slug"], lang)}#try">{t("亲手试原型", "Try the prototype", lang)}</a>' if has_try(p['slug']) else ''
         h += f'''
   <article class="work-item reveal" data-component="Work item">
-   <div class="work-item__visual frame-block">{frame_label(T(p['label'], lang), T(prov_text, lang), prov_cls, p['project'])}<a href="{url(p['slug'], lang)}" aria-label="{t('阅读案例：', 'Read the case: ', lang)}{p['name']}"><div class="frame">{collage(p['slug'], lang)}</div></a></div>
+   <div class="work-item__visual frame-block">{frame_label(T(p['label'], lang), T(prov_text, lang), prov_cls, p['project'])}<a href="{url(p['slug'], lang)}" aria-label="{t('阅读案例：', 'Read the case: ', lang)}{p['name']}"><div class="frame">{cover(p['slug'], lang)}</div></a></div>
    <div class="work-item__copy">
     <p class="work-item__name" style="--project:var(--p-{p['project']})">{p['name']}</p>
     <p class="label work-item__meta">{p['year']} · {T(p['type'], lang)}</p>
     <h3><a href="{url(p['slug'], lang)}">{T(p['title'], lang)}</a></h3>
     <p class="work-item__summary">{T(p['summary'], lang)}</p>
     <ul class="chips">{chips}</ul>
-    <div class="work-item__actions"><a class="link-arrow" href="{url(p['slug'], lang)}">{t('阅读案例', 'Read the case', lang)} <span aria-hidden="true">→</span></a><a class="link" href="{url(p['slug'], lang)}#try">{t('亲手试原型', 'Try the prototype', lang)}</a></div>
+    <div class="work-item__actions"><a class="link-arrow" href="{url(p['slug'], lang)}">{t('阅读案例', 'Read the case', lang)} <span aria-hidden="true">→</span></a>{try_link}</div>
    </div>
   </article>'''
     h += '\n </div>\n</div></section>'
@@ -298,6 +331,7 @@ def home(lang):
 
 # ------------------------------------------------------------------ case
 CASE_HERO = {
+    'agent-matrix': ('diagram', ['Agent Matrix · 谁在等我、九个问题、分工、信任等级', 'Agent Matrix · who waits, nine problems, roles, trust levels']),
     'qingju': ('original', ['青桔 · 寻宝地图与路线讨论圈 · 2021', 'Qingju · treasure map and route discussion · 2021']),
     'playbook': ('original', ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions']),
     'smt': ('original', ['SMT-MAX · 资产与持仓工作区', 'SMT-MAX · assets & positions workspace']),
@@ -309,6 +343,7 @@ BRIEF_LABELS = [['问题', 'Problem'], ['我的关键决定', 'Key decisions'], 
 DECISION_LABELS = [['问题', 'Problem'], ['考虑过的方案', 'Alternative considered'], ['为什么没选', 'Why not'], ['结果', 'Outcome']]
 
 CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
+    'agent-matrix': ['十四个 agent 都在等我，所以我先设计它们怎么问我。', 'Fourteen agents were waiting on me, so I designed how they ask.'],   # 卡 20261115-002 选 A；PDF 里还没有这个案例
     'qingju': ['让成长体系，回到骑行本身。', 'Connect cycling rewards to the reasons people ride.'],
     'playbook': ['把复杂规则，变成可参与的体验。', 'Turn creator rules into fan experiences.'],
     'smt': ['从业务单元，建立界面秩序。', 'Make a securities interface reusable.'],
@@ -376,6 +411,9 @@ def case_page(slug, lang):
     brief = ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(BRIEF_LABELS, c['brief']))
     prov_key, hero_label = CASE_HERO[slug]
     prov_text, prov_cls = PROV[prov_key]
+    # 没有可试演示的案例（Agent Matrix）不出「直接试原型」，「从头读」当主按钮
+    start = f'<a class="btn{" btn--ghost" if has_try(slug) else ""}" href="#section-1">{t("从头读", "Read from the start", lang)}</a>'
+    actions = (f'<a class="btn" href="#try">{t("直接试原型", "Try the prototype", lang)} <span aria-hidden="true">↓</span></a>' if has_try(slug) else '') + start
     h += f'''<main id="main" class="wrap">
 <header class="case-head">
  <a class="back" href="{url('', lang)}#work">← {t('全部作品', 'All work', lang)}</a>
@@ -385,8 +423,8 @@ def case_page(slug, lang):
  <dl class="case-brief" data-component="Case brief">{brief}</dl>
  <dl class="case-spec" data-component="Spec table">{facts}</dl>
 </header>
-<div class="case-hero frame-block reveal">{frame_label(T(hero_label, lang), T(prov_text, lang), prov_cls, p['project'])}<div class="frame">{collage(slug, lang)}</div>
- <div class="case-hero__actions"><a class="btn" href="#try">{t('直接试原型', 'Try the prototype', lang)} <span aria-hidden="true">↓</span></a><a class="btn btn--ghost" href="#section-1">{t('从头读', 'Read from the start', lang)}</a></div></div>
+<div class="case-hero frame-block reveal">{frame_label(T(hero_label, lang), T(prov_text, lang), prov_cls, p['project'])}<div class="frame">{cover(slug, lang)}</div>
+ <div class="case-hero__actions">{actions}</div></div>
 <div class="case-layout">
  <nav class="toc" aria-label="{t('本页目录', 'On this page', lang)}"><span class="toc__title label">{t('目录', 'Contents', lang)}</span>'''
     for n, s in enumerate(c['sections']):
@@ -396,8 +434,17 @@ def case_page(slug, lang):
     for n, s in enumerate(c['sections']):
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
         h += f'\n<section class="case-section" id="section-{n+1}"><p class="label label--teal">{n+1:02d} · {label}</p><h2>{s["title"][i]}</h2>'
-        body = ''.join(f'<p>{para[i]}</p>' for para in s['text'])
-        h += f'<div class="{"outcome" if s.get("outcome") else "prose"}">{body}</div>'
+        paras = [f'<p>{para[i]}</p>' for para in s['text']]
+        box = 'outcome' if s.get('outcome') else 'prose'
+        if 'rows' in s:
+            # 'rows'（2026-11-17，Agent Matrix 06 节）：一张几行的细线表，插在正文第 after 段后面，沿用开头摘要和决策块的样式。
+            # 每行 [左边小标签, 加粗的一句, 下面一句]，都是 [zh, en]。没有这个键的章节一个字都不变
+            k = s['rows']['after']
+            table = ('<dl class="case-brief case-decision" data-component="Rows">'
+                     + ''.join(f'<div><dt>{r[0][i]}</dt><dd><strong>{r[1][i]}</strong><br>{r[2][i]}</dd></div>' for r in s['rows']['items']) + '</dl>')
+            h += f'<div class="{box}">{"".join(paras[:k])}</div>{table}<div class="{box}">{"".join(paras[k:])}</div>'
+        else:
+            h += f'<div class="{box}">{"".join(paras)}</div>'
         if 'decision' in s:
             h += '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, s['decision'])) + '</dl>'
         if 'insight' in s:
@@ -410,8 +457,10 @@ def case_page(slug, lang):
         if 'external' in s:
             h += f'<p style="margin-top:24px"><a class="link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
         h += '</section>'
-    h += f'''
-<p class="source-line">{t('原稿', 'Source', lang)}: <a href="{c['source']}" target="_blank" rel="noopener">{t('Figma 项目文件', 'Figma project file', lang)} ↗</a> · {t('访问遵循原文件的分享权限。', 'Access follows the source file’s sharing settings.', lang)}</p>
+    if c.get('source'):   # 没有 Figma 原稿的案例（Agent Matrix）不出这一行
+        h += f'''
+<p class="source-line">{t('原稿', 'Source', lang)}: <a href="{c['source']}" target="_blank" rel="noopener">{t('Figma 项目文件', 'Figma project file', lang)} ↗</a> · {t('访问遵循原文件的分享权限。', 'Access follows the source file’s sharing settings.', lang)}</p>'''
+    h += '''
  </article>
 </div>'''
     idx = [x['slug'] for x in PROJECTS].index(slug)
@@ -448,4 +497,4 @@ if __name__ == '__main__':
             save(('en/' if lang == 'en' else '') + 'work/' + p['slug'], case_page(p['slug'], lang))
     (OUT / 'sitemap.xml').write_text(sitemap(), encoding='utf-8', newline='\n')
     (OUT / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n', encoding='utf-8', newline='\n')
-    print('Built 10 pages, sitemap.xml and robots.txt.')
+    print(f'Built {2 + 2 * len(PROJECTS)} pages, sitemap.xml and robots.txt.')

@@ -177,6 +177,16 @@ JOBS = {
     'fridge/sub-refusals': (SRC / 'work' / 'fridge' / 'sub-L15-refusals.png', 2000, 86),
     'fridge/sub-rounds': (SRC / 'work' / 'fridge' / 'sub-L16-rounds.png', 2000, 86),
     'fridge/sub-test-not-run': (SRC / 'work' / 'fridge' / 'sub-L19-test-not-run.png', 2000, 86),
+    # Agent Matrix — 2026。2026-11-17：四张图，中英文各一张（05-agent-matrix/portfolio/figures/，1800 宽，由 figures/src/build.mjs 生成；
+    # 本人在卡 20261115-001 第 3 版通过）。只压缩成 WebP，不缩放不裁切，见 docs/sources.md
+    'agent-matrix/fig-agents-zh': (SRC / 'work' / 'agent-matrix' / 'fig-agents-zh.png', 1800, 88),
+    'agent-matrix/fig-agents-en': (SRC / 'work' / 'agent-matrix' / 'fig-agents-en.png', 1800, 88),
+    'agent-matrix/fig-sequence-zh': (SRC / 'work' / 'agent-matrix' / 'fig-sequence-zh.png', 1800, 88),
+    'agent-matrix/fig-sequence-en': (SRC / 'work' / 'agent-matrix' / 'fig-sequence-en.png', 1800, 88),
+    'agent-matrix/fig-who-waits-zh': (SRC / 'work' / 'agent-matrix' / 'fig-who-waits-zh.png', 1800, 88),
+    'agent-matrix/fig-who-waits-en': (SRC / 'work' / 'agent-matrix' / 'fig-who-waits-en.png', 1800, 88),
+    'agent-matrix/fig-trust-zh': (SRC / 'work' / 'agent-matrix' / 'fig-trust-zh.png', 1800, 88),
+    'agent-matrix/fig-trust-en': (SRC / 'work' / 'agent-matrix' / 'fig-trust-en.png', 1800, 88),
 }
 for n in range(5):
     JOBS[f'fridge/submission-{n}'] = (EXP / f'fridge-p22-{n}.jpg', 800, 82)

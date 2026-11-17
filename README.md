@@ -1,6 +1,6 @@
 # Tobie / Yucheng Feng — Portfolio website
 
-Bilingual (中文 `/`, English `/en/`) static portfolio: four case studies — Qingju, PlayBook, Industrial Securities SMT, The Commons Fridge — plus explorations, about and contact.
+Bilingual (中文 `/`, English `/en/`) static portfolio: five case studies — Agent Matrix, PlayBook, Industrial Securities SMT, The Commons Fridge, Qingju — plus explorations, about and contact.
 
 Design system **“Annotated”** (v3, 2026-09-19): the site is a working canvas; real work sits in white frames and my voice appears as annotations. Product screens are never re-skinned. Full spec: [`docs/design-system.md`](docs/design-system.md).
 

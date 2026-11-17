@@ -1,11 +1,12 @@
 # 交接单合同（项目文件夹 → portfolio-web）
 
-publisher 是唯一改动本仓库的 agent。输入是三份交接单：
+publisher 是唯一改动本仓库的 agent。输入是五份交接单：
 
 - `../01-commons-fridge/portfolio/handoff.md` → `CASES['commons-fridge']`
 - `../02-playbook/portfolio/handoff.md` → `CASES['playbook']`
 - `../03-qingju/portfolio/handoff.md` → `CASES['qingju']`
 - `../04-shared/SMT-交接单.md` → `CASES['smt']`
+- `../05-agent-matrix/portfolio/handoff.md` → `CASES['agent-matrix']`（2026-11-17 新增）
 
 只处理 `status: ready` 的交接单；第 6 节“待本人确认”里未勾选的条目不上线。
 

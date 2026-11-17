@@ -18,6 +18,7 @@ PROV = {
     'mixed': (['原稿对比', 'Source comparison'], ''),
     'submission': (['提交稿原页', 'Submitted page'], ''),     # 学术提交稿里的一页，英文原文，只裁掉页脚和空白
     'retro': (['2026 复盘图', '2026 diagram'], ''),           # 2026 年回看时新画的图，不是当年的原稿，也不是研究材料
+    'diagram': (['按项目记录绘制', 'Drawn from project records'], ''),   # 2026-11-17，Agent Matrix：照项目自己的记录（分工表、复盘、审核卡、台账）画的图，不是界面截图
 }
 
 # (slug, section number) -> list of figures
@@ -305,5 +306,26 @@ FIGURES = {
   {'kind': 'image', 'src': 'fridge/penguin-motion', 'prov': 'original', 'project': 'fridge', 'pad': True,
    'label': ['展览动态研究 · 2026 年 9 月', 'Exhibition motion study · September 2026'],
    'caption': ['角色的下一步：把邀请与确认做成触觉和动态反馈。', 'Next for the character: turning invite and acknowledge into tactile and motion feedback.']},
+ ],
+ # ---------------- Agent Matrix ----------------
+ # 2026-11-17：四张图，中英文各一张（'src' 中文页，'src_en' 英文页）。本人在卡 20261115-001 第 3 版通过；图注照交接单第 3 节。
+ # 白底的图，用普通图框。02、03、04 节要的三张截图（飞书看板、一张审核卡、一页状态文件）还在等本人（卡 20261115-005），没到之前不放。
+ ('agent-matrix', 1): [
+  {'kind': 'image', 'src': 'agent-matrix/fig-agents-zh', 'src_en': 'agent-matrix/fig-agents-en', 'prov': 'diagram', 'project': 'matrix',
+   'label': ['十四个 agent 的分工和流水线', 'Fourteen agents: roles and pipeline'],
+   'caption': ['十四个 agent 各管一块，「通过」只在我这里。', 'Fourteen agents, one area each. Approval sits only with me.']},
+  {'kind': 'image', 'src': 'agent-matrix/fig-sequence-zh', 'src_en': 'agent-matrix/fig-sequence-en', 'prov': 'diagram', 'project': 'matrix',
+   'label': ['九个问题，各引出一个机制', 'Nine problems, one mechanism each'],
+   'caption': ['每个机制，都是被一个具体的问题逼出来的。', 'Every mechanism was forced by one specific problem.']},
+ ],
+ ('agent-matrix', 6): [
+  {'kind': 'image', 'src': 'agent-matrix/fig-who-waits-zh', 'src_en': 'agent-matrix/fig-who-waits-en', 'prov': 'diagram', 'project': 'matrix',
+   'label': ['当时在等的六张卡', 'The six cards that were waiting'],
+   'caption': ['不急、有推荐选项的可以先走；要我亲眼看、亲手做的仍然等我。', 'Non-urgent cards with a recommended option can go ahead; what I must see or do myself still waits.']},
+ ],
+ ('agent-matrix', 7): [
+  {'kind': 'image', 'src': 'agent-matrix/fig-trust-zh', 'src_en': 'agent-matrix/fig-trust-en', 'prov': 'diagram', 'project': 'matrix',
+   'label': ['四级信任等级和台账', 'Four trust levels and the ledger'],
+   'caption': ['每类任务从最低一级开始。', 'Every task type starts at the lowest level.']},
  ],
 }

@@ -233,3 +233,10 @@ PlayBook
 - 上一版 `playbook/feature-map`（`feature-map-2024.png`）页面不再引用；原图、JOBS 和 `dist/assets/work/playbook/feature-map.webp` 都还在，没有删。
 - 2026-11-17 改底色（02 节研究摘要 `qingju/research`、03 节旅程图 `qingju/journey`）：两张图的白底换成页面底色 `#ECF0ED`，原因是本人接着卡 20261117-002，在青桔会话里对这两张说「也换掉」（交接单 2h）。来源是一直在用的 `04-shared/output/portfolio/v2/assets/qingju-research.png`、`qingju-journey.png`，经 `03-qingju/portfolio/figures/src/remove_white.py` 整张处理成 `03-qingju/portfolio/figures/research-2021.png`、`journey-2021.png`，不裁切、不改内容，尺寸不变（1920×2153、1920×1080）；原来两张白底原图还在原处没动。网站原图放 `sources/work/qingju/`，`tools/prepare_assets.py` 这两条改指新图，宽 1920、质量 82 / 84 不变，只重导这两张；导出的 webp 四个角都是 `#EDF0ED`、`#ECF1ED`、`#ECF1ED`、`#ECF1ED`（和 `#ECF0ED` 差 1 级）。`figures.py` 这两条各加 `'bg': '#ECF0ED', 'flat': True`；label、alt、caption、prov、顺序没动，`qingju/field` 实拍照片没动。私有备份 `04-shared/网站原图/work/qingju/` 加了这两张新图。
 - 2026-11-17 同日改底色（02 节实地考察 `qingju/field`）：本人在卡 20261117-004 上写「实地考察也可以换」（交接单 2h）。来源是一直在用的 `04-shared/output/portfolio/v2/assets/qingju-field.png`，经 `03-qingju/portfolio/figures/src/remove_white.py` 处理成 `03-qingju/portfolio/figures/field-2021.png`（1920×916，尺寸不变）：七张照片外框以内的像素原样保留（逐张比对过），只把版面白底和照片之间的白缝换成 `#ECF0ED`；原白底图还在原处没动。网站原图放 `sources/work/qingju/`，`tools/prepare_assets.py` 这一条改指新图，宽 1920、质量 82 不变，只重导这一张；导出的 webp 四个角是 `#EDF0ED`、`#ECF1ED`、`#ECF1ED`、`#ECF1ED`。`figures.py` 这一条加 `'bg': '#ECF0ED', 'flat': True`；label、caption、prov（`photo`）、顺序没动。私有备份 `04-shared/网站原图/work/qingju/` 加了这张新图。
+
+## 2026-11-17：PlayBook 08 节加一段便签引句
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 4 节「本批交付（2026-11-17：08 节加一段便签引句）」。只加字，不加图，节数不变（9 节）；插在 08 节 `text` 第 1 段和第 2 段之间。
+- 来源：Figma App UX 文件 `3IhJOmCVR6WC8mJYbbYLA7`，节点 `744:22420`（三句问题）和 `744:22486`（三个页面名），2026-11-17 截图逐字核对，截图存 `02-playbook/portfolio/figures/src/figma-1x/note-barter-744-22420.png`、`note-barter-744-22486.png`。便签是本人写的；引导句「和客户方讨论之后，我把自己还没想清楚的问题记在了线框旁边」出自卡 20261115-028 本人的结论。
+- 原稿里「1 对 1」「1 对多」数字两侧的空格不一致，页面上统一成数字两侧各一个空格，别的没动（包括小写的 steam）。英文是译文，段内注明 translated from my Chinese notes。
+- 只合到本机预览，没有部署；验收卡由 playbook agent 提，本人通过再关卡 20261115-028。

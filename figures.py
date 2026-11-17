@@ -158,17 +158,24 @@ FIGURES = {
  # 五张 Studio 定稿（UX + UI 都是本人），1440 宽画框的 2 倍图，按原比例整张显示，不裁切。
  # 2026-11-17 第 2 版（卡 20261117-017 本人打回：一屏放不下的做成上下滑动）：比 16:9 高的三张（新建挑战、挑战页、作品详情）
  # 加 'scroll': True，放进 16:9 窗口里按窗口宽度整张显示、上下滑动看；另外两张本来就是 16:9，不开。
+ # 第 3 版（卡 20261117-017 本人：「侧边栏都是固定的，不要让侧边栏也一起滑动」）：'fixed' 写哪几块界面不跟着滑，
+ # 按 2 倍原图（sources/work/playbook/studio-remix-*@2x.png，2880 宽）上量的像素：
+ #   新建挑战、挑战页：顶部搜索栏到 y=96（下沿那条线在 y=94–95），左侧菜单到 x=512（右边那条竖线在 x=510–511）；
+ #   作品详情：没有左侧菜单；顶部条到 y=96（白底在 y=95 结束），右侧「Message From The Creator」栏从 x=2238 起（2880−2238=642）。
  ('playbook', 9): [
   {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
    'label': ['粉丝挑战列表', 'Fan challenges'],
    'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']},
   {'kind': 'image', 'src': 'playbook/studio-remix-new-challenge', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+   'fixed': {'of': 2880, 'top': 96, 'left': 512},
    'label': ['新建挑战', 'New challenge'],
    'caption': ['名称、说明、可提交的文件类型和数量、阶段时间、给粉丝的分成。', 'Name, description, accepted file types and counts, phase timing and the fan’s share.']},
   {'kind': 'image', 'src': 'playbook/studio-remix-challenge-page', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+   'fixed': {'of': 2880, 'top': 96, 'left': 512},
    'label': ['挑战页', 'Challenge page'],
    'caption': ['当前阶段、剩余天数和全部投稿，创作者从这里选出获胜者。', 'The current phase, days left and all submissions. The creator picks the winner here.']},
   {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+   'fixed': {'of': 2880, 'top': 96, 'right': 642},
    'label': ['作品详情', 'Submission detail'],
    'caption': ['在画面上框出一块留修改意见，右侧按版本记录往来。', 'Mark an area of the image to comment on it. The side panel keeps the feedback by revision.']},
   {'kind': 'image', 'src': 'playbook/studio-remix-creator-collab', 'prov': 'original', 'project': 'playbook',

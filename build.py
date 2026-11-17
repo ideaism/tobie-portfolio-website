@@ -366,9 +366,26 @@ def figure_html(f, lang):
             # 'scroll'（2026-11-17，PlayBook 09 节）：比 16:9 高的整页稿放进一个 16:9 的窗口，图按窗口宽度整张显示，
             # 超出的部分在窗口里上下滑动看（滚动只靠 CSS；site.js 只管滑到底以后把提示藏起来）。
             # 窗口可以 Tab 聚焦、方向键滚动；放大按钮挪到窗口右下角，点开仍是整张图。没有这个键的图一个字都不变
+            # 'fixed'（2026-11-17 第 3 版，卡 20261117-017 本人：「侧边栏都是固定的，不要让侧边栏也一起滑动」）：
+            # 原图里固定不动的界面（顶部条、左侧菜单、右侧栏），按原图像素写 {'of': 原图宽, 'top': 顶部条高, 'left': 左侧栏宽, 'right': 右侧栏宽}。
+            # 做法：同一张图再叠一层不滑的，用 clip-path 只露出这几块；滑的那张在它下面，最顶上时两层像素重合，看不出拼缝。
+            # 图不新增文件，数字只在 figures.py 里，样式只读这里算出的几个百分比。
+            fixed, extra, vars_ = f.get('fixed'), '', []
+            if fixed:
+                iw, ih = MANIFEST[src]
+                of = fixed['of']
+                pw = lambda k: fixed.get(k, 0) / of * 100                    # 占图宽的百分比
+                ph = lambda k: fixed.get(k, 0) / of * iw / ih * 100          # 占图高的百分比（clip-path 的上下按图高算）
+                l, r, tp = f'{pw("left"):.4f}%', f'{100 - pw("right"):.4f}%', f'{ph("top"):.4f}%'
+                clip = f'polygon(0 0,100% 0,100% 100%,{r} 100%,{r} {tp},{l} {tp},{l} 100%,0 100%)'
+                vars_ = [f'--fix-l:{pw("left"):.4f}%', f'--fix-r:{pw("right"):.4f}%']
+                extra = img(src, '', 'shot-scroll__fixed').replace('<img ', '<img aria-hidden="true" ', 1).replace('class="shot-scroll__fixed"', f'class="shot-scroll__fixed" style="clip-path:{clip}"', 1)
+            if vars_:
+                css = css + vars_
+                style = f' style="{";".join(css)}"'
             name = escape(T(f['label'], lang))
-            return (f'<figure class="figure frame-block"{width}>{label}<div class="frame shot-scroll" data-scroll-shot{style}>'
-                    f'<div class="shot-scroll__view" tabindex="0" role="region" aria-label="{name}{t("（可上下滑动）", " (scroll to see more)", lang)}">{img(src, T(f["label"], lang))}</div>'
+            return (f'<figure class="figure frame-block"{width}>{label}<div class="frame shot-scroll{" shot-scroll--fixed" if fixed else ""}" data-scroll-shot{style}>'
+                    f'<div class="shot-scroll__view" tabindex="0" role="region" aria-label="{name}{t("（可上下滑动）", " (scroll to see more)", lang)}">{img(src, T(f["label"], lang))}</div>{extra}'
                     f'<span class="shot-scroll__hint" aria-hidden="true">{t("可上下滑动", "Scroll to see more", lang)}</span>'
                     f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
         return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang))}"><div{pad}>'

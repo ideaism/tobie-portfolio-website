@@ -523,6 +523,54 @@
   1840,
   1542
  ],
+ "smt/daton-buy-care": [
+  750,
+  1624
+ ],
+ "smt/daton-buy-standard": [
+  750,
+  1624
+ ],
+ "smt/daton-holdings-care": [
+  750,
+  1624
+ ],
+ "smt/daton-holdings-care-sheet": [
+  750,
+  1624
+ ],
+ "smt/daton-holdings-standard": [
+  750,
+  1624
+ ],
+ "smt/daton-home-care": [
+  600,
+  1698
+ ],
+ "smt/daton-home-standard": [
+  600,
+  1860
+ ],
+ "smt/daton-order-limit": [
+  750,
+  1624
+ ],
+ "smt/daton-order-market": [
+  750,
+  1624
+ ],
+ "smt/daton-order-star-market": [
+  750,
+  1624
+ ],
+ "smt/daton-repay-care": [
+  750,
+  1624
+ ],
+ "smt/daton-repay-standard": [
+  750,
+  1624
+ ],
  "smt/level-variants": [
   1510,
   842

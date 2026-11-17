@@ -200,6 +200,32 @@ FIGURES = {
    'label': ['网格策略', 'Grid strategy'],
    'caption': ['网格策略 · 多档预埋：左边设基准价、价差、档位数和每档数量，右边是运行中的网格任务，下面是任务明细。', 'Grid strategy · multi-level pre-set orders: base price, spread, number of levels and quantity per level on the left; running grid tasks on the right; task details below.']},
  ],
+ # 2026-11-17（卡 20261117-013，交接单第 0 节）：新 06 节「适老化方案」，大通证券关怀版五组手机界面，2 倍图（打码版）。
+ # 750×1624 的十张和竖屏框（390:844）比例一致，放 'items'；交易首页两张是比一屏长的整页稿（600×1698、600×1860），
+ # 放 'whole' 整张显示、顶对齐，关怀版比原版矮一截是稿子本来的样子。
+ ('smt', 6): [
+  {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 2,
+   'label': ['交易首页 · 关怀版与原版', 'Trading home · Care mode vs Standard'],
+   'items': [],
+   'whole': [('smt/daton-home-care', ['关怀版', 'Care mode']), ('smt/daton-home-standard', ['原版', 'Standard'])],
+   'caption': ['① 常用功能放进大格子，放在好点到的位置 ② 核心功能用高对比的色块，点击范围更大 ③ 主要组件的可点区域大于 60×60pt，底部图标换成文字', '① Frequent functions sit in large tiles within easy reach ② Core functions get high-contrast blocks with larger tap areas ③ Main components have tap areas larger than 60×60pt; bottom-bar icons become text']},
+  {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 2,
+   'label': ['买入页面 · 关怀版与原版', 'Buy screen · Care mode vs Standard'],
+   'items': [('smt/daton-buy-care', ['关怀版', 'Care mode']), ('smt/daton-buy-standard', ['原版', 'Standard'])],
+   'caption': ['① 买入、卖出、撤单、查询、持仓的标签放大，可点范围扩大 ② 最新价移到顶部，同时显示涨跌额和涨跌幅 ③ 选市场和输代码合在一起，输入代码后系统判断所属市场 ④ 委托方式和价格合成一栏，价格栏随委托方式变化 ⑤ 最小字号大于 18pt，盘口移到下方并放大 ⑥ 盘口和持仓做成标签切换', '① The Buy, Sell, Cancel, Query and Holdings tabs are enlarged, with wider tap areas ② The latest price moves to the top, shown with its change and change % ③ Market selection merges with the stock-code field: the system detects the market from the code ④ Order type and price share one row; the price field changes with the order type ⑤ Minimum type size above 18pt; the order book moves below the form and is enlarged ⑥ Order book and holdings become two tabs']},
+  {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 3,
+   'label': ['三种委托方式 · 关怀版', 'Three order types · Care mode'],
+   'items': [('smt/daton-order-limit', ['限价', 'Limit order']), ('smt/daton-order-market', ['市价', 'Market order']), ('smt/daton-order-star-market', ['科创板市价', 'STAR Market · market order'])],
+   'caption': ['委托方式不同，可选项也不同：系统按股票的市场和类型调整。左起：限价、市价、科创板市价。', 'Options change with the order type: the system adjusts them to the stock’s market and type. From left: limit order, market order, STAR Market market order.']},
+  {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 3,
+   'label': ['持仓页面 · 关怀版与原版', 'Holdings · Care mode vs Standard'],
+   'items': [('smt/daton-holdings-care', ['关怀版', 'Care mode']), ('smt/daton-holdings-care-sheet', ['关怀版 · 点持仓后', 'Care mode · after tapping a holding']), ('smt/daton-holdings-standard', ['原版', 'Standard'])],
+   'caption': ['① 币种切换从滑动改成「切换」按钮加底部弹窗 ② 三列改成两列，总资产单独一行 ③ 点一只持仓的股票，从底部弹出买入、卖出、行情', '① Currency switching changes from a swipe to a “Switch” button with a bottom sheet ② Three columns become two, with total assets on its own line ③ Tapping a holding opens a bottom sheet with Buy, Sell and Quote']},
+  {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 2,
+   'label': ['还款 · 关怀版与原版', 'Margin repayment · Care mode vs Standard'],
+   'items': [('smt/daton-repay-care', ['关怀版', 'Care mode']), ('smt/daton-repay-standard', ['原版', 'Standard'])],
+   'caption': ['① 最小字号放大到 18pt，最新价放到更显眼的位置 ② 布局和买入、卖出页统一 ③ 可点区域大于 44×44pt，委托方式和价格合成一栏 ④ 持仓从右侧弹出改成标签切换', '① Minimum type size raised to 18pt; the latest price moves to a more prominent position ② Layout matches the buy and sell screens ③ Tap areas larger than 44×44pt; order type and price share one row ④ Holdings move from a right-side panel to a tab']},
+ ],
  # ---------------- Commons Fridge ----------------
  # 2026-11-15 加：'fridge/sub-*' 八张取自最终提交稿（23 页横版 PDF）的原页，页码写在 label 里；来源见 docs/sources.md
  ('commons-fridge', 1): [

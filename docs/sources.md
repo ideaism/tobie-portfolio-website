@@ -38,6 +38,13 @@ Author: Yucheng Feng / Tobie. User confirmed UP NO.1 is a colleague's account; d
   - 没放的：日间版下单板（`原图/day-credit-order-panel-683-24828.png`），字段名在日间版里看不见，本人定不放。
   - 05 节正文第一句的依据是卡 20261115-008 第 2 版；第二句（每一页由同一批组件拼成）是 SMT 会话照图写的，本人在卡 20261116-014 上读过。label、caption 照交接单「0 号更新 · 甲″」的表逐字用；英文术语（T+0 arbitrage、pre-set orders、time and sales 等）是 SMT 会话译的。
   - 落点：`cases.py` → `CASES['smt']['sections']` 第 5 项（新）和第 6 项的 label；`figures.py` 新增 `('smt', 2)`、`('smt', 5)`，`('smt', 3)` 后面接两张；`tools/prepare_assets.py` 的 `JOBS` 加 8 行。`prototypes.py`（复刻演示在第 3 节）和 `build.py` 没有改。
+- 2026-11-17 新开 06 节「适老化方案」（原 06「交付与反思」顺延成 07，只改 label）。依据：`04-shared/SMT-交接单.md` 第 0 节「本次可合并」；这次只合这一节，交接单其余批次（T2–T5、F3、「我的职责」写宽等）没合。这是同一家公司任职期间给大通证券做的另一个方案，放在 SMT 案例里当一节，不是兴业 SMT 的一部分。
+  - 时间、做了什么、结果：`cv-pm/master/冯渝程_产品经理_母版_中文.html` 第 74–77 行；公司英文名 Daton、Shengang 照 `cv-pm/master/Yucheng_Feng_Product_Master_CV_EN.html`。
+  - 六条规则和五组图注：Figma 文件 `wJ3RuBonuVd45NDoBHJw4Z`「老年版」的「ppt」页（`81:1605`），画框 `120:1769`（交易首页）、`84:1436`（买入页面）、`84:1458`（三种委托方式）、`84:1810`（持仓页面）、`122:1951`（还款）的说明卡原文，抄在 `04-shared/给本人读-大通适老化一节-验收稿-2026-11-17.md` 最下面。「1.25 倍」出自同一页「总结」的文字图层。
+  - 图：本人 2026-11-17 在 Figma 里导出的五张 2 倍图（`04-shared/大通适老化-导出/`），裁切和打码脚本 `04-shared/大通适老化-裁图-2026-11-17/crop.py`。打码三处：交易首页两张的姓名加资金账号、买入原版的股东账号。网站只用 `打码/` 文件夹里的 12 张（不用 `原图裁切/`），复制到 `sources/work/smt/` 时改成英文文件名，导出 WebP 时不缩放、不裁切（最大宽 = 原图宽，质量 88）：
+    `01-首页-关怀版` → `smt/daton-home-care`（600×1698）、`01-首页-原版` → `smt/daton-home-standard`（600×1860）、`02-买入-关怀版` → `smt/daton-buy-care`、`02-买入-原版` → `smt/daton-buy-standard`、`03-委托-限价` → `smt/daton-order-limit`、`03-委托-市价` → `smt/daton-order-market`、`03-委托-科创板市价` → `smt/daton-order-star-market`、`04-持仓-关怀版` → `smt/daton-holdings-care`、`04-持仓-关怀版-弹窗` → `smt/daton-holdings-care-sheet`、`04-持仓-原版` → `smt/daton-holdings-standard`、`05-还款-关怀版` → `smt/daton-repay-care`、`05-还款-原版` → `smt/daton-repay-standard`（这十张都是 750×1624）。
+  - 本人的结论：卡 20261115-052（放进 SMT 案例）、20261117-005（放 6 页）、20261117-006 和会话原话（不放 PPT 原页，只用手机界面，文字重做）、20261117-013（验收通过；卡上问的数字和玫红圆点留不留没答，按通过的稿子都留）。
+  - 落点：`cases.py` → `CASES['smt']['sections']` 第 6 项（新）和第 7 项的 label；`figures.py` 新增 `('smt', 6)` 五条 `phones`；`tools/prepare_assets.py` 的 `JOBS` 加 12 行。`prototypes.py`（smt 只有第 3 节）和 `build.py` 的 `CASE_HERO` 不受节号影响，没有改。
 
 ## Commons Fridge
 - https://www.figma.com/design/lx9WbYRybWceTemdXVkoJj?node-id=190-148

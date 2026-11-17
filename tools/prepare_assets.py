@@ -132,6 +132,20 @@ JOBS = {
     'smt/screen-quick-order': (SRC / 'work' / 'smt' / 'night-quick-order-656-24252-masked.png', 1920, 88),
     'smt/screen-basket-order': (SRC / 'work' / 'smt' / 'night-basket-order-1759-63399-masked.png', 1920, 88),
     'smt/screen-grid-strategy': (SRC / 'work' / 'smt' / 'night-grid-strategy-1727-54810-masked.png', 1920, 88),
+    # 2026-11-17（卡 20261117-013）：06 节「适老化方案」，大通证券关怀版 12 张手机界面。2 倍图，取自 04-shared/大通适老化-裁图-2026-11-17/打码/，
+    # 最大宽 = 原图宽（首页 600，其余 750），不放大。来源见 docs/sources.md
+    'smt/daton-home-care': (SRC / 'work' / 'smt' / 'daton-home-care.png', 600, 88),
+    'smt/daton-home-standard': (SRC / 'work' / 'smt' / 'daton-home-standard.png', 600, 88),
+    'smt/daton-buy-care': (SRC / 'work' / 'smt' / 'daton-buy-care.png', 750, 88),
+    'smt/daton-buy-standard': (SRC / 'work' / 'smt' / 'daton-buy-standard.png', 750, 88),
+    'smt/daton-order-limit': (SRC / 'work' / 'smt' / 'daton-order-limit.png', 750, 88),
+    'smt/daton-order-market': (SRC / 'work' / 'smt' / 'daton-order-market.png', 750, 88),
+    'smt/daton-order-star-market': (SRC / 'work' / 'smt' / 'daton-order-star-market.png', 750, 88),
+    'smt/daton-holdings-care': (SRC / 'work' / 'smt' / 'daton-holdings-care.png', 750, 88),
+    'smt/daton-holdings-care-sheet': (SRC / 'work' / 'smt' / 'daton-holdings-care-sheet.png', 750, 88),
+    'smt/daton-holdings-standard': (SRC / 'work' / 'smt' / 'daton-holdings-standard.png', 750, 88),
+    'smt/daton-repay-care': (SRC / 'work' / 'smt' / 'daton-repay-care.png', 750, 88),
+    'smt/daton-repay-standard': (SRC / 'work' / 'smt' / 'daton-repay-standard.png', 750, 88),
     # The Commons Fridge — 2026
     'fridge/photo-fridge': (EXP / 'fridge-p1-0.jpg', 2000, 78),
     'fridge/photo-touch': (EXP / 'fridge-p18-1.jpg', 1400, 78),

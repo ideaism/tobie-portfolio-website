@@ -255,3 +255,4 @@ PlayBook
 - 文字依据：本人 2024 年在旧作品集（Figma `lfqzkEzhH33yq5kvIkNEqW` 节点 `2159:23058`）里写的四段 Remix 说明，加上这五张画面里看得到的东西（表单字段、框选留言、按版本记录、两处「选为获胜者」按钮、三个页签）。画面里的创作者名字和插画是原稿里的示例，本人在卡 20261115-031 上定了直接用。原稿里的小毛病（第 4 张「测试」气泡和 Cencel、第 5 张菜单高亮 Campaign、第 2 张两个中文标签）照原样留着。
 - 落点：`cases.py` → `CASES['playbook']['sections']` 第 9 项（新）和第 10 项的 label（`09 /` → `10 /`）；`figures.py` 新增 `('playbook', 9)` 五条 `image`（`prov: original`，整张显示、不裁切），原 `('playbook', 9)`（团队 UI 三张）改成 `('playbook', 10)`；`tools/prepare_assets.py` 的 `JOBS` 加 5 行（最大宽 2400、质量 84，照 `playbook/studio-editor`）。`prototypes.py`（playbook 只按 3、4 节匹配）、`build.py` 的 `CASE_HERO`（不按节号）、`tests/`、`verify.py` 都没有写死 PlayBook 的节数或 9 / 10 节号，没有改。
 - 只合到本机预览，没有部署。
+- 第 2 版（交接单第 4 节 ③）：作品详情、创作者联名这两张 2026-11-17 按本人在卡 20261117-017 上的要求在导出图上修了三处（拼写、测试气泡、菜单高亮），原始导出和修补脚本在 `02-playbook/portfolio/figures/src/`。新建挑战、挑战页、作品详情三张比 16:9 高，`figures.py` 加 `'scroll': True`，放进 16:9 窗口里上下滑动看（本人原话：「这种一屏放不下的就做滑动效果，可以上下滑动查看，不需要在一屏放下」）。

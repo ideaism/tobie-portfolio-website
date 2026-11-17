@@ -175,15 +175,16 @@ def collage(slug, lang):
     if slug == 'playbook':
         # 2026-11-17（本人定，卡 20261117-020 选 A）：深色舞台，一叠真实界面斜着往后排开，鼠标移上去散开一点。
         # 界面只斜放，不改颜色和内容。Studio 活动页是本人做的，三屏 App 是团队的成品。
+        # 2026-11-18 本人要求：手机压在 Studio 页面上面。（先写的在下面：Studio 页面放第一个）
         phone = 'aspect-ratio:390/844;object-fit:cover;object-position:top'
         def piece(name, alt, i, style, cls=''):
             return img(name, alt, ('stage__item ' + cls).strip()).replace('<img', f'<img style="--i:{i};{style}"')
         return ('<div class="collage collage--stage" style="--bg:#15100F;--glow:249,87,87">'
                 '<span class="stage__word" aria-hidden="true">PlayBook</span><div class="stage__stack">'
+                + piece('playbook/studio-campaign', t('PlayBook Studio 活动页', 'PlayBook Studio campaign page', lang), 0, 'left:4%;top:32%;width:60%')
                 + piece('playbook/team-inventory', t('PlayBook App 物品库（成品界面）', 'PlayBook App inventory (finished UI)', lang), 3, f'left:83%;top:15%;width:17.5%;{phone}', 'collage__phone')
                 + piece('playbook/team-home', t('PlayBook App 首页（成品界面）', 'PlayBook App home (finished UI)', lang), 2, f'left:69%;top:19%;width:18.5%;{phone}', 'collage__phone')
                 + piece('playbook/team-mission', t('PlayBook App 任务页（成品界面）', 'PlayBook App mission page (finished UI)', lang), 1, f'left:54%;top:24%;width:19.5%;{phone}', 'collage__phone')
-                + piece('playbook/studio-campaign', t('PlayBook Studio 活动页', 'PlayBook Studio campaign page', lang), 0, 'left:4%;top:32%;width:60%')
                 + '</div></div>')
     if slug == 'smt':
         return (f'<div class="collage" style="--bg:#F2F2F3;aspect-ratio:16/9">'

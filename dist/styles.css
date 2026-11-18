@@ -891,3 +891,7 @@ html.studio-open{overflow:hidden}
   .prov{margin-top:-2px}                                                 /* 标签盒子比文字行高 4px 左右，往上提一点让两边文字在一条线上 */
   .prov:not(.prov--retro){white-space:nowrap}                            /* 普通来源标签保持一行；重做演示的长标签仍按第 693 行允许折行 */
 }
+/* 2026-11-18 卡 20261118-022：按网址（ai. / ux. / fin.）换首屏的小字和那句话的例子顺序；没认出网址就显示 www 那一版 */
+.trk:not([data-t="www"]){display:none}
+html[data-track] .trk[data-t="www"]{display:none}
+html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],html[data-track="fin"] .trk[data-t="fin"]{display:inline}

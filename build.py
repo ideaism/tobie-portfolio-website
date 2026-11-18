@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261118c'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261118d'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -52,6 +52,7 @@ def head(title, desc, lang, path):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){{var m=/^(ai|ux|fin)\\./.exec(location.hostname);if(m)document.documentElement.setAttribute('data-track',m[1])}})()</script>
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(desc)}">
 <meta name="theme-color" content="#ECF0ED">
@@ -254,6 +255,23 @@ METHOD = [
     (['做出原型，再请人检验', 'Prototype, then test'], ['AI · 快速原型', 'AI · fast prototyping']),
 ]
 
+# 2026-11-18（卡 20261118-022 第 2 版选 A）：按网址给不同岗位看不同首屏。
+# 同一份网站绑 www / ai / ux / fin 四个网址；大标题和按钮都不换，只换标题上面的小字（面向的岗位）
+# 和标题下那句话里例子的顺序。'www' 是现在的样子，也是没开脚本、或网址不认识时的样子。
+TRACKS = {
+    'www': (['产品与体验设计', 'Product & experience design'],
+            ['从创作者工具、证券软件，到走廊尽头那台共享冰箱。', 'in creator tools, securities software and the shared fridge down the hall.']),
+    'ai': (['AI 产品设计', 'AI product design'],
+           ['从十四个 AI agent 的协作、创作者工具，到证券软件和走廊尽头那台共享冰箱。', 'in a team of fourteen AI agents, creator tools, securities software and the shared fridge down the hall.']),
+    'ux': (['交互设计', 'Interaction design'],
+           ['从创作者工具、走廊尽头那台共享冰箱，到证券软件。', 'in creator tools, the shared fridge down the hall and securities software.']),
+    'fin': (['金融产品设计', 'Financial product design'],
+            ['从证券软件、创作者工具，到走廊尽头那台共享冰箱。', 'in securities software, creator tools and the shared fridge down the hall.']),
+}
+
+def track_text(i, lang):
+    return ''.join(f'<span class="trk" data-t="{k}">{T(v[i], lang)}</span>' for k, v in TRACKS.items())
+
 def home(lang):
     path = url('', lang)
     h = head(t('Tobie 冯渝程 — 产品与体验设计', 'Tobie (Yucheng Feng) — Product & experience design', lang),
@@ -269,9 +287,9 @@ def home(lang):
 <section class="hero"><div class="wrap">
  <div class="hero__grid">
   <div class="reveal">
-   <p class="label path"><span>{t('产品与体验设计', 'Product & experience design', lang)}</span><span>{t('英国南安普顿', 'Southampton, UK', lang)}</span></p>
+   <p class="label path"><span>{track_text(0, lang)}</span><span>{t('英国南安普顿', 'Southampton, UK', lang)}</span></p>
    <h1 class="hero__title">{t('把复杂的系统，<br>设计得<em>让人看得懂。</em>', 'I make complex systems <em>understandable.</em>', lang)}</h1>
-   <p class="lead hero__lead">{t('我把产品背后的结构，和人们在其中做出的决定连接起来——从创作者工具、证券软件，到走廊尽头那台共享冰箱。', 'I connect the structure behind a product to the decisions people make inside it — in creator tools, securities software and the shared fridge down the hall.', lang)}</p>
+   <p class="lead hero__lead">{t('我把产品背后的结构，和人们在其中做出的决定连接起来——', 'I connect the structure behind a product to the decisions people make inside it — ', lang)}{track_text(1, lang)}</p>
    <div class="hero__ctas"><a class="btn" href="#work">{t('看作品', 'See the work', lang)} <span aria-hidden="true">↓</span></a><a class="btn btn--ghost" href="/assets/Yucheng-Feng-Portfolio.pdf" target="_blank" rel="noopener">{t('PDF 作品集', 'Portfolio PDF', lang)}</a></div>
   </div>
   <figure class="portrait frame-block reveal" data-component="Annotated figure">

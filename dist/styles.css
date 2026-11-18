@@ -260,34 +260,33 @@ p,li{text-wrap:pretty}
 .js .reveal:not(.is-in) .collage--stage{--spread:-3.2cqw}
 @media (prefers-reduced-motion:reduce){.collage .stage__item{transition:none}.js .reveal:not(.is-in) .collage--stage{--spread:0cqw}}
 @media (max-width:640px){.collage--stage{aspect-ratio:4/3.1}.stage__stack{transform:scale(1.22);transform-origin:80% 54%}}
-/* 2026-11-18 卡 20261118-013 第 2 版：其余三张封面各一种摆法。界面和照片只裁切、缩放、转角度。 */
-/* 兴业 SMT：拼格 */
-.collage--bento{container-type:inline-size;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(8,1fr);grid-template-areas:"a a a a a a a a d d d d" "a a a a a a a a d d d d" "a a a a a a a a d d d d" "a a a a a a a a d d d d" "a a a a a a a a d d d d" "b b b b c c c c d d d d" "b b b b c c c c d d d d" "b b b b c c c c d d d d";gap:1.4cqw;padding:2.2cqw}
-.bento__tile{position:relative;margin:0;overflow:hidden;border-radius:1.3cqw;background:#1E1E1E;box-shadow:0 0 0 1px rgba(255,255,255,.07)}
-.collage--bento .bento__tile img{position:absolute;border-radius:0;box-shadow:none;max-width:none}
-.bento__label{position:absolute;left:1.1cqw;bottom:1.1cqw;padding:.45cqw .9cqw;border-radius:99px;background:rgba(14,24,48,.86);color:#fff;font:500 max(10px,1.15cqw)/1.2 var(--mono);letter-spacing:.02em;backdrop-filter:blur(4px)}
-.bento__tile--phones{background:linear-gradient(160deg,#F44545,#C81E1E)}
-.bento__phones{position:absolute;inset:7% 0 0 4%;isolation:isolate;display:flex;justify-content:center;align-items:flex-start}
-.collage--bento .bento__phones img{border-radius:1.4cqw 1.4cqw 0 0;box-shadow:0 2cqw 3cqw -1cqw rgba(0,0,0,.45)}
-.collage--bento .bento__phones img+img{margin:12% 0 0 -22%;position:relative;z-index:-1;opacity:.96}
-/* 冰箱：手账拼贴 */
-.collage--scrap{container-type:inline-size;background:radial-gradient(rgba(60,50,30,.10) 1px,transparent 1.3px) 0 0/2.4cqw 2.4cqw,var(--bg)}
-.scrap__snap{position:absolute;margin:0;padding:1cqw 1cqw 0;background:#FFFDF8;box-shadow:0 1.6cqw 2.6cqw -1.2cqw rgba(40,30,10,.45),0 0 0 1px rgba(0,0,0,.05);transform:rotate(var(--r));transition:transform var(--t-reveal) var(--ease)}
-.collage--scrap .scrap__snap img{position:static;width:100%;height:auto;object-fit:cover;border-radius:0;box-shadow:none}
-.scrap__snap figcaption{padding:.9cqw .2cqw 1.1cqw;font:500 max(10px,1.35cqw)/1.2 var(--mono);color:#4A4336}
-.scrap__tape{position:absolute;z-index:1;left:50%;top:-1.3cqw;width:30%;height:2.6cqw;transform:translateX(-50%) rotate(-3deg);background:rgba(232,214,160,.78);box-shadow:0 0 0 1px rgba(160,140,90,.18)}
-.collage--scrap .scrap__phone{right:4.5%;top:11%;width:21%;transform:rotate(-2.5deg);transition:transform var(--t-reveal) var(--ease)}
-.collage--scrap .scrap__sticker{left:41%;top:70%;width:12.5%;border-radius:0;box-shadow:none;transform:rotate(-10deg);filter:drop-shadow(.25cqw 0 0 #fff) drop-shadow(-.25cqw 0 0 #fff) drop-shadow(0 .25cqw 0 #fff) drop-shadow(0 -.25cqw 0 #fff) drop-shadow(0 .8cqw .8cqw rgba(40,30,10,.3))}
-.work-item__visual>a:hover .scrap__snap,.case-hero .collage--scrap:hover .scrap__snap{transform:rotate(calc(var(--r)*1.6))}
-.work-item__visual>a:hover .scrap__phone,.case-hero .collage--scrap:hover .scrap__phone{transform:rotate(-4deg) translateY(-.6cqw)}
-/* 青桔：等距斜放 */
-.collage--iso{container-type:inline-size;background:radial-gradient(70% 90% at 60% 40%,#E9FBF6,rgba(233,251,246,0) 70%),var(--bg)}
-.iso__plane{position:absolute;left:50%;top:50%;width:74cqw;height:52cqw;display:flex;gap:4cqw;justify-content:center;align-items:center;transform:translate(-46%,-56%) rotateX(56deg) rotateZ(-38deg);transform-style:preserve-3d}
-.collage--iso .iso__phone{position:relative;width:17cqw;height:auto;border-radius:2cqw;box-shadow:-1.6cqw 1.6cqw 0 -.2cqw rgba(9,110,94,.28),-3.4cqw 3.4cqw 3cqw -1cqw rgba(9,80,70,.35);transform:translateZ(calc(var(--i)*2.4cqw));transition:transform var(--t-reveal) var(--ease)}
-.work-item__visual>a:hover .iso__phone,.case-hero .collage--iso:hover .iso__phone{transform:translateZ(calc(var(--i)*2.4cqw + 1.6cqw))}
-.collage--iso .iso__chests{left:6%;bottom:7%;width:36%;border-radius:0;box-shadow:none;filter:drop-shadow(0 1.2cqw 1cqw rgba(9,80,70,.3))}
-@media (prefers-reduced-motion:reduce){.scrap__snap,.collage--scrap .scrap__phone,.collage--iso .iso__phone{transition:none}}
-@media (max-width:640px){.collage--bento{aspect-ratio:4/3.6;grid-template-areas:"a a a a a a a a d d d d" "a a a a a a a a d d d d" "a a a a a a a a d d d d" "a a a a a a a a d d d d" "b b b b b b b b d d d d" "b b b b b b b b d d d d" "b b b b b b b b d d d d" "b b b b b b b b d d d d"}.collage--bento [style*="grid-area:c"]{display:none}.collage--scrap,.collage--iso{aspect-ratio:4/3.3}}
+/* 2026-11-18 卡 20261118-013 第 3 版选 A：兴业 SMT 设计中心项目卡；冰箱和青桔「生成插画铺底 + 真界面立着」。
+   插画和 3D 图标是 Figma AI 生成的装饰（assets/work/gen/）；界面、照片、企鹅都是原图，只裁切、缩放、转一点角度。
+   尺寸都用 cqw。容器自己的 padding/gap 不能用 cqw（会落到视口单位），所以只给里面的元素用。 */
+.collage--idcard,.collage--ill{container-type:inline-size}
+.collage .cover-bg{inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;box-shadow:none}
+.cover-veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(207,243,234,0) 30%,rgba(207,243,234,.55) 100%)}
+.cover-chips{position:absolute;left:6cqw;top:6.5cqw;display:flex;flex-wrap:wrap;gap:1cqw}
+.cover-chip{font:600 max(9px,1.7cqw)/1 var(--mono);padding:.9cqw 1.4cqw;border-radius:99px;letter-spacing:.02em}
+.cover-title{position:absolute;left:6cqw;top:13.5cqw;margin:0;font-weight:800;font-size:6.2cqw;line-height:1.05;letter-spacing:-.02em;color:#0E1830}
+.cover-title--long{font-size:4.4cqw;max-width:52cqw}
+.collage .cover-phone{height:auto;border-radius:2.3cqw;background:#fff;transform:rotate(var(--r,0deg));transition:transform var(--t-reveal) var(--ease);box-shadow:0 0 0 .5cqw #fff,0 0 0 .62cqw rgba(0,0,0,.08),0 2.4cqw 5cqw rgba(10,30,40,.22)}
+.collage .cover-deco,.collage .cover-sticker{height:auto;border-radius:0;box-shadow:none}
+.collage .cover-deco{filter:drop-shadow(0 1cqw 1.2cqw rgba(9,80,70,.25))}
+.collage .cover-sticker{transform:rotate(-8deg);filter:drop-shadow(.25cqw 0 0 #fff) drop-shadow(-.25cqw 0 0 #fff) drop-shadow(0 .25cqw 0 #fff) drop-shadow(0 -.25cqw 0 #fff) drop-shadow(0 .8cqw 1.2cqw rgba(0,0,0,.18))}
+.work-item__visual>a:hover .cover-phone,.case-hero .collage--ill:hover .cover-phone{transform:rotate(var(--r,0deg)) translateY(-.8cqw)}
+/* 兴业 SMT：设计中心项目卡 */
+.collage--idcard{background:linear-gradient(160deg,#FFFFFF 0%,#EEF5FF 55%,#D6E8FD 100%)}
+.collage--idcard .cover-chip{background:#fff;color:#3557E8;box-shadow:0 0 0 1px #D8E3FA}
+.collage .idcard__icon{right:2cqw;top:-1cqw;width:30cqw;height:auto;border-radius:0;box-shadow:none;-webkit-mask:radial-gradient(closest-side,#000 70%,transparent 100%);mask:radial-gradient(closest-side,#000 70%,transparent 100%)}
+.idcard__win{position:absolute;left:6cqw;right:-8cqw;top:28cqw;border-radius:1.4cqw 1.4cqw 0 0;overflow:hidden;background:#1E1E1E;box-shadow:0 0 0 1px rgba(14,24,48,.12),0 2cqw 5cqw rgba(30,60,140,.25);transition:transform var(--t-reveal) var(--ease)}
+.idcard__win::before{content:'';display:block;height:2.6cqw;background:#2B2B2B;background-image:radial-gradient(circle at 2cqw 50%,#FF5F57 .55cqw,transparent .6cqw),radial-gradient(circle at 3.8cqw 50%,#FEBC2E .55cqw,transparent .6cqw),radial-gradient(circle at 5.6cqw 50%,#28C840 .55cqw,transparent .6cqw)}
+.collage .idcard__win img{position:static;width:100%;height:auto;border-radius:0;box-shadow:none}
+.work-item__visual>a:hover .idcard__win,.case-hero .collage--idcard:hover .idcard__win{transform:translateY(-1cqw)}
+/* 冰箱：小标签用深绿底 */
+.collage--door .cover-chips{left:5cqw;top:6cqw}
+.collage--door .cover-chip{background:#264846;color:#F3E7D1}
+@media (prefers-reduced-motion:reduce){.collage .cover-phone,.idcard__win{transition:none}}
 
 .explore-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gutter)}
 .explore h3{font-size:var(--fs-h3);margin:var(--s-4) 0 var(--s-2)}

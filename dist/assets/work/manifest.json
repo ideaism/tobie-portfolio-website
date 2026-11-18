@@ -139,6 +139,22 @@
   800,
   1467
  ],
+ "gen/cf-door": [
+  1200,
+  800
+ ],
+ "gen/qj-bike-chest": [
+  900,
+  563
+ ],
+ "gen/qj-map": [
+  1200,
+  800
+ ],
+ "gen/smt-icon-blocks": [
+  900,
+  900
+ ],
  "playbook/app-barter-consume": [
   390,
   868

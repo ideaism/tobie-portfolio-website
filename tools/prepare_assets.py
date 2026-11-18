@@ -6,6 +6,9 @@ photo or recording poster. Nothing is redrawn. The only edits are:
   * Qingju wireframes: individual screens cut from the lo-fi board and the
     board's teal flow arrows removed (sources/work/clean_qingju_lines.py);
   * tobie/face.webp: a circular crop of the existing avatar illustration.
+  * gen/*: cover decorations generated with Figma AI on 2026-11-18 (card 20261118-013).
+    They are not project work, only backdrops/icons on the home covers. qj-bike-chest is
+    cut from the clay render by tools/cut_gen_clay.py.
 
 Run:  python3 tools/prepare_assets.py                      (all assets)
       python3 tools/prepare_assets.py playbook/app-home    (only the named ones; the rest stay byte-identical)
@@ -61,6 +64,11 @@ JOBS = {
     'qingju/hifi-phone-map': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 90),
     'qingju/hifi-phone-food': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 90),
     'qingju/hifi-phone-discussion': (SRC / 'work' / 'qingju-hifi' / 'route.png', 800, 90),
+    # 封面装饰（Figma AI 生成，2026-11-18 卡 20261118-013 选 A）——不是项目成果
+    'gen/smt-icon-blocks': (SRC / 'work' / 'gen' / 'smt-icon-blocks.png', 900, 84),
+    'gen/cf-door': (SRC / 'work' / 'gen' / 'cf-door.png', 1200, 84),
+    'gen/qj-map': (SRC / 'work' / 'gen' / 'qj-map.png', 1200, 84),
+    'gen/qj-bike-chest': (SRC / 'work' / 'gen' / 'qj-bike-chest.png', 900, 88),
     'qingju/hifi-chests-cut': (SRC / 'work' / 'qingju-hifi' / 'chests-cut.png', 890, 92),
     'playbook/app-craft-missing': (EXP / 'app-craft-insufficient.png', 780, 86),
     'playbook/app-craft-ready': (EXP / 'app-craft-ready.png', 780, 86),

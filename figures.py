@@ -18,7 +18,8 @@ PROV = {
     'mixed': (['原稿对比', 'Source comparison'], ''),
     'submission': (['提交稿原页', 'Submitted page'], ''),     # 学术提交稿里的一页，英文原文，只裁掉页脚和空白
     'retro': (['2026 复盘图', '2026 diagram'], ''),           # 2026 年回看时新画的图，不是当年的原稿，也不是研究材料
-    'diagram': (['按项目记录绘制', 'Drawn from project records'], ''),   # 2026-11-17，Agent Matrix：照项目自己的记录（分工表、复盘、审核卡、台账）画的图，不是界面截图
+    'diagram': (['按项目记录绘制', 'Drawn from project records'], ''),
+    'cover-ill': (['原始界面 + 生成插画', 'Original UI + AI illustration'], ''),   # 2026-11-18 卡 20261118-013：封面底图/图标是 Figma AI 生成的装饰，界面是原图   # 2026-11-17，Agent Matrix：照项目自己的记录（分工表、复盘、审核卡、台账）画的图，不是界面截图
 }
 
 # (slug, section number) -> list of figures

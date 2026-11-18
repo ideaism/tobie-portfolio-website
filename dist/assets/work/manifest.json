@@ -755,6 +755,10 @@
   750,
   1624
  ],
+ "smt/layout-flow": [
+  1414,
+  484
+ ],
  "smt/level-variants": [
   1510,
   842
@@ -763,9 +767,25 @@
   3309,
   4113
  ],
+ "smt/old-client": [
+  1922,
+  1038
+ ],
+ "smt/order-panel-after": [
+  608,
+  487
+ ],
+ "smt/order-panel-before": [
+  518,
+  413
+ ],
  "smt/overview": [
   1920,
   1080
+ ],
+ "smt/quick-trade-before": [
+  2560,
+  1399
  ],
  "smt/screen-asset-home": [
   1920,

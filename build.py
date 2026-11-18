@@ -145,7 +145,7 @@ PROJECTS = [
  {'slug': 'smt', 'project': 'smt', 'name': 'Industrial Securities · 兴业 SMT', 'year': '2022–23',
   'type': ['在职项目 · 证券桌面软件', 'In-house · securities software'],
   'title': ['从业务单元，建立界面秩序。', 'Let business meaning set component boundaries.'],
-  'summary': ['与同事一起拆分业务单元，我负责组件、状态与使用规范，让高密度的金融界面可以复用。同期做的适老化方案被公司采纳为通用投标提案。', 'With colleagues I broke the product into business units; I designed and maintained the components, states and usage rules that let a dense financial interface be reused. My age-friendly proposal from the same period became the company’s standard pitch for bids.'],
+  'summary': ['与同事一起拆分业务单元，我负责组件、状态与使用规范，再用它们参与绘制交易、行情等页面，让高密度的金融界面可以复用。同期做的适老化方案被公司采纳为通用投标提案。', 'With colleagues I broke the product into business units; I designed and maintained the components, states and usage rules, then used them to help design trading and market-data screens, so a dense financial interface could be reused. My age-friendly proposal from the same period became the company’s standard pitch for bids.'],
   'chips': [['业务拆分', '组件设计', '适老化方案', '需求对接'], ['Business decomposition', 'Components', 'Age-friendly design', 'Requirements liaison']],
   'label': ['兴业 SMT · 项目卡', 'Industrial Securities SMT · project card'], 'prov': 'cover-gen'},
  {'slug': 'commons-fridge', 'project': 'fridge', 'name': 'The Commons Fridge', 'year': '2026',

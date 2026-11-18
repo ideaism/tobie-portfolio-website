@@ -177,6 +177,13 @@ JOBS = {
     'smt/daton-holdings-standard': (SRC / 'work' / 'smt' / 'daton-holdings-standard.png', 750, 88),
     'smt/daton-repay-care': (SRC / 'work' / 'smt' / 'daton-repay-care.png', 750, 88),
     'smt/daton-repay-standard': (SRC / 'work' / 'smt' / 'daton-repay-standard.png', 750, 88),
+    # 2026-11-18（卡 20261118-025、20261118-028）：01 节旧版整屏 1 张、新 06 节「改版前后」4 张。取自 04-shared/SMT-改版前后-裁图-2026-11-18/打码/，
+    # 最大宽 = 原图宽，不放大、不改色。06 节「快速交易 · 改版后」复用上面的 smt/screen-quick-order，不另导。来源见 docs/sources.md
+    'smt/old-client': (SRC / 'work' / 'smt' / 'old-client-masked.png', 1922, 88),
+    'smt/layout-flow': (SRC / 'work' / 'smt' / 'layout-flow.png', 1414, 88),
+    'smt/order-panel-before': (SRC / 'work' / 'smt' / 'order-panel-before-masked.png', 518, 90),
+    'smt/order-panel-after': (SRC / 'work' / 'smt' / 'order-panel-after.png', 608, 90),
+    'smt/quick-trade-before': (SRC / 'work' / 'smt' / 'quick-trade-before.png', 2560, 88),
     # The Commons Fridge — 2026
     'fridge/photo-fridge': (EXP / 'fridge-p1-0.jpg', 2000, 78),
     'fridge/photo-touch': (EXP / 'fridge-p18-1.jpg', 1400, 78),

@@ -45,6 +45,16 @@ Author: Yucheng Feng / Tobie. User confirmed UP NO.1 is a colleague's account; d
     `01-首页-关怀版` → `smt/daton-home-care`（600×1698）、`01-首页-原版` → `smt/daton-home-standard`（600×1860）、`02-买入-关怀版` → `smt/daton-buy-care`、`02-买入-原版` → `smt/daton-buy-standard`、`03-委托-限价` → `smt/daton-order-limit`、`03-委托-市价` → `smt/daton-order-market`、`03-委托-科创板市价` → `smt/daton-order-star-market`、`04-持仓-关怀版` → `smt/daton-holdings-care`、`04-持仓-关怀版-弹窗` → `smt/daton-holdings-care-sheet`、`04-持仓-原版` → `smt/daton-holdings-standard`、`05-还款-关怀版` → `smt/daton-repay-care`、`05-还款-原版` → `smt/daton-repay-standard`（这十张都是 750×1624）。
   - 本人的结论：卡 20261115-052（放进 SMT 案例）、20261117-005（放 6 页）、20261117-006 和会话原话（不放 PPT 原页，只用手机界面，文字重做）、20261117-013（验收通过；卡上问的数字和玫红圆点留不留没答，按通过的稿子都留）。
   - 落点：`cases.py` → `CASES['smt']['sections']` 第 6 项（新）和第 7 项的 label；`figures.py` 新增 `('smt', 6)` 五条 `phones`；`tools/prepare_assets.py` 的 `JOBS` 加 12 行。`prototypes.py`（smt 只有第 3 节）和 `build.py` 的 `CASE_HERO` 不受节号影响，没有改。
+- 2026-11-18 第二批文字 + 新开 06 节「改版前后」（原 06「适老化方案」、07「交付与反思」顺延成 07、08，只改 label；只合到本机，没部署、没推送）。依据：卡 20261118-025（`04-shared/给本人读-SMT第二批文字-2026-11-18.md`）和卡 20261118-028（`04-shared/给本人读-SMT改版前后-2026-11-18.md`），本人都批了；两份重叠的三处（导语、02 节第 2 段、首页卡片简介）以 028 为准（「参与绘制了交易、行情等页面」，照本人在 025 上的批注「交易行情还有其他页面都参与了绘制」）。F3、T3、T4 的中英文照 `04-shared/SMT-交接单-存档-2026-11-17.md` 原文；T2 用 025 附录第 2 条（含「系统上线后，再对照设计稿做还原走查」，本人批注「这个做了」）；「客户方的产品人员」本人在 028 前言里确认保留。中英文逐字用；英文是 SMT 会话译的。
+  - 文字落点：`cases.py` → `CASES['smt']`：`deck`；`facts` 的我的职责、协作方式、交付范围三格；01 节加第 3 段（四个问题，照本人旧作品集「旧版分析」页原话，写成「我们归纳了」）；02 节第 1、2 段之间插 T4，第 2 段换成 028 版；03 节第 1 段后插买卖档位一句（「五档或十档」，照线上那张图的标题）；04 节第 1、2 段之间插 T2，第 2 段前加 T3 第一句；新 06 节 title + 三段 text（028 第 3、4 条，第一句是 025 第 3 条）。`build.py` → `PROJECTS` 的 `smt`：`summary` 中英整句换成 028 版。`brief`、`chips` 没动。
+  - 图：`04-shared/SMT-改版前后-裁图-2026-11-18/打码/`（裁切和打码见同目录 `说明.md`、`crop.py`、`crop_g2_after_v2.py`；源图是本人旧作品集 Figma 的截图和幻灯片导出，`04-shared/SMT-改版前后-导出-2026-11-18/`）。复制到 `sources/work/smt/` 时改成英文文件名，私有备份同名放 `04-shared/网站原图/work/smt/`（这台电脑 `网站原图.sh save` 跑不了，手动复制的）。导出 WebP 时不缩放、不改色（最大宽 = 原图宽）：
+    `G1-旧版整屏` → `old-client-masked.png` → `smt/old-client`（1922×1038，1 倍截图，账号姓名、Windows 水印、「测试」字样已打码），01 节；
+    `G4-版面动线示意` → `layout-flow.png` → `smt/layout-flow`（1414×484，幻灯片 2 倍导出），06 节；
+    `G2-下单面板-改版前` → `order-panel-before-masked.png` → `smt/order-panel-before`（518×413，1 倍截图，账号姓名已打码），06 节；
+    `G2-下单面板-改版后` → `order-panel-after.png` → `smt/order-panel-after`（608×487，从 `G3-快速交易-改版后` 裁的下单板 + 十档，1 倍，框内没有账号姓名），06 节；
+    `G3-快速交易-改版前` → `quick-trade-before.png` → `smt/quick-trade-before`（2560×1399，1 倍截图，账户栏是「请选择账户」、订单表为空，没打码），06 节；
+    「快速交易 · 改版后」复用 05 节的 `smt/screen-quick-order`（Figma 节点 `656:24252` 打码版），没有新文件。`打码/G3-快速交易-改版后.png` 这次没用；它和线上那张是同一页，程序比过大部分一样、有少量不同，没逐处查。
+  - 图的落点：`figures.py` 新增 `('smt', 1)` 一条 `image`、新 `('smt', 6)` 四条（`image` 动线图；`phones` 两格 `whole` 放下单面板前后；`image` 快速交易前、后各一条）；原 `('smt', 6)` 改键为 `('smt', 7)`，内容没动。下单面板两张比正文栏窄，`image` 会被 `.frame img{width:100%}` 放大，所以放进 `phones` 的 `whole`（显示宽度上限 = 原图宽，不套竖屏框、不带 `screen` 类），没加新 CSS。`tools/prepare_assets.py` 的 `JOBS` 加 5 行。`prototypes.py`（smt 只有第 3 节）和 `build.py` 的 `CASE_HERO` 不带节号，没有改。
 
 ## Commons Fridge
 - https://www.figma.com/design/lx9WbYRybWceTemdXVkoJj?node-id=190-148
@@ -324,4 +334,4 @@ PlayBook
 - 事实卡两行照 6e ④ 的建议（卡 20261118-027 本人选 A）：我的职责“研究、系统设计、交互、功能原型与产品决策”；交付“实体入口、双语原型、研究者演示；v2.0 多租户版，已在五人合租试用”。没写“试点运营”：谁在管、收了什么数据没有记录。
 - 跟着顺延改的：`figures.py` 的 `('commons-fridge', 7)` → `8`（L19 比较测试、展览动态研究两张）；`prototypes.py` 可点的 v1.8 原型从第 6 节挪到第 7 节。`build.py` 的 `CASE_HERO` 冰箱那条不带节号，没改。
 - 上面“没写上页面、等交接单的：Commons Fridge 在合租里试用”那一条，以这里为准：版本是 v2.0（本人在卡 20261118-021 上说的），月份是 9 月。
-- 只合到本机预览，没有部署，没有推送。
+- 只合到本机预览，没有部署；公开仓库的 main 没推。这一批是自动同步提交的 `c746f78`（提交信息“自动同步：PC-20260611SJDV 2026-11-18 13:54”），自动同步把它推到了备用位置 `refs/sync/main`，那里不上线。

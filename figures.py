@@ -216,6 +216,12 @@ FIGURES = {
  # ---------------- SMT ----------------
  # 2026-11-16（卡 20261116-014）：夜间版原稿导出的 8 张，1 倍，按原比例整张显示（kind 'image'，不进手机条）。
  # 02 节 1 张、03 节接 2 张、新 05 节「界面」5 张；原 05 顺延成 06。来源和打码见 docs/sources.md
+ # 2026-11-18（卡 20261118-028）：01 节加旧版整屏 1 张；label、caption 照 `04-shared/给本人读-SMT改版前后-2026-11-18.md` 第 2 条
+ ('smt', 1): [
+  {'kind': 'image', 'src': 'smt/old-client', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['旧版客户端 · 整屏', 'Old client · full screen'],
+   'caption': ['改版前的信用交易客户端：左边下单，中间行情和 K 线，下面是持仓表。账号和姓名已打码。', 'The old margin-trading client before the redesign: order entry on the left, quotes and the K-line chart in the middle, positions below. Account numbers and names are masked.']},
+ ],
  ('smt', 2): [
   {'kind': 'image', 'src': 'smt/credit-order-panel', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
    'label': ['信用交易下单板 · 按业务拆出的 13 个变体', 'Margin-trading order panel · 13 variants by business'],
@@ -254,10 +260,30 @@ FIGURES = {
    'label': ['网格策略', 'Grid strategy'],
    'caption': ['网格策略 · 多档预埋：左边设基准价、价差、档位数和每档数量，右边是运行中的网格任务，下面是任务明细。', 'Grid strategy · multi-level pre-set orders: base price, spread, number of levels and quantity per level on the left; running grid tasks on the right; task details below.']},
  ],
+ # 2026-11-18（卡 20261118-028）：新 06 节「改版前后」三组图，label、caption 照 `04-shared/给本人读-SMT改版前后-2026-11-18.md` 第 5 条。
+ # 下单面板两张是 1 倍截图（518、608 宽），比正文栏窄：放进 'phones' 的 'whole'（不套竖屏框、不带 screen 类、显示宽度上限 = 原图宽），
+ # 桌面并排、手机两列；不用 'image'，因为 .frame img{width:100%} 会把它们放大。快速交易「改版后」复用 05 节的 smt/screen-quick-order。
+ ('smt', 6): [
+  {'kind': 'image', 'src': 'smt/layout-flow', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['版面动线 · 上下排布到左右分屏', 'Reading path · from top-and-bottom to left-right'],
+   'caption': ['左：旧版上下单一布局，查找信息效率低。右：新版左右分屏，合理分配快速入口。虚线是浏览的顺序。', 'Left: the old single top-and-bottom layout, where finding information was slow. Right: the new left-right split, with room set aside for quick entries. The dashed lines show the reading order.']},
+  {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 2,
+   'label': ['下单面板 · 改版前后', 'Order panel · before & after'],
+   'items': [],
+   'whole': [('smt/order-panel-before', ['下单面板 · 改版前', 'Order panel · before']), ('smt/order-panel-after', ['下单面板 · 改版后', 'Order panel · after'])],
+   'caption': ['改版前：旧版下单面板和十档盘口。账号和姓名已打码。改版后：新版快速挂单：方向从两个单选圆圈改成并排的「买入」「卖出」按钮，数量可以按全部、1/2、1/3、1/4 快捷填。', 'Before: the old order panel and ten-level order book. Account numbers and names are masked. After: the new quick order panel: direction changes from two radio buttons to side-by-side Buy and Sell buttons, and quantity can be filled with All, 1/2, 1/3 or 1/4.']},
+  {'kind': 'image', 'src': 'smt/quick-trade-before', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['快速交易 · 改版前', 'Quick trade · before'],
+   'caption': ['旧版快速挂单整屏。', 'The old quick-order full screen.']},
+  {'kind': 'image', 'src': 'smt/screen-quick-order', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
+   'label': ['快速交易 · 改版后', 'Quick trade · after'],
+   'caption': ['新版快速挂单整页，和 05 节那张是同一页。', 'The new quick-order screen, the same page as in section 05.']},
+ ],
  # 2026-11-17（卡 20261117-013，交接单第 0 节）：新 06 节「适老化方案」，大通证券关怀版五组手机界面，2 倍图（打码版）。
  # 750×1624 的十张和竖屏框（390:844）比例一致，放 'items'；交易首页两张是比一屏长的整页稿（600×1698、600×1860），
  # 放 'whole' 整张显示、顶对齐，关怀版比原版矮一截是稿子本来的样子。
- ('smt', 6): [
+ # 2026-11-18（卡 20261118-028）：前面加了 06 节「改版前后」，这一节顺延成 07，键从 ('smt', 6) 改成 ('smt', 7)，内容没动。
+ ('smt', 7): [
   {'kind': 'phones', 'prov': 'original', 'project': 'smt', 'n': 2,
    'label': ['交易首页 · 关怀版与原版', 'Trading home · Care mode vs Standard'],
    'items': [],

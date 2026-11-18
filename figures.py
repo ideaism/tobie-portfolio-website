@@ -21,7 +21,6 @@ PROV = {
     'diagram': (['按项目记录绘制', 'Drawn from project records'], ''),   # 2026-11-17，Agent Matrix：照项目自己的记录（分工表、复盘、审核卡、台账）画的图，不是界面截图
     'cover-ill': (['原始界面 + 生成插画', 'Original UI + AI illustration'], ''),   # 2026-11-18 卡 20261118-013：封面底图/图标是 Figma AI 生成的装饰，界面是原图
     'cover-gen': (['生成插画', 'AI illustration'], ''),   # 2026-11-18 卡 20261118-017：兴业 SMT 封面只有文字和 Figma AI 生成的 3D 图标，没有界面
-    'research-gen': (['研究材料 + 生成插画', 'Research artefact + AI illustration'], ''),   # 2026-11-18 本人选「AI 头像版」：青桔三个画像的文字是 2021 原稿，头像是 Figma AI 生成的
 }
 
 # (slug, section number) -> list of figures
@@ -54,11 +53,11 @@ FIGURES = {
    'caption': ['实地观察（2021-05-09 18:00–19:30，武汉藏龙岛湿地公园）：现场投放的车多、在骑的少。', 'Field observation (9 May 2021, 18:00–19:30, Canglongdao Wetland Park, Wuhan): many bikes deployed, few in use.']},
  ],
  ('qingju', 3): [
-  # 2026-11-18 本人在看板上说「完成这部分」；场景图是 Figma 2206:20030 2 倍导出去白底；画像文字照 2206:20310 原稿，原稿的网上照片换成 AI 头像（本人选的）。
-  {'kind': 'image', 'src': 'qingju/personas-zh', 'src_en': 'qingju/personas-en', 'prov': 'research-gen', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
+  # 2026-11-18 本人在看板上说「完成这部分」；场景图是 Figma 2206:20030 2 倍导出去白底；画像文字照 2206:20310 原稿，原稿的网上照片换成 AI 头像（本人选的）。2026-11-18 卡 20261118-026 本人意见：不写 AI 生成、不写重新排版，来源标签用「研究材料」。
+  {'kind': 'image', 'src': 'qingju/personas-zh', 'src_en': 'qingju/personas-en', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
    'label': ['用户画像 · 三类休闲骑行者', 'Personas · three kinds of leisure rider'],
-   'alt': ['三个用户画像：杨志豪，27 岁，一级用户，游览记录型；郭嘉欣，22 岁，二级用户，社交分享型；林小琳，22 岁，三级用户，逛街探店型。每人一行，写着决策力、诉求、痛点各三到四条。头像是 AI 生成的黏土风插画。', 'Three personas: Yang Zhihao, 27, primary persona, the explore-and-record rider; Guo Jiaxin, 22, secondary persona, the social sharer; Lin Xiaolin, 22, tertiary persona, the shop explorer. Each row lists three or four points under what they decide on, what they want and their pain points. The portraits are AI-generated clay-style illustrations.'],
-   'caption': ['三类休闲骑行者的画像（2021），由访谈和问卷综合而来：游览记录型、社交分享型、逛街探店型，各自写了决策力、诉求和痛点。文字照 2021 原稿，2026 年重新排版；头像为 2026 年 AI 生成。', 'Personas for three kinds of leisure rider (2021), synthesised from the interviews and questionnaire: the explore-and-record rider, the social sharer and the shop explorer, each with what they decide on, what they want and their pain points. Text as in the 2021 original, re-laid out in 2026; portraits generated with AI in 2026.']},
+   'alt': ['三个用户画像：杨志豪，27 岁，一级用户，游览记录型；郭嘉欣，22 岁，二级用户，社交分享型；林小琳，22 岁，三级用户，逛街探店型。每人一行，写着决策力、诉求、痛点各三到四条。', 'Three personas: Yang Zhihao, 27, primary persona, the explore-and-record rider; Guo Jiaxin, 22, secondary persona, the social sharer; Lin Xiaolin, 22, tertiary persona, the shop explorer. Each row lists three or four points under what they decide on, what they want and their pain points.'],
+   'caption': ['三类休闲骑行者的画像（2021），由访谈和问卷综合而来：游览记录型、社交分享型、逛街探店型，各自写了决策力、诉求和痛点。', 'Personas for three kinds of leisure rider (2021), synthesised from the interviews and questionnaire: the explore-and-record rider, the social sharer and the shop explorer, each with what they decide on, what they want and their pain points.']},
   {'kind': 'image', 'src': 'qingju/journey', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
    'label': ['用户旅程图 · 骑行前 / 中 / 后', 'Journey map · before / during / after'],
    'caption': ['原始旅程图：行为与机会的综合。', 'Original journey map: a synthesis of behaviours and opportunities.']},

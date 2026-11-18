@@ -129,7 +129,7 @@ PROJECTS = [
   'title': ['十四个 agent 都在等我，所以我先设计它们怎么问我。', 'Fourteen agents were waiting on me, so I designed how they ask.'],
   'summary': ['我一个人带 14 个 AI agent 做一个游戏。它们做得很快，我看不过来。这个案例讲我怎么设计「agent 怎么问我、我怎么答、答案怎么回去」，以及我不在线的时候，哪些地方还离不开我、我怎么补。', 'I direct 14 AI agents building a game. They produce faster than I can review. This case is about designing how agents ask me, how I answer, and how the answer gets back to them, and about where the system still needed me when I was not there, and how I closed each gap.'],
   'chips': [['问题定义', '协作流程', '复盘'], ['Problem framing', 'Workflow design', 'Retrospective']],
-  'label': ['Agent Matrix · 当时在等的六张卡（临时封面）', 'Agent Matrix · the six cards that were waiting (temporary cover)'], 'prov': 'diagram'},
+  'label': ['Agent Matrix · 当时在等的六张卡', 'Agent Matrix · the six cards that were waiting'], 'prov': 'diagram'},
  {'slug': 'qingju', 'project': 'qingju', 'name': 'Qingju · 青桔', 'year': '2021',
   'type': ['青桔（滴滴）商业委托 · 训练营结项', 'Commercial brief from Qingju (DiDi) · Programme capstone'],
   'title': ['让成长体系，回到骑行本身。', 'Make growth part of the ride.'],
@@ -145,8 +145,8 @@ PROJECTS = [
  {'slug': 'smt', 'project': 'smt', 'name': 'Industrial Securities · 兴业 SMT', 'year': '2022–23',
   'type': ['在职项目 · 证券桌面软件', 'In-house · securities software'],
   'title': ['从业务单元，建立界面秩序。', 'Let business meaning set component boundaries.'],
-  'summary': ['与同事一起拆分业务单元，我负责组件、状态与使用规范，让高密度的金融界面可以复用。', 'With colleagues I broke the product into business units; I designed and maintained the components, states and usage rules that let a dense financial interface be reused.'],
-  'chips': [['业务拆分', '组件设计', '规范维护', '需求对接'], ['Business decomposition', 'Components', 'Specifications', 'Requirements liaison']],
+  'summary': ['与同事一起拆分业务单元，我负责组件、状态与使用规范，让高密度的金融界面可以复用。同期做的适老化方案被公司采纳为通用投标提案。', 'With colleagues I broke the product into business units; I designed and maintained the components, states and usage rules that let a dense financial interface be reused. My age-friendly proposal from the same period became the company’s standard pitch for bids.'],
+  'chips': [['业务拆分', '组件设计', '适老化方案', '需求对接'], ['Business decomposition', 'Components', 'Age-friendly design', 'Requirements liaison']],
   'label': ['兴业 SMT · 项目卡', 'Industrial Securities SMT · project card'], 'prov': 'cover-gen'},
  {'slug': 'commons-fridge', 'project': 'fridge', 'name': 'The Commons Fridge', 'year': '2026',
   'type': ['硕士毕业设计', 'MA final project'],
@@ -346,7 +346,7 @@ def home(lang):
 
 # ------------------------------------------------------------------ case
 CASE_HERO = {
-    'agent-matrix': ('diagram', ['Agent Matrix · 当时在等的六张卡（临时封面）', 'Agent Matrix · the six cards that were waiting (temporary cover)']),
+    'agent-matrix': ('diagram', ['Agent Matrix · 当时在等的六张卡', 'Agent Matrix · the six cards that were waiting']),
     'qingju': ('cover-ill', ['青桔 · 寻宝地图与路线讨论圈 · 2021', 'Qingju · treasure map and route discussion · 2021']),
     'playbook': ('original', ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions']),
     'smt': ('cover-gen', ['兴业 SMT · 项目卡', 'Industrial Securities SMT · project card']),

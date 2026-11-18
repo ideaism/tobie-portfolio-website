@@ -303,3 +303,12 @@ PlayBook
 - 兴业 SMT：`../04-shared/SMT-交接单.md` 0a 节。落点 `cases.py` → `CASES['smt']['brief']` 第 3 行句尾加一句；`build.py` → `PROJECTS` 的 `smt`：`summary` 句尾加一句，`chips` 第 3 个「规范维护 / Specifications」换成「适老化方案 / Age-friendly design」。依据：`cases.py` SMT 06 节末段“方案被公司采纳为通用的适老化提案用于投标，后来申港证券的投标沿用了它”；简历母版“方案被公司采纳为通用适老化提案用于投标，后续申港证券投标沿用”。没有新事实；写的是“为大通证券做的”“同期做的”，没写成和兴业 SMT 是同一个项目。本人在卡 021 上对这一条没有批注。
 - Agent Matrix：`../05-agent-matrix/portfolio/handoff.md` 第 8 节。① `cases.py` → `CASES['agent-matrix']['sections']` 删三句，中英一起删，不写替换的话：04 节 `text[2]`「这一节我只能讲为什么这么设计……我还没有数据」、05 节 `text[4]`「「agent 没开会话就替它开」那条路，到现在还没有真的走到过」、07 节 `text[3]`「这套系统刚开始记账……它是下一步，不是成果」。本人在卡 021 上的批注原话：“删掉”。上面 2026-11-17 那一节里“正文里有三句是说边界的……照登”这一条，以这里为准。交接单第 2 节正文里的这三条同时删了。② `build.py` → `PROJECTS` 里 `agent-matrix` 的 `label` 和 `CASE_HERO['agent-matrix']`：去掉“（临时封面）”和“ (temporary cover)”。封面本身没换，来源标签 `diagram` 照留。
 - 只合到本机预览，没有部署，没有推送公开仓库。
+
+## 2026-11-18：青桔 01 节核心使用场景、03 节用户画像（只合到本机）
+
+- 依据：本人 2026-11-18 在看板上说「完成这部分」；画像的头像本人选「AI 头像版」。
+- `qingju/scenarios-2021`（01 节，排在「定义活跃用户」之后）：旧作品集 Figma `lfqzkEzhH33yq5kvIkNEqW` 节点 `2206:20030`「核心使用场景」，按 2 倍导出；白底用 `03-qingju/portfolio/figures/src/remove_white.py` 换成页面底色 `#ECF0ED`（做法同 2026-11-17 那三张）。原图 `03-qingju/portfolio/figures/scenarios-2021.png`，3660×1720。来源标签 `research`。
+- `qingju/personas-zh`、`qingju/personas-en`（03 节，排在旅程图之前；中文页取 `src`，英文页取 `src_en`）：由 `03-qingju/portfolio/figures/src/build_personas.mjs` 排版生成，2800 宽，底色 `#ECF0ED`。文字照旧作品集节点 `2206:20310` 的 2021 原稿；原稿头像是网上找的照片，换成 Figma AI（gpt-image-2.5-flare）生成的黏土风头像，在 Figma 文件 `Ev9VV0dBnUaby6N4W7nJ1e` 节点 `2:2`、`2:3`、`2:4`。来源标签是新加的 `research-gen`「研究材料 + 生成插画」，规则见 `docs/design-system.md` 5.3 的例外一条。
+- 林小琳的「决策力」三行和郭嘉欣的一字不差，2021 原稿就是这样，照原样保留，等本人决定要不要改。
+- 网站处理：三张复制到 `sources/work/qingju/`（私有备份 `04-shared/网站原图/work/qingju/`），在 `tools/prepare_assets.py` 登记（宽 1920、质量 86），只缩放和压缩，没有裁切。图框 `'bg': '#ECF0ED', 'flat': True`。label、alt、caption 照派单原文；`build.py` 现在不读 `alt` 键，替代文字用的还是 `label`。
+- 只合到本机预览，没有部署，没有推送。

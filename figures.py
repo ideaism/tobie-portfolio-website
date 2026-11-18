@@ -21,6 +21,7 @@ PROV = {
     'diagram': (['按项目记录绘制', 'Drawn from project records'], ''),   # 2026-11-17，Agent Matrix：照项目自己的记录（分工表、复盘、审核卡、台账）画的图，不是界面截图
     'cover-ill': (['原始界面 + 生成插画', 'Original UI + AI illustration'], ''),   # 2026-11-18 卡 20261118-013：封面底图/图标是 Figma AI 生成的装饰，界面是原图
     'cover-gen': (['生成插画', 'AI illustration'], ''),   # 2026-11-18 卡 20261118-017：兴业 SMT 封面只有文字和 Figma AI 生成的 3D 图标，没有界面
+    'research-gen': (['研究材料 + 生成插画', 'Research artefact + AI illustration'], ''),   # 2026-11-18 本人选「AI 头像版」：青桔三个画像的文字是 2021 原稿，头像是 Figma AI 生成的
 }
 
 # (slug, section number) -> list of figures
@@ -37,6 +38,11 @@ FIGURES = {
    'label': ['定义活跃用户 · 2021 原稿（中文）', 'Defining an active rider · 2021 original (Chinese)'],
    'alt': ['2021 原稿「定义活跃用户」：四列阶段，试用单车（1–3 天）、体验骑行（7 天）、习惯使用（30 天）、分享推荐（3 个月以上）；每列往下是主要指标和主要标准；最下面归成潜力用户、活跃用户、忠实用户。', 'The 2021 “defining an active rider” page: four stage columns, trial (days 1–3), first rides (day 7), habit (day 30) and advocacy (three months and beyond), each with indicators and a threshold beneath; at the bottom, riders are grouped as potential, active or loyal.'],
    'caption': ['把“提高活跃度”拆成四个阶段：试用单车（1–3 天）、体验骑行（7 天）、习惯使用（30 天）、分享推荐（3 个月以上）。每个阶段写了主要指标和判断标准，再归成潜力、活跃、忠实三类用户。', 'The brief to “increase engagement”, broken into four stages: trial (days 1–3), first rides (day 7), habit (day 30) and advocacy (three months and beyond). Each stage has indicators and a threshold, and riders are grouped as potential, active or loyal.']},
+  # 2026-11-18 本人在看板上说「完成这部分」；场景图是 Figma 2206:20030 2 倍导出去白底；画像文字照 2206:20310 原稿，原稿的网上照片换成 AI 头像（本人选的）。
+  {'kind': 'image', 'src': 'qingju/scenarios-2021', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
+   'label': ['核心使用场景 · 2021 原稿（中文）', 'Core riding scenarios · 2021 original (Chinese)'],
+   'alt': ['2021 原稿「核心使用场景」：左边是场景需求分类柱状图，从高到低是上下班、购物逛街、运动、景区旅游、上学、其他；下面两个数字，74.8% 是上下班和上学的通勤需求比例，118.7% 是购物逛街、运动和景区的休闲需求比例；右边一段结论：休闲场景占比较高，用户骑车的增量空间在休闲时间；最下面是 95 后和 00 后的兴趣圈层。', 'The 2021 “core riding scenarios” page: on the left, a bar chart of riding scenarios from most to least chosen — commuting to work, shopping, exercise, sightseeing, getting to school, other; beneath it two figures, 74.8% for commuting to work and school and 118.7% for shopping, exercise and sightseeing; on the right, the conclusion that leisure scenarios rank high and the room for more riding lies in leisure time; at the bottom, the interest circles of riders born after 1995 and after 2000.'],
+   'caption': ['团队问卷里的场景需求（多选，所以各项相加会超过 100%）：上下班和上学两项通勤合计 74.8%，购物逛街、运动、景区三项休闲合计 118.7%。通勤时间是固定的，骑行的增量在休闲时间；95 后、00 后的兴趣圈层里，体育、健身、美拍这类提升自我的爱好排在前面。', 'Riding scenarios from the team’s questionnaire (multiple choice, so the options add up to more than 100%): commuting to work and to school together come to 74.8%; shopping, exercise and sightseeing together come to 118.7%. Commutes follow a fixed timetable, so the room for more riding lies in leisure time; among riders born after 1995 and after 2000, self-improving hobbies such as sport, fitness and photography lead their interest circles.']},
  ],
  ('qingju', 2): [
   {'kind': 'image', 'src': 'qingju/research', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
@@ -48,6 +54,11 @@ FIGURES = {
    'caption': ['实地观察（2021-05-09 18:00–19:30，武汉藏龙岛湿地公园）：现场投放的车多、在骑的少。', 'Field observation (9 May 2021, 18:00–19:30, Canglongdao Wetland Park, Wuhan): many bikes deployed, few in use.']},
  ],
  ('qingju', 3): [
+  # 2026-11-18 本人在看板上说「完成这部分」；场景图是 Figma 2206:20030 2 倍导出去白底；画像文字照 2206:20310 原稿，原稿的网上照片换成 AI 头像（本人选的）。
+  {'kind': 'image', 'src': 'qingju/personas-zh', 'src_en': 'qingju/personas-en', 'prov': 'research-gen', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
+   'label': ['用户画像 · 三类休闲骑行者', 'Personas · three kinds of leisure rider'],
+   'alt': ['三个用户画像：杨志豪，27 岁，一级用户，游览记录型；郭嘉欣，22 岁，二级用户，社交分享型；林小琳，22 岁，三级用户，逛街探店型。每人一行，写着决策力、诉求、痛点各三到四条。头像是 AI 生成的黏土风插画。', 'Three personas: Yang Zhihao, 27, primary persona, the explore-and-record rider; Guo Jiaxin, 22, secondary persona, the social sharer; Lin Xiaolin, 22, tertiary persona, the shop explorer. Each row lists three or four points under what they decide on, what they want and their pain points. The portraits are AI-generated clay-style illustrations.'],
+   'caption': ['三类休闲骑行者的画像（2021），由访谈和问卷综合而来：游览记录型、社交分享型、逛街探店型，各自写了决策力、诉求和痛点。文字照 2021 原稿，2026 年重新排版；头像为 2026 年 AI 生成。', 'Personas for three kinds of leisure rider (2021), synthesised from the interviews and questionnaire: the explore-and-record rider, the social sharer and the shop explorer, each with what they decide on, what they want and their pain points. Text as in the 2021 original, re-laid out in 2026; portraits generated with AI in 2026.']},
   {'kind': 'image', 'src': 'qingju/journey', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
    'label': ['用户旅程图 · 骑行前 / 中 / 后', 'Journey map · before / during / after'],
    'caption': ['原始旅程图：行为与机会的综合。', 'Original journey map: a synthesis of behaviours and opportunities.']},

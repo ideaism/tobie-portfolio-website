@@ -261,7 +261,7 @@ METHOD = [
 TRACKS = {
     'www': (['产品与体验设计', 'Product & experience design'],
             ['从创作者工具、证券软件，到走廊尽头那台共享冰箱。', 'in creator tools, securities software and the shared fridge down the hall.']),
-    'ai': (['AI 产品设计', 'AI product design'],
+    'ai': (['AI 产品经理', 'AI product manager'],
            ['从十四个 AI agent 的协作、创作者工具，到证券软件和走廊尽头那台共享冰箱。', 'in a team of fourteen AI agents, creator tools, securities software and the shared fridge down the hall.']),
     'ux': (['交互设计', 'Interaction design'],
            ['从创作者工具、走廊尽头那台共享冰箱，到证券软件。', 'in creator tools, the shared fridge down the hall and securities software.']),
@@ -269,6 +269,17 @@ TRACKS = {
             ['从证券软件、创作者工具，到走廊尽头那台共享冰箱。', 'in securities software, creator tools and the shared fridge down the hall.']),
 }
 
+# 卡 20261118-023 本人在聊天里说「按 C 改吧」：作品列表也跟着岗位排。规则：那句话里提到的项目按同样的顺序排在前面，
+# 没提到的按 www 的顺序跟在后面。ai 版刚好和 www 一样，所以不写。
+TRACK_ORDER = {
+    'ux': ['playbook', 'commons-fridge', 'smt', 'agent-matrix', 'qingju'],
+    'fin': ['smt', 'playbook', 'commons-fridge', 'agent-matrix', 'qingju'],
+}
+assert all(sorted(v) == sorted(PROJECT_ORDER) for v in TRACK_ORDER.values())
+# 紧跟在作品列表后面的一小段脚本：页面一边读一边执行，所以在第一次画出来之前就排好了，读屏和 Tab 顺序也跟着变。
+WORK_ORDER_JS = ('<script>(function(){var o=' + json.dumps(TRACK_ORDER, separators=(',', ':')) +
+                 "[document.documentElement.getAttribute('data-track')],w=document.currentScript.previousElementSibling;"
+                 "if(o&&w)o.forEach(function(s){var e=w.querySelector('[data-slug=\"'+s+'\"]');if(e)w.appendChild(e)})})()</script>")
 def track_text(i, lang):
     return ''.join(f'<span class="trk" data-t="{k}">{T(v[i], lang)}</span>' for k, v in TRACKS.items())
 
@@ -308,7 +319,7 @@ def home(lang):
         chips = ''.join(f'<li class="chip">{c}</li>' for c in T(p['chips'], lang))
         try_link = f'<a class="link" href="{url(p["slug"], lang)}#try">{t("亲手试原型", "Try the prototype", lang)}</a>' if has_try(p['slug']) else ''
         h += f'''
-  <article class="work-item reveal" data-component="Work item">
+  <article class="work-item reveal" data-component="Work item" data-slug="{p['slug']}">
    <div class="work-item__visual frame-block">{frame_label(T(p['label'], lang), T(prov_text, lang), prov_cls, p['project'])}<a href="{url(p['slug'], lang)}" aria-label="{t('阅读案例：', 'Read the case: ', lang)}{p['name']}"><div class="frame">{cover(p['slug'], lang)}</div></a></div>
    <div class="work-item__copy">
     <p class="work-item__name" style="--project:var(--p-{p['project']})">{p['name']}</p>
@@ -319,7 +330,7 @@ def home(lang):
     <div class="work-item__actions"><a class="link-arrow" href="{url(p['slug'], lang)}">{t('阅读案例', 'Read the case', lang)} <span aria-hidden="true">→</span></a>{try_link}</div>
    </div>
   </article>'''
-    h += '\n </div>\n</div></section>'
+    h += '\n </div>' + WORK_ORDER_JS + '\n</div></section>'
 
     explorations = [
         ('cctv', ['CDU · 批判性设计', 'CDU · critical design'], ['让看不见的监控被看见', 'Making the invisible visible'],

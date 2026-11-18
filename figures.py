@@ -30,22 +30,22 @@ FIGURES = {
  # 2026-11-17（卡 20261117-002「可以的话把白底去掉」）：三张原图白底换成页面底色 #ECF0ED，图框跟着用 'bg' + 'flat'（和 07 节两张一样）
  ('qingju', 1): [
   {'kind': 'image', 'src': 'qingju/growth-system-2021', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
-   'label': ['成长体系痛点分析 · 2021 原稿（中文）', 'Growth-system pain points · 2021 original (Chinese)'],
+   'label': ['成长体系痛点分析 · 2021（中文）', 'Growth-system pain points · 2021 (Chinese)'],
    'alt': ['2021 原稿「成长体系痛点分析」：左边三条问题，层级深、模块多、感知度弱；右边一张结构图，入口、成长形式、出口三列，任务中心、骑行累积、每日签到三个入口各自连到“达成特定成就”。', 'The 2021 “growth-system pain points” page: three problems on the left (too deep, too many modules, low visibility) and a diagram on the right with three columns (entry, mechanism, outcome), where the task centre, ride accumulation and daily check-in each lead separately to an achievement.'],
    'caption': ['2021 年对当时青桔成长体系的梳理：任务中心、骑行累积、每日签到三个入口，各自通向“达成特定成就”，彼此不相连。问题归为三点：层级深、模块多（任务、等级、勋章、积分四套）、感知弱。', 'A 2021 map of Qingju’s growth system at the time: three entry points (task centre, ride accumulation, daily check-in) each lead separately to “achievement unlocked”, with nothing linking them. Three problems are named: buried too deep, too many modules (tasks, levels, badges, points) and low visibility.']},
   {'kind': 'image', 'src': 'qingju/active-user-stages-2021', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
-   'label': ['定义活跃用户 · 2021 原稿（中文）', 'Defining an active rider · 2021 original (Chinese)'],
+   'label': ['定义活跃用户 · 2021（中文）', 'Defining an active rider · 2021 (Chinese)'],
    'alt': ['2021 原稿「定义活跃用户」：四列阶段，试用单车（1–3 天）、体验骑行（7 天）、习惯使用（30 天）、分享推荐（3 个月以上）；每列往下是主要指标和主要标准；最下面归成潜力用户、活跃用户、忠实用户。', 'The 2021 “defining an active rider” page: four stage columns, trial (days 1–3), first rides (day 7), habit (day 30) and advocacy (three months and beyond), each with indicators and a threshold beneath; at the bottom, riders are grouped as potential, active or loyal.'],
    'caption': ['把“提高活跃度”拆成四个阶段：试用单车（1–3 天）、体验骑行（7 天）、习惯使用（30 天）、分享推荐（3 个月以上）。每个阶段写了主要指标和判断标准，再归成潜力、活跃、忠实三类用户。', 'The brief to “increase engagement”, broken into four stages: trial (days 1–3), first rides (day 7), habit (day 30) and advocacy (three months and beyond). Each stage has indicators and a threshold, and riders are grouped as potential, active or loyal.']},
   # 2026-11-18 本人在看板上说「完成这部分」；场景图是 Figma 2206:20030 2 倍导出去白底；画像文字照 2206:20310 原稿，原稿的网上照片换成 AI 头像（本人选的）。
   {'kind': 'image', 'src': 'qingju/scenarios-2021', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
-   'label': ['核心使用场景 · 2021 原稿（中文）', 'Core riding scenarios · 2021 original (Chinese)'],
+   'label': ['核心使用场景 · 2021（中文）', 'Core riding scenarios · 2021 (Chinese)'],
    'alt': ['2021 原稿「核心使用场景」：左边是场景需求分类柱状图，从高到低是上下班、购物逛街、运动、景区旅游、上学、其他；下面两个数字，74.8% 是上下班和上学的通勤需求比例，118.7% 是购物逛街、运动和景区的休闲需求比例；右边一段结论：休闲场景占比较高，用户骑车的增量空间在休闲时间；最下面是 95 后和 00 后的兴趣圈层。', 'The 2021 “core riding scenarios” page: on the left, a bar chart of riding scenarios from most to least chosen — commuting to work, shopping, exercise, sightseeing, getting to school, other; beneath it two figures, 74.8% for commuting to work and school and 118.7% for shopping, exercise and sightseeing; on the right, the conclusion that leisure scenarios rank high and the room for more riding lies in leisure time; at the bottom, the interest circles of riders born after 1995 and after 2000.'],
    'caption': ['团队问卷里的场景需求（多选，所以各项相加会超过 100%）：上下班和上学两项通勤合计 74.8%，购物逛街、运动、景区三项休闲合计 118.7%。通勤时间是固定的，骑行的增量在休闲时间；95 后、00 后的兴趣圈层里，体育、健身、美拍这类提升自我的爱好排在前面。', 'Riding scenarios from the team’s questionnaire (multiple choice, so the options add up to more than 100%): commuting to work and to school together come to 74.8%; shopping, exercise and sightseeing together come to 118.7%. Commutes follow a fixed timetable, so the room for more riding lies in leisure time; among riders born after 1995 and after 2000, self-improving hobbies such as sport, fitness and photography lead their interest circles.']},
  ],
  ('qingju', 2): [
   {'kind': 'image', 'src': 'qingju/research', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
-   'label': ['访谈摘要 · 2021 原稿（中文）', 'Interview summary · 2021 original (Chinese)'],
+   'label': ['访谈摘要 · 2021（中文）', 'Interview summary · 2021 (Chinese)'],
    'alt': ['2021 年访谈摘要原稿（中文）：访谈提纲说明；11 位受访者关键表述的气泡；一个标为“没有注意过用户成长体系”的百分比；以及两组关键词——成长体系关注点（权益、优惠、收集、社交）与休闲骑行影响因素（自我情感、社交、环境）。', 'Original 2021 interview summary, in Chinese: the interview guide; speech bubbles with key remarks from 11 interviewees; a percentage labelled “had not noticed the growth system”; and two keyword chains — what riders look for in a growth system (status, discounts, collecting, sharing) and what shapes a leisure ride (personal feelings, social needs, environment).'],
    'caption': ['研究摘要原稿（中文），聚焦休闲骑行场景。', 'Original research summary (in Chinese), focused on leisure riding.']},
   {'kind': 'image', 'src': 'qingju/field', 'prov': 'photo', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
@@ -64,7 +64,7 @@ FIGURES = {
  ],
  ('qingju', 4): [
   {'kind': 'image', 'src': 'qingju/user-flow-2021', 'prov': 'research', 'project': 'qingju', 'bg': '#ECF0ED', 'flat': True,
-   'label': ['用户流程 · 2021 原稿（中文）', 'User flow · 2021 original (Chinese)'],
+   'label': ['用户流程 · 2021（中文）', 'User flow · 2021 (Chinese)'],
    'alt': ['2021 原稿「用户流程」流程图：选择路线或店铺、扫码开始骑行、结束骑行、获得宝藏、前往宝库查看、使用金币升级宝箱；下方分支是合并路线、发布骑行感受、发布至讨论圈或查看骑行回忆，以及查看风景卡和优惠券。', 'The 2021 user-flow chart: choose a route or shop, scan to start, end the ride, receive treasure, open the vault, upgrade chests with coins; lower branches cover merging routes, writing up the ride, publishing to the route discussion or viewing ride memories, and viewing scenery cards and coupons.'],
    'caption': ['低保真之前的整条路径：选择路线或店铺 → 扫码骑行 → 结束骑行 → 获得宝藏（优惠券、风景卡、金币）→ 去宝库查看 → 用金币升级宝箱。另一支是记录：可以合并多条路线，发布骑行感受，公开的进讨论圈，不公开的进骑行回忆。', 'The whole path before wireframing: choose a route or shop → scan and ride → end the ride → receive treasure (coupons, scenery cards, coins) → open the vault → upgrade chests with coins. A second branch covers recording: merge several routes, write up the ride, then publish it to the route discussion or keep it in ride memories.']},
   {'kind': 'image', 'src': 'qingju/lofi-board', 'prov': 'wire', 'project': 'qingju', 'bg': '#4F4F4F',
@@ -112,8 +112,8 @@ FIGURES = {
  ('playbook', 1): [
   {'kind': 'pair', 'prov': 'original', 'project': 'playbook',
    'label': ['同一条规则的两端 · Studio → App', 'Two sides of one rule · Studio → App'],
-   'wide': ('playbook/studio-campaign', ['Studio：配置活动、任务、物品与配方（我的 UX/UI）', 'Studio: configure campaigns, tasks, items and recipes (my UX/UI)']),
-   'phone': ('playbook/app-missions', ['App：参与任务（我的 UX）', 'App: take part in missions (my UX)']),
+   'wide': ('playbook/studio-campaign', ['Studio：配置活动、任务、物品与配方', 'Studio: configure campaigns, tasks, items and recipes']),
+   'phone': ('playbook/app-missions', ['App：参与任务', 'App: take part in missions']),
    'caption': ['左：创作者端 Studio 活动页原稿。右：粉丝端 App 任务页的 UX 稿。', 'Left: the creator-side Studio campaign page. Right: the fan-side App missions screen, UX version.']},
  ],
  # 2026-11-16：新增 02「用户与动线」、07「收藏与展示」，原 02–06 顺延为 03–06、08（07 这一批没有图）
@@ -135,12 +135,12 @@ FIGURES = {
   {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 5,
    'label': ['合成界面的演变 · 谁做了什么', 'How the crafting screen evolved · who did what'],
    'items': [('playbook/early-ui', ['早期 UI · 另一位设计师', 'Early UI · another designer']), ('playbook/cauldron-list', ['配方列表 · 我的 UX', 'Recipe list · my UX']), ('playbook/app-craft-ready', ['配方详情 · 我的 UX', 'Recipe detail · my UX']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
-   'whole': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉（我的 UX）', 'Dropped · drag materials into a furnace (my UX)'], 1)],
+   'whole': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace'], 1)],
    'caption': ['早期视觉确立了方向。我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'The early UI set a visual direction. I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.']},
  ],
  ('playbook', 5): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
-   'label': ['创作者上下文与搜索 · 我的 UX', 'Creator context and search · my UX'],
+   'label': ['创作者上下文与搜索', 'Creator context and search'],
    'items': [('playbook/app-home', ['首页：上下文与进度', 'Home: context + progress']), ('playbook/app-inventory', ['背包：相关物品', 'Inventory: related items']), ('playbook/app-search', ['全局搜索：分类筛选', 'Global search: categories']), ('playbook/app-search-creators', ['搜索结果：创作者', 'Results: creators'])],
    'caption': ['日常任务保留创作者上下文；2023 年 10 月的评审后，搜索改为跨社区的全局入口。', 'Everyday tasks keep the creator context; after the October 2023 review, search became a global, cross-community entry point.']},
  ],
@@ -159,7 +159,7 @@ FIGURES = {
  ('playbook', 7): [
   # 「推荐选择」那张是 390×770，不是整屏，放在 'whole'（不套竖屏框，按原比例整张显示），第三项 1 是它在这一排里的位置
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
-   'label': ['展示柜的四个状态 · 我的 UX', 'Four showcase states · my UX'],
+   'label': ['展示柜的四个状态', 'Four showcase states'],
    'items': [('playbook/app-showcase-empty', ['未填充：空架子和“一键展示”', 'Empty: a bare shelf and “One-click Show”']), ('playbook/app-showcase-filled', ['已填充', 'Filled']), ('playbook/app-showcase-visitor', ['访客视角：共同关注的创作者', 'Visitor’s view: creators you both follow'])],
    'whole': [('playbook/app-showcase-pick', ['推荐选择：从背包里推荐', 'Choosing: recommended from the inventory'], 1)],
    'caption': ['展示柜从空架子开始：点“一键展示”，系统从背包里推荐物品，选好后出现在个人主页上；别人来访时还能看到共同关注的创作者。', 'The showcase starts as an empty shelf. “One-click Show” recommends items from the inventory; once chosen they appear on the profile, and visitors also see the creators you both follow.']},
@@ -169,12 +169,12 @@ FIGURES = {
   # 七张 390×868 的屏只比竖屏框（390:844）高 3%，但底部正好是操作按钮（Refuse / Accept、List、Sure…），
   # 套竖屏框会把按钮切掉一半，所以放在 'whole' 里整张显示；只有 390×1203 的社区首页照常裁成一屏高。
   {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
-   'label': ['交易市场 · 我的 UX 线框', 'Marketplace · my UX wireframes'],
+   'label': ['交易市场 · 线框', 'Marketplace · wireframes'],
    'items': [('playbook/app-market-home', ['社区首页：市场和以物换物的入口', 'Community home: entry to Market and Barter'])],
    'whole': [('playbook/app-market-listings', ['物品行情：挂单列表', 'Item page: listings']), ('playbook/app-market-trend', ['价格走势与买卖盘', 'Price trend and order book']), ('playbook/app-market-buy-confirm', ['购买确认：数量、单价、应付总额', 'Purchase confirmation: quantity, price, total due'])],
    'caption': ['', '']},     # 两条手机条共用下一条的图注
   {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
-   'label': ['以物换物 · 我的 UX 线框', 'Barter · my UX wireframes'],
+   'label': ['以物换物 · 线框', 'Barter · wireframes'],
    'items': [],
    'whole': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换：上面是会失去的，下面是想得到的', 'Posting a request: what you lose above, what you want below']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
    'caption': ['交易市场和以物换物共约 27 屏线框，这里各放四屏。', 'The marketplace and barter flows run to about 27 wireframes; four of each are shown here.']},
@@ -229,7 +229,7 @@ FIGURES = {
  ],
  ('smt', 3): [
   {'kind': 'image', 'src': 'smt/states', 'prov': 'original', 'project': 'smt', 'pad': True,
-   'label': ['原稿截图 · 行状态', 'Source crop · row states'],
+   'label': ['行状态', 'Row states'],
    'caption': ['上方复刻所依据的原稿行状态截图（默认、选中、悬停）；无数据变体在原稿中保留行高。', 'The source crop the replica follows (default, selected, hover); the no-data variant keeps the row height in the source.']},
   {'kind': 'image', 'src': 'smt/level-variants', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
    'label': ['买卖档位 · 8 个变体', 'Bid/ask levels · 8 variants'],
@@ -240,7 +240,7 @@ FIGURES = {
  ],
  ('smt', 4): [
   {'kind': 'image', 'src': 'smt/trade-components', 'prov': 'original', 'project': 'smt', 'bg': '#1E1E1E',
-   'label': ['交易控件与变体 · 组件库原稿', 'Trading controls and variants · library source'],
+   'label': ['交易控件与变体', 'Trading controls and variants'],
    'caption': ['买入 3 种、卖出 6 种状态（选中、聚焦、未选中，有无角标）。', 'Buy has 3 states and sell has 6 (selected, focused, unselected, with or without a badge).']},
  ],
  ('smt', 5): [
@@ -312,16 +312,16 @@ FIGURES = {
  # 2026-11-15 加：'fridge/sub-*' 八张取自最终提交稿（23 页横版 PDF）的原页，页码写在 label 里；来源见 docs/sources.md
  ('commons-fridge', 1): [
   {'kind': 'image', 'src': 'fridge/sub-chain', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['从访谈到功能的推导链 · 提交稿 L02', 'How each step produced the next · submission L02'],
+   'label': ['从访谈到功能的推导链', 'How each step produced the next'],
    'caption': ['七步：五场访谈 → 行为卡 → 四个画像 → 旅程与情绪 → 失效点 → 设计原则 → 功能与角色。前五步来自访谈，后两步是我的设计判断。', 'Seven steps, from five interviews to features and character. Steps 01–05 rest on the interviews; steps 06–07 are my design decisions.']},
   {'kind': 'image', 'src': 'fridge/research', 'prov': 'research', 'project': 'fridge', 'pad': True,
    'label': ['五场共享冰箱习惯访谈 · U01–U05', 'Five shared-fridge habit interviews · U01–U05'],
    'caption': ['访谈卡片（中文原稿）。', 'Interview cards (Chinese originals).']},
   {'kind': 'image', 'src': 'fridge/sub-personas', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['四个行为情境画像 · 提交稿 L04', 'Four behavioural personas · submission L04'],
+   'label': ['四个行为情境画像', 'Four behavioural personas'],
    'caption': ['画像描述的是情境，不是人格类型：同一个人会随住处、层架规则和关系的变化在它们之间移动。图里的人像是示意插画。', 'These are situations, not personality types: the same person moves between them when the home, the shelf rules or the relationships change. The portraits are illustrations.']},
   {'kind': 'image', 'src': 'fridge/sub-curves', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['四条情绪曲线，同一条横轴 · 提交稿 L08', 'Four curves, one shared axis · submission L08'],
+   'label': ['四条情绪曲线，同一条横轴', 'Four curves, one shared axis'],
    'caption': ['纵轴是相对位置，高度本身不重要，要看的是形状：三条曲线能回升，一条不能。除了 A，其余三条都在第四阶段落到最低——出了问题、得有人开口的那一刻。最低点是人与人之间的事，不是技术问题。', 'The vertical axis is relative; what matters is the shape, not the height: three curves recover, one does not. Every curve except A bottoms out at stage 4, the moment something is wrong and someone has to say so. The lowest point is social, not technical.']},
  ],
  ('commons-fridge', 2): [
@@ -332,10 +332,10 @@ FIGURES = {
  ],
  ('commons-fridge', 3): [
   {'kind': 'image', 'src': 'fridge/sub-failures', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['九种共享冰箱失灵的方式 · 提交稿 L09', 'Nine ways a shared fridge fails · submission L09'],
+   'label': ['九种共享冰箱失灵的方式', 'Nine ways a shared fridge fails'],
    'caption': ['每张卡是一种跨访谈出现的失效方式；卡片底下的编号（例如 U02 · U05）是它出自哪几场访谈。', 'Each card is a failure pattern seen across interviews; the codes underneath (for example U02 · U05) name the interviews that produced it.']},
   {'kind': 'image', 'src': 'fridge/sub-failure-to-feature', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['每个失效点，对应做出来的一样东西 · 提交稿 L10', 'What was built in answer to each failure · submission L10'],
+   'label': ['每个失效点，对应做出来的一样东西', 'What was built in answer to each failure'],
    'caption': ['从左到右读一行：失效点、原型里回应它的那样东西、在哪一版做出来。', 'Read a row left to right: the failure, the thing in the build that answers it, and the version it shipped in.']},
  ],
  ('commons-fridge', 4): [
@@ -353,16 +353,16 @@ FIGURES = {
    'items': [('fridge/penguin-add', ['邀请一个动作', 'Invite an action']), ('fridge/penguin-received', ['确认一条记录', 'Acknowledge a record']), ('fridge/penguin-manage', ['一起查看', 'Check together']), ('fridge/penguin-found', ['发现了东西', 'Found something'])],
    'caption': ['用 AI 辅助探索后，我挑选并精修成一套一致的角色，每个表情对应一种交互时刻。', 'Explored with AI assistance, then selected and refined into one consistent character; each expression maps to an interaction moment.']},
   {'kind': 'image', 'src': 'fridge/sub-refusals', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['否掉一张图的三个理由 · 提交稿 L15', 'Three documented reasons for refusing a render · submission L15'],
+   'label': ['否掉一张图的三个理由', 'Three documented reasons for refusing a render'],
    'caption': ['取自生成记录，不是凭记忆。五个文件里有两个根本不是设计方向，而是想得到真正的透明背景时失败的尝试；最终稿放弃了透明，统一用一种米白底色。', 'Taken from the generation record, not from memory. Two of the five files are not design directions at all — they are failed attempts to get a genuine transparent background; the final sources abandoned transparency and use one uniform off-white.']},
   {'kind': 'image', 'src': 'fridge/sub-rounds', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['四轮修改，每一轮被要求改什么 · 提交稿 L16', 'Four rounds, and what each one was told to fix · submission L16'],
+   'label': ['四轮修改，每一轮被要求改什么', 'Four rounds, and what each one was told to fix'],
    'caption': ['第 3 轮先定下优先级：性格第一，关系第二，吉祥物感最后。第 4a 轮把全身比例改成大头比例。第 4b 轮只用不透明的平涂色块，这一版被选中，进入表情系统和印刷件。', 'Round 3 set an explicit hierarchy: personality, then relationship, then mascot. Round 4a replaced the full-body default with a head-led proportion. Round 4b uses strictly opaque flat fills — the version selected and carried into the expression system and the printed pieces.']},
  ],
  # 2026-11-18：前面插了 06「产品化」（v2.0，交接单 6e），「下一步」从 07 顺延为 08，这两张图跟着挪；新 06 节这次不放图
  ('commons-fridge', 8): [
   {'kind': 'image', 'src': 'fridge/sub-test-not-run', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
-   'label': ['一套备好的比较测试 · 提交稿 L19', 'A comparison test, printed and ready · submission L19'],
+   'label': ['一套备好的比较测试', 'A comparison test, printed and ready'],
    'caption': ['评估材料是齐的：参与者说明、观察表、评分表、NFC 读取测试表、三种顺序的卡片和选择矩阵。获批的伦理路线只覆盖关于已有习惯的访谈，所以这套测试留到下一轮。', 'The evaluation kit is complete — participant instructions, an observer sheet, a rating sheet, an NFC read-test sheet, sequence cards in three orders and a selection matrix. The approved ethics route covered interviews about existing habits, so this test is for the next round.']},
   {'kind': 'image', 'src': 'fridge/penguin-motion', 'prov': 'original', 'project': 'fridge', 'pad': True,
    'label': ['展览动态研究 · 2026 年 9 月', 'Exhibition motion study · September 2026'],

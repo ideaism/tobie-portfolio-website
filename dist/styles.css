@@ -895,3 +895,5 @@ html.studio-open{overflow:hidden}
 .trk:not([data-t="www"]){display:none}
 html[data-track] .trk[data-t="www"]{display:none}
 html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],html[data-track="fin"] .trk[data-t="fin"]{display:inline}
+/* 2026-11-18 交接单 8b 第 1 条：页脚的微信号是文字不是链接，颜色跟旁边的链接一样、不带下划线 */
+.contact__wechat{color:#CFE0DB}

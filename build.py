@@ -39,8 +39,16 @@ def legacy_img(name, alt):
     return f'<img src="/assets/{name}.webp" width="{w}" height="{h}" alt="{escape(alt)}" loading="lazy" decoding="async">'
 
 def frame_label(name, prov_text, prov_cls='', project='explore'):
+    prov = f'<span class="prov {prov_cls}">{prov_text}</span>' if prov_text else ''    # 来源小标签不显示时整个不出（见 prov_shown）
     return (f'<div class="frame-label" style="--project:var(--p-{project})"><span class="frame-label__name"><span>{name}</span></span>'
-            f'<span class="prov {prov_cls}">{prov_text}</span></div>')
+            f'{prov}</div>')
+
+
+# 2026-11-18 卡 20261118-021 本人「同意」（交接单 8b 第 5 条）：图上的来源小标签只留必要的——团队 UI、生成插画两种、
+# 按项目记录绘制、提交稿 / 原稿对比 / 回看。下面四类是本人自己的图，图注里已经说了是什么，不显示；figures.py 里的数据照旧留着。
+PROV_HIDDEN = {'original', 'wire', 'research', 'photo'}
+def prov_shown(key):
+    return (['', ''], '') if key in PROV_HIDDEN else PROV[key]
 
 
 # ------------------------------------------------------------------ shell
@@ -102,6 +110,7 @@ def footer(lang):
     <h2>{t('好的合作，<br>从一次对话开始。', 'Good work starts<br>with a conversation.', lang)}</h2>
     <a class="contact__mail" href="mailto:{EMAIL}">{EMAIL} <span aria-hidden="true">↗</span></a>
     <div class="contact__links">
+     <span class="contact__wechat">{t('微信 beijixinfei', 'WeChat beijixinfei', lang)}</span>
      <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn ↗</a>
      <a href="/assets/Yucheng-Feng-Portfolio.pdf" target="_blank" rel="noopener">{t('PDF 作品集', 'Portfolio PDF', lang)} ↗</a>
      <a href="#main">{t('回到顶部', 'Back to top', lang)} ↑</a>
@@ -312,10 +321,10 @@ def home(lang):
 </div></section>
 
 <section class="section" id="work"><div class="wrap">
- <div class="section-head"><h2>{t('精选作品', 'Selected work', lang)}</h2><p>{t('2021–2026 年的五个项目。界面都是原始设计（封面上的插画是 AI 生成的，已标注）；每个可操作原型都运行在原始界面上，不做重新“美化”。', 'Five projects, 2021–2026. Every screen is the original design (cover illustrations are AI-generated and labelled), and every prototype runs on the original screens — nothing is re-skinned.', lang)}</p></div>
+ <div class="section-head"><h2>{t('精选作品', 'Selected work', lang)}</h2><p>{t('2021–2026 年的五个项目：一套 AI 协作系统、一个创作者平台、一款证券交易软件、一个毕业设计和一次商业委托。封面上的插画是 AI 生成的，已标注。', 'Five projects, 2021–2026: an AI collaboration system, a creator platform, securities trading software, an MA final project and a commercial brief. Cover illustrations are AI-generated and labelled.', lang)}</p></div>
  <div class="work">'''
     for p in PROJECTS:
-        prov_text, prov_cls = PROV[p['prov']]
+        prov_text, prov_cls = prov_shown(p['prov'])
         chips = ''.join(f'<li class="chip">{c}</li>' for c in T(p['chips'], lang))
         try_link = f'<a class="link" href="{url(p["slug"], lang)}#try">{t("亲手试原型", "Try the prototype", lang)}</a>' if has_try(p['slug']) else ''
         h += f'''
@@ -358,13 +367,15 @@ def home(lang):
   <div class="note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">Tobie · 冯渝程</div><p class="note__text">{t('我喜欢从人的行为出发，把模糊的需求拆开，再把它们变成人能理解、能掌控的系统。', 'I start from how people actually behave, untangle what they need, and give complex systems a shape people can understand and control.', lang)}</p></div></div>
  </div>
  <div class="about__text reveal">
-  <p>{t('我是冯渝程，也叫 Tobie，目前在南安普顿大学攻读 MA Communication Design。我的设计经历跨越金融工具、创作者平台和日常生活中的实体交互；我会用研究、线框、组件规范和可运行的原型，把一个决定讲清楚。', 'I’m Yucheng Feng, also known as Tobie, studying for an MA in Communication Design at the University of Southampton. My work spans financial tools, creator platforms and physical everyday interactions; I use research, wireframes, component specs and working prototypes to make a decision clear.', lang)}</p>
+  <p>{t('我是冯渝程，也叫 Tobie。2021 年起做过法律类 App、证券交易软件和创作者平台的交互与产品设计，直接对接过券商客户和创业团队。现在在南安普顿大学读 MA Communication Design，2026 年 12 月毕业。我会用研究、线框、组件规范和可运行的原型，把一个决定讲清楚。', 'I’m Yucheng Feng, also known as Tobie. Since 2021 I have designed interactions and product flows for a legal services app, securities trading software and a creator platform, working directly with brokerage clients and a startup team. I am finishing an MA in Communication Design at the University of Southampton in December 2026. I use research, wireframes, component specs and working prototypes to make a decision clear.', lang)}</p>
   <dl class="spec">
-   <div><dt>{t('关注方向', 'Focus', lang)}</dt><dd>{t('用户研究、交互设计、组件体系、实体与数字体验', 'User research, interaction design, component systems, physical + digital experiences', lang)}</dd></div>
-   <div><dt>{t('教育', 'Education', lang)}</dt><dd>{t('南安普顿大学 · MA Communication Design<br>湖北美术学院 · 本科', 'University of Southampton · MA Communication Design<br>Hubei Institute of Fine Arts · BA', lang)}</dd></div>
+   <div><dt>{t('关注方向', 'Focus', lang)}</dt><dd>{t('需求分析与拆解、用户研究、交互与原型 · 证券交易软件、创作者工具、AI 协作流程', 'Requirements analysis, user research, interaction & prototyping · Securities trading software, creator tools, AI collaboration workflows', lang)}</dd></div>
+   <div><dt>{t('经历', 'Experience', lang)}</dt><dd>{t('2023.10 – 2024.05 · PlayBook · 产品设计（远程兼职）<br>2022.02 – 2023.03 · 武汉优品楚鼎科技有限公司 · 交互设计师<br>2021.06 – 2021.09 · 武汉牛晓法科技有限公司 · UX 设计师', 'Oct 2023 – May 2024 · PlayBook · Product Designer (part-time, remote)<br>Feb 2022 – Mar 2023 · Wuhan Youpin Chuding Technology · Interaction Designer<br>Jun – Sep 2021 · Wuhan Niuxiaofa Technology · UX Designer', lang)}</dd></div>
+   <div><dt>{t('教育', 'Education', lang)}</dt><dd>{t('南安普顿大学 · MA Communication Design（2025.09 – 2026.12）<br>湖北美术学院 · 产品设计 本科（2017.09 – 2021.06）', 'University of Southampton · MA Communication Design (Sep 2025 – Dec 2026, expected)<br>Hubei Institute of Fine Arts · BA Product Design (Sep 2017 – Jun 2021)', lang)}</dd></div>
    <div><dt>{t('工具', 'Toolkit', lang)}</dt><dd>Figma · ProtoPie · HTML/CSS/JS {t('原型', 'prototypes', lang)} · {t('AI 辅助原型与视觉探索', 'AI-assisted prototyping and visual exploration', lang)}</dd></div>
    <div><dt>{t('语言', 'Languages', lang)}</dt><dd>{t('中文（母语）· 英文（工作语言）', 'Chinese (native) · English (working)', lang)}</dd></div>
    <div><dt>{t('所在地', 'Based in', lang)}</dt><dd>{t('英国南安普顿', 'Southampton, UK', lang)}</dd></div>
+   <div><dt>{t('到岗', 'Availability', lang)}</dt><dd>{t('2026 年 12 月 31 日起', 'From 31 December 2026', lang)}</dd></div>
   </dl>
  </div>
 </div></section>
@@ -395,7 +406,7 @@ CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
 }
 
 def figure_html(f, lang):
-    prov_text, prov_cls = PROV[f['prov']]
+    prov_text, prov_cls = prov_shown(f['prov'])
     label = frame_label(T(f['label'], lang), T(prov_text, lang), prov_cls, f['project'])
     cap = f'<figcaption class="frame-caption">{T(f["caption"], lang)}</figcaption>' if T(f['caption'], lang) else ''    # 图注留空（['', '']）就不出这一行：两条手机条共用后一条的图注时用
     kind = f['kind']
@@ -516,7 +527,7 @@ def case_page(slug, lang):
     facts = ''.join(f'<div><dt>{f[i]}</dt><dd>{f[i + 2]}</dd></div>' for f in c['facts'])
     brief = ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(BRIEF_LABELS, c['brief']))
     prov_key, hero_label = CASE_HERO[slug]
-    prov_text, prov_cls = PROV[prov_key]
+    prov_text, prov_cls = prov_shown(prov_key)
     # 没有可试演示的案例（Agent Matrix）不出「直接试原型」，「从头读」当主按钮
     start = f'<a class="btn{" btn--ghost" if has_try(slug) else ""}" href="#section-1">{t("从头读", "Read from the start", lang)}</a>'
     actions = (f'<a class="btn" href="#try">{t("直接试原型", "Try the prototype", lang)} <span aria-hidden="true">↓</span></a>' if has_try(slug) else '') + start

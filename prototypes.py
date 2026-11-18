@@ -26,9 +26,13 @@ def t(zh, en, lang): return zh if lang == 'zh' else en
 def _json(data):
     return escape(json.dumps(data, ensure_ascii=False), quote=True)
 
+# 2026-11-18 卡 20261118-021 本人「同意」（网站呈现交接单 8b 第 5 条）：「原始界面」「原始线框」这两种小标签不显示，
+# 和 build.py 的 PROV_HIDDEN 同一条规矩；下面各处的数据照旧留着。其余小标签（重建、可运行、录屏等）照旧显示。
+_PROV_HIDDEN = {'原始界面', 'Original screen', 'Original screens', '原始线框', 'Original wireframes'}
 def _frame_label(name, prov, prov_class, project):
+    tag = '' if prov in _PROV_HIDDEN else f'<span class="prov {prov_class}">{prov}</span>'
     return (f'<div class="frame-label" style="--project:var(--p-{project})"><span class="frame-label__name"><span>{name}</span></span>'
-            f'<span class="prov {prov_class}">{prov}</span></div>')
+            f'{tag}</div>')
 
 def _note(text, who):
     return (f'<div class="note proto__note" aria-live="polite"><span class="note__face" aria-hidden="true"></span>'

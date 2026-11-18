@@ -331,7 +331,8 @@ FIGURES = {
    'label': ['四轮修改，每一轮被要求改什么 · 提交稿 L16', 'Four rounds, and what each one was told to fix · submission L16'],
    'caption': ['第 3 轮先定下优先级：性格第一，关系第二，吉祥物感最后。第 4a 轮把全身比例改成大头比例。第 4b 轮只用不透明的平涂色块，这一版被选中，进入表情系统和印刷件。', 'Round 3 set an explicit hierarchy: personality, then relationship, then mascot. Round 4a replaced the full-body default with a head-led proportion. Round 4b uses strictly opaque flat fills — the version selected and carried into the expression system and the printed pieces.']},
  ],
- ('commons-fridge', 7): [
+ # 2026-11-18：前面插了 06「产品化」（v2.0，交接单 6e），「下一步」从 07 顺延为 08，这两张图跟着挪；新 06 节这次不放图
+ ('commons-fridge', 8): [
   {'kind': 'image', 'src': 'fridge/sub-test-not-run', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
    'label': ['一套备好的比较测试 · 提交稿 L19', 'A comparison test, printed and ready · submission L19'],
    'caption': ['评估材料是齐的：参与者说明、观察表、评分表、NFC 读取测试表、三种顺序的卡片和选择矩阵。获批的伦理路线只覆盖关于已有习惯的访谈，所以这套测试留到下一轮。', 'The evaluation kit is complete — participant instructions, an observer sheet, a rating sheet, an NFC read-test sheet, sequence cards in three orders and a selection matrix. The approved ethics route covered interviews about existing habits, so this test is for the next round.']},

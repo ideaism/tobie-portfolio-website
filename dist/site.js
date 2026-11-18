@@ -65,6 +65,53 @@ if (hot) {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && pinned) { pinned = null; clear(); } });
 }
 
+/* case tabs (2026-11-18, only smt for now): one case page holding two projects.
+   The page is built as jump links over stacked panels (readable without JS); this turns them into tabs.
+   A hash opens its tab: #daton opens that panel, and a hash inside a panel (#section-3, #try) opens the panel holding it. */
+const tabList = document.querySelector('[data-tablist]');
+if (tabList) {
+  const tabs = [...tabList.querySelectorAll('[data-tab]')];
+  const panels = tabs.map(tab => document.getElementById(tab.dataset.tab));
+  tabList.setAttribute('role', 'tablist');
+  tabs.forEach((tab, n) => {
+    tab.setAttribute('role', 'tab'); tab.setAttribute('aria-controls', panels[n].id);
+    panels[n].setAttribute('role', 'tabpanel'); panels[n].setAttribute('aria-labelledby', tab.id);
+  });
+  const select = n => {
+    tabs.forEach((tab, k) => { const on = k === n; tab.setAttribute('aria-selected', String(on)); tab.tabIndex = on ? 0 : -1; panels[k].hidden = !on; });
+    window.dispatchEvent(new Event('scroll'));   // re-run the contents highlight for the panel now shown
+  };
+  const target = () => { try { return document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return null; } };
+  const openHash = () => {
+    const el = location.hash.length > 1 && target();
+    const n = el ? panels.findIndex(p => p.contains(el)) : -1;
+    if (n < 0) return false;
+    const wasHidden = panels[n].hidden;
+    select(n);
+    if (panels.includes(el)) {   // a tab link: show the tab bar and the head of that tab
+      const top = () => window.scrollTo({ top: 0, behavior: 'instant' });
+      top();
+      if (document.readyState !== 'complete') window.addEventListener('load', () => requestAnimationFrame(top), { once: true });   // the browser's own jump to the hash comes after this script
+    }
+    else if (wasHidden) el.scrollIntoView({ behavior: 'instant' });               // the browser could not scroll to it while it was hidden
+    return true;
+  };
+  if (!openHash()) select(0);
+  window.addEventListener('hashchange', openHash);
+  const choose = n => {
+    select(n); tabs[n].focus();
+    history.replaceState(null, '', n === 0 ? location.pathname + location.search : '#' + panels[n].id);   // the first tab keeps the plain address
+  };
+  tabs.forEach((tab, n) => tab.addEventListener('click', e => { e.preventDefault(); choose(n); }));
+  tabList.addEventListener('keydown', e => {
+    const n = tabs.indexOf(document.activeElement);
+    if (n < 0) return;
+    const to = { ArrowRight: n + 1, ArrowLeft: n - 1, Home: 0, End: tabs.length - 1 }[e.key];
+    if (to !== undefined) { e.preventDefault(); choose((to + tabs.length) % tabs.length); }
+    else if (e.key === ' ') { e.preventDefault(); choose(n); }
+  });
+}
+
 /* case contents: highlight the section being read */
 const tocLinks = [...document.querySelectorAll('.toc a')];
 const sections = [...document.querySelectorAll('.case-section')];
@@ -73,7 +120,7 @@ if (tocLinks.length) {
   const update = () => {
     ticking = false;
     let current = null;
-    for (const s of sections) if (s.getBoundingClientRect().top < window.innerHeight * 0.35) current = s.id;
+    for (const s of sections) if (s.offsetParent && s.getBoundingClientRect().top < window.innerHeight * 0.35) current = s.id;   // skip sections in a hidden tab
     tocLinks.forEach(a => a.classList.toggle('is-current', a.hash === '#' + current));
   };
   window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });

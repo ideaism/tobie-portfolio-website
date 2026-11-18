@@ -56,6 +56,11 @@ Author: Yucheng Feng / Tobie. User confirmed UP NO.1 is a colleague's account; d
     「快速交易 · 改版后」复用 05 节的 `smt/screen-quick-order`（Figma 节点 `656:24252` 打码版），没有新文件。`打码/G3-快速交易-改版后.png` 这次没用；它和线上那张是同一页，程序比过大部分一样、有少量不同，没逐处查。
   - 图的落点：`figures.py` 新增 `('smt', 1)` 一条 `image`、新 `('smt', 6)` 四条（`image` 动线图；`phones` 两格 `whole` 放下单面板前后；`image` 快速交易前、后各一条）；原 `('smt', 6)` 改键为 `('smt', 7)`，内容没动。下单面板两张比正文栏窄，`image` 会被 `.frame img{width:100%}` 放大，所以放进 `phones` 的 `whole`（显示宽度上限 = 原图宽，不套竖屏框、不带 `screen` 类），没加新 CSS。`tools/prepare_assets.py` 的 `JOBS` 加 5 行。`prototypes.py`（smt 只有第 3 节）和 `build.py` 的 `CASE_HERO` 不带节号，没有改。
 
+- 2026-11-18 拆成两个 tab（卡 030 选 A；只合到本机，没部署、没推送）。依据：`04-shared/给本人读-大通tab新句子-2026-11-18.md`，文字照发布会话收到的定稿逐字用（事实卡第三格是「我的职责：适老化提案 · 组件搭建」，不是稿子里的「平台」那格）。
+  - 兴业那个 tab：`brief` 第三行删掉大通那句；07 节「适老化方案」整节挪走，原 08「交付与反思」改成 07（只改 label）。首页卡片（`build.py` 的 `PROJECTS` smt 简介和标签）没动。
+  - 大通那个 tab：`cases.py` → `CASES['smt']['tabs']` 第 2 项（`id` `daton`）：title、deck、brief、facts 新写；01 节「六条规则」= 原 07 节的六段规则原文，原 07 节第一段并进 deck（前面加公司名），最后一段原话做 brief 第三行。`figures.py` 的 `('smt', 7)` 改键成 `('daton', 1)`，五组图没动。
+  - 页面：`build.py` 抽出 `case_layout()`，`case_page()` 读 `tabs`；`dist/styles.css` 加 `.case-tabs`；`dist/site.js` 加 tab 切换，目录高亮跳过藏起来的 tab。`prototypes.py`（smt 复刻在第 3 节）和 `CASE_HERO` 不受影响，没有改。
+
 ## Commons Fridge
 - https://www.figma.com/design/lx9WbYRybWceTemdXVkoJj?node-id=190-148
 - Final 23-page landscape submission in 毕业设计/最终交付/06-正式提交包-Final-Submission/03-补充材料-Optional-Supporting.

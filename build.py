@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261118a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261118b'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -433,39 +433,20 @@ def figure_html(f, lang):
         return f'<figure class="figure frame-block">{label}<div class="frame" style="background:#F6F1E6"><div class="phone-strip" style="--n:4">{items}</div></div>{cap}</figure>'
     return ''
 
-def case_page(slug, lang):
-    c = CASES[slug]; i = 0 if lang == 'zh' else 1
-    path = url(slug, lang)
-    p = next(x for x in PROJECTS if x['slug'] == slug)
-    title = T(CASE_TITLES[slug], lang)
-    h = head(f"{p['name']} — {title} — Tobie", c['deck'][i], lang, path) + topbar(lang, path, 'work')
-    facts = ''.join(f'<div><dt>{f[i]}</dt><dd>{f[i + 2]}</dd></div>' for f in c['facts'])
-    brief = ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(BRIEF_LABELS, c['brief']))
-    prov_key, hero_label = CASE_HERO[slug]
-    prov_text, prov_cls = PROV[prov_key]
-    # 没有可试演示的案例（Agent Matrix）不出「直接试原型」，「从头读」当主按钮
-    start = f'<a class="btn{" btn--ghost" if has_try(slug) else ""}" href="#section-1">{t("从头读", "Read from the start", lang)}</a>'
-    actions = (f'<a class="btn" href="#try">{t("直接试原型", "Try the prototype", lang)} <span aria-hidden="true">↓</span></a>' if has_try(slug) else '') + start
-    h += f'''<main id="main" class="wrap">
-<header class="case-head">
- <a class="back" href="{url('', lang)}#work">← {t('全部作品', 'All work', lang)}</a>
- <p class="label path" style="--project:var(--p-{p['project']})"><span>{p['name']}</span><span>{p['year']}</span><span>{T(p['type'], lang)}</span></p>
- <h1>{title}</h1>
- <p class="lead">{c['deck'][i]}</p>
- <dl class="case-brief" data-component="Case brief">{brief}</dl>
- <dl class="case-spec" data-component="Spec table">{facts}</dl>
-</header>
-<div class="case-hero frame-block reveal">{frame_label(T(hero_label, lang), T(prov_text, lang), prov_cls, p['project'])}<div class="frame">{cover(slug, lang)}</div>
- <div class="case-hero__actions">{actions}</div></div>
+def case_layout(c, key, lang, anchor='section'):
+    """目录 + 正文。c 是一份案例内容（CASES[slug]，或它 'tabs' 里的一个 tab）；
+    key 是 figures.py 和 section_demo 的键名（案例 slug 或 tab id）；anchor 是各节锚点的前缀（section-1、daton-section-1）。"""
+    i = 0 if lang == 'zh' else 1
+    h = f'''
 <div class="case-layout">
  <nav class="toc" aria-label="{t('本页目录', 'On this page', lang)}"><span class="toc__title label">{t('目录', 'Contents', lang)}</span>'''
     for n, s in enumerate(c['sections']):
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
-        h += f'<a href="#section-{n+1}"><span>{n+1:02d}</span>{label}</a>'
+        h += f'<a href="#{anchor}-{n+1}"><span>{n+1:02d}</span>{label}</a>'
     h += '</nav>\n <article class="case-body">'
     for n, s in enumerate(c['sections']):
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
-        h += f'\n<section class="case-section" id="section-{n+1}"><p class="label label--teal">{n+1:02d} · {label}</p><h2>{s["title"][i]}</h2>'
+        h += f'\n<section class="case-section" id="{anchor}-{n+1}"><p class="label label--teal">{n+1:02d} · {label}</p><h2>{s["title"][i]}</h2>'
         paras = [f'<p>{para[i]}</p>' for para in s['text']]
         box = 'outcome' if s.get('outcome') else 'prose'
         if 'rows' in s:
@@ -483,8 +464,8 @@ def case_page(slug, lang):
             h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
         if 'steps' in s:
             h += '<div class="steps">' + ''.join(f'<div class="step"><span class="label label--teal">{st[0][i]}</span><h3>{st[1][i]}</h3><p>{st[2][i]}</p></div>' for st in s['steps']) + '</div>'
-        h += section_demo(slug, n + 1, lang)
-        for f in FIGURES.get((slug, n + 1), []):
+        h += section_demo(key, n + 1, lang)
+        for f in FIGURES.get((key, n + 1), []):
             h += figure_html(f, lang)
         if 'external' in s:
             h += f'<p style="margin-top:24px"><a class="link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
@@ -495,6 +476,64 @@ def case_page(slug, lang):
     h += '''
  </article>
 </div>'''
+    return h
+
+def case_page(slug, lang):
+    c = CASES[slug]; i = 0 if lang == 'zh' else 1
+    path = url(slug, lang)
+    p = next(x for x in PROJECTS if x['slug'] == slug)
+    title = T(CASE_TITLES[slug], lang)
+    h = head(f"{p['name']} — {title} — Tobie", c['deck'][i], lang, path) + topbar(lang, path, 'work')
+    facts = ''.join(f'<div><dt>{f[i]}</dt><dd>{f[i + 2]}</dd></div>' for f in c['facts'])
+    brief = ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(BRIEF_LABELS, c['brief']))
+    prov_key, hero_label = CASE_HERO[slug]
+    prov_text, prov_cls = PROV[prov_key]
+    # 没有可试演示的案例（Agent Matrix）不出「直接试原型」，「从头读」当主按钮
+    start = f'<a class="btn{" btn--ghost" if has_try(slug) else ""}" href="#section-1">{t("从头读", "Read from the start", lang)}</a>'
+    actions = (f'<a class="btn" href="#try">{t("直接试原型", "Try the prototype", lang)} <span aria-hidden="true">↓</span></a>' if has_try(slug) else '') + start
+    back = f'<a class="back" href="{url("", lang)}#work">← {t("全部作品", "All work", lang)}</a>'
+    tabs = c.get('tabs')
+    if tabs:
+        # 'tabs'（2026-11-18，卡 030，只有 smt 用）：页面顶部一排 tab，返回链接挪到 tab 上面；第一个 tab 是案例本身（上面这些键），
+        # 后面的 tab 各有自己的开头和章节。没开 JS 时 tab 是跳到各块的链接，几块从上往下排着都能读；site.js 把它变成真正的 tab。
+        links = ''.join(f'<a class="case-tabs__tab" id="tab-{tb["id"]}" href="#{tb["id"]}" data-tab="{tb["id"]}">{T(tb["name"], lang)}</a>' for tb in tabs)
+        h += f'''<main id="main" class="wrap">
+<div class="case-tabs" data-component="Case tabs">
+ {back}
+ <div class="case-tabs__list" data-tablist>{links}</div>
+</div>
+<div class="case-tab" id="{tabs[0]['id']}" data-tabpanel>
+<header class="case-head">'''
+    else:
+        h += f'''<main id="main" class="wrap">
+<header class="case-head">
+ {back}'''
+    h += f'''
+ <p class="label path" style="--project:var(--p-{p['project']})"><span>{p['name']}</span><span>{p['year']}</span><span>{T(p['type'], lang)}</span></p>
+ <h1>{title}</h1>
+ <p class="lead">{c['deck'][i]}</p>
+ <dl class="case-brief" data-component="Case brief">{brief}</dl>
+ <dl class="case-spec" data-component="Spec table">{facts}</dl>
+</header>
+<div class="case-hero frame-block reveal">{frame_label(T(hero_label, lang), T(prov_text, lang), prov_cls, p['project'])}<div class="frame">{cover(slug, lang)}</div>
+ <div class="case-hero__actions">{actions}</div></div>'''
+    h += case_layout(c, slug, lang)
+    for tb in (tabs or [])[1:]:
+        # 后面的 tab：开头和第一个 tab 同样的样子（标题、导语、三行摘要、事实卡），不放封面。
+        # 一页只能有一个 h1，所以标题用 h2，样式和 h1 一样。各节锚点带 tab id 前缀，节号从 01 重新数。
+        tfacts = ''.join(f'<div><dt>{f[i]}</dt><dd>{f[i + 2]}</dd></div>' for f in tb['facts'])
+        tbrief = ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(BRIEF_LABELS, tb['brief']))
+        h += f'''
+</div>
+<div class="case-tab" id="{tb['id']}" data-tabpanel>
+<header class="case-head">
+ <h2 class="case-head__title">{tb['title'][i]}</h2>
+ <p class="lead">{tb['deck'][i]}</p>
+ <dl class="case-brief" data-component="Case brief">{tbrief}</dl>
+ <dl class="case-spec" data-component="Spec table">{tfacts}</dl>
+</header>''' + case_layout(tb, tb['id'], lang, f"{tb['id']}-section")
+    if tabs:
+        h += '\n</div>'
     idx = [x['slug'] for x in PROJECTS].index(slug)
     nxt = PROJECTS[(idx + 1) % len(PROJECTS)]
     h += f'''

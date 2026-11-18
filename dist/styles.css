@@ -343,6 +343,20 @@ p,li{text-wrap:pretty}
 .case-spec dd{margin:0;font-size:var(--fs-small);line-height:1.5}
 .case-hero{margin:var(--s-6) 0 var(--s-8)}
 .case-hero__actions{display:flex;flex-wrap:wrap;gap:var(--s-3);margin-top:var(--s-5)}
+/* case tabs (2026-11-18, card 030; only smt uses it): one case page holding two projects, each with its own head and sections.
+   Without JS the tabs are jump links and the panels stack; site.js adds the tab roles and hides the panel not shown. */
+.case-tabs{padding-top:var(--s-7)}
+.case-tabs .back{margin-bottom:var(--s-5)}
+.case-tabs__list{display:flex;gap:var(--s-6);border-bottom:1px solid var(--rule)}
+.case-tabs__tab{flex:0 1 auto;min-width:0;padding:var(--s-3) 0 calc(var(--s-3) - 2px);margin-bottom:-1px;border-bottom:3px solid transparent;font-size:1rem;font-weight:700;line-height:1.4;color:var(--ink-3);transition:color var(--t-fast),border-color var(--t-fast)}
+.case-tabs__tab:hover{color:var(--ink)}
+.case-tabs__tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--teal)}
+.case-tabs__tab:focus-visible{border-radius:4px 4px 0 0}
+.case-tab>.case-head{padding-top:var(--s-6)}
+.case-head__title{font-size:var(--fs-h1);max-width:18em;margin:var(--s-4) 0 var(--s-5)}
+.case-tab>.case-head+.case-layout{margin-top:var(--s-6)}
+html:not(.js) .case-tab+.case-tab{margin-top:var(--s-9);border-top:1px solid var(--ink)}
+@media (max-width:520px){.case-tabs__list{gap:var(--s-4)}.case-tabs__tab{flex:1 1 0}}
 
 .case-layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s-8);align-items:start}
 .toc{position:sticky;top:100px;display:grid;gap:2px;padding:var(--s-2) 0}

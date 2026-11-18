@@ -275,18 +275,24 @@ p,li{text-wrap:pretty}
 .collage .cover-deco{filter:drop-shadow(0 1cqw 1.2cqw rgba(9,80,70,.25))}
 .collage .cover-sticker{transform:rotate(-8deg);filter:drop-shadow(.25cqw 0 0 #fff) drop-shadow(-.25cqw 0 0 #fff) drop-shadow(0 .25cqw 0 #fff) drop-shadow(0 -.25cqw 0 #fff) drop-shadow(0 .8cqw 1.2cqw rgba(0,0,0,.18))}
 .work-item__visual>a:hover .cover-phone,.case-hero .collage--ill:hover .cover-phone{transform:rotate(var(--r,0deg)) translateY(-.8cqw)}
-/* 兴业 SMT：设计中心项目卡 */
-.collage--idcard{background:linear-gradient(160deg,#FFFFFF 0%,#EEF5FF 55%,#D6E8FD 100%)}
-.collage--idcard .cover-chip{background:#fff;color:#3557E8;box-shadow:0 0 0 1px #D8E3FA}
-.collage .idcard__icon{right:2cqw;top:-1cqw;width:30cqw;height:auto;border-radius:0;box-shadow:none;-webkit-mask:radial-gradient(closest-side,#000 70%,transparent 100%);mask:radial-gradient(closest-side,#000 70%,transparent 100%)}
-.idcard__win{position:absolute;left:6cqw;right:-8cqw;top:28cqw;border-radius:1.4cqw 1.4cqw 0 0;overflow:hidden;background:#1E1E1E;box-shadow:0 0 0 1px rgba(14,24,48,.12),0 2cqw 5cqw rgba(30,60,140,.25);transition:transform var(--t-reveal) var(--ease)}
-.idcard__win::before{content:'';display:block;height:2.6cqw;background:#2B2B2B;background-image:radial-gradient(circle at 2cqw 50%,#FF5F57 .55cqw,transparent .6cqw),radial-gradient(circle at 3.8cqw 50%,#FEBC2E .55cqw,transparent .6cqw),radial-gradient(circle at 5.6cqw 50%,#28C840 .55cqw,transparent .6cqw)}
-.collage .idcard__win img{position:static;width:100%;height:auto;border-radius:0;box-shadow:none}
-.work-item__visual>a:hover .idcard__win,.case-hero .collage--idcard:hover .idcard__win{transform:translateY(-1cqw)}
+/* 兴业 SMT：设计中心项目卡（卡 20261118-017 改选 S1：不放截图） */
+.collage--idcard{background:linear-gradient(120deg,#FFFFFF 0%,#EEF5FF 45%,#D6E8FD 100%)}
+.collage--idcard .cover-chips{top:7cqw}
+.collage--idcard .cover-chip:nth-child(1){background:#E3ECFF;color:#3557E8}
+.collage--idcard .cover-chip:nth-child(2){background:#E5F6EE;color:#1C8A5A}
+.collage--idcard .cover-chip:nth-child(3){background:#FFF0E0;color:#B05E0E}
+.collage--idcard .cover-title{top:15.5cqw;font-size:7.4cqw}
+.collage--idcard .cover-title--long{font-size:5cqw;max-width:46cqw}
+.idcard__sub{position:absolute;left:6cqw;top:26cqw;max-width:40cqw;margin:0;font-size:max(11px,2.5cqw);font-weight:500;line-height:1.35;color:#4A5878}
+:lang(en) .idcard__sub{top:28.5cqw}
+.idcard__credit{position:absolute;left:6cqw;bottom:6.5cqw;display:flex;align-items:center;gap:1.2cqw;margin:0;font-size:max(10px,1.9cqw);color:#4A5878}
+.collage .idcard__face{position:static;width:4cqw;height:4cqw;border-radius:50%;box-shadow:0 0 0 .3cqw #fff,0 .4cqw 1cqw rgba(30,60,140,.2)}
+.collage .idcard__icon{right:1cqw;bottom:-2cqw;width:50cqw;height:auto;border-radius:0;box-shadow:none;transition:transform var(--t-reveal) var(--ease);-webkit-mask:radial-gradient(closest-side,#000 72%,transparent 100%);mask:radial-gradient(closest-side,#000 72%,transparent 100%)}
+.work-item__visual>a:hover .idcard__icon,.case-hero .collage--idcard:hover .idcard__icon{transform:translateY(-1cqw)}
 /* 冰箱：小标签用深绿底 */
 .collage--door .cover-chips{left:5cqw;top:6cqw}
 .collage--door .cover-chip{background:#264846;color:#F3E7D1}
-@media (prefers-reduced-motion:reduce){.collage .cover-phone,.idcard__win{transition:none}}
+@media (prefers-reduced-motion:reduce){.collage .cover-phone,.collage .idcard__icon{transition:none}}
 
 .explore-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gutter)}
 .explore h3{font-size:var(--fs-h3);margin:var(--s-4) 0 var(--s-2)}

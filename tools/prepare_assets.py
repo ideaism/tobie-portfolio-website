@@ -64,8 +64,8 @@ JOBS = {
     'qingju/hifi-phone-map': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 90),
     'qingju/hifi-phone-food': (SRC / 'work' / 'qingju-hifi' / 'map.png', 800, 90),
     'qingju/hifi-phone-discussion': (SRC / 'work' / 'qingju-hifi' / 'route.png', 800, 90),
-    # 封面装饰（Figma AI 生成，2026-11-18 卡 20261118-013 选 A）——不是项目成果
-    'gen/smt-icon-blocks': (SRC / 'work' / 'gen' / 'smt-icon-blocks.png', 900, 84),
+    # 封面装饰（Figma AI 生成，2026-11-18 卡 20261118-013 选 A、-017 SMT 改 S1）——不是项目成果
+    'gen/smt-icon-window': (SRC / 'work' / 'gen' / 'smt-icon-window.png', 900, 84),
     'gen/cf-door': (SRC / 'work' / 'gen' / 'cf-door.png', 1200, 84),
     'gen/qj-map': (SRC / 'work' / 'gen' / 'qj-map.png', 1200, 84),
     'gen/qj-bike-chest': (SRC / 'work' / 'gen' / 'qj-bike-chest.png', 900, 88),

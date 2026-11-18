@@ -147,7 +147,7 @@ PROJECTS = [
   'title': ['从业务单元，建立界面秩序。', 'Let business meaning set component boundaries.'],
   'summary': ['与同事一起拆分业务单元，我负责组件、状态与使用规范，让高密度的金融界面可以复用。', 'With colleagues I broke the product into business units; I designed and maintained the components, states and usage rules that let a dense financial interface be reused.'],
   'chips': [['业务拆分', '组件设计', '规范维护', '需求对接'], ['Business decomposition', 'Components', 'Specifications', 'Requirements liaison']],
-  'label': ['SMT-MAX · 资产与持仓', 'SMT-MAX · assets & positions'], 'prov': 'cover-ill'},
+  'label': ['兴业 SMT · 项目卡', 'Industrial Securities SMT · project card'], 'prov': 'cover-gen'},
  {'slug': 'commons-fridge', 'project': 'fridge', 'name': 'The Commons Fridge', 'year': '2026',
   'type': ['硕士毕业设计', 'MA final project'],
   'title': ['共享一台冰箱，也共享清晰的边界。', 'Make shared care easier to negotiate.'],
@@ -191,19 +191,19 @@ def collage(slug, lang):
                 + piece('playbook/team-mission', t('PlayBook App 任务页（成品界面）', 'PlayBook App mission page (finished UI)', lang), 1, f'left:54%;top:24%;width:19.5%;{phone}', 'collage__phone')
                 + '</div></div>')
     if slug == 'smt':
-        # 2026-11-18（卡 20261118-013 第 3 版选 A = S2）：设计中心项目卡。浅蓝底、彩色小标签、大标题，
-        # 右上一个玻璃质感的 3D 图标（Figma AI 生成，一摞组件积木，只当装饰），下半截露出真实的资产首页（原图，只缩放裁切）。
-        # 本人要求：不放关怀版。
+        # 2026-11-18（卡 20261118-017 本人改选 S1）：设计中心项目卡。浅蓝底、三色小标签、大标题、一句副标题、
+        # 左下一行「我做了什么」，右边一个玻璃质感的 3D 图标（Figma AI 生成：交易窗口 + K 线，只当装饰）。不放界面截图，不放关怀版。
         chips = ''.join(f'<span class="cover-chip">{c}</span>' for c in
                         (['2022–23', '桌面端', '组件与规范'] if lang == 'zh' else ['2022–23', 'Desktop', 'Components & specs']))
         long = '' if lang == 'zh' else ' cover-title--long'
         return ('<div class="collage collage--idcard" style="--bg:#EEF5FF">'
                 + f'<div class="cover-chips" aria-hidden="true">{chips}</div>'
                 + f'<p class="cover-title{long}" aria-hidden="true">{t("兴业 SMT", "Industrial Securities SMT", lang)}</p>'
-                + img('gen/smt-icon-blocks', t('插画：一摞组件积木的 3D 图标', 'Illustration: a 3D icon of stacked component blocks', lang), 'idcard__icon')
-                + '<div class="idcard__win">'
-                + img('smt/screen-asset-home', t('SMT-MAX 资产首页：多账户总览和持仓', 'SMT-MAX asset home: multi-account overview and positions', lang))
-                + '</div></div>')
+                + f'<p class="idcard__sub" aria-hidden="true">{t("从业务单元，建立界面秩序", "Let business meaning set component boundaries", lang)}</p>'
+                + '<p class="idcard__credit" aria-hidden="true">' + img('tobie/face', t('冯渝程', 'Yucheng Feng', lang), 'idcard__face')
+                + t('组件设计、使用规范与维护', 'Component design, specifications & maintenance', lang) + '</p>'
+                + img('gen/smt-icon-window', t('插画：玻璃质感的交易窗口 3D 图标，里面是 K 线', 'Illustration: a glassy 3D trading-window icon with a candlestick chart', lang), 'idcard__icon')
+                + '</div>')
     if slug == 'commons-fridge':
         # 2026-11-18（卡 20261118-013 第 3 版选 A = F1）：生成的插画铺底（贴满冰箱贴的冰箱门，一只手拿手机碰门上的小贴片），
         # 左边立一屏原型首页；本人另外要求加一只小企鹅（项目里的企鹅原图，当贴纸）。
@@ -349,7 +349,7 @@ CASE_HERO = {
     'agent-matrix': ('diagram', ['Agent Matrix · 当时在等的六张卡（临时封面）', 'Agent Matrix · the six cards that were waiting (temporary cover)']),
     'qingju': ('cover-ill', ['青桔 · 寻宝地图与路线讨论圈 · 2021', 'Qingju · treasure map and route discussion · 2021']),
     'playbook': ('original', ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions']),
-    'smt': ('cover-ill', ['SMT-MAX · 资产与持仓工作区', 'SMT-MAX · assets & positions workspace']),
+    'smt': ('cover-gen', ['兴业 SMT · 项目卡', 'Industrial Securities SMT · project card']),
     'commons-fridge': ('cover-ill', ['The Commons Fridge · 原型首页', 'The Commons Fridge · prototype home']),
 }
 

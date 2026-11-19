@@ -12,6 +12,7 @@ Author: Yucheng Feng / Tobie. User confirmed UP NO.1 is a colleague's account; d
 - Cover 2206:19923; research 2206:20210; journey 2206:20389; wireframes 2206:20837; reflection 2206:21841.
 - Source clearly states the leisure-cycling direction was proposed by the author. Existing project index records user confirmation of research, interview, persona, journey and low-fi scope.
 - High fidelity is credited to the team. Historical sample counts use explicit provenance; no causal lift or numerical outcome inferred. User was asked asynchronously about the additional outcome mentioned.
+- 两张旅程图出自旧作品集 Figma `lfqzkEzhH33yq5kvIkNEqW` 节点 2206:20455（郭嘉欣）、2206:20518（林小琳），原稿抬头误写成杨志豪那句，2026-11-19 本人在卡 024、026 同意按各自人物重写抬头（`03-qingju/portfolio/figures/src/build_journeys.py`），其余照原稿。
 
 ## PlayBook
 - Studio: https://www.figma.com/design/XDyOn5545LrSOsCwqUcED7?node-id=5562-28622

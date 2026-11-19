@@ -33,6 +33,8 @@ JOBS = {
     'qingju/cover': (SRC / 'qingju-cover.png', 1920, 82),
     'qingju/research': (SRC / 'work' / 'qingju' / 'research-2021.png', 1920, 82),
     'qingju/journey': (SRC / 'work' / 'qingju' / 'journey-2021.png', 1920, 84),
+    'qingju/journey-guo': (SRC / 'work' / 'qingju' / 'journey-guo-2021.png', 1920, 84),
+    'qingju/journey-lin': (SRC / 'work' / 'qingju' / 'journey-lin-2021.png', 1920, 84),
     'qingju/field': (SRC / 'work' / 'qingju' / 'field-2021.png', 1920, 82),
     'qingju/team-route': (SRC / 'work' / 'qingju' / 'team-route-2021.png', 1200, 84),   # 2026-11-18 卡 20261118-003：上方白底换成 #F6F8F6，见 docs/sources.md
     'qingju/team-memory': (SRC / 'work' / 'qingju' / 'team-memory@2x.png', 800, 86),   # 2 倍原稿，见 docs/sources.md 2026-11-15

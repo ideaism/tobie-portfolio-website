@@ -387,6 +387,13 @@ FIGURES = {
    'label': ['九个问题，各引出一个机制', 'Nine problems, one mechanism each'],
    'caption': ['每个机制，都是被一个具体的问题逼出来的。', 'Every mechanism was forced by one specific problem.']},
  ],
+ # 2026-11-21：03 节「一张审核卡」（卡 20261115-005 要的三张之一）。用审核中心小原型拍的示例卡，整卡比一屏高，放进 16:9 窗口上下滑，左侧菜单不动
+ ('agent-matrix', 3): [
+  {'kind': 'image', 'src': 'agent-matrix/review-card', 'prov': 'original', 'project': 'matrix', 'scroll': True,
+   'fixed': {'of': 2880, 'left': 496},
+   'label': ['一张审核卡', 'A review card'],
+   'caption': ['一张卡回答五个问题。这是示例卡，不是真实待办。', 'One card answers five questions. This is an example card, not a live item.']},
+ ],
  ('agent-matrix', 6): [
   {'kind': 'image', 'src': 'agent-matrix/fig-who-waits-zh', 'src_en': 'agent-matrix/fig-who-waits-en', 'prov': 'diagram', 'project': 'matrix',
    'label': ['当时在等的六张卡', 'The six cards that were waiting'],

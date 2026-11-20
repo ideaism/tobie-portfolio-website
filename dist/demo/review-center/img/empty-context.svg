@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 700" width="390" height="700" font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="390" height="700" fill="#f4f5f7"/>
+<rect x="0" y="0" width="390" height="64" fill="#ffffff"/><rect x="20" y="24" width="120" height="16" rx="8" fill="#d5d9e0"/><rect x="45" y="150" width="300" height="220" rx="16" fill="none" stroke="#9aa1ad" stroke-width="2" stroke-dasharray="8 6"/><text x="195" y="266" text-anchor="middle" font-size="18" fill="#6b7280">插图放这里</text><rect x="110" y="400" width="170" height="14" rx="7" fill="#c9ced6"/><rect x="80" y="450" width="230" height="52" rx="12" fill="#2f5bd3"/><text x="195" y="483" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">开始打卡</text>
+<text x="376" y="688" text-anchor="end" font-size="12" fill="#9aa1ad">示例图</text>
+</svg>

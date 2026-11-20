@@ -220,6 +220,9 @@ JOBS = {
     'agent-matrix/fig-who-waits-en': (SRC / 'work' / 'agent-matrix' / 'fig-who-waits-en.png', 1800, 88),
     'agent-matrix/fig-trust-zh': (SRC / 'work' / 'agent-matrix' / 'fig-trust-zh.png', 1800, 88),
     'agent-matrix/fig-trust-en': (SRC / 'work' / 'agent-matrix' / 'fig-trust-en.png', 1800, 88),
+    # 2026-11-21（交接单第 9 节）：审核中心小原型的截图，1440 宽 2 倍图。03 节一张整卡、07 节原型载入前的封面
+    'agent-matrix/review-card': (SRC / 'work' / 'agent-matrix' / 'review-card.png', 2880, 86),
+    'agent-matrix/review-demo-poster': (SRC / 'work' / 'agent-matrix' / 'review-demo-poster.png', 2000, 86),
 }
 for n in range(5):
     JOBS[f'fridge/submission-{n}'] = (EXP / f'fridge-p22-{n}.jpg', 800, 82)

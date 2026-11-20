@@ -21,8 +21,9 @@ class Page(HTMLParser):
 pages={p:Page(p) for p in ROOT.rglob('index.html')};errors=[];checked=set()
 for p,v in pages.items():
  if v.structure_errors:errors.append(f'{p}: structure {v.structure_errors}')
- if v.h1!=1:errors.append(f'{p}: h1 count {v.h1}')
- if v.lang not in ['en','zh-CN']:errors.append(f'{p}: lang missing')
+ app=(ROOT/'demo') in p.parents   # dist/demo/ 是嵌进案例页的独立小应用（审核中心原样代码），不是网站页面，不查 h1、lang
+ if not app and v.h1!=1:errors.append(f'{p}: h1 count {v.h1}')
+ if not app and v.lang not in ['en','zh-CN']:errors.append(f'{p}: lang missing')
  for img in v.imgs:
   if 'src' in img and not img.get('alt') and img.get('aria-hidden')!='true':errors.append(f'{p}: missing alt')   # aria-hidden copies (scroll 'fixed' layer) are decorative
  for ref in v.refs:
@@ -32,7 +33,7 @@ for p,v in pages.items():
   if not u.path:target=p
   if target.is_dir():target=target/'index.html'
   if not target.exists():errors.append(f'{p}: missing {ref}');continue
-  if u.fragment and target in pages and u.fragment not in pages[target].ids:errors.append(f'{p}: missing anchor {ref}')
+  if u.fragment and not u.fragment.startswith('/') and target in pages and u.fragment not in pages[target].ids:errors.append(f'{p}: missing anchor {ref}')   # '#/…' 是 dist/demo/ 小应用的路由，不是锚点
   if u.path.startswith('/'):checked.add(u.path)
 for path in sorted(checked):
  try:

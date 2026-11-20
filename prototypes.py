@@ -790,6 +790,29 @@ def sittings(lang):
 </section>'''
 
 
+# Agent Matrix 07：审核中心小原型（2026-11-21）。dist/demo/review-center/ 是审核中心 web/ 线上那一版（commit 168e852）的 app.js、style.css 原样，
+# 加一个 mock.js 把读写服务器的那一层换成内存里的 8 张示例卡：不用登录、不发请求、刷新就复原。源和改动清单在 05-agent-matrix/portfolio/demo/review-center/README.md。
+REVIEW_URL = '/demo/review-center/#/card/demo-03'   # 直接开到封面截图那张卡（同一件事的第三张，卡头下有前几张）
+
+def review_demo(lang, anchor):
+    T = lambda zh, en: t(zh, en, lang)
+    sizes = ''.join(f'<button type="button" data-size="{k}" aria-pressed="{str(k == "wide").lower()}" disabled>{v}</button>'
+                    for k, v in [('wide', T('电脑宽', 'Desktop')), ('phone', T('手机宽', 'Phone'))])
+    return f'''<section class="proto frame-block" id="{anchor}" data-review="{REVIEW_URL}" data-component="Live prototype">
+{_frame_label(T('审核中心 · 看卡', 'Review centre · card view'), T('可运行原型', 'Working prototype'), 'prov--live', 'matrix')}
+<div class="frame frame--canvas"><div class="rv">
+ <div class="proto__intro"><span class="label label--teal">{T('真实代码，示例卡', 'Real code, example cards')}</span><h3>{T('卡顶上多了一行：还剩几张。', 'One new line at the top: how many are left.')}</h3>
+  <p>{T('点右上角「还剩 4 张」，或者通过一张。', 'Click “还剩 4 张” (4 left) at the top right, or approve a card.')}</p></div>
+ <div class="rv__screen" data-screen data-size="wide"><div class="rv__poster"><img src="/assets/work/agent-matrix/review-demo-poster.webp" alt="{T('审核中心看卡页截图：顶上一行「还剩 4 张 · 下一张」，卡头下面是前几张', 'Screenshot of the card view: “4 left · next” at the top, earlier cards under the header')}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {T('在这里运行', 'Run it here')}</button></div></div>
+ <div class="rv__side">
+  <div class="routes" role="group" aria-label="{T('宽度', 'Width')}">{sizes}</div>
+  {_note(T('第 1 版我钉了两处：纯文字卡左右空得太多；手机上不要弹小列表。换到手机宽看第 2 版。', 'On version 1 I pinned two problems: text-only cards left too much space at the sides, and the phone should not pop up a list. Switch to phone width to see version 2.'), T('Tobie 的注释', 'Tobie’s note'))}
+  <div class="proto__tools"><a class="tool-btn" href="{REVIEW_URL}" target="_blank" rel="noopener">↗ {T('新窗口全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
+ </div>
+</div>
+<p class="proto__prov">{T('嵌入的是审核中心的网页代码本身，换上了 8 张示例卡。', 'This is the review centre’s own web code, running on eight example cards.')}</p>
+</div></section>'''
+
 def section_demo(slug, number, lang):
     """Which demo sits in which case section (1-based)."""
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
@@ -799,5 +822,5 @@ def section_demo(slug, number, lang):
     if slug == 'playbook' and number == 11: return drafter(lang)   # 2026-11-17：最后一节「2026 回看 · 活动起草助手」（交接单 ⑤）
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 7: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06；2026-11-18：前面又插了 06「产品化」（v2.0），顺延为 07
-    if slug == 'agent-matrix' and number == 7: return sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）
+    if slug == 'agent-matrix' and number == 7: return review_demo(lang, 'try') + sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）
     return ''

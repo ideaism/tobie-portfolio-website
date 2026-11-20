@@ -1481,6 +1481,46 @@ function liveset(root) {
   }));
 }
 
+/* ---------- Agent Matrix 07: review-centre prototype (2026-11-21) ---------- */
+function reviewDemo(root) {
+  const url = root.dataset.review, screen = root.querySelector('[data-screen]');
+  const sizes = [...root.querySelectorAll('[data-size]')], reload = root.querySelector('[data-action="reset-frame"]');
+  let frame;
+  // 审核中心 901px 以上才是电脑版。案例正文栏只有 ~870px，所以「电脑宽」按 1100px 渲染再缩小放进框里；手机宽和小屏原样
+  const DESK = 1100;
+  function fit() {
+    if (!frame) return;
+    const w = screen.clientWidth, h = screen.clientHeight;
+    const s = screen.dataset.size === 'wide' && w >= 600 && w < DESK ? w / DESK : 1;
+    frame.style.width = s < 1 ? DESK + 'px' : '';
+    frame.style.height = s < 1 ? h / s + 'px' : '';
+    frame.style.transform = s < 1 ? `scale(${s})` : '';
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(screen);
+  function load() {
+    if (!frame) {
+      frame = document.createElement('iframe');
+      frame.title = root.querySelector('.frame-label__name span').textContent;
+      frame.referrerPolicy = 'no-referrer';
+      frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+      screen.querySelector('.rv__poster').remove();
+      frame.style.transformOrigin = '0 0';
+      screen.append(frame);
+      fit();
+      sizes.forEach(b => b.disabled = false);
+      reload.disabled = false;
+    }
+    frame.src = url;
+  }
+  root.querySelector('[data-action="load"]').addEventListener('click', () => { load(); frame.focus(); });
+  sizes.forEach(b => b.addEventListener('click', () => {
+    sizes.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    screen.dataset.size = b.dataset.size;
+    fit();
+  }));
+  reload.addEventListener('click', () => { if (frame) load(); });
+}
+
 /* ---------- Agent Matrix 07: sittings chart (2026-11-21) ----------
    One dot per sitting; a new sitting starts after a pause longer than N minutes (same rule as
    claudestudy/evidence/2026-11-21-审核中心使用数据/recompute.py: gap > N). Dot area ∝ cards handled. */
@@ -1575,5 +1615,6 @@ if (inBrowser) {
   document.querySelectorAll('[data-live]').forEach(live);
   document.querySelectorAll('[data-clips]').forEach(clips);
   document.querySelectorAll('[data-sittings]').forEach(sittingsChart);
+  document.querySelectorAll('[data-review]').forEach(reviewDemo);
 }
 if (typeof module !== 'undefined' && module.exports) module.exports = { recipeRules, draftRules, sittingGroups };

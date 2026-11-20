@@ -898,6 +898,18 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 /* 2026-11-18 交接单 8b 第 1 条：页脚的微信号是文字不是链接，颜色跟旁边的链接一样、不带下划线 */
 .contact__wechat{color:#CFE0DB}
 
+/* Agent Matrix 07：审核中心小原型（2026-11-21，prototypes.py review_demo()） */
+.rv{display:grid;gap:var(--s-5);padding:var(--s-6)}
+.rv__screen{position:relative;width:100%;max-width:100%;height:min(720px,78vh);margin:0 auto;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--rule),var(--shadow-frame);transition:max-width .35s var(--ease)}
+.rv__screen[data-size="phone"]{max-width:390px}
+.rv__screen iframe{display:block;width:100%;height:100%;border:0}
+.rv__poster{position:relative;height:100%}
+.rv__poster img{width:100%;height:100%;object-fit:cover;object-position:top left}
+.rv__poster .btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(14,42,39,.25)}
+.rv__side{display:grid;grid-template-columns:auto 1fr auto;gap:var(--s-5);align-items:center}
+.rv__side .note{margin:0}
+@media (max-width:860px){.rv__side{grid-template-columns:1fr}.rv__side .routes{display:none}}
+@media (max-width:640px){.rv{padding:var(--s-5)}.rv__screen{height:min(680px,80vh)}}
 /* Agent Matrix 07：处理记录分批图（2026-11-21，prototypes.py sittings()） */
 .sit{display:grid;gap:var(--s-5);padding:var(--s-6)}
 .sit__stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s-4);margin:0}

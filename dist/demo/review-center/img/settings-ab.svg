@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" width="640" height="440" font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="640" height="440" fill="#f4f5f7"/>
+<text x="30" y="52" font-size="16" font-weight="600" fill="#374151">A 按功能</text>
+<text x="30" y="92" font-size="13" fill="#6b7280">提醒</text>
+<rect x="30" y="100" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="44" y="125" font-size="14" fill="#111827">打卡提醒</text>
+<rect x="30" y="148" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="44" y="173" font-size="14" fill="#111827">安静时段</text>
+<text x="30" y="204" font-size="13" fill="#6b7280">数据</text>
+<rect x="30" y="212" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="44" y="237" font-size="14" fill="#111827">导出记录</text>
+<rect x="30" y="260" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="44" y="285" font-size="14" fill="#111827">清空记录</text>
+<text x="350" y="52" font-size="16" font-weight="600" fill="#374151">B 按常用程度</text>
+<text x="350" y="92" font-size="13" fill="#6b7280">常用</text>
+<rect x="350" y="100" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="364" y="125" font-size="14" fill="#111827">打卡提醒</text>
+<rect x="350" y="148" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="364" y="173" font-size="14" fill="#111827">导出记录</text>
+<text x="350" y="204" font-size="13" fill="#6b7280">不常用</text>
+<rect x="350" y="212" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="364" y="237" font-size="14" fill="#111827">安静时段</text>
+<rect x="350" y="260" width="260" height="40" rx="8" fill="#ffffff" stroke="#e3e6eb"/><text x="364" y="285" font-size="14" fill="#111827">清空记录</text>
+
+<text x="626" y="428" text-anchor="end" font-size="12" fill="#9aa1ad">示例图</text>
+</svg>

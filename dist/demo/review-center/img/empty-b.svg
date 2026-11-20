@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="480" height="360" fill="#f4f5f7"/>
+<circle cx="190" cy="150" r="78" fill="#ffd66b"/><circle cx="300" cy="190" r="62" fill="#7fb4ff"/><rect x="196" y="108" width="110" height="104" rx="16" fill="#ff8a7a"/><path d="M222 162l18 18 34-38" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><rect x="160" y="282" width="160" height="12" rx="6" fill="#d5d9e0"/>
+<text x="466" y="348" text-anchor="end" font-size="12" fill="#9aa1ad">示例图 B · 色块</text>
+</svg>

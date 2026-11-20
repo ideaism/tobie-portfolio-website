@@ -349,3 +349,11 @@ PlayBook
 - 来源小标签：`figures.py` 的 `prov` 数据都留着；`build.py` 的 `PROV_HIDDEN`（原始界面、原始线框、研究材料、实拍）不显示，团队 UI、生成插画两种、按项目记录绘制、提交稿 / 原稿对比 / 回看照旧显示。
 - 关于页自我介绍、信息表（经历、教育起止年月、到岗）：照简历母版 `cv-pm/master/冯渝程_产品经理_母版_中文.html` 和 `Yucheng_Feng_Product_Master_CV_EN.html`，由招聘方审核会话整理；英文没有母语者读过。意向城市本人说不写。
 - 页脚加「微信 beijixinfei」：本人在卡 20261118-021 上给的。
+
+## 2026-11-21：Agent Matrix 新 07 节「重新定义」，原 07 改 08（只合到本机，没部署、没推送；卡 20261121-011 本人选 B）
+- 正文、出处：`../05-agent-matrix/portfolio/handoff.md` 第 9 节。数字由 `~/其他任务/claudestudy/evidence/2026-11-21-审核中心使用数据/recompute.py` 重算，数据截止北京时间 2026-11-21 00:53。
+- 数据图：`../05-agent-matrix/portfolio/data/sittings.json`，225 个动作的时间和结论，去掉了标题、意见、卡号。构建时写进页面，运行时不发请求。分批规则「间隔 > N 分钟算新一批」和 `recompute.py` 一致。
+- 小原型：`dist/demo/review-center/` 的 `index.html`、`app.js`、`style.css` 是审核中心 `web/` 线上版（commit `168e852`）原样，`index.html` 改了两处（样式路径改相对、先载 `mock.js`）。`mock.js` 拦下 `/api/` 请求，换成内存里的 8 张示例卡（虚构项目、虚构标题），刷新就复原；它还顺手修了审核中心里「放了 3 天以上」那组展不开的问题（真站上的修法另行提卡）。`img/` 是 10 张占位示意图。源和改动清单：`../05-agent-matrix/portfolio/demo/review-center/README.md`。
+- 03 节「一张审核卡」、07 节原型封面：小原型 1440 宽 2 倍截图，原图 `sources/work/agent-matrix/review-card.png`、`review-demo-poster.png`。
+- 注意：推送后审核中心的前端代码（不含服务端、数据、密钥）会出现在公开仓库里。
+- `verify.py` 跟着改了两处：`dist/demo/` 下的小应用不查 h1、lang；`#/…` 是小应用的路由，不当锚点查。

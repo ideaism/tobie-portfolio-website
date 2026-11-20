@@ -897,3 +897,18 @@ html[data-track] .trk[data-t="www"]{display:none}
 html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],html[data-track="fin"] .trk[data-t="fin"]{display:inline}
 /* 2026-11-18 交接单 8b 第 1 条：页脚的微信号是文字不是链接，颜色跟旁边的链接一样、不带下划线 */
 .contact__wechat{color:#CFE0DB}
+
+/* Agent Matrix 07：处理记录分批图（2026-11-21，prototypes.py sittings()） */
+.sit{display:grid;gap:var(--s-5);padding:var(--s-6)}
+.sit__stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s-4);margin:0}
+.sit__stats dt{font-family:var(--mono);font-size:var(--fs-micro);line-height:1.4;color:var(--ink-3)}
+.sit__stats dd{margin:4px 0 0;font-size:1.6rem;line-height:1.2;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.sit__ctl{display:flex;align-items:center;gap:var(--s-4);flex-wrap:wrap}
+.sit__ctl input{flex:1;min-width:160px;accent-color:var(--p-matrix)}
+.sit__ctl output{font-family:var(--mono);font-size:var(--fs-small);min-width:5.5em;color:var(--ink)}
+.sit__plot{position:relative;min-height:120px}
+.sit__plot svg{display:block;max-width:100%;overflow:visible}
+.sit__dot{fill:var(--p-matrix);fill-opacity:.8;stroke:#F6F8F6;stroke-width:2;cursor:pointer}
+.sit__dot.is-on{fill-opacity:1;stroke:var(--ink)}
+.sit__tip{position:absolute;z-index:2;pointer-events:none;background:var(--ink);color:#fff;font-family:var(--mono);font-size:var(--fs-micro);line-height:1.4;padding:6px 10px;border-radius:6px;white-space:nowrap}
+@media (max-width:640px){.sit{padding:var(--s-5)}.sit__stats{grid-template-columns:repeat(2,minmax(0,1fr))}}

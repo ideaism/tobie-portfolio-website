@@ -1481,6 +1481,89 @@ function liveset(root) {
   }));
 }
 
+/* ---------- Agent Matrix 07: sittings chart (2026-11-21) ----------
+   One dot per sitting; a new sitting starts after a pause longer than N minutes (same rule as
+   claudestudy/evidence/2026-11-21-审核中心使用数据/recompute.py: gap > N). Dot area ∝ cards handled. */
+function sittingGroups(times, verdicts, gapMin) {
+  const g = gapMin * 60, out = [];
+  let cur = null;
+  times.forEach((t, i) => {
+    if (!cur || t - times[i - 1] > g) { cur = { start: t, end: t, n: 0, r: 0 }; out.push(cur); }
+    cur.end = t; cur.n++; if (verdicts[i] === 'r') cur.r++;
+  });
+  return out;
+}
+function median(a) { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+
+function sittingsChart(root) {
+  const cfg = JSON.parse(root.dataset.config), L = cfg.i18n;
+  const plot = root.querySelector('[data-plot]'), svg = plot.querySelector('svg'), tip = root.querySelector('[data-tip]');
+  const range = root.querySelector('[data-gap]'), out = root.querySelector('[data-gap-out]');
+  const stat = k => root.querySelector(`[data-stat="${k}"]`);
+  const NS = 'http://www.w3.org/2000/svg';
+  const pad = n => String(n).padStart(2, '0');
+  const when = s => { const d = new Date((s + cfg.tz) * 1000); return `${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`; };
+  const radius = n => 3.5 + Math.sqrt(n) * 3.2;
+  let groups = [];
+
+  function draw() {
+    const gap = +range.value;
+    out.textContent = gap + L.min;
+    groups = sittingGroups(cfg.t, cfg.v, gap);
+    const sizes = groups.map(s => s.n);
+    stat('n').textContent = groups.length;
+    stat('med').textContent = median(sizes) + L.items;
+    stat('one').textContent = sizes.filter(n => n === 1).length;
+    stat('max').textContent = Math.max(...sizes) + L.items;
+    // flow the dots left to right in time order, wrapping like text
+    const W = Math.max(240, plot.clientWidth), gapX = 6, rows = [];
+    let row = { items: [], w: 0, h: 0 };
+    groups.forEach((s, i) => {
+      const r = radius(s.n), d = 2 * r;
+      if (row.items.length && row.w + gapX + d > W - 4) { rows.push(row); row = { items: [], w: 0, h: 0 }; }
+      row.w += (row.items.length ? gapX : 0) + d; row.h = Math.max(row.h, d);
+      row.items.push({ s, r, i });
+    });
+    if (row.items.length) rows.push(row);
+    svg.replaceChildren();
+    let y = 2;
+    rows.forEach(rw => {
+      let x = 2;
+      rw.items.forEach(({ s, r, i }) => {
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('cx', x + r); c.setAttribute('cy', y + rw.h / 2); c.setAttribute('r', r);
+        c.setAttribute('class', 'sit__dot');
+        c.dataset.i = i;
+        svg.append(c);
+        x += 2 * r + gapX;
+      });
+      y += rw.h + 8;
+    });
+    svg.setAttribute('viewBox', `0 0 ${W} ${y}`); svg.setAttribute('width', W); svg.setAttribute('height', y);
+    hide();
+  }
+  function show(c) {
+    const s = groups[+c.dataset.i];
+    svg.querySelectorAll('.is-on').forEach(e => e.classList.remove('is-on'));
+    c.classList.add('is-on');
+    const span = s.end - s.start;
+    tip.textContent = `${when(s.start)}${L.from} · ${s.n === 1 ? L.one : s.n + L.items}` +
+      (s.n > 1 ? ` · ${L.span}${span < 120 ? span + L.sec : Math.round(span / 60) + L.min}` : '') + (s.r ? ` · ${L.rej}${s.r}` : '');
+    tip.hidden = false;
+    const pb = plot.getBoundingClientRect(), cb = c.getBoundingClientRect();
+    const left = Math.min(Math.max(cb.left - pb.left + cb.width / 2 - tip.offsetWidth / 2, 0), pb.width - tip.offsetWidth);
+    tip.style.left = left + 'px'; tip.style.top = (cb.top - pb.top - tip.offsetHeight - 8) + 'px';
+  }
+  function hide() { tip.hidden = true; svg.querySelectorAll('.is-on').forEach(e => e.classList.remove('is-on')); }
+  svg.addEventListener('pointerover', e => { if (e.target.dataset.i !== undefined) show(e.target); });
+  svg.addEventListener('pointerdown', e => { if (e.target.dataset.i !== undefined) show(e.target); else hide(); });
+  plot.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hide(); });
+  range.addEventListener('input', draw);
+  let lastW = 0;
+  if ('ResizeObserver' in window) new ResizeObserver(() => { if (plot.clientWidth !== lastW) { lastW = plot.clientWidth; draw(); } }).observe(plot);
+  draw();
+}
+
 if (inBrowser) {
   const labs = { recipe: recipeLab, items: itemsLab, comments: commentLab };
   document.querySelectorAll('[data-proto]').forEach(flowPlayer);
@@ -1491,5 +1574,6 @@ if (inBrowser) {
   document.querySelectorAll('[data-smt]').forEach(smt);
   document.querySelectorAll('[data-live]').forEach(live);
   document.querySelectorAll('[data-clips]').forEach(clips);
+  document.querySelectorAll('[data-sittings]').forEach(sittingsChart);
 }
-if (typeof module !== 'undefined' && module.exports) module.exports = { recipeRules, draftRules };
+if (typeof module !== 'undefined' && module.exports) module.exports = { recipeRules, draftRules, sittingGroups };

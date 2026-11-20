@@ -756,6 +756,40 @@ def drafter(lang):
 </section>'''
 
 
+# --------------------------------------------------------------------------
+# Agent Matrix 07「重新定义」：203 张卡的处理记录，按「隔多久算新的一批」分批（2026-11-21，交接单第 9 节，卡 20261121-011 选 B）
+# 数据只有一份：05-agent-matrix/portfolio/data/sittings.json（去标识：只有每个动作的时间和结论，没有标题、意见、卡号），
+# 构建时写进页面（data-config），页面运行时不发请求。出处和重算脚本在 claudestudy/evidence/2026-11-21-审核中心使用数据/。
+# --------------------------------------------------------------------------
+SITTINGS_DATA = Path(__file__).resolve().parent.parent / '05-agent-matrix' / 'portfolio' / 'data' / 'sittings.json'
+
+@lru_cache(maxsize=1)
+def sittings_data():
+    return json.loads(SITTINGS_DATA.read_text(encoding='utf-8'))
+
+def sittings(lang):
+    d = sittings_data()
+    T = lambda zh, en: t(zh, en, lang)
+    cfg = {'t': d['t'], 'v': ['r' if v == 'rejected' else '' for v in d['v']], 'gap': d['default_gap_min'], 'tz': 8 * 3600,
+           'i18n': {'min': T(' 分钟', ' min'), 'items': T(' 张', ' cards'), 'from': T(' 起', ''),
+                    'rej': T('打回 ', 'sent back '), 'span': T('用了 ', 'took '), 'sec': T(' 秒', 's'), 'one': T('1 张', '1 card'),
+                    'aria': T('每个圆点是一批，圆点越大，那一批处理得越多。', 'Each dot is one sitting; larger dots mean more cards handled.')}}
+    stats = ''.join(f'<div><dt>{T(*lab)}</dt><dd data-stat="{k}">–</dd></div>' for k, lab in [
+        ('n', ('分成几批', 'Sittings')), ('med', ('一批中位几张', 'Median per sitting')), ('one', ('只处理 1 张的批', 'Sittings of one card')), ('max', ('最大一批', 'Largest sitting'))])
+    return f'''<section class="proto frame-block" id="sittings" data-sittings data-config="{_json(cfg)}" data-component="Data chart">
+{_frame_label(T('审核中心 · 203 张卡的处理记录', 'Review centre · how 203 cards were handled'), T('按项目记录绘制', 'Drawn from project records'), '', 'matrix')}
+<div class="frame frame--canvas"><div class="sit">
+ <div class="proto__intro"><span class="label label--teal">{T('可以拖的图', 'Try it')}</span><h3>{T('我每次坐下来，处理了几张。', 'How many cards I handled per sitting.')}</h3><p>{T('一个点是一批。拖动滑杆，改「隔多久算新的一批」。', 'Each dot is one sitting. Drag the slider to change how long a pause starts a new one.')}</p></div>
+ <dl class="sit__stats" aria-live="polite">{stats}</dl>
+ <label class="sit__ctl"><span class="label">{T('隔多久算新的一批', 'A new sitting after')}</span><input type="range" min="1" max="120" step="1" value="{d['default_gap_min']}" data-gap><output data-gap-out>{d['default_gap_min']}{T(' 分钟', ' min')}</output></label>
+ <div class="sit__plot" data-plot><svg role="img" aria-label="{T('每个圆点是一批，圆点越大，那一批处理得越多。', 'Each dot is one sitting; larger dots mean more cards handled.')}"></svg><div class="sit__tip" data-tip hidden></div></div>
+</div>
+<p class="proto__prov">{T('203 张真卡的处理时间，不含标题和意见。', 'Handling times of 203 real cards, without titles or comments.')}</p>
+</div>
+<noscript><p class="frame-caption">{T('启用 JavaScript 后可以拖这张图。', 'Enable JavaScript to use this chart.')}</p></noscript>
+</section>'''
+
+
 def section_demo(slug, number, lang):
     """Which demo sits in which case section (1-based)."""
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
@@ -765,4 +799,5 @@ def section_demo(slug, number, lang):
     if slug == 'playbook' and number == 11: return drafter(lang)   # 2026-11-17：最后一节「2026 回看 · 活动起草助手」（交接单 ⑤）
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 7: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06；2026-11-18：前面又插了 06「产品化」（v2.0），顺延为 07
+    if slug == 'agent-matrix' and number == 7: return sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）
     return ''

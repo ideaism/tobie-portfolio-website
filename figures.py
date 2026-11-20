@@ -392,7 +392,7 @@ FIGURES = {
    'label': ['当时在等的六张卡', 'The six cards that were waiting'],
    'caption': ['不急、有推荐选项的可以先走；要我亲眼看、亲手做的仍然等我。', 'Non-urgent cards with a recommended option can go ahead; what I must see or do myself still waits.']},
  ],
- ('agent-matrix', 7): [
+ ('agent-matrix', 8): [   # 2026-11-21：前面插了新 07「重新定义」，「下一步」顺延为 08
   {'kind': 'image', 'src': 'agent-matrix/fig-trust-zh', 'src_en': 'agent-matrix/fig-trust-en', 'prov': 'diagram', 'project': 'matrix',
    'label': ['四级信任等级和台账', 'Four trust levels and the ledger'],
    'caption': ['每类任务从最低一级开始。', 'Every task type starts at the lowest level.']},

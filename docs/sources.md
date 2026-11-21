@@ -356,4 +356,5 @@ PlayBook
 - 小原型：`dist/demo/review-center/` 的 `index.html`、`app.js`、`style.css` 是审核中心 `web/` 线上版（commit `168e852`）原样，`index.html` 改了两处（样式路径改相对、先载 `mock.js`）。`mock.js` 拦下 `/api/` 请求，换成内存里的 8 张示例卡（虚构项目、虚构标题），刷新就复原；它还顺手修了审核中心里「放了 3 天以上」那组展不开的问题（真站上的修法另行提卡）。`img/` 是 10 张占位示意图。源和改动清单：`../05-agent-matrix/portfolio/demo/review-center/README.md`。
 - 03 节「一张审核卡」、07 节原型封面：小原型 1440 宽 2 倍截图，原图 `sources/work/agent-matrix/review-card.png`、`review-demo-poster.png`。
 - 注意：推送后审核中心的前端代码（不含服务端、数据、密钥）会出现在公开仓库里。
+- 第 2 版（卡 20261121-012 打回「把使用过程的摩擦写出来」）：07 节加一段、三行摩擦表、队列数、两句本人打回原话。每一条的出处在交接单第 9 节「第 2 版加的」。
 - `verify.py` 跟着改了两处：`dist/demo/` 下的小应用不查 h1、lang；`#/…` 是小应用的路由，不当锚点查。

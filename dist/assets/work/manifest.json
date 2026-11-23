@@ -39,6 +39,46 @@
   2000,
   1250
  ],
+ "agent-matrix/undo-after": [
+  1192,
+  90
+ ],
+ "agent-matrix/undo-before": [
+  1192,
+  90
+ ],
+ "agent-matrix/undo-restored": [
+  1032,
+  130
+ ],
+ "fridge/3d-drag-shelf": [
+  300,
+  649
+ ],
+ "fridge/3d-idle-doze": [
+  260,
+  314
+ ],
+ "fridge/3d-idle-nod": [
+  260,
+  314
+ ],
+ "fridge/3d-magnet-drag-turn": [
+  320,
+  446
+ ],
+ "fridge/3d-open-door": [
+  300,
+  649
+ ],
+ "fridge/3d-penguin-cheer": [
+  312,
+  675
+ ],
+ "fridge/3d-weekly-pass": [
+  304,
+  449
+ ],
  "fridge/cf-add": [
   480,
   1104

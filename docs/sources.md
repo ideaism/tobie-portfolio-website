@@ -358,3 +358,10 @@ PlayBook
 - 注意：推送后审核中心的前端代码（不含服务端、数据、密钥）会出现在公开仓库里。
 - 第 2 版（卡 20261121-012 打回「把使用过程的摩擦写出来」）：07 节加一段、三行摩擦表、队列数、两句本人打回原话。每一条的出处在交接单第 9 节「第 2 版加的」。
 - `verify.py` 跟着改了两处：`dist/demo/` 下的小应用不查 h1、lang；`#/…` 是小应用的路由，不当锚点查。
+
+## 2026-11-23：Commons Fridge 新 07 节「3D 小样」（8 节变 9 节）；Agent Matrix 07 节加 text 6 和撤回两组图、08 节 text 3 加一句（只合到本机，没部署、没推送、没提交）
+- 冰箱依据：`../01-commons-fridge/portfolio/handoff.md` 6f ①②、6g（总控批注第 1–3 条）。正文、insight、七张图的图注照原文。6f ③ 第 2、3、4 条不合。
+- 冰箱七张动图：原 GIF 在 `sources/work/fridge/3d-*.gif`（`3d-open-door`、`3d-drag-shelf` 来自 `3d-小样/试装/截图/网页/五个交互-第五轮/动图-00-开门.gif`、`动图-17-拖到别的层.gif`，卡 20261120-017；其余五张来自 `01-commons-fridge/portfolio/3d-小样-2026-11-23/01–05`，卡号见交接单 6f ② 表）。`tools/prepare_assets.py` 的 `ANIMS` 转成动态 WebP（有损 quality 70，不抽帧、不缩放），七张合计约 4.3 MB（GIF 原来约 21.4 MB）。
+- 跟着顺延改的：`figures.py` 的 `('commons-fridge', 8)` → `9`；`prototypes.py` v1.8 原型从第 7 节挪到第 8 节；`build.py` 的 `CASE_HERO` 冰箱那条不带节号，没改。原 07（现 08）第 2 段「多人能同步的版本……见上一节」改成「见 06 节」，因为上一节现在是 3D 小样。
+- Agent Matrix 依据：`../05-agent-matrix/portfolio/handoff.md` 第 10 节。三张裁图原样复制到 `sources/work/agent-matrix/undo-before.png`、`undo-after.png`、`undo-restored.png`（裁自 `claudestudy/evidence/2026-11-23-审核中心-提交后撤回/` 的示例数据截图）。改之前 / 改之后两条 13:1 的扁图并排会缩到看不清，改成上下排（`build.py` kind `stack`）；两组图放在 07 节正文后、原型前（`before_demo`）。备用的手机 390 宽撤回条没用。07 节 text 2 的统计数没动（交接单第 10 节「待本人确认」第 2 条）。
+- 交接单第 10 节「待本人确认」三条都还没勾：只合到本机，上线前要本人在验收卡上定。

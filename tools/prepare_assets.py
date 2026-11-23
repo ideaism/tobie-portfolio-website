@@ -223,6 +223,22 @@ JOBS = {
     # 2026-11-21（交接单第 9 节）：审核中心小原型的截图，1440 宽 2 倍图。03 节一张整卡、07 节原型载入前的封面
     'agent-matrix/review-card': (SRC / 'work' / 'agent-matrix' / 'review-card.png', 2880, 86),
     'agent-matrix/review-demo-poster': (SRC / 'work' / 'agent-matrix' / 'review-demo-poster.png', 2000, 86),
+    # 2026-11-23（交接单第 10 节）：07 节撤回 8 秒，三条裁图，1 倍图，最大宽 = 原图宽
+    'agent-matrix/undo-before': (SRC / 'work' / 'agent-matrix' / 'undo-before.png', 1192, 90),
+    'agent-matrix/undo-after': (SRC / 'work' / 'agent-matrix' / 'undo-after.png', 1192, 90),
+    'agent-matrix/undo-restored': (SRC / 'work' / 'agent-matrix' / 'undo-restored.png', 1032, 90),
+}
+
+# 动图（2026-11-23，冰箱 07「3D 小样」，交接单 6f ②、6g）：小样录屏 GIF → 动态 WebP（有损），不缩放。
+# name -> (源 GIF, 质量, 每几帧留一帧)。抽帧时被跳过的帧时长加到留下的那一帧上，总时长和播放速度不变
+ANIMS = {
+    'fridge/3d-open-door': (SRC / 'work' / 'fridge' / '3d-open-door.gif', 70, 1),
+    'fridge/3d-drag-shelf': (SRC / 'work' / 'fridge' / '3d-drag-shelf.gif', 70, 1),
+    'fridge/3d-magnet-drag-turn': (SRC / 'work' / 'fridge' / '3d-magnet-drag-turn.gif', 70, 1),
+    'fridge/3d-weekly-pass': (SRC / 'work' / 'fridge' / '3d-weekly-pass.gif', 70, 1),
+    'fridge/3d-penguin-cheer': (SRC / 'work' / 'fridge' / '3d-penguin-cheer.gif', 70, 1),
+    'fridge/3d-idle-doze': (SRC / 'work' / 'fridge' / '3d-idle-doze.gif', 70, 1),
+    'fridge/3d-idle-nod': (SRC / 'work' / 'fridge' / '3d-idle-nod.gif', 70, 1),
 }
 for n in range(5):
     JOBS[f'fridge/submission-{n}'] = (EXP / f'fridge-p22-{n}.jpg', 800, 82)
@@ -264,6 +280,24 @@ def export(name, src, max_w, quality):
     return im.width, im.height
 
 
+def export_anim(name, src, quality, step):
+    im = Image.open(src)
+    frames, durations = [], []
+    for i in range(im.n_frames):
+        im.seek(i)
+        d = im.info.get('duration', 100)
+        if i % step == 0:
+            frames.append(im.convert('RGBA').copy())
+            durations.append(d)
+        else:
+            durations[-1] += d
+    dest = OUT / f'{name}.webp'
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    frames[0].save(dest, 'WEBP', save_all=True, append_images=frames[1:], duration=durations, loop=0,
+                   quality=quality, method=4)   # method 6 一张要几分钟，4 体积差不多
+    return frames[0].width, frames[0].height
+
+
 def face():
     im = Image.open(SRC / 'tobie-avatar.png').convert('RGB')
     w, h = im.size
@@ -279,18 +313,23 @@ if __name__ == '__main__':
     only = sys.argv[1:]          # 只重导指定的几张：python3 tools/prepare_assets.py playbook/app-home qingju/team-memory
     path = OUT / 'manifest.json'
     if only:
-        unknown = [n for n in only if n not in JOBS]
+        unknown = [n for n in only if n not in JOBS and n not in ANIMS]
         if unknown:
             sys.exit(f'JOBS 里没有：{", ".join(unknown)}')
         manifest = json.loads(path.read_text(encoding='utf-8'))
         for name in only:
-            src, max_w, q = JOBS[name]
-            manifest[name] = export(name, src, max_w, q)
+            if name in ANIMS:
+                manifest[name] = export_anim(name, *ANIMS[name])
+            else:
+                src, max_w, q = JOBS[name]
+                manifest[name] = export(name, src, max_w, q)
             print(f'{name}: {manifest[name][0]} × {manifest[name][1]}')
     else:
         manifest = {}
         for name, (src, max_w, q) in JOBS.items():
             manifest[name] = export(name, src, max_w, q)
+        for name, args in ANIMS.items():
+            manifest[name] = export_anim(name, *args)
         manifest['tobie/face'] = face()
     path.write_text(json.dumps(manifest, indent=1, sort_keys=True), encoding='utf-8', newline='\n')
     total = sum(p.stat().st_size for p in OUT.rglob('*.webp'))

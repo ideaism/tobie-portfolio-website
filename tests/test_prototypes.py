@@ -279,6 +279,7 @@ class FigureTests(unittest.TestCase):
                 srcs += [f['src_en']] if 'src_en' in f else []        # 英文页另取的图
                 srcs += [i[0] for i in f.get('partials', [])]         # 不是整屏的局部图
                 srcs += [i[0] for i in f.get('whole', [])]            # 和手机一样宽、整张显示的图
+                srcs += [i[0] for row in f.get('rows', []) for i in row]   # 'anims' 的动图（2026-11-23）
                 for name, cap in f.get('cap', {}).items():            # 显示宽度上限不能超过导出图的宽度
                     self.assertLessEqual(cap, MANIFEST[name][0], f'{slug}/{n}: {name}')
                 if f['kind'] == 'pair':

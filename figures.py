@@ -371,6 +371,7 @@ FIGURES = {
  # 按原宽显示、不放大；一行几张，窄屏放不下就换行（styles.css .anims）。一张图里只有一只企鹅
  ('commons-fridge', 7): [
   {'kind': 'anims', 'prov': 'original', 'project': 'fridge',
+   'label': ['', ''], 'caption': ['', ''],   # 交接单只给了每张的图注，没给整组的图名和图注：都不出
    'rows': [
     [('fridge/3d-open-door', ['点一下，门开了', 'Tap, and the door opens']),
      ('fridge/3d-drag-shelf', ['拿起来，拖到别的层', 'Pick it up, drag it to another shelf'])],

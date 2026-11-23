@@ -821,6 +821,6 @@ def section_demo(slug, number, lang):
     if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
     if slug == 'playbook' and number == 11: return drafter(lang)   # 2026-11-17：最后一节「2026 回看 · 活动起草助手」（交接单 ⑤）
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
-    if slug == 'commons-fridge' and number == 7: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06；2026-11-18：前面又插了 06「产品化」（v2.0），顺延为 07
+    if slug == 'commons-fridge' and number == 8: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06；2026-11-18：前面又插了 06「产品化」（v2.0），顺延为 07；2026-11-23：前面又插了 07「3D 小样」，顺延为 08
     if slug == 'agent-matrix' and number == 7: return review_demo(lang, 'try') + sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）
     return ''

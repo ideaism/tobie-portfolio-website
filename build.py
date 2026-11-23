@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261118d'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261123a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -407,8 +407,11 @@ CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
 
 def figure_html(f, lang):
     prov_text, prov_cls = prov_shown(f['prov'])
-    label = frame_label(T(f['label'], lang), T(prov_text, lang), prov_cls, f['project'])
-    cap = f'<figcaption class="frame-caption">{T(f["caption"], lang)}</figcaption>' if T(f['caption'], lang) else ''    # 图注留空（['', '']）就不出这一行：两条手机条共用后一条的图注时用
+    # 图名留空（['', '']）、来源标签也不显示时，整行 frame-label 不出（2026-11-23：交接单只给了图注的图）
+    has_label = T(f.get('label', ['', '']), lang) or T(prov_text, lang)
+    label = frame_label(T(f['label'], lang), T(prov_text, lang), prov_cls, f['project']) if has_label else ''
+    cap_text = T(f.get('caption', ['', '']), lang)
+    cap = f'<figcaption class="frame-caption">{cap_text}</figcaption>' if cap_text else ''    # 图注留空（['', '']）就不出这一行：两条手机条共用后一条的图注时用
     kind = f['kind']
     if kind == 'image':
         # 'flat'：图本身就是页面底色时用，去掉图框的描边和投影，图直接落在页面上（配合 'bg' 把白底也换掉）。没有这个键的图框一个字都不变
@@ -468,6 +471,18 @@ def figure_html(f, lang):
         return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip" style="grid-template-columns:3fr 1fr;align-items:center">'
                 f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{escape(T(wl, lang))}">{img(wsrc, T(wl, lang))}</button><figcaption>{T(wl, lang)}</figcaption></figure>'
                 f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{escape(T(pl, lang))}">{img(psrc, T(pl, lang), "screen")}</button><figcaption>{T(pl, lang)}</figcaption></figure></div></div>{cap}</figure>')
+    if kind == 'stack':
+        # 'stack'（2026-11-23，Agent Matrix 07 节）：几张很扁的横条图（13:1）上下排，每张下面一行小字说是哪张；并排的话字会缩到看不清
+        rows = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}</button>'
+                       f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
+        return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
+    if kind == 'anims':
+        # 'anims'（2026-11-23，冰箱 07 节）：小样录屏（动态 WebP），按原宽显示、不放大，不带放大按钮；
+        # 'rows' 每行几张，窄屏放不下就换行上下排（styles.css .anims）。每张自己的图注写在下面
+        rows = ''.join('<div class="anims__row">' + ''.join(
+            f'<figure style="flex:0 1 {MANIFEST[src][0]}px;max-width:{MANIFEST[src][0]}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>'
+            for src, lbl in row) + '</div>' for row in f['rows'])
+        return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="anims">{rows}</div></div>{cap}</figure>'
     if kind == 'penguins':
         items = ''.join(f'<figure>{img(src, T(lbl, lang)).replace("<img", "<img style=\"box-shadow:none;border-radius:0;max-width:150px;margin:auto\"")}<figcaption style="text-align:center">{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
         return f'<figure class="figure frame-block">{label}<div class="frame" style="background:#F6F1E6"><div class="phone-strip" style="--n:4">{items}</div></div>{cap}</figure>'
@@ -504,9 +519,10 @@ def case_layout(c, key, lang, anchor='section'):
             h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
         if 'steps' in s:
             h += '<div class="steps">' + ''.join(f'<div class="step"><span class="label label--teal">{st[0][i]}</span><h3>{st[1][i]}</h3><p>{st[2][i]}</p></div>' for st in s['steps']) + '</div>'
+        figs = FIGURES.get((key, n + 1), [])
+        h += ''.join(figure_html(f, lang) for f in figs if f.get('before_demo'))   # 'before_demo'（2026-11-23）：紧跟正文的图，放在原型前面
         h += section_demo(key, n + 1, lang)
-        for f in FIGURES.get((key, n + 1), []):
-            h += figure_html(f, lang)
+        h += ''.join(figure_html(f, lang) for f in figs if not f.get('before_demo'))
         if 'external' in s:
             h += f'<p style="margin-top:24px"><a class="link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
         h += '</section>'

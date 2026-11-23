@@ -924,3 +924,15 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .sit__dot.is-on{fill-opacity:1;stroke:var(--ink)}
 .sit__tip{position:absolute;z-index:2;pointer-events:none;background:var(--ink);color:#fff;font-family:var(--mono);font-size:var(--fs-micro);line-height:1.4;padding:6px 10px;border-radius:6px;white-space:nowrap}
 @media (max-width:640px){.sit{padding:var(--s-5)}.sit__stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* 2026-11-23：Agent Matrix 07 撤回 8 秒的两条扁图上下排（build.py kind 'stack'） */
+.stack{display:grid;gap:var(--s-5);padding:var(--s-6)}
+.stack figure{margin:0}
+.stack img{display:block;width:100%;height:auto;border-radius:8px;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.stack figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
+/* 2026-11-23：冰箱 07 小样录屏（build.py kind 'anims'）：按原宽显示不放大，一行放不下就换行 */
+.anims{display:grid;gap:var(--s-6);padding:var(--s-6)}
+.anims__row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:var(--s-5)}
+.anims figure{margin:0;min-width:0}
+.anims img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 16px 30px -18px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06)}
+.anims figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
+@media (max-width:640px){.stack,.anims{padding:var(--s-5)}}

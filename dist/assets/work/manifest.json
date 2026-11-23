@@ -55,14 +55,6 @@
   300,
   649
  ],
- "fridge/3d-idle-doze": [
-  260,
-  314
- ],
- "fridge/3d-idle-nod": [
-  260,
-  314
- ],
  "fridge/3d-magnet-drag-turn": [
   320,
   446
@@ -76,7 +68,7 @@
   675
  ],
  "fridge/3d-weekly-pass": [
-  304,
+  221,
   449
  ],
  "fridge/cf-add": [

@@ -367,19 +367,18 @@ FIGURES = {
    'label': ['四轮修改，每一轮被要求改什么', 'Four rounds, and what each one was told to fix'],
    'caption': ['第 3 轮先定下优先级：性格第一，关系第二，吉祥物感最后。第 4a 轮把全身比例改成大头比例。第 4b 轮只用不透明的平涂色块，这一版被选中，进入表情系统和印刷件。', 'Round 3 set an explicit hierarchy: personality, then relationship, then mascot. Round 4a replaced the full-body default with a head-led proportion. Round 4b uses strictly opaque flat fills — the version selected and carried into the expression system and the printed pieces.']},
  ],
- # 2026-11-23：新 07「3D 小样」（交接单 6f ②、6g 第 2、3 条）。七张小样录屏，GIF 转成动态 WebP（tools/prepare_assets.py ANIMS），
- # 按原宽显示、不放大；一行几张，窄屏放不下就换行（styles.css .anims）。一张图里只有一只企鹅
+ # 2026-11-23：新 07「3D 小样」（交接单 6f ②、6g 第 2、3 条）。五张小样录屏，GIF 转成动态 WebP（tools/prepare_assets.py ANIMS）。
+ # 两行：第一行三张整屏（对应正文第 1 段），第二行冰箱贴和每周结算（对应第 2 段）。同一行等高、顶对齐，放不下就等比缩，不换行；
+ # 手机上第一行排成 2+1（styles.css .anims）。一张图里只有一只企鹅。待机两张没用（docs/sources.md）
  ('commons-fridge', 7): [
   {'kind': 'anims', 'prov': 'original', 'project': 'fridge',
    'label': ['', ''], 'caption': ['', ''],   # 交接单只给了每张的图注，没给整组的图名和图注：都不出
    'rows': [
     [('fridge/3d-open-door', ['点一下，门开了', 'Tap, and the door opens']),
-     ('fridge/3d-drag-shelf', ['拿起来，拖到别的层', 'Pick it up, drag it to another shelf'])],
-    [('fridge/3d-magnet-drag-turn', ['冰箱贴：抓中间是挪，抓边上是转', 'Magnets: grab the middle to move, the edge to turn'])],
-    [('fridge/3d-weekly-pass', ['一周没有东西放坏，得一枚冰箱贴', 'A week with nothing spoiled earns a magnet']),
+     ('fridge/3d-drag-shelf', ['拿起来，拖到别的层', 'Pick it up, drag it to another shelf']),
      ('fridge/3d-penguin-cheer', ['吃掉一样，企鹅得一条鱼', 'Eat something, the penguin gets a fish'])],
-    [('fridge/3d-idle-doze', ['没人理就打盹', 'Dozes when left alone']),
-     ('fridge/3d-idle-nod', ['吃到鱼，只点一下头', 'Gets a fish, gives one nod'])],
+    [('fridge/3d-magnet-drag-turn', ['冰箱贴：抓中间是挪，抓边上是转', 'Magnets: grab the middle to move, the edge to turn']),
+     ('fridge/3d-weekly-pass', ['一周没有东西放坏，得一枚冰箱贴', 'A week with nothing spoiled earns a magnet'])],
    ]},
  ],
  # 2026-11-18：前面插了 06「产品化」（v2.0，交接单 6e），「下一步」从 07 顺延为 08，这两张图跟着挪；新 06 节这次不放图
@@ -419,7 +418,7 @@ FIGURES = {
  # 改之前 / 改之后两条 13:1 的扁图并排会缩到三分之一宽、字看不清，所以上下排（'stack'）
  ('agent-matrix', 7): [
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix', 'before_demo': True,
-   'label': ['改之前 / 改之后', 'Before / After'],
+   'label': ['', ''],   # 每张图下面已经写了改之前 / 改之后，上面不再出一行图名
    'items': [('agent-matrix/undo-before', ['改之前', 'Before']), ('agent-matrix/undo-after', ['改之后', 'After'])],
    'caption': ['以前点完只闪一下「已记下」；现在停 8 秒，可以撤回。', 'Before, a decision just flashed “Saved”. Now it stays for eight seconds, with Undo.']},
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix', 'before_demo': True,   # 交接单写的是 image；也是扁图（8:1），用 stack 让放大按钮不盖住「通过」

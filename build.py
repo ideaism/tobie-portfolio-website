@@ -478,11 +478,16 @@ def figure_html(f, lang):
                        f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
     if kind == 'anims':
-        # 'anims'（2026-11-23，冰箱 07 节）：小样录屏（动态 WebP），按原宽显示、不放大，不带放大按钮；
-        # 'rows' 每行几张，窄屏放不下就换行上下排（styles.css .anims）。每张自己的图注写在下面
-        rows = ''.join('<div class="anims__row">' + ''.join(
-            f'<figure style="flex:0 1 {MANIFEST[src][0]}px;max-width:{MANIFEST[src][0]}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>'
-            for src, lbl in row) + '</div>' for row in f['rows'])
+        # 'anims'（2026-11-23，冰箱 07 节）：小样录屏（动态 WebP），不放大，不带放大按钮；每张自己的图注写在下面。
+        # 'rows' 每行几张：同一行等高、顶对齐——行高取这一行里最矮那张的原高，各张按宽高比分宽（flex-grow = 该高度下的宽），
+        # 整行最宽不超过这个宽度，所以不会放大；放不下就整行等比缩，不换行。手机上三张那行排成 2+1（styles.css .anims__row--3）
+        def anim_row(row):
+            h = min(MANIFEST[src][1] for src, _ in row)
+            ws = [MANIFEST[src][0] * h / MANIFEST[src][1] for src, _ in row]
+            cells = ''.join(f'<figure style="flex:{w:.1f} 1 0">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>'
+                            for (src, lbl), w in zip(row, ws))
+            return f'<div class="anims__row anims__row--{len(row)}" style="max-width:calc({sum(ws):.0f}px + {len(row) - 1} * var(--s-5))">{cells}</div>'
+        rows = ''.join(anim_row(row) for row in f['rows'])
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="anims">{rows}</div></div>{cap}</figure>'
     if kind == 'penguins':
         items = ''.join(f'<figure>{img(src, T(lbl, lang)).replace("<img", "<img style=\"box-shadow:none;border-radius:0;max-width:150px;margin:auto\"")}<figcaption style="text-align:center">{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])

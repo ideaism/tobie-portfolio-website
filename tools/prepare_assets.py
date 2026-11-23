@@ -237,9 +237,8 @@ ANIMS = {
     'fridge/3d-magnet-drag-turn': (SRC / 'work' / 'fridge' / '3d-magnet-drag-turn.gif', 70, 1),
     'fridge/3d-weekly-pass': (SRC / 'work' / 'fridge' / '3d-weekly-pass.gif', 70, 1),
     'fridge/3d-penguin-cheer': (SRC / 'work' / 'fridge' / '3d-penguin-cheer.gif', 70, 1),
-    'fridge/3d-idle-doze': (SRC / 'work' / 'fridge' / '3d-idle-doze.gif', 70, 1),
-    'fridge/3d-idle-nod': (SRC / 'work' / 'fridge' / '3d-idle-nod.gif', 70, 1),
 }
+# 待机两张（idle-doze、idle-nod）没用：画面是裁出来的，边上露着半截标签和半截气泡（docs/sources.md）
 for n in range(5):
     JOBS[f'fridge/submission-{n}'] = (EXP / f'fridge-p22-{n}.jpg', 800, 82)
 # 2026-11-18：PlayBook 11 节起草助手的 17 张物品图（交接单第 4 节 ⑥；02-playbook/portfolio/figures/items/，512×512 透明底，Codex 生成）。
@@ -264,6 +263,8 @@ CROP = {
     'qingju/hifi-phone-map': (33, 47, 433, 912),          # the front phone on the map crop (2026-11-17)
     'qingju/hifi-phone-food': (433, 101, 750, 857),       # what shows of the phone behind it: its left edge is hidden in the original
     'qingju/hifi-phone-discussion': (9, 42, 409, 905),    # the discussion phone on the route crop
+    # 2026-11-23：录屏右边是米色画布上的演示按钮（快进到周日、重放）和鼠标圈；140 帧逐帧看过，结算卡和企鹅都在手机框里（框右边到 x=217），裁到框
+    'fridge/3d-weekly-pass': (0, 0, 221, 449),
 }
 
 
@@ -287,7 +288,8 @@ def export_anim(name, src, quality, step):
         im.seek(i)
         d = im.info.get('duration', 100)
         if i % step == 0:
-            frames.append(im.convert('RGBA').copy())
+            fr = im.convert('RGBA')
+            frames.append(fr.crop(CROP[name]) if name in CROP else fr.copy())
             durations.append(d)
         else:
             durations[-1] += d

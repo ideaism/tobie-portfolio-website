@@ -361,7 +361,9 @@ PlayBook
 
 ## 2026-11-23：Commons Fridge 新 07 节「3D 小样」（8 节变 9 节）；Agent Matrix 07 节加 text 6 和撤回两组图、08 节 text 3 加一句（只合到本机，没部署、没推送、没提交）
 - 冰箱依据：`../01-commons-fridge/portfolio/handoff.md` 6f ①②、6g（总控批注第 1–3 条）。正文、insight、七张图的图注照原文。6f ③ 第 2、3、4 条不合。
-- 冰箱七张动图：原 GIF 在 `sources/work/fridge/3d-*.gif`（`3d-open-door`、`3d-drag-shelf` 来自 `3d-小样/试装/截图/网页/五个交互-第五轮/动图-00-开门.gif`、`动图-17-拖到别的层.gif`，卡 20261120-017；其余五张来自 `01-commons-fridge/portfolio/3d-小样-2026-11-23/01–05`，卡号见交接单 6f ② 表）。`tools/prepare_assets.py` 的 `ANIMS` 转成动态 WebP（有损 quality 70，不抽帧、不缩放），七张合计约 4.3 MB（GIF 原来约 21.4 MB）。
+- 冰箱五张动图：原 GIF 在 `sources/work/fridge/3d-*.gif`（`3d-open-door`、`3d-drag-shelf` 来自 `3d-小样/试装/截图/网页/五个交互-第五轮/动图-00-开门.gif`、`动图-17-拖到别的层.gif`，卡 20261120-017；其余三张来自 `01-commons-fridge/portfolio/3d-小样-2026-11-23/01–03`，卡号见交接单 6f ② 表）。`tools/prepare_assets.py` 的 `ANIMS` 转成动态 WebP（有损 quality 70，不抽帧、不缩放），五张合计约 3.5 MB。`3d-weekly-pass` 裁到手机框（`CROP`）：右边米色画布上只有演示按钮和鼠标圈，140 帧里结算卡都没出框。
+- 交接单里的两张待机图（`04-待机-打盹`、`05-待机-吃到鱼点头`）没用：画面是裁出来的，边上露着半截「到先用」标签和半截气泡，放在作品集里显得糙。原件还在 `01-commons-fridge/portfolio/3d-小样-2026-11-23/`。
+- 排法：第一行开门、拖到别的层、吃掉得鱼三张整屏（对应正文第 1 段），第二行冰箱贴、每周结算（对应第 2 段）；同一行等高、顶对齐（`build.py` kind `anims`）。
 - 跟着顺延改的：`figures.py` 的 `('commons-fridge', 8)` → `9`；`prototypes.py` v1.8 原型从第 7 节挪到第 8 节；`build.py` 的 `CASE_HERO` 冰箱那条不带节号，没改。原 07（现 08）第 2 段「多人能同步的版本……见上一节」改成「见 06 节」，因为上一节现在是 3D 小样。
 - Agent Matrix 依据：`../05-agent-matrix/portfolio/handoff.md` 第 10 节。三张裁图原样复制到 `sources/work/agent-matrix/undo-before.png`、`undo-after.png`、`undo-restored.png`（裁自 `claudestudy/evidence/2026-11-23-审核中心-提交后撤回/` 的示例数据截图）。改之前 / 改之后两条 13:1 的扁图并排会缩到看不清，改成上下排（`build.py` kind `stack`）；两组图放在 07 节正文后、原型前（`before_demo`）。备用的手机 390 宽撤回条没用。07 节 text 2 的统计数没动（交接单第 10 节「待本人确认」第 2 条）。
 - 交接单第 10 节「待本人确认」三条都还没勾：只合到本机，上线前要本人在验收卡上定。

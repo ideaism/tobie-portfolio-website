@@ -931,10 +931,11 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .stack figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
 .stack figcaption{min-height:28px;padding-right:40px}
 .stack .enlarge::after{right:0;bottom:auto;top:calc(100% + var(--s-3));width:28px;height:28px;background-size:14px}
-/* 2026-11-23：冰箱 07 小样录屏（build.py kind 'anims'）：按原宽显示不放大，一行放不下就换行 */
+/* 2026-11-23：冰箱 07 小样录屏（build.py kind 'anims'）：同一行等高、顶对齐，不放大；放不下整行等比缩。手机上三张那行排成 2+1，第三张居中 */
 .anims{display:grid;gap:var(--s-6);padding:var(--s-6)}
-.anims__row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:var(--s-5)}
+.anims__row{display:flex;justify-content:center;align-items:flex-start;gap:var(--s-5);width:100%;margin:0 auto}
 .anims figure{margin:0;min-width:0}
+@media (max-width:640px){.anims__row--3{flex-wrap:wrap;row-gap:var(--s-5)}.anims__row--3 figure{flex:0 0 calc((100% - var(--s-5)) / 2)!important}}
 .anims img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 16px 30px -18px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06)}
 .anims figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
 @media (max-width:640px){.stack,.anims{padding:var(--s-5)}}

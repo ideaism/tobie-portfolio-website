@@ -446,8 +446,8 @@ def figure_html(f, lang):
                     f'<div class="shot-scroll__view" tabindex="0" role="region" aria-label="{name}{t("（可上下滑动）", " (scroll to see more)", lang)}">{img(src, T(f["label"], lang))}</div>{extra}'
                     f'<span class="shot-scroll__hint" aria-hidden="true">{t("可上下滑动", "Scroll to see more", lang)}</span>'
                     f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
-        return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang))}"><div{pad}>'
-                f'{img(src, T(f["label"], lang))}</div></button></div>{cap}</figure>')
+        return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang) or cap_text)}"><div{pad}>'
+                f'{img(src, T(f["label"], lang) or cap_text)}</div></button></div>{cap}</figure>')   # 没有图名的图，用图注当 alt
     if kind == 'phones':
         # 一条手机条里有三种格子，都不放大（显示宽度不超过原图宽度，.claude/agents/walkthrough.md R1、R3）：
         #   'items'    整屏截图：套 390:844 竖屏框，长图只露一屏高，点开看全图。
@@ -473,7 +473,8 @@ def figure_html(f, lang):
                 f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{escape(T(pl, lang))}">{img(psrc, T(pl, lang), "screen")}</button><figcaption>{T(pl, lang)}</figcaption></figure></div></div>{cap}</figure>')
     if kind == 'stack':
         # 'stack'（2026-11-23，Agent Matrix 07 节）：几张很扁的横条图（13:1）上下排，每张下面一行小字说是哪张；并排的话字会缩到看不清
-        rows = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}</button>'
+        # 放大按钮挪到图下面那行的右边（styles.css .stack .enlarge::after），不盖住扁图上的按钮和字；小字留空时那一行照样留着放按钮；没有小字的图用图注当 alt
+        rows = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang) or cap_text)}">{img(src, T(lbl, lang) or cap_text)}</button>'
                        f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
     if kind == 'anims':

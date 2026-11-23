@@ -422,8 +422,9 @@ FIGURES = {
    'label': ['改之前 / 改之后', 'Before / After'],
    'items': [('agent-matrix/undo-before', ['改之前', 'Before']), ('agent-matrix/undo-after', ['改之后', 'After'])],
    'caption': ['以前点完只闪一下「已记下」；现在停 8 秒，可以撤回。', 'Before, a decision just flashed “Saved”. Now it stays for eight seconds, with Undo.']},
-  {'kind': 'image', 'src': 'agent-matrix/undo-restored', 'prov': 'original', 'project': 'matrix', 'before_demo': True,
+  {'kind': 'stack', 'prov': 'original', 'project': 'matrix', 'before_demo': True,   # 交接单写的是 image；也是扁图（8:1），用 stack 让放大按钮不盖住「通过」
    'label': ['', ''],   # 交接单只给了图注，没给图名：不出图名那一行
+   'items': [('agent-matrix/undo-restored', ['', ''])],
    'caption': ['撤回以后，意见和图上批注都还在。', 'After Undo, the comment and the pinned note are still there.']},
  ],
  ('agent-matrix', 8): [   # 2026-11-21：前面插了新 07「重新定义」，「下一步」顺延为 08

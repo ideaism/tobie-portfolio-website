@@ -210,6 +210,12 @@ JOBS = {
     'fridge/sub-refusals': (SRC / 'work' / 'fridge' / 'sub-L15-refusals.png', 2000, 86),
     'fridge/sub-rounds': (SRC / 'work' / 'fridge' / 'sub-L16-rounds.png', 2000, 86),
     'fridge/sub-test-not-run': (SRC / 'work' / 'fridge' / 'sub-L19-test-not-run.png', 2000, 86),
+    # 2026-11-24（交接单 6h）：02、04 节换成 3D 小样的画面，替掉上面 cf-home / cf-add / cf-house / cf-found 在正文里的位置。
+    # 在打包进站的小样（dist/demo/commons-fridge-3d/）里用真实点击走到，390×844、2 倍截图；3d-home 也当 07 节原型载入前的封面。见 docs/sources.md
+    'fridge/3d-home': (SRC / 'work' / 'fridge' / '3d-home.png', 480, 86),
+    'fridge/3d-add-plan': (SRC / 'work' / 'fridge' / '3d-add-plan.png', 480, 88),
+    'fridge/3d-other-on-my-shelf': (SRC / 'work' / 'fridge' / '3d-other-on-my-shelf.png', 480, 86),
+    'fridge/3d-unknown': (SRC / 'work' / 'fridge' / '3d-unknown.png', 480, 86),
     # Agent Matrix — 2026。2026-11-17：四张图，中英文各一张（05-agent-matrix/portfolio/figures/，1800 宽，由 figures/src/build.mjs 生成；
     # 本人在卡 20261115-001 第 3 版通过）。只压缩成 WebP，不缩放不裁切，见 docs/sources.md
     'agent-matrix/fig-agents-zh': (SRC / 'work' / 'agent-matrix' / 'fig-agents-zh.png', 1800, 88),

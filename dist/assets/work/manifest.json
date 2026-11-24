@@ -51,9 +51,17 @@
   1032,
   130
  ],
+ "fridge/3d-add-plan": [
+  480,
+  1039
+ ],
  "fridge/3d-drag-shelf": [
   300,
   649
+ ],
+ "fridge/3d-home": [
+  480,
+  1039
  ],
  "fridge/3d-magnet-drag-turn": [
   320,
@@ -63,9 +71,17 @@
   300,
   649
  ],
+ "fridge/3d-other-on-my-shelf": [
+  480,
+  1039
+ ],
  "fridge/3d-penguin-cheer": [
   312,
   675
+ ],
+ "fridge/3d-unknown": [
+  480,
+  1039
  ],
  "fridge/3d-weekly-pass": [
   221,

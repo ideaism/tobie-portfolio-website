@@ -1,0 +1,60 @@
+/* 拎起角落企鹅时的表情和彩蛋（egg.js 配套）。egg.js 没启动时（?skin=0、?skin=b、带 ?t=、?idle=0、?egg=0）
+   这里的东西一个都不插进 DOM，规则也就都不生效。“!”、汗、星星都是 CSS 画的，不用系统 emoji。 */
+
+/* 换脸：所有 pose 先压下去，再把要的那张亮出来（站姿、吃鱼那张的 opacity 是 app.js 内联写的，所以要 !important） */
+#penguin.eg-face .lean .pose { opacity: 0 !important; }
+#penguin.eg-face.eg-f-eat .lean .pose.eat, #penguin.eg-face.eg-f-tilt .lean .pose.tilt, #penguin.eg-face.eg-f-blink .lean .pose.blink { opacity: 1 !important; }
+
+/* 跟着身子走的一层（在 .lean 里，盖在图上面） */
+#penguin .egfx { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+#penguin .eg-head { position: absolute; left: 50%; top: 10px; width: 2px; height: 2px; margin-left: -1px; }
+
+/* “!”：头顶右上，一根圆头的短棒加一个点，暖橙色，白边好在深绿冰箱上看清 */
+#penguin .eg-bang { position: absolute; left: 60px; top: -22px; width: 9px; height: 24px; opacity: 0; transform-origin: 50% 100%; rotate: 12deg;
+  filter: drop-shadow(0 1px 1px rgba(90, 50, 15, .35)); }
+#penguin .eg-bang::before, #penguin .eg-bang::after { content: ""; position: absolute; left: 0; width: 9px; background: #e07a2e;
+  box-shadow: 0 0 0 2px #fffaf0, inset 0 1.5px 0 rgba(255, 220, 170, .6); }
+#penguin .eg-bang::before { top: 0; height: 15px; border-radius: 5px 5px 4px 4px / 5px 5px 7px 7px; }
+#penguin .eg-bang::after { top: 18px; height: 6px; width: 7px; left: 1px; border-radius: 50%; }
+#penguin.eg-bang .eg-bang { animation: egBang 1s cubic-bezier(.2, .8, .3, 1) forwards; }
+@keyframes egBang {
+  0% { opacity: 1; transform: translateY(4px) scale(0); }
+  16% { opacity: 1; transform: translateY(-2px) scale(1.18); }
+  30% { opacity: 1; transform: translateY(0) scale(1); }
+  70% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-3px) scale(.92); }
+}
+
+/* 汗：脑门右边一滴冰蓝的泥，慢慢往下滑 */
+#penguin .eg-sweat { position: absolute; left: 63px; top: 20px; width: 9px; height: 9px; opacity: 0; }
+#penguin .eg-sweat::before { content: ""; position: absolute; inset: 0; border-radius: 0 50% 50% 50%; rotate: 45deg;
+  background: radial-gradient(circle at 38% 40%, #ffffff 0, #e6f6f9 22%, #a9d8e2 70%, #86c2cf 100%);
+  box-shadow: 0 0 0 1.2px rgba(52, 104, 116, .32), 0 1px 2px rgba(20, 60, 70, .3); }
+#penguin.eg-sweat .eg-sweat { animation: egSweat 1.9s cubic-bezier(.45, 0, .7, 1) forwards; }
+@keyframes egSweat {
+  0% { opacity: 0; transform: translateY(-3px) scale(.6); }
+  14% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: .9; transform: translateY(15px) scale(1, 1.06); }
+}
+
+/* 晕：头顶三颗小星星绕圈（位置、远近、透明度由 egg.js 每帧写） */
+#penguin .eg-stars { position: absolute; left: 50%; top: 2px; width: 0; height: 0; display: none; filter: drop-shadow(0 1px 1px rgba(110, 70, 20, .4)); }
+#penguin.eg-dizzy .eg-stars { display: block; }
+#penguin .eg-star { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; background: #f3c24f;
+  clip-path: polygon(50% 0, 63% 37%, 100% 50%, 63% 63%, 50% 100%, 37% 63%, 0 50%, 37% 37%); }
+
+/* 气泡：样子照 .skin-a #bubble（白卡、圆角 19、尾巴朝企鹅）；位置由 egg.js 跟着头写，保持正着 */
+#egBubble { position: absolute; left: 0; top: 0; height: 38px; line-height: 38px; padding: 0 14px; border-radius: 19px; white-space: nowrap; pointer-events: none;
+  font-size: 13px; color: var(--ink); background: var(--card); box-shadow: 0 1px 2px rgba(20, 30, 20, .3), 0 6px 16px rgba(20, 30, 20, .28);
+  opacity: 0; scale: .92; transform-origin: 100% 50%; transition: opacity .18s, scale .22s cubic-bezier(.23, 1, .32, 1); visibility: hidden; }
+#egBubble.on { opacity: 1; scale: 1; visibility: visible; }
+#egBubble::after { content: ""; position: absolute; right: -5px; top: 14px; width: 12px; height: 12px; background: var(--card); border-radius: 0 3px 0 0; transform: rotate(45deg) skew(8deg, 8deg); }
+#egBubble.r { transform-origin: 0 50%; }
+#egBubble.r::after { right: auto; left: -5px; border-radius: 0 0 0 3px; }
+/* 企鹅自己说话时、以及拎起到落回角落收干净之前（egg-hold），冰箱的那句提示先让开 */
+#phone.egg-talk #bubble, #phone.egg-hold #bubble { visibility: hidden; }
+
+/* 不要动效（prefers-reduced-motion 或 ?rm=1，egg.js 加 eg-rm 类）：不弹不转，表情和气泡静态出现 */
+#penguin.eg-rm.eg-bang .eg-bang { animation: none; opacity: 1; }
+#penguin.eg-rm.eg-sweat .eg-sweat { animation: none; opacity: .9; transform: translateY(10px); }
+#egBubble.rm { transition: none; scale: 1; }

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>冰箱交互小样</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="skin.css">
+<link rel="stylesheet" href="idle.css">
+<link rel="stylesheet" href="egg.css">
+<link rel="stylesheet" href="duo.css">
+<link rel="stylesheet" href="week.css">
+<link rel="stylesheet" href="add.css">
+<link rel="stylesheet" href="marks.css">
+<link rel="stylesheet" href="bin.css">
+<link rel="stylesheet" href="manage.css">
+<link rel="stylesheet" href="shop.css">
+<link rel="stylesheet" href="rules.css">
+<link rel="stylesheet" href="start.css">
+<link rel="stylesheet" href="fishinfo.css">
+</head>
+<body>
+<div id="frame">
+  <div id="phone">
+    <img id="stage" src="img/stage.webp" alt="" draggable="false">
+    <div id="interior"><div class="dark"></div><div class="glow"></div></div>
+    <div id="shelf"></div>
+    <div id="strip"></div>
+    <div id="doorScene">
+      <div id="door">
+        <div class="edge"></div>
+        <div class="face"><div class="shade"></div></div>
+      </div>
+    </div>
+
+    <div id="status">9:41</div>
+    <div id="topbar">
+      <div class="seg"><span class="on">厨房大冰箱</span><span>厨房小冰箱</span></div>
+      <button class="ghost">只看我的</button>
+    </div>
+
+    <div id="freezerTags" class="fade"><span class="tag">冷冻 · 先到先用</span><span class="tag">6 件</span></div>
+    <div id="bubble" class="fade">有 1 件东西的计划过了大半。</div>
+
+    <div id="bottombar">
+      <button class="primary">＋ 放入</button>
+      <button class="soft">查看处理</button>
+      <button class="soft">买菜前看一眼</button>
+    </div>
+
+    <div id="penguin">
+      <div class="ring"></div>
+      <div class="lean">
+        <img class="pose stand" src="img/trim/penguin-stand.webp" alt="" draggable="false">
+        <img class="pose eat" src="img/trim/penguin-eat.webp" alt="" draggable="false">
+      </div>
+    </div>
+
+    <div id="dim"></div>
+    <div id="liftLayer">
+      <div id="liftShadow"></div>
+      <div id="lift"><div class="tilt"><img alt="" draggable="false"><div class="gloss"></div></div></div>
+    </div>
+    <div id="sheet"></div>
+
+    <div id="celebrate">
+      <div class="cdim"></div>
+      <div class="rays"><div class="burst"></div></div>
+      <div class="confetti"></div>
+      <img class="cfish" src="img/trim/fish.webp" alt="" draggable="false">
+      <div class="cpenguin">
+        <img class="pose eat" src="img/trim/penguin-eat.webp" alt="" draggable="false">
+        <img class="pose full" src="img/trim/penguin-full.webp" alt="" draggable="false">
+        <img class="pose cheer" src="img/trim/penguin-cheer.webp" alt="" draggable="false">
+        <img class="pose calm" src="img/trim/penguin-full-calm.webp" alt="" draggable="false">
+      </div>
+      <div class="cpenguin2">
+        <img class="pose stand" src="img/trim/penguin-happy-stand.webp" alt="" draggable="false">
+        <img class="pose cheer" src="img/trim/penguin-happy-cheer.webp" alt="" draggable="false">
+      </div>
+      <div class="ccard"><div class="ctext">赶上了——企鹅得到一条鱼</div><div class="fishrow"></div></div>
+    </div>
+  </div>
+</div>
+<button id="replay" type="button">重播</button>
+<button id="weekBtn" type="button">快进到周日（演示）</button>
+<script src="data.js"></script>
+<script src="kinds.js"></script>
+<script src="skin.js"></script>
+<script src="start.js"></script>
+<script src="app.js"></script>
+<script src="idle.js"></script>
+<script src="egg.js"></script>
+<script src="week.js"></script>
+<script src="add.js"></script>
+<script src="marks.js"></script>
+<script src="bin.js"></script>
+<script src="manage.js"></script>
+<script src="shop.js"></script>
+<script src="rules.js"></script>
+<script src="fishinfo.js"></script>
+</body>
+</html>

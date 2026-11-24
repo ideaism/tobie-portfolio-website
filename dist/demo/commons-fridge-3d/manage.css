@@ -1,0 +1,65 @@
+/* 查看处理（manage.js，第五步）。只有默认界面「冰箱贴」有：规则都挂在 #mgLayer、#phone.mg-open、.skin-a 上，旧界面 ?skin=0 和方向 B 碰不到。
+   清单从底栏后面升上来（底栏这时提到清单上面，一直露着，再点“查看处理”收回去）。 */
+
+/* 底栏按钮开着时变成绿的 */
+.skin-a #bottombar .side.on { color: var(--sage); }
+.skin-a #bottombar .side.on svg { stroke-width: 2.3; }
+
+/* 清单开着：角落那只企鹅和它的气泡让开（清单顶上换成同一只），一个画面只有一只 */
+#phone.mg-open #penguin, #phone.mg-open #bubble, #phone.mg-open #peek { visibility: hidden; }
+#phone.mg-open #bottombar { z-index: 41; }
+
+#mgLayer { left: 0; top: 0; width: 390px; height: 844px; z-index: 40; display: none; overflow: hidden; font-family: var(--font); color: var(--ink); }
+#mgLayer.on { display: block; }
+#mgLayer .mgpanel { position: absolute; inset: 0; background: #fbf4e6; transform: translateY(100%); box-shadow: 0 -8px 30px rgba(38, 48, 43, .16); }
+
+/* 顶上：严肃那只企鹅 + 它气泡里那句话 */
+#mgLayer .mghead { position: absolute; left: 0; top: 46px; width: 390px; height: 104px; padding: 0 20px 0 18px; display: flex; align-items: flex-end; gap: 12px; }
+#mgLayer .mgpeng { flex: none; width: 72px; height: 100px; object-fit: contain; object-position: 50% 100%; pointer-events: none; }
+#mgLayer .mgsay { position: relative; margin-bottom: 40px; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 20px; color: var(--ink);
+  background: var(--card); box-shadow: 0 1px 2px rgba(20, 30, 20, .18), 0 6px 16px rgba(20, 30, 20, .12); }
+#mgLayer .mgsay::after { content: ""; position: absolute; left: -5px; bottom: 12px; width: 12px; height: 12px; background: var(--card); border-radius: 0 0 0 3px; transform: rotate(45deg) skew(8deg, 8deg); }
+#mgLayer .mgsay b { color: #b9691a; font-weight: 700; }
+
+/* 四个过滤 */
+#mgLayer .mgseg { position: absolute; left: 16px; top: 160px; width: 358px; height: 40px; padding: 3px; display: flex; gap: 2px; border-radius: 14px; background: rgba(109, 84, 55, .09); }
+#mgLayer .mgseg button { flex: 1 1 0; height: 34px; border-radius: 11px; font-size: 13px; color: var(--brown); white-space: nowrap; }
+#mgLayer .mgseg button[data-f="soon"] { flex-grow: 1.7; }
+#mgLayer .mgseg button.on { color: #fff; background: var(--sage); box-shadow: 0 1px 2px rgba(40, 60, 48, .3); }
+
+/* 清单 */
+#mgLayer .mglist { position: absolute; left: 0; top: 208px; width: 390px; bottom: 72px; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
+  padding: 6px 16px 28px; scrollbar-width: none; }
+#mgLayer .mglist::-webkit-scrollbar { display: none; }
+#mgLayer .mgg { margin-top: 12px; }
+#mgLayer .mgg h3 { margin: 0 0 6px 2px; font-size: 0; }
+/* 组名：和层板上的名牌一样的纸胶带 */
+#mgLayer .mgg h3 span { display: inline-block; height: 18px; line-height: 18px; padding: 0 10px; font-size: 11px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; color: #5b4a33;
+  background: linear-gradient(180deg, #fff3d6, #f6e2b8); rotate: -1deg; filter: drop-shadow(0 1px 1px rgba(90, 55, 20, .25));
+  clip-path: polygon(0 0, 3px 12.5%, 0 25%, 3px 37.5%, 0 50%, 3px 62.5%, 0 75%, 3px 87.5%, 0 100%,
+    100% 100%, calc(100% - 3px) 87.5%, 100% 75%, calc(100% - 3px) 62.5%, 100% 50%, calc(100% - 3px) 37.5%, 100% 25%, calc(100% - 3px) 12.5%, 100% 0); }
+#mgLayer .mgg.mine h3 span { color: #fff; background: linear-gradient(180deg, #62806c, #506b5b); }
+#mgLayer .mgg.cold h3 span { color: #24515a; background: linear-gradient(180deg, #f0fcff, #ceecf0); }
+#mgLayer .mgg.offer h3 span { color: #fff; background: linear-gradient(180deg, #e0574a, #c9402f); }
+
+#mgLayer .mgrow { display: flex; align-items: center; gap: 12px; width: 100%; height: 56px; padding: 0 12px 0 6px; margin-bottom: 6px; border-radius: 16px; text-align: left;
+  background: var(--card); box-shadow: 0 1px 2px rgba(60, 40, 15, .1); transition: transform .14s cubic-bezier(.23, 1, .32, 1); }
+#mgLayer .mgrow:active, #mgLayer .mgrow.hit { transform: scale(.97); }
+#mgLayer .mgimg { flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: #f4ecdc; }
+#mgLayer .mgimg img { max-width: 36px; max-height: 36px; display: block; pointer-events: none; }
+#mgLayer .mgrow.other .mgimg img { filter: saturate(.55); }
+#mgLayer .mgname { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 记号：和层上同一种颜色 */
+#mgLayer .mgc { flex: none; font-style: normal; height: 22px; line-height: 22px; padding: 0 8px; border-radius: 6px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+#mgLayer .mgc.tape { color: #fff; border-radius: 2px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .2) 0 2px, rgba(255, 255, 255, 0) 2px 6px), linear-gradient(180deg, #f6a550, #e8832c);
+  clip-path: polygon(0 0, 3px 25%, 0 50%, 3px 75%, 0 100%, 100% 100%, calc(100% - 3px) 75%, 100% 50%, calc(100% - 3px) 25%, 100% 0); padding: 0 10px; }
+#mgLayer .mgc.tape.overdue { background: repeating-linear-gradient(90deg, rgba(255, 236, 220, .18) 0 2px, rgba(255, 236, 220, 0) 2px 6px), linear-gradient(180deg, #b4502f, #94391f); }
+#mgLayer .mgc.held { position: relative; padding: 0 8px 0 13px; border-radius: 3px 5px 5px 3px; color: #5f4527; background: linear-gradient(180deg, #f6e4c1, #ecd3a6); box-shadow: 0 1px 1.5px rgba(70, 45, 15, .3); }
+#mgLayer .mgc.held::before { content: ""; position: absolute; left: 4px; top: 8.5px; width: 5px; height: 5px; border-radius: 50%; background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(95, 69, 39, .35); }
+#mgLayer .mgc.offer { width: 30px; height: 30px; line-height: 26px; padding: 0; border-radius: 50%; border: 2px solid #fffaf0; text-align: center; font-size: 10.5px; font-weight: 800; color: #fff;
+  background: #d9483b; box-shadow: 0 1px 2px rgba(60, 40, 15, .35); }
+#mgLayer .mgc.ask { width: 24px; height: 24px; line-height: 20px; padding: 0; border-radius: 50%; border: 2px solid #fffaf0; text-align: center; font-size: 13px; font-weight: 800; color: #c0731f;
+  background: #fffaf0; box-shadow: inset 0 0 0 1.5px #e3b06c, 0 1px 2px rgba(60, 40, 15, .3); }
+#mgLayer .mgc.ylw { height: 20px; line-height: 20px; padding: 0 6px; border-radius: 3px; font-size: 11px; font-weight: 800; color: #2a2614; background: #ffe234; }
+#mgLayer .mgempty { margin: 40px 0 0; text-align: center; font-size: 14px; color: var(--muted); }

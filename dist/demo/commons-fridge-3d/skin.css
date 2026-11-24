@@ -1,0 +1,356 @@
+/* 界面的两个方向。只有网址带 ?skin=a 或 ?skin=b 时才加载（见 skin.js）。
+   照两份开源 skill 的规则写：按下缩到 .97、缓出曲线、数字等宽、外圆角 = 内圆角 + 内边距、
+   用几层透明影子代替描边、点得到的地方不小于 44。 */
+html.skin body { -webkit-font-smoothing: antialiased; }
+.skin svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.skin #topbar button, .skin #bottombar button { transition: transform .14s cubic-bezier(.23, 1, .32, 1); }
+.skin button:active { transform: scale(.97); }
+
+/* 东西脚下的影子；别人的东西褪色，不再是半透明 */
+.skin .item::before { content: ""; position: absolute; left: 6%; right: 6%; bottom: -3px; height: 9px; border-radius: 50%; z-index: -1;
+  background: radial-gradient(closest-side, rgba(104, 60, 18, .42), rgba(104, 60, 18, 0)); }
+.skin .item.other img { opacity: .82; filter: saturate(.38) brightness(1.05); }
+.skin .item.other::before { opacity: .6; }
+
+/* ============ 详情卡（两个方向共用骨架） ============ */
+/* 贴着屏幕底边放：app.js 是按“打开那一刻量到的高度”算 top 的，样式或字体晚到一步，卡片就会浮在半空 */
+.skin #sheet { padding: 10px 22px 24px; top: auto !important; bottom: 0; }
+.skin #sheet .handle { width: 36px; margin-bottom: 20px; background: #ddd6c6; }
+.skin #sheet .shead { display: flex; justify-content: space-between; align-items: flex-end; }
+.skin #sheet .title { font-size: 28px; line-height: 1.1; font-weight: 700; color: var(--ink); }
+.skin #sheet .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.skin #sheet .days { display: flex; align-items: baseline; color: var(--ink); }
+.skin #sheet .days small { font-size: 12px; color: var(--muted); margin-right: 6px; }
+.skin #sheet .days b { font-size: 38px; line-height: .9; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.skin #sheet .days span { font-size: 13px; margin-left: 3px; }
+.skin #sheet .meta { display: flex; margin: 16px 0 18px; padding-top: 13px; border-top: 1px solid rgba(38, 48, 43, .09); font-size: 13px; color: var(--muted); }
+.skin #sheet .meta span + span::before { content: "·"; margin: 0 8px; color: #b9b2a2; font-weight: 400; }
+.skin #sheet .meta .me { color: var(--sage); font-weight: 600; }
+.skin #sheet .meta .plan, .skin #sheet .meta .ask { color: #9a5f22; font-weight: 600; }
+.skin #sheet .go { width: 100%; height: 58px; padding: 0 16px 0 22px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between;
+  background: var(--sage); color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), inset 0 -2px 0 rgba(20, 40, 30, .16), 0 1px 2px rgba(40, 60, 48, .3), 0 6px 14px rgba(80, 107, 91, .28); }
+.skin #sheet .go span { font-size: 18px; font-weight: 700; letter-spacing: .02em; }
+.skin #sheet .go small { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255, 255, 255, .86); }
+.skin #sheet .go small img { width: 30px; display: block; filter: drop-shadow(0 1px 1px rgba(20, 40, 30, .3)); }
+.skin #sheet .row3 { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 8px; }
+.skin #sheet .row3 button { height: 46px; font-size: 14px; color: var(--ink); position: relative; }
+.skin #sheet .row3 button + button::before { content: ""; position: absolute; left: 0; top: 15px; bottom: 15px; width: 1px; background: rgba(38, 48, 43, .14); }
+.skin #sheet .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.skin #sheet .row2 button { height: 52px; border-radius: 18px; font-size: 15px; font-weight: 600; color: #3f5a4a; background: var(--card);
+  box-shadow: inset 0 0 0 1.5px rgba(80, 107, 91, .5), 0 1px 2px rgba(40, 60, 48, .08); }
+.skin #sheet .text { width: 100%; height: 44px; margin-top: 6px; font-size: 14px; color: var(--muted); }
+
+/* ============ 庆祝（两个方向共用） ============ */
+/* 庆祝的背景：整屏换底（010 卡选 A，备注“圈圈背景可以再优化”）。
+   冰箱整个盖掉，换成一块暖色的底；企鹅身后三层黏土圆盘从里到外依次弹出来（动画在 app.js 的 celebrate 里）。
+   放射状的光芒不用了，旧界面（?skin=0）还留着做对比。 */
+.skin .cdim { background: radial-gradient(circle at 50% 43%, #f5c27c 0, #efb166 62%, #e8a558 100%); }
+.skin .rays { top: 372px; }   /* 圆盘的圆心对准企鹅的中心 */
+.skin .rays .burst { display: none; }
+.skin .rays .ring { display: block; left: calc(var(--d) / -2); top: calc(var(--d) / -2); width: var(--d); height: var(--d);
+  box-shadow: 0 10px 20px rgba(160, 92, 26, .2), inset 0 3px 4px rgba(255, 255, 255, .5), inset 0 -10px 16px rgba(204, 134, 52, .16); }
+.skin .rays .r3 { --d: 670px; background: radial-gradient(circle at 42% 30%, #f9d096, #f6c784 78%); }
+.skin .rays .r2 { --d: 470px; background: radial-gradient(circle at 42% 30%, #fde1b0, #fad79d 78%); }
+.skin .rays .r1 { --d: 310px; background: radial-gradient(circle at 42% 30%, #fff3d9, #feeac4 78%); }
+/* 企鹅脚下的影子（模型自己也有一块，图当替身时靠这块） */
+.skin .rays::after { content: ""; position: absolute; left: -110px; top: 96px; width: 220px; height: 40px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(150, 92, 34, .3), rgba(150, 92, 34, 0)); }
+/* 庆祝时的星星（014 卡选的）：鼓鼓的四角星，不要黑影，只留一点暖色的影子 */
+.skin .confetti i { box-shadow: none; }
+.skin .confetti i svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 2.5px 1.5px rgba(176, 104, 34, .38)); }
+.skin .ccard { border-radius: 26px; padding: 20px 20px 18px; }
+.skin .ctext b { display: block; font-size: 26px; line-height: 1.2; font-weight: inherit; }
+.skin .ctext span { display: block; margin-top: 4px; font-family: var(--font); font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+.skin .fishrow { gap: 4px; margin-top: 10px; height: 36px; }
+.skin .fishrow .f { width: 46px; height: 36px; background: none; }
+.skin .fishrow .f img { width: 40px; filter: drop-shadow(0 2px 2px rgba(60, 40, 15, .2)); }
+
+/* ================================================================
+   方向 A「冰箱贴」
+   ================================================================ */
+/* 站酷快乐体（开源，SIL OFL）。只带了界面上用到的字，清单在 fonts/zcool-kuaile-subset.txt；界面加了新字要重做子集，不然新字会掉回系统字 */
+@font-face { font-family: "ZCOOL KuaiLe"; font-style: normal; font-weight: 400; font-display: block; src: url(fonts/zcool-kuaile-subset.woff2) format("woff2"); }
+.skin-a { --fun: "ZCOOL KuaiLe", "Yuanti SC", "YouYuan", var(--font); --brown: #6d5437; }
+
+/* 顶上：字就是切换，当前的那台大一号，下面一道手画的波浪线 */
+.skin-a #topbar { left: 20px; top: 44px; width: 352px; height: 48px; align-items: center; }
+.skin-a .tabs { display: flex; align-items: baseline; gap: 16px; }
+.skin-a .tab { position: relative; height: 44px; font-family: var(--fun); font-size: 15px; color: #8a6c47; }
+.skin-a .tab.on { font-size: 25px; color: var(--ink); }
+.skin-a .tab.on::after { content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6' viewBox='0 0 16 6'%3E%3Cpath d='M0 3 Q4 0 8 3 T16 3' fill='none' stroke='%23d89245' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 / 16px 6px repeat-x; }
+.skin-a .onlymine { display: flex; align-items: center; gap: 7px; height: 44px; font-size: 13px; color: var(--brown); }
+.skin-a .onlymine .sw { position: relative; width: 32px; height: 19px; border-radius: 10px; background: rgba(122, 88, 44, .24); box-shadow: inset 0 1px 2px rgba(80, 50, 20, .3); }
+.skin-a .onlymine .sw::after { content: ""; position: absolute; left: 2px; top: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fffaf0;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, .4); }
+
+/* 层名：贴在层板前沿上的纸胶带 */
+.skin-a .name { height: 17px; padding: 0; border-radius: 0; background: none; box-shadow: none; transform-origin: 0 50%;
+  filter: drop-shadow(0 1px 1px rgba(90, 55, 20, .32)); }
+.skin-a .name.mine { background: none; }
+.skin-a .tp { display: block; height: 17px; line-height: 17px; padding: 0 10px; font-size: 11px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; color: #5b4a33;
+  background: linear-gradient(180deg, rgba(255, 249, 232, .96), rgba(250, 238, 210, .96));
+  clip-path: polygon(0 0, 3px 12.5%, 0 25%, 3px 37.5%, 0 50%, 3px 62.5%, 0 75%, 3px 87.5%, 0 100%,
+    100% 100%, calc(100% - 3px) 87.5%, 100% 75%, calc(100% - 3px) 62.5%, 100% 50%, calc(100% - 3px) 37.5%, 100% 25%, calc(100% - 3px) 12.5%, 100% 0); }
+.skin-a .name.mine .tp { color: #fff; background: linear-gradient(180deg, #62806c, #506b5b); }
+/* 我的层整格底色（app.js initMineCell，定格 ?t= 时不建）：后壁上一块半透明的鼠尾草绿，往里凹一点；名牌压在它左下角。
+   --fl 是第一次开门时亮的那一下（0→1→0） */
+.skin-a .minecell { position: absolute; left: 34px; width: 322px; border-radius: 16px 16px 10px 10px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(124, 160, 116, .18) 0%, rgba(110, 148, 106, .25) 78%, rgba(96, 134, 96, .30) 100%);
+  box-shadow: inset 0 3px 6px rgba(52, 80, 60, .16), inset 0 -2px 0 rgba(255, 255, 255, .16), 0 0 0 1px rgba(96, 128, 104, .10); }
+.skin-a .minecell::after { content: ""; position: absolute; inset: 0; border-radius: inherit; opacity: var(--fl, 0);
+  background: rgba(158, 196, 166, .38); box-shadow: 0 0 16px 2px rgba(140, 182, 150, .55); }
+/* 拖着东西到别的一层上（app.js shelfAt / shelfMark）：那层胶带换成琥珀色、放大一点，整格淡淡铺一层暖底 */
+.skin-a .name.drop { scale: 1.12; }
+.skin-a .name.drop .tp, .skin-a .name.mine.drop .tp { color: #fff; background: linear-gradient(180deg, #e2a35a, #cf8738); }
+.skin-a .minecell ~ .name.mine.drop::before { border-bottom-color: #cf8738; }
+.skin-a .dropcell { position: absolute; left: 34px; width: 322px; border-radius: 16px 16px 10px 10px; pointer-events: none; opacity: 0;
+  background: rgba(232, 168, 92, .2); box-shadow: inset 0 0 0 1.5px rgba(214, 140, 60, .45);
+  transition: opacity .16s ease-out, top .16s ease-out, height .16s ease-out; }
+.skin-a .dropcell.on { opacity: 1; }
+/* 名牌上边一个朝上的小尖角：指着上面这一格（只在有底色时） */
+.skin-a .minecell ~ .name.mine::before { content: ""; position: absolute; left: 13px; top: -5px; border: 5px solid transparent; border-top: 0; border-bottom-color: #62806c; }
+
+/* 主人：小圆贴纸，白边，歪一点 */
+.skin-a .sticker { width: 22px; height: 22px; line-height: 18px; font-size: 11px; font-weight: 700; border: 2px solid #fffaf0;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, .4), 0 3px 6px rgba(60, 40, 15, .16); }
+.skin-a .sticker.shared { background: #fffaf0; color: var(--sage); border: 2px solid #fffaf0; line-height: 18px; box-shadow: inset 0 0 0 1.5px var(--sage), 0 1px 2px rgba(60, 40, 15, .4), 0 3px 6px rgba(60, 40, 15, .16); }
+.skin-a .sticker.ask { background: #fffaf0; color: #c0731f; border: 2px solid #fffaf0; line-height: 18px; box-shadow: inset 0 0 0 1.5px #e3b06c, 0 1px 2px rgba(60, 40, 15, .4), 0 3px 6px rgba(60, 40, 15, .16); }
+
+/* 还有 2 件：层板上一个虚线空位 */
+.skin-a .more { height: 34px; line-height: 31px; padding: 0; border-radius: 11px; font-family: var(--fun); font-size: 14px; font-weight: 400; color: #7a5a30;
+  background: rgba(255, 248, 228, .3); border: 1.5px dashed rgba(132, 92, 44, .6); box-shadow: none; }
+
+/* 冷冻抽屉 */
+.skin-a #freezerTags, .skin-a .fxc .freezerTags { left: 34px; top: 624px; gap: 9px; align-items: center; }
+.skin-a #freezerTags .tapewrap, .skin-a .fxc .freezerTags .tapewrap { filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .35)); rotate: -1.4deg; }
+.skin-a #freezerTags .hint, .skin-a .fxc .freezerTags .hint { font-size: 11px; color: rgba(255, 240, 208, .88); }
+/* 拖东西到抽屉上：抽屉面往外滑一点，上面露出一道冷冻腔（app.js “6 冷冻抽屉”）。平时整块不显示 */
+.skin-a .frz { left: 0; top: 0; width: 390px; height: 844px; display: none; pointer-events: none; }
+.skin-a .frz > * { position: absolute; }
+.skin-a .frz .dcav { left: 21px; top: 619px; width: 349px; height: 96px; overflow: hidden; border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, #0c2a2e 0%, #164046 34%, #2b6066 72%, #3f7a7c 100%);
+  box-shadow: inset 0 2px 0 rgba(222, 248, 250, .55), inset 0 4px 7px rgba(190, 236, 240, .28), inset 0 -10px 14px rgba(4, 18, 20, .45); }
+.skin-a .frz .dcav::before { content: ""; position: absolute; left: 14%; right: 14%; top: 28%; height: 70%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(170, 240, 246, .42), rgba(170, 240, 246, 0)); }
+.skin-a .frz .dcav::after { content: ""; position: absolute; left: 4px; right: 4px; top: 1px; height: 9px; border-radius: 8px 8px 50% 50%;
+  background: linear-gradient(180deg, rgba(240, 253, 255, .7), rgba(220, 246, 250, .22) 55%, rgba(220, 246, 250, 0)); filter: blur(.7px); }
+.skin-a .frz .dstuff { left: 0; top: 0; width: 349px; height: 96px; }
+.skin-a .frz .dstuff i { position: absolute; display: block; border-radius: 45% 50% 12px 12px / 60% 60% 12px 12px;
+  background: radial-gradient(120% 90% at 40% 10%, rgba(226, 248, 250, .42), rgba(150, 206, 210, .14) 70%); box-shadow: inset 0 1.5px 1px rgba(245, 255, 255, .55); filter: blur(.5px); }
+.skin-a .frz .dstuff i:nth-child(2) { border-radius: 10px 10px 6px 6px; }
+.skin-a .frz .dstuff i:nth-child(3) { border-radius: 30% 40% 10px 10px / 70% 60% 10px 10px; }
+.skin-a .frz .ddrop { left: 0; top: 0; display: none; transform-origin: 50% 50%; }
+.skin-a .frz .dface { left: 17.7px; top: 621.6px; width: 356px; height: 127.4px; transform-origin: 50% 50%; }
+.skin-a .frz .puff { left: 0; top: 0; width: 46px; height: 30px; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, rgba(236, 252, 255, .75), rgba(236, 252, 255, 0)); filter: blur(1.5px); }
+/* 企鹅从白卡上沿探头（app.js “7 企鹅探头”）：压暗层上面、拿起来的东西和白卡下面 */
+.skin-a #peek { position: absolute; left: 0; top: 0; width: 79px; height: 110px; display: none; pointer-events: none; }
+.skin-a #peek .plean { position: absolute; inset: 0; transform-origin: 50% 56%; }
+.skin-a #peek .tilt { opacity: 0; }
+.skin-a .roll { display: inline-block; height: 17px; overflow: hidden; vertical-align: top; }
+.skin-a .roll > span { display: block; }
+.skin-a .roll > span > span { display: block; height: 17px; }
+
+/* 两台冰箱并排摆在一个“厨房”里，镜头左右转（app.js 的“镜头”一节）。第二台是第一台的复制品（.fxc） */
+#kitchen, .fx { left: 0; top: 0; width: 390px; height: 844px; }
+.fx { position: absolute; transform-origin: 195px 440px; }
+.fx > * { position: absolute; }
+/* 门缝条加宽：底图右边画着一扇开着的门，平时在屏幕外，镜头一转就会露出来，门关着时要一起挡住 */
+.skin-a #strip, .skin-a .fxc .strip { width: 64px; }
+.skin-a .fxc .strip { background: linear-gradient(90deg, #4a5b69 0, #415260 6px, #36444f 9.5px, var(--bg) 10.5px); }
+.skin-a .fxc .door .edge { background: linear-gradient(90deg, #34434e, #3e4f5c); }
+/* 转的途中贴在冰箱顶上深色横梁上的铭牌，样式跟层名胶带一样，到位后淡出 */
+.skin-a .plate { left: 195px; top: 121px; translate: -50% 0; scale: 1.15; opacity: 0; pointer-events: none; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .35)); }
+.skin-a .plate .tp { rotate: -1.5deg; }
+.skin-a .tab { transform-origin: 0 100%; }
+
+/* 企鹅说话：带尾巴的气泡，尾巴朝企鹅 */
+.skin-a #bubble { left: auto; right: 100px; top: 688px; height: 38px; line-height: 38px; padding: 0 14px; border-radius: 19px; font-size: 13px; color: var(--ink);
+  background: var(--card); box-shadow: 0 1px 2px rgba(20, 30, 20, .3), 0 6px 16px rgba(20, 30, 20, .28); }
+.skin-a #bubble::after { content: ""; position: absolute; right: -5px; top: 14px; width: 12px; height: 12px; background: var(--card); border-radius: 0 3px 0 0; transform: rotate(45deg) skew(8deg, 8deg); }
+.skin-a #bubble b { color: #b9691a; font-weight: 700; }
+
+/* 底下：不要白底条，中间一颗黏土按钮，两边是图标加字 */
+.skin-a #bottombar { top: 772px; height: 72px; padding: 6px 16px 14px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: center; justify-items: center;
+  background: none; box-shadow: none; border-radius: 0; }
+.skin-a #bottombar button { flex: none; display: flex; align-items: center; justify-content: center; }
+.skin-a #bottombar .side { height: 44px; padding: 0 6px; gap: 6px; border-radius: 0; font-size: 13px; color: var(--brown); }
+.skin-a #bottombar .fab { width: 128px; height: 52px; gap: 6px; border-radius: 26px; font-family: var(--fun); font-size: 19px; color: #fff;
+  background: radial-gradient(120% 140% at 30% 12%, #7b9b86, #506b5b 55%, #425b4d);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, .28), inset 0 -4px 6px rgba(20, 40, 30, .22), 0 2px 3px rgba(40, 60, 48, .35), 0 8px 18px rgba(64, 88, 72, .34); }
+.skin-a #bottombar .fab svg { width: 20px; height: 20px; stroke-width: 2.4; }
+
+.skin-a #sheet .title, .skin-a .ctext { font-family: var(--fun); font-weight: 400; }
+.skin-a #sheet .title { font-size: 30px; }
+.skin-a .ctext b { font-size: 30px; }
+.skin-a #sheet .go span { font-family: var(--fun); font-weight: 400; font-size: 20px; }
+
+/* ---------- 拉出一层（app.js “4 拉出一层”） ---------- */
+/* 层名胶带末尾的小箭头；胶带和“+N”格按下缩一下 */
+.skin-a .tp .chev { display: inline-block; width: 8px; height: 8px; margin: 0 -3px 0 3px; vertical-align: -.5px; stroke-width: 2.2; opacity: .75; }
+.skin-a .pull { pointer-events: auto; cursor: pointer; transition: scale .14s cubic-bezier(.23, 1, .32, 1); }
+.skin-a .pull.press { scale: .94; }
+.skin-a .name.pull::after { content: ""; position: absolute; left: -6px; right: -8px; top: -4px; bottom: -12px; }
+.skin-a .intray { visibility: hidden; }
+/* “+N”格下沿：收着的每样东西一个主人颜色的小泥点 */
+.skin-a .more .mdots { position: absolute; left: 0; right: 0; bottom: 3px; display: flex; justify-content: center; gap: 4px; line-height: 0; }
+.skin-a .gd { display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--sage);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .45), inset 0 -1px 1px rgba(0, 0, 0, .18), 0 1px 1px rgba(80, 50, 20, .35); }
+.skin-a .gd.shared { background: #fffaf0; box-shadow: inset 0 0 0 1.5px var(--sage), 0 1px 1px rgba(80, 50, 20, .35); }
+.skin-a .gd.ask { background: #fffaf0; box-shadow: inset 0 0 0 1.5px #e3b06c, 0 1px 1px rgba(80, 50, 20, .35); }
+.skin-a .more .gd { width: 8px; height: 8px; }
+/* 托盘：层板同色的奶油黏土，鼓起来的边、顶上一道高光，压在后面冰箱上的影子 */
+#trayLayer { left: 0; top: 0; width: 390px; height: 844px; display: none; pointer-events: none; }
+#kitchen { transform-origin: 195px 420px; }
+#trayLayer > * { position: absolute; left: 0; top: 0; }
+#trayLayer .trayDim { width: 390px; height: 844px; opacity: 0; pointer-events: auto; background: rgba(40, 26, 12, .46); }
+#trayLayer .tray { box-sizing: border-box; border-radius: 26px; pointer-events: auto; transform-origin: 50% 100%;
+  background: linear-gradient(180deg, #fff3cf 0, #fbe1b0 9%, #f5ce99 55%, #edbb77 100%);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .9), inset 0 -5px 7px rgba(176, 112, 44, .38), inset 2px 0 3px rgba(255, 250, 225, .5),
+    0 2px 3px rgba(90, 50, 15, .4), 0 16px 34px rgba(36, 20, 6, .5); }
+#trayLayer .floor { position: absolute; inset: 13px; border-radius: 15px; overflow: hidden;
+  background: linear-gradient(180deg, #f4c98e 0, #f8d9a7 10%, #feefbf 70%, #fdeabc 100%);
+  box-shadow: inset 0 4px 7px rgba(150, 92, 32, .42), inset 0 -1px 0 rgba(255, 255, 255, .7); }
+#trayLayer .grain { position: absolute; inset: 0; opacity: .3; mix-blend-mode: multiply;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .38 0 0 0 0 .18 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"); }
+#trayLayer .trayItems { width: 390px; height: 844px; }
+.titem { position: absolute; left: 0; top: 0; transform-origin: 50% 100%; pointer-events: auto; cursor: pointer; }
+.titem .tbox { position: relative; width: 100%; height: 100%; transform-origin: 50% 100%; }
+.titem .tbox img { width: 100%; height: 100%; display: block; pointer-events: none; }
+.titem .tbox::before { content: ""; position: absolute; left: 6%; right: 6%; bottom: -3px; height: 9px; border-radius: 50%; z-index: -1; opacity: var(--mf, 1);
+  background: radial-gradient(closest-side, rgba(104, 60, 18, .42), rgba(104, 60, 18, 0)); }
+.titem.other .tbox img { opacity: .82; filter: saturate(.38) brightness(1.05); }
+.titem.other .tbox::before { opacity: calc(.6 * var(--mf, 1)); }
+.titem .tlab { position: absolute; left: 50%; top: 100%; width: 80px; margin: 7px 0 0 -40px; text-align: center; pointer-events: none; font-family: var(--font); }
+.titem .tn { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.titem .ti { font-size: 10.5px; line-height: 14px; color: #8a6c47; white-space: nowrap; }
+.titem.mine .ti { color: var(--sage); }
+.titem .hit { position: absolute; left: -8px; right: -8px; top: -6px; bottom: -40px; }
+#trayLayer .tgh { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 5px; height: 18px; font-family: var(--fun); font-size: 12px; color: #7a5a30; white-space: nowrap; pointer-events: none; }
+#trayLayer .tgh.tight { letter-spacing: -.04em; font-size: 11px; }
+/* 托盘前沿的名牌：比层板上那条大一号；箭头转成朝上，提示“往上推收起” */
+#trayLayer .trayname { pointer-events: auto; cursor: pointer; transition: scale .14s cubic-bezier(.23, 1, .32, 1); }
+#trayLayer .trayname.press { scale: .95; }
+#trayLayer .trayname::after { content: ""; position: absolute; left: -8px; right: -10px; top: -10px; bottom: -12px; }
+#trayLayer .trayname .chev { rotate: calc(var(--o, 0) * -90deg); }
+/* 只看我的：拿“我的”那颗绿当开着的底色；东西脚下的影子跟着变淡（--mf 由 app.js 写） */
+.skin-a .onlymine .sw::before { content: ""; position: absolute; inset: 0; border-radius: inherit; opacity: var(--k, 0);
+  background: linear-gradient(180deg, #6f9079, #506b5b); box-shadow: inset 0 1px 2px rgba(20, 40, 30, .35); }
+.skin-a .onlymine .sw::after { translate: calc(var(--k, 0) * 13px) 0; }
+.skin-a .item::before { opacity: var(--mf, 1); }
+.skin-a .item.other::before { opacity: calc(.6 * var(--mf, 1)); }
+
+/* ---------- 详情卡上的“开了”“更新”、冷冻（app.js “8”） ---------- */
+/* 开了：计划下面一行小字；按钮变成绿字的“已开 ✓”，还能点（点了改回没开），和旁边两个按钮同一个字号、同一种按下手感 */
+.skin-a #sheet .mnote { margin: -10px 0 14px; font-size: 12px; color: var(--muted); }
+.skin-a #sheet .row3 button.done { display: flex; align-items: center; justify-content: center; gap: 3px; color: var(--sage); font-weight: 600; }
+.skin-a #sheet .row3 button.done .ck { width: 15px; height: 15px; stroke-width: 2.4; }
+.skin-a #sheet .row3.two { grid-template-columns: repeat(2, 1fr); }
+.skin-a #sheet .meta .cold { color: #3f7a86; font-weight: 600; }
+/* 编辑面板：三行选项 + 保存 / 取消。字用正文字体（手写体子集里没有这些字） */
+.skin-a #sheet .edit { margin-top: 2px; font-family: var(--font); }
+.skin-a #sheet .erow { margin-bottom: 12px; }
+.skin-a #sheet .el { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.skin-a #sheet .seg, .skin-a #sheet .zones { display: flex; flex-wrap: wrap; gap: 6px; }
+.skin-a #sheet .seg button, .skin-a #sheet .zones button { height: 34px; padding: 0 12px; border-radius: 12px; font-size: 13px; color: var(--ink); background: var(--card);
+  box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .32); transition: transform .14s cubic-bezier(.23, 1, .32, 1); }
+.skin-a #sheet .seg button.on, .skin-a #sheet .zones button.on { color: #fff; background: var(--sage); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(40, 60, 48, .3); }
+.skin-a #sheet .zones button { display: flex; align-items: center; gap: 5px; height: 32px; padding: 0 10px; font-size: 12px; }
+.skin-a #sheet .zones button.cz { color: #2f6570; box-shadow: inset 0 0 0 1.2px rgba(63, 122, 134, .42); background: #f1f8f8; }
+.skin-a #sheet .zones button.cz.on { color: #fff; background: #3f7a86; }
+.skin-a #sheet .zones button:disabled { color: #b9b2a2; box-shadow: inset 0 0 0 1.2px rgba(38, 48, 43, .1); background: #f6f2e8; cursor: default; }
+.skin-a #sheet .zones button small { font-size: 11px; }
+.skin-a #sheet .ecold { display: none; font-size: 13px; color: #3f7a86; }
+.skin-a #sheet .edit.cold .eplan .seg { display: none; }
+.skin-a #sheet .edit.cold .eplan .ecold { display: block; }
+.skin-a #sheet .eact { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-top: 4px; }
+.skin-a #sheet .eact button { height: 48px; border-radius: 16px; font-size: 15px; font-weight: 600; }
+.skin-a #sheet .eact .save { color: #fff; background: var(--sage); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(40, 60, 48, .3), 0 6px 14px rgba(80, 107, 91, .24); }
+.skin-a #sheet .eact .cancel { color: var(--muted); background: var(--card); box-shadow: inset 0 0 0 1.2px rgba(38, 48, 43, .16); }
+/* 一行提示：“计划已从现在重新起算”“记录已更新”“已拿出来解冻” */
+.skin-a #toast { position: absolute; left: 50%; top: 104px; display: none; opacity: 0; pointer-events: none; white-space: nowrap;
+  height: 34px; line-height: 34px; padding: 0 16px; border-radius: 17px; font-family: var(--font); font-size: 13px; color: #fffaf0;
+  background: rgba(38, 48, 43, .9); box-shadow: 0 2px 4px rgba(20, 30, 20, .25), 0 8px 18px rgba(20, 30, 20, .22); }
+/* 带“撤销”的提示条：右边一颗点得到的小按钮（44 高的热区，看上去只是一段加粗的字） */
+.skin-a #toast.act { align-items: center; gap: 4px; padding: 0 4px 0 16px; pointer-events: auto; margin-left: -36px; }   /* 往左让 36：右端别压到右下角探头的企鹅脸（企鹅头从 x≈272 起） */
+/* 整条都算“撤销”：看上去还是 34 高的药丸，点得到的上下各多 5，共 44 高（放在字和按钮下面） */
+.skin-a #toast.act { isolation: isolate; }
+.skin-a #toast.act::after { content: ""; position: absolute; left: 0; right: 0; top: -5px; bottom: -5px; z-index: -1; }
+.skin-a #toast .tmsg { line-height: 34px; }
+.skin-a #toast .tact { position: relative; height: 34px; padding: 0 12px; margin-left: 2px; border-radius: 13px; font-family: var(--font); font-size: 13px; font-weight: 700;
+  color: #c9e0cf; letter-spacing: .04em; transition: transform .14s cubic-bezier(.23, 1, .32, 1); }
+.skin-a #toast .tact::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: rgba(255, 250, 240, .22); }
+.skin-a #toast .tact::after { content: ""; position: absolute; left: -4px; right: -6px; top: -5px; bottom: -5px; }
+/* 冷冻抽屉面上点得到的一块（看不见） */
+.skin-a .dhit { pointer-events: auto; cursor: pointer; }
+/* 冷冻托盘：冰蓝的托盘，底上一层霜 */
+#trayLayer.cold .trayDim { background: rgba(8, 30, 36, .5); }
+#trayLayer.cold .tray { background: linear-gradient(180deg, #f4fdff 0, #d9f0f3 9%, #bfe1e6 55%, #9ccbd2 100%);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .95), inset 0 -5px 7px rgba(52, 110, 120, .36), inset 2px 0 3px rgba(240, 252, 255, .6),
+    0 2px 3px rgba(10, 40, 46, .4), 0 16px 34px rgba(4, 20, 24, .5); }
+#trayLayer.cold .floor { background: radial-gradient(120% 60% at 30% 0, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0) 60%),
+  linear-gradient(180deg, #b6dde3 0, #cfeaee 10%, #e9f7f8 70%, #e4f4f6 100%);
+  box-shadow: inset 0 4px 7px rgba(40, 98, 108, .36), inset 0 -1px 0 rgba(255, 255, 255, .8); }
+#trayLayer.cold .grain { opacity: .5; mix-blend-mode: screen; filter: invert(1) brightness(1.4); }
+#trayLayer.cold .titem .tbox::before { background: radial-gradient(closest-side, rgba(30, 80, 90, .34), rgba(30, 80, 90, 0)); }
+#trayLayer.cold .titem .ti { color: #3f7a86; }
+#trayLayer .tgh.cold { font-family: var(--font); font-weight: 600; font-size: 12px; color: #2f6570; }
+.titem .tst { position: absolute; right: -9px; top: -9px; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; border: 2px solid #fffaf0;
+  font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; color: #fff; rotate: 8deg;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, .4), 0 3px 6px rgba(60, 40, 15, .16); }
+.titem .tst.shared { background: #fffaf0; color: var(--sage); box-shadow: inset 0 0 0 1.5px var(--sage), 0 1px 2px rgba(60, 40, 15, .4); }
+.titem .tst.ask { background: #fffaf0; color: #c0731f; box-shadow: inset 0 0 0 1.5px #e3b06c, 0 1px 2px rgba(60, 40, 15, .4); }
+.titem.other .tst { opacity: .9; }
+#trayLayer .trayname.frzname .tp { color: #24515a; background: linear-gradient(180deg, rgba(240, 252, 255, .97), rgba(206, 236, 240, .97)); }
+
+/* ================================================================
+   方向 B「刻字」
+   ================================================================ */
+.skin-b { --serif: "Noto Serif SC", "Songti SC", "SimSun", serif; --emboss: rgba(104, 66, 24, .86); }
+
+.skin-b #topbar { left: 22px; top: 42px; width: 348px; height: 54px; align-items: flex-start; }
+.skin-b .ttl h1 { margin: 0; font-family: var(--serif); font-weight: 900; font-size: 26px; line-height: 32px; letter-spacing: .03em; color: #2b3a31; }
+.skin-b .ttl .other { display: flex; align-items: center; gap: 1px; height: 22px; font-size: 12px; color: #7d6040; }
+.skin-b .ttl .other svg { width: 12px; height: 12px; stroke-width: 2; }
+.skin-b .onlymine { display: flex; align-items: center; gap: 7px; height: 32px; font-size: 13px; color: #5d4a30; }
+.skin-b .onlymine .ck { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px #8a6d48; }
+
+/* 层名：直接印在后壁上，不加底 */
+.skin-b .name, .skin-b .name.mine { height: 16px; padding: 0; border-radius: 0; background: none; box-shadow: none; display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--emboss); text-shadow: 0 1px 0 rgba(255, 244, 214, .4); }
+.skin-b .name.mine { color: #37523f; }
+.skin-b .name .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.skin-b .name .dot.ring { box-shadow: inset 0 0 0 1.5px var(--emboss); }
+
+/* 主人：印在这样东西脚下的层板边上 */
+.skin-b .sticker, .skin-b .sticker.shared, .skin-b .sticker.ask { width: 48px; height: 12px; line-height: 12px; border: 0; border-radius: 0; background: none !important; box-shadow: none;
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-shadow: 0 1px 0 rgba(255, 246, 222, .45); }
+
+.skin-b .more { height: 12px; line-height: 12px; padding: 0; background: none; box-shadow: none; border-radius: 0; white-space: nowrap;
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; color: var(--emboss); text-shadow: 0 1px 0 rgba(255, 246, 222, .45); }
+
+.skin-b #freezerTags { left: 38px; top: 621px; gap: 8px; align-items: baseline; color: rgba(255, 240, 208, .9); text-shadow: 0 -1px 0 rgba(0, 0, 0, .28); }
+.skin-b #freezerTags b { font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: .1em; }
+.skin-b #freezerTags span { font-size: 10.5px; color: rgba(255, 240, 208, .68); }
+
+.skin-b #bubble { left: 38px; top: 700px; height: 32px; line-height: 32px; padding: 0; border-radius: 0; background: none; box-shadow: none;
+  display: flex; align-items: center; gap: 7px; font-size: 13px; color: rgba(255, 243, 214, .94); }
+.skin-b #bubble .dot { width: 7px; height: 7px; border-radius: 50%; background: #efab57; box-shadow: 0 0 0 3px rgba(239, 171, 87, .22); flex: none; }
+.skin-b #bubble b { color: #f4bb6f; font-weight: 700; }
+.skin-b #bubble svg { width: 13px; height: 13px; margin-left: -3px; opacity: .7; stroke-width: 2; }
+
+/* 底下：一条浮着的磨砂条。外圆角 22 = 按钮圆角 16 + 内边距 6 */
+.skin-b #bottombar { left: 12px; top: 776px; width: 366px; height: 56px; padding: 6px; gap: 2px; align-items: center; border-radius: 22px;
+  background: rgba(255, 252, 244, .8); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55), 0 1px 2px rgba(90, 60, 25, .14), 0 10px 26px rgba(90, 60, 25, .18); }
+.skin-b #bottombar button { height: 44px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.skin-b #bottombar .quiet { flex: 1; font-size: 13px; color: var(--ink); }
+.skin-b #bottombar .quiet svg { color: #5b6b62; }
+.skin-b #bottombar .put { flex: 0 0 100px; font-size: 15px; font-weight: 600; color: #fff; background: var(--sage);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(40, 60, 48, .34), 0 4px 10px rgba(80, 107, 91, .3); }
+.skin-b #bottombar .put svg { stroke-width: 2.2; }
+
+.skin-b #sheet .title, .skin-b .ctext { font-family: var(--serif); font-weight: 900; letter-spacing: .02em; }
+.skin-b #sheet .days b { font-family: var(--serif); font-weight: 900; }

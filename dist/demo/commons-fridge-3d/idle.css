@@ -1,0 +1,23 @@
+/* 角落企鹅的待机动作（idle.js 配套）。
+   这只是严肃的那只：不笑、不瞪圆眼、不蹦跳，动作慢而克制。
+   idle.js 没启动时（带 ?t= 定格、或 ?idle=0）这里的规则一条都不生效：
+   .idle 这层、三张新图、小 z、影子都是 idle.js 启动后才插进去的。 */
+
+/* idle.js 把 .lean 包进这一层：呼吸、歪、压扁、被拎起来的位移都写在这层上，app.js 管的 .lean 不动 */
+#penguin .idle { position: absolute; inset: 0; transform-origin: 50% 100%; pointer-events: none; will-change: transform; }
+#penguin.ip-on .idle { pointer-events: auto; touch-action: none; cursor: grab; }
+#penguin.ip-held .idle { cursor: grabbing; }
+
+/* 三张新图平时藏着，靠 #penguin 上的类换出来；换出来时把站姿藏掉（站姿的内联 opacity 是 app.js 写的，所以要 !important） */
+#penguin .pose.blink, #penguin .pose.nap, #penguin .pose.tilt { opacity: 0; }
+#penguin.ip-blink .pose.blink, #penguin.ip-nap .pose.nap, #penguin.ip-tilt .pose.tilt { opacity: 1; }
+#penguin.ip-blink .pose.stand, #penguin.ip-nap .pose.stand, #penguin.ip-tilt .pose.stand { opacity: 0 !important; }
+
+/* 被拎起来时留在地上的影子 */
+#penguin .ishadow { position: absolute; left: 50%; bottom: -5px; width: 62px; height: 14px; margin-left: -31px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(20, 30, 25, .42), rgba(20, 30, 25, 0)); opacity: 0; pointer-events: none; }
+
+/* 打盹时冒的小 z：位置和透明度由 idle.js 按时间算 */
+#penguin .izz { position: absolute; left: 14px; top: 6px; width: 0; height: 0; pointer-events: none; }
+#penguin .izz span { position: absolute; left: 0; top: 0; font: 700 15px/1 var(--fun, var(--font, system-ui)); color: #fffdf6;
+  text-shadow: 0 1px 3px rgba(20, 30, 25, .45); opacity: 0; will-change: transform, opacity; }

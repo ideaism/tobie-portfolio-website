@@ -1,0 +1,27 @@
+/* 门上的三条约定（rules.js，第五步）。只有默认界面「冰箱贴」有：.rnote 只在厨房大冰箱的门上，#rulesBig 是揭下来放大的那张。
+   字用正文字体（“说好的”的“好”，还有“标”“任”“挂”这些字，手写体子集里没有）。 */
+
+/* 门上：门板右下（把手在左边、冰箱贴开场在上沿一排）。外框不转，斜放的是里面的纸 */
+.rnote { position: absolute; left: 268px; top: 326px; width: 78px; height: 90px; pointer-events: auto; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.rn-paper, .rb-paper { background: linear-gradient(176deg, #fffbf1 0%, #fbf3e2 100%); color: #4f4130; text-align: center; }
+.rn-paper { position: absolute; inset: 0; padding-top: 19px; rotate: 4deg; border-radius: 2px 2px 3px 6px; pointer-events: none;
+  box-shadow: 0 1px 1.5px rgba(20, 14, 6, .28), 2px 5px 9px rgba(20, 14, 6, .24); }
+.rn-paper b { display: block; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+.rnote svg.rn-lines { display: block; width: 52px; height: 28px; margin: 7px auto 0; fill: none; stroke: #8a7a5e; stroke-width: 2; stroke-linecap: round; }
+/* 压着纸条的小磁铁：一颗红色圆钮 */
+.rn-mag { position: absolute; left: 50%; top: -6px; width: 15px; height: 15px; margin-left: -7.5px; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #f3a093 0, #d9483b 48%, #a8321f 100%); box-shadow: 0 1px 1px rgba(40, 10, 5, .45), 1px 3px 4px rgba(40, 10, 5, .28); }
+.rnote.lifted .rn-paper { visibility: hidden; }
+
+/* 揭下来放大到屏幕中间 */
+#rulesBig { left: 0; top: 0; width: 390px; height: 844px; z-index: 55; display: none; font-family: var(--font); }
+#rulesBig.on { display: block; }
+#rulesBig .rb-dim { position: absolute; inset: 0; background: rgba(38, 48, 43, .45); opacity: 0; }
+#rulesBig .rb-paper { position: absolute; left: 59px; top: 262px; width: 272px; padding: 34px 26px 30px; border-radius: 3px 3px 4px 10px; transform-origin: 50% 50%;
+  box-shadow: 0 18px 40px rgba(40, 30, 15, .32); }
+#rulesBig .rn-mag { top: -10px; width: 26px; height: 26px; margin-left: -13px; }
+#rulesBig .rb-paper b { display: block; font-size: 20px; font-weight: 700; letter-spacing: .1em; }
+#rulesBig ol { margin: 16px 0 0; padding: 0; list-style: none; counter-reset: r; text-align: left; }
+#rulesBig li { position: relative; margin-top: 12px; padding-left: 30px; font-size: 16px; line-height: 24px; color: var(--ink); counter-increment: r; }
+#rulesBig li::before { content: counter(r); position: absolute; left: 0; top: 0; width: 22px; height: 22px; line-height: 22px; text-align: center; border-radius: 50%;
+  font-family: var(--fun); font-size: 14px; color: #8a6c47; box-shadow: inset 0 0 0 1.4px rgba(138, 108, 71, .45); }

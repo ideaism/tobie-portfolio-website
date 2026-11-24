@@ -1,0 +1,56 @@
+/* 买菜前看一眼（shop.js，第五步）和“满了”的字章。只有默认界面「冰箱贴」有：规则都挂在 #shopLayer、#phone.shop-open、.skin-a 上，
+   旧界面 ?skin=0 和方向 B 碰不到。卡从底栏后面升上来（底栏这时提到卡上面）；上半屏透出冰箱的几层，点一下收起。 */
+
+/* 卡开着：角落严肃的那只和它的气泡让开，卡沿上换成开心的那只 */
+#phone.shop-open #penguin, #phone.shop-open #bubble, #phone.shop-open #peek { visibility: hidden; }
+#phone.shop-open #bottombar { z-index: 41; }
+
+#shopLayer { left: 0; top: 0; width: 390px; height: 844px; z-index: 40; display: none; overflow: hidden; font-family: var(--font); color: var(--ink); }
+#shopLayer.on { display: block; }
+#shopLayer .shabove { position: absolute; left: 0; top: 0; width: 390px; height: 436px; }
+#shopLayer .shwrap { position: absolute; left: 0; top: 436px; width: 390px; height: 408px; transform: translateY(100%); }
+#shopLayer .shpeng { position: absolute; left: 290px; top: -68px; width: 74px; height: 108px; object-fit: contain; object-position: 50% 0; pointer-events: none;
+  transform: translateY(110px); filter: drop-shadow(0 3px 4px rgba(40, 30, 15, .22)); }
+#shopLayer .shcard { position: absolute; left: 0; top: 0; width: 390px; height: 408px; border-radius: 28px 28px 0 0; background: var(--card);
+  box-shadow: 0 -8px 30px rgba(38, 48, 43, .2); }
+#shopLayer .shscroll { position: absolute; inset: 0 0 72px; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 20px 18px 16px; scrollbar-width: none; }   /* 底下 72 留给底栏，滚动的字不从底栏字后面穿过 */
+#shopLayer .shscroll::-webkit-scrollbar { display: none; }
+#shopLayer .shh { margin: 0 0 8px 2px; font-size: 16px; font-weight: 700; }
+
+/* 需要先吃掉的 */
+#shopLayer .shrow { display: flex; align-items: center; gap: 12px; width: 100%; height: 50px; padding: 0 4px; text-align: left; border-radius: 14px; }
+#shopLayer .shrow + .shrow { border-top: 1px solid rgba(38, 48, 43, .07); border-radius: 0; }
+#shopLayer .shimg { flex: none; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 11px; background: #f4ecdc; }
+#shopLayer .shimg img { max-width: 32px; max-height: 32px; display: block; pointer-events: none; }
+#shopLayer .shname { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 计划：颜色照层上的胶带（过了大半橙、过了砖红），还早的是浅绿 */
+#shopLayer .shplan { flex: none; font-style: normal; height: 22px; line-height: 22px; padding: 0 9px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #3f5a4a; background: var(--sage-soft); white-space: nowrap; }
+#shopLayer .shplan.midway { color: #fff; background: linear-gradient(180deg, #f6a550, #e8832c); }
+#shopLayer .shplan.overdue { color: #fff; background: linear-gradient(180deg, #b4502f, #94391f); }
+#shopLayer .shplan.paused { color: var(--muted); background: #eeeae0; }
+#shopLayer .shempty { margin: 6px 2px 4px; font-size: 14px; color: var(--muted); }
+
+/* 每层：几件、还有空间 / 满了 */
+#shopLayer .shzones { margin-top: 14px; }
+#shopLayer .shfr { margin: 10px 0 2px; font-size: 0; }
+#shopLayer .shfr span { display: inline-block; height: 18px; line-height: 18px; padding: 0 9px; border-radius: 9px; font-size: 11px; font-weight: 600; color: var(--brown); background: #f4ecdc; }
+#shopLayer .shzone { display: flex; align-items: center; gap: 10px; width: 100%; height: 42px; padding: 0 4px; text-align: left; }
+#shopLayer .shzone + .shzone { border-top: 1px solid rgba(38, 48, 43, .07); }
+#shopLayer .shzn { flex: 1 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#shopLayer .shcnt { flex: none; width: 40px; text-align: right; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+#shopLayer .shroom { flex: none; width: 72px; height: 26px; line-height: 24px; text-align: center; font-style: normal; border-radius: 13px; font-size: 12px; font-weight: 600;
+  color: #3f5a4a; background: #eef3ee; box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .45); }
+#shopLayer .shzone.full .shroom { color: #fff; background: #a4492c; box-shadow: none; }
+
+/* 跳一下时亮的那一圈（挂在层板上那件东西里面，跟着它一起跳） */
+.skin-a .shglow { position: absolute; left: -9px; right: -9px; top: -7px; bottom: -7px; border-radius: 50%; pointer-events: none; z-index: -1;
+  background: radial-gradient(closest-side, rgba(255, 236, 170, .55), rgba(255, 220, 130, 0) 92%);
+  box-shadow: 0 0 0 2px rgba(255, 226, 140, .95), 0 0 14px 4px rgba(255, 205, 90, .55); }
+
+/* ---------- “满”字章：名牌末尾（marks.js）、“更新”“拿出来解冻”的选层（skin.js）、“放入”的选层（shop.js） ---------- */
+.skin-a .tp .mk-full, .skin-a .fullst { display: inline-block; width: 13px; height: 13px; line-height: 13px; text-align: center; font-style: normal;
+  font-family: var(--font); font-size: 9px; font-weight: 800; letter-spacing: 0; color: #fff; background: #a4492c; border-radius: 2px; rotate: -7deg;
+  box-shadow: 0 0 0 1px rgba(255, 250, 240, .7); }
+.skin-a .tp .mk-full { margin: 0 0 0 5px; vertical-align: 1.5px; }
+.skin-a #sheet .zones button .fullst, #addLayer .achips button .fullst { flex: none; margin-left: 1px; vertical-align: 1px; }
+#addLayer .achips button .fullst { margin-left: 5px; }

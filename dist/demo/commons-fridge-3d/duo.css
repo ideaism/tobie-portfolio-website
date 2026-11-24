@@ -1,0 +1,5 @@
+/* 庆祝里的第二只企鹅：开心那只（018 卡）。
+   它只在庆祝里出现：从右下角蹦进来举手欢呼，收起时蹦出去。位置和动作在 app.js 的 happyIn() 里。
+   严肃那只（.cpenguin）含着鱼不笑的那张图是 .pose.calm，样式沿用 style.css 里 .cpenguin .pose 的规则。 */
+.cpenguin2 { left: 0; top: 0; width: 79px; height: 110px; transform-origin: 50% 50%; opacity: 0; pointer-events: none; }
+.cpenguin2 .pose { opacity: 0; }

@@ -1,0 +1,87 @@
+/* 建冰箱和新人加入（start.js）。只在网址带 ?start=new / ?start=join、默认界面「冰箱贴」时有：
+   规则都挂在 .st-on / .st-new / .st-join（start.js 才加）或只有 start.js 建的元素上，平时打开、?skin=0、?skin=b 一条都碰不到。 */
+
+/* 两段流程里先不显示“只看我的”（没东西可看） */
+.st-on #topbar .onlymine { visibility: hidden; }
+
+/* 卡、邀请卡开着：角落那只企鹅和它的气泡让开；卡开着时底栏也藏起来（卡盖不全） */
+#phone.st-card-on #penguin, #phone.st-card-on #bubble, #phone.st-card-on #peek,
+#phone.st-inv-open #penguin, #phone.st-inv-open #bubble, #phone.st-inv-open #peek, #phone.st-card-on #bottombar { visibility: hidden; }
+#phone.st-inv-open #toast { z-index: 70; }
+
+/* ---------- 盖在冰箱上的卡（建冰箱那一屏 / 登录前那一屏） ---------- */
+.st-lay { left: 0; top: 0; width: 390px; height: 844px; z-index: 48; font-family: var(--font); color: var(--ink); }
+.st-lay .st-dim { position: absolute; inset: 0; pointer-events: none; }
+.st-join .st-lay .st-dim { background: rgba(38, 48, 43, .32); }
+.st-card { position: absolute; left: 16px; right: 16px; bottom: 20px; padding: 18px 20px 18px; border-radius: 26px; background: var(--card);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .7), inset 0 -3px 6px rgba(109, 84, 55, .08), 0 2px 4px rgba(60, 40, 15, .14), 0 14px 34px rgba(38, 48, 43, .26); }
+.st-t { font-size: 22px; line-height: 30px; font-weight: 700; margin: 0 0 6px; }
+.st-who { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); margin: 0 0 18px; }
+.st-dots { display: inline-flex; }
+.st-dots i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--card); box-shadow: 0 1px 2px rgba(60, 40, 15, .3); }
+.st-dots i + i { margin-left: -6px; }
+.st-f { display: block; margin: 0 0 12px; }
+.st-f > span { display: block; font-size: 13px; color: var(--muted); margin: 0 0 6px 2px; }
+.st-in { display: block; width: 100%; height: 46px; padding: 0 14px; border: 0; outline: 0; border-radius: 14px; font: inherit; font-size: 16px; color: var(--ink);
+  background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2), inset 0 2px 3px rgba(109, 84, 55, .07); -webkit-user-select: text; user-select: text; cursor: text; }
+.st-in:focus { box-shadow: inset 0 0 0 1.5px var(--sage), inset 0 2px 3px rgba(109, 84, 55, .07); }
+.st-in[readonly] { cursor: pointer; }
+.st-code { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; cursor: pointer; }
+.st-code i { height: 52px; line-height: 52px; border-radius: 13px; text-align: center; font-style: normal; font-size: 22px; font-weight: 700; color: var(--ink);
+  background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2), inset 0 2px 3px rgba(109, 84, 55, .07); }
+.st-code i.on { box-shadow: inset 0 0 0 1.5px var(--sage); }
+.st-go { display: block; width: 100%; height: 52px; margin-top: 4px; border-radius: 26px; font-size: 17px; font-weight: 700; color: #fff; letter-spacing: .04em;
+  background: radial-gradient(120% 140% at 30% 12%, #7b9b86, #506b5b 55%, #425b4d);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, .28), inset 0 -4px 6px rgba(20, 40, 30, .22), 0 2px 3px rgba(40, 60, 48, .35), 0 8px 18px rgba(64, 88, 72, .3);
+  transition: transform .12s, opacity .15s; }
+.st-go:active { transform: scale(.97); }
+.st-go:disabled { opacity: .45; cursor: default; }
+
+/* ---------- 门上的邀请贴纸：门板左边中间、把手右边，白底小方块 ---------- */
+.stqr { position: absolute; left: 92px; top: 192px; width: 54px; height: 54px; pointer-events: auto; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.stqr-in { position: absolute; inset: 0; padding: 4px; rotate: -4deg; border-radius: 7px; background: #fffdf6; pointer-events: none;
+  box-shadow: 0 1px 1.5px rgba(20, 14, 6, .3), 2px 4px 8px rgba(20, 14, 6, .24); }
+.stqr svg, .st-qrbig svg { display: block; width: 100%; height: 100%; fill: #2b2a26; stroke: none; }
+
+/* 点了从底下升上来的卡 */
+.st-inv { left: 0; top: 0; width: 390px; height: 844px; z-index: 52; display: none; font-family: var(--font); color: var(--ink); }
+.st-inv.on { display: block; }
+.st-inv .st-dim { position: absolute; inset: 0; background: rgba(38, 48, 43, .45); opacity: 0; }
+.st-inv .st-panel { position: absolute; left: 0; bottom: 0; width: 390px; padding: 30px 22px 30px; border-radius: 28px 28px 0 0; background: var(--card);
+  box-shadow: 0 -8px 30px rgba(38, 48, 43, .16); transform: translateY(104%); text-align: center; }
+.st-qrbig { width: 196px; height: 196px; margin: 0 auto; padding: 10px; border-radius: 18px; background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .16), 0 2px 6px rgba(60, 40, 15, .1); }
+.st-fname { margin: 14px 0 20px; font-family: var(--fun); font-size: 24px; line-height: 30px; }
+.st-acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.st-acts button { height: 46px; border-radius: 15px; font-size: 14px; font-weight: 600; color: var(--ink); background: #fffaf0;
+  box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2), 0 1px 2px rgba(60, 40, 15, .08); transition: transform .12s; }
+.st-acts button:active { transform: scale(.96); }
+
+/* ---------- 名牌认层 ---------- */
+/* 名牌旁边两个小按钮 */
+.st-pop { left: 0; top: 0; display: none; gap: 6px; z-index: 47; font-family: var(--font); }
+.st-pop.on { display: flex; }
+.st-pop button { height: 34px; padding: 0 12px; border-radius: 17px; font-size: 13px; font-weight: 600; white-space: nowrap; color: var(--ink); background: var(--card);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .7), 0 1px 2px rgba(60, 40, 15, .3), 0 6px 14px rgba(38, 48, 43, .22); transition: transform .12s; }
+.st-pop button[data-k="mine"] { color: #fff; background: linear-gradient(180deg, #62806c, #506b5b); }
+.st-pop button:active { transform: scale(.95); }
+/* 新人：还空着的二层一闪一闪（碰别的东西就停） */
+.skin-a .name.st-blink { animation: stBlink 1.1s ease-in-out infinite; }
+@keyframes stBlink {
+  0%, 100% { filter: drop-shadow(0 1px 1px rgba(90, 55, 20, .32)); }
+  50% { filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 6px rgba(255, 255, 255, .95)) drop-shadow(0 0 12px rgba(255, 236, 190, .9)); }
+}
+
+/* ---------- 建冰箱的人：放大的纸条上每条前面一个空框，点一条勾一条 ---------- */
+.st-new #rulesBig li.st-ck { padding-left: 56px; cursor: pointer; }
+.st-new #rulesBig li.st-ck::before { left: 28px; }
+.st-box { position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 5px; background: #fffaf0; box-shadow: inset 0 0 0 1.6px rgba(109, 84, 55, .5); }
+.st-done .st-box { background: var(--sage); box-shadow: none; }
+.st-done .st-box::after { content: ""; position: absolute; left: 7.5px; top: 3.5px; width: 5px; height: 10px; border: solid #fff; border-width: 0 2.4px 2.4px 0; rotate: 45deg; }
+
+/* ---------- 手机框外的演示按钮（和“快进到周日（演示）”同一个样子，叠在它上面） ---------- */
+#startBtns { position: fixed; right: 18px; bottom: 96px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+#startBtns.hidden { display: none; }
+#startBtns button { height: 32px; padding: 0 14px; border-radius: 16px; font-size: 12px; color: #8a7d68;
+  background: rgba(255, 255, 255, .5); border: 1px solid rgba(138, 125, 104, .3); }
+#startBtns button.on { color: var(--sage); border-color: rgba(80, 107, 91, .5); }

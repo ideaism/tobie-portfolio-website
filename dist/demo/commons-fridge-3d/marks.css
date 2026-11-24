@@ -1,0 +1,77 @@
+/* 记号（marks.js）。只有默认界面「冰箱贴」有：规则都挂在 .skin-a 上，旧界面 ?skin=0 和方向 B 一条都碰不到。
+   字都用正文字体：这些字（请、已、要、时、在、回、来……）手写体子集里没有。
+   东西身上的记号挂在 .item（托盘上是 .tbox）里面，跟着东西一起弹出来、被拿起来时一起藏、只看我的时一起变淡（--mf） */
+
+/* ---------- 过了大半：橙色纸胶带斜贴在左上角；过了：同一条深一号（砖红）。外层管影子，里层裁出撕开的两头 ---------- */
+.skin-a .mk-tape { position: absolute; left: -9px; top: 3px; width: 36px; height: 11px; pointer-events: none; opacity: var(--mf, 1);
+  filter: drop-shadow(0 1px 1px rgba(80, 40, 10, .38)); }
+.skin-a .mk-tape .in { position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .22) 0 2px, rgba(255, 255, 255, 0) 2px 6px), linear-gradient(180deg, #f6a550, #e8832c);
+  clip-path: polygon(0 0, 3px 20%, 0 40%, 3px 60%, 0 80%, 2px 100%, 100% 100%, calc(100% - 3px) 80%, 100% 60%, calc(100% - 2px) 40%, 100% 20%, calc(100% - 3px) 0); }
+.skin-a .mk-tape.overdue .in { background: repeating-linear-gradient(90deg, rgba(255, 236, 220, .2) 0 2px, rgba(255, 236, 220, 0) 2px 6px), linear-gradient(180deg, #b4502f, #94391f); }
+.titem .tbox > .mk-tape { left: -10px; top: 2px; }
+
+/* ---------- 有人要处理：东西下沿挂一张牛皮纸小吊牌，左头打个孔穿根线 ---------- */
+.skin-a .mk-held { position: absolute; left: 50%; top: calc(100% - 9px); translate: -50% 0; pointer-events: none; opacity: var(--mf, 1);
+  height: 15px; line-height: 15px; padding: 0 4px 0 9px; border-radius: 2px 4px 4px 2px; white-space: nowrap;
+  font-family: var(--font); font-size: 8.5px; font-weight: 700; letter-spacing: -.02em; color: #5f4527;
+  background: linear-gradient(180deg, #f6e4c1, #ecd3a6); box-shadow: 0 1px 1.5px rgba(70, 45, 15, .35); }
+.skin-a .mk-held::before { content: ""; position: absolute; left: 3px; top: 5.5px; width: 4px; height: 4px; border-radius: 50%; background: #fffaf0;
+  box-shadow: inset 0 0 0 1px rgba(95, 69, 39, .35); }
+.skin-a .mk-held::after { content: ""; position: absolute; left: 5px; bottom: 100%; width: 1px; height: 7px; background: rgba(95, 69, 39, .55); rotate: 18deg; transform-origin: 50% 100%; }
+.skin-a .mk-held.low { top: calc(100% + 3px); }   /* 有名字小标签（75% 处）的东西：吊牌挂到下面去，不压字 */
+.skin-a .mk-held.l { left: -4px; translate: 0 0; }
+.titem .tbox > .mk-held { top: calc(100% - 10px); }
+
+/* ---------- 请吃：右上角一颗红圆贴，开放期间换掉主人贴纸 ---------- */
+.skin-a .mk-offer { position: absolute; left: calc(100% - 15px); top: -11px; width: 26px; height: 26px; box-sizing: border-box; pointer-events: none; opacity: var(--mf, 1);
+  border-radius: 50%; border: 2px solid #fffaf0; background: #d9483b; color: #fff; text-align: center; line-height: 22px;
+  font-family: var(--font); font-size: 9.5px; font-weight: 800; letter-spacing: -.02em;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, .4), 0 3px 6px rgba(60, 40, 15, .16); }
+.titem .tbox > .mk-offer { left: auto; right: -11px; top: -11px; }
+.skin-a .sticker.mk-off { visibility: hidden; }
+/* 别的记号压过黄标时，“临期”先收起来（一格只放一个记号） */
+.skin-a .item.mk-noy > .ytag { display: none; }
+
+/* ---------- 已处理：原位一张白纸小便条，顶上一截透明胶，不挡手 ---------- */
+.skin-a .mk-note { position: absolute; width: 42px; height: 17px; line-height: 17px; text-align: center; pointer-events: none;
+  font-family: var(--font); font-size: 9.5px; font-weight: 700; color: #7a6a52; letter-spacing: .04em;
+  background: #fffaf0; border-radius: 1px; box-shadow: 0 1px 2px rgba(70, 45, 15, .3); transition: left .32s cubic-bezier(.23, 1, .32, 1); }
+.skin-a .mk-note.edge { transition: none; }   /* 这层摆满了：贴在层板前沿右边 */
+.skin-a .mk-note::before { content: ""; position: absolute; left: 50%; top: -4px; width: 16px; height: 7px; margin-left: -8px; rotate: -6deg;
+  background: rgba(255, 246, 214, .7); box-shadow: 0 0 0 .5px rgba(150, 120, 70, .25); }
+
+/* ---------- 我这几天不在：顶栏一颗不带字的小手提箱（点按区 32×32）；开着时填成深绿。不在时我的层名牌里多一个小手提箱 ---------- */
+.skin-a .mk-awaybtn { position: absolute; top: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--brown, #7a582c); }
+.skin-a .mk-awaybtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.skin-a .mk-awaybtn:active { scale: .9; }
+.skin-a .mk-awaybtn.on { color: #fff; background: #506b5b; box-shadow: 0 1px 2px rgba(40, 60, 40, .35); }
+.skin-a .mk-awaybtn.on svg { width: 18px; height: 18px; }
+.skin-a .tp .mk-case { display: inline-block; width: 11px; height: 11px; margin: 0 4px 0 -2px; vertical-align: -1.5px; }
+.skin-a .tp .mk-case svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- “+N”：本人 2026-11-20 说点太多看不清——默认界面只留“+N”几个字，主人小点（app.js updateMore 画的）藏起来 ---------- */
+.skin-a .more .mdots { display: none; }
+.skin-a .more { line-height: 34px; }
+
+/* ---------- 详情卡上多出来的 ---------- */
+.skin-a #sheet .meta .mkchip { color: #9a5f22; font-weight: 600; white-space: nowrap; }
+.skin-a #sheet .meta .mkchip.offer { color: #b8402f; }
+.skin-a #sheet .row2.mkone { grid-template-columns: 1fr; }
+.skin-a #sheet .mkhold { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; padding: 0 6px 0 14px; height: 44px;
+  border-radius: 14px; background: #f6ead2; font-size: 13px; color: #6d4f2a; font-weight: 600; }
+.skin-a #sheet .mkhold button { height: 32px; padding: 0 12px; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--card);
+  box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2); }
+.skin-a #sheet .mkrow { display: grid; grid-template-columns: 1fr; margin-top: 4px; border-top: 1px solid rgba(38, 48, 43, .07); }
+.skin-a #sheet .mkrow.n2 { grid-template-columns: 1fr 1fr; }
+.skin-a #sheet .mkrow.n3 { grid-template-columns: 1fr 1fr 1fr; }
+.skin-a #sheet .mkrow button { height: 44px; font-size: 14px; color: #3f5a4a; font-weight: 600; position: relative; }
+.skin-a #sheet .mkrow button + button::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 1px; background: rgba(38, 48, 43, .14); }
+.skin-a #sheet .mkpick { margin-top: 6px; padding: 10px 0 2px; border-top: 1px solid rgba(38, 48, 43, .07); }
+.skin-a #sheet .mkpick .mkq { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+
+/* 第四步审查 2：有吊牌的那格压在右边邻居上面（吊牌比东西宽，原来被右边那格盖住一截）。
+   层板自己隔一层，提上来的 z-index 只在层板里面比，不会盖到压暗层、白卡上 */
+.skin-a #shelf, .skin-a .fxc .shelf { isolation: isolate; }
+.skin-a .item.mk-up { z-index: 1; }
+.skin-a .sticker.mk-up { z-index: 2; }

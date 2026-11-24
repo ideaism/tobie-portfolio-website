@@ -1,0 +1,20 @@
+/* 垃圾桶（bin.js，改版 B）。只有默认界面「冰箱贴」有：元素是 bin.js 插的，旧界面 ?skin=0 和方向 B 里根本没有。
+   平时藏在底边下面；拖起东西时从左下角弹上来。不接手势：按在它上面的手指照样落到下面的东西上 */
+#bin { pointer-events: none; }
+#bin:not(.up) { visibility: hidden; }
+/* 变换（探出、歪、缩放、咕一下、跳）都在 .bb 上，以底边中点为原点 */
+#bin .bb { position: absolute; inset: 0; transform-origin: 50% 100%; }
+#bin .bb img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* 盖子、桶身的切法（按图上量的接缝）写在 bin.js 里。盖子绕左后方的铰链（盖子左下角）转 */
+#bin .lid { transform-origin: 0.5% 20.7%; filter: drop-shadow(0 1px 1.5px rgba(60, 50, 20, .2)); }
+/* 盖子掀开时露出来的桶口：椭圆的下沿就是接缝那条弧，压在桶身下面，只露出接缝以上的部分 */
+#bin .mouth { position: absolute; left: 1.8%; width: 96.1%; top: 18.7%; height: 6.3%; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, #1f3024, #2d4733 62%, #46694a 86%, #6d9466); }
+
+/* 不换鱼的东西拖到企鹅身上：企鹅头上冒一句“这件还不急” */
+#binSay { display: none; left: auto; right: 14px; top: 626px; height: 28px; line-height: 28px; padding: 0 11px; border-radius: 14px; pointer-events: none; white-space: nowrap;
+  font-family: var(--font); font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--card);
+  box-shadow: 0 1px 2px rgba(60, 40, 15, .22), 0 4px 10px rgba(60, 40, 15, .12); }
+#binSay::after { content: ""; position: absolute; right: 30px; bottom: -4px; width: 9px; height: 9px; background: var(--card); border-radius: 0 0 3px 0; transform: rotate(45deg); }
+
+#phone.add-open #bin, #phone.add-open #binSay { visibility: hidden; }

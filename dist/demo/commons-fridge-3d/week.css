@@ -1,0 +1,108 @@
+/* 每周结算和门上的冰箱贴（week.js）。只有默认界面有；旧界面（?skin=0）和方向 B（?skin=b）里这些都不出现。 */
+
+/* ---------- 手机框外面的演示按钮 ---------- */
+#weekBtn { display: none; position: fixed; right: 18px; bottom: 56px; height: 32px; padding: 0 14px; border-radius: 16px; font-size: 12px; color: #8a7d68;
+  background: rgba(255, 255, 255, .5); border: 1px solid rgba(138, 125, 104, .3); }
+.week-on #weekBtn { display: block; }
+.week-on #replay.hidden + #weekBtn, .week-on #weekBtn.hidden { display: none; }
+#weekBtn.used { opacity: .55; }
+#weekTip { position: fixed; right: 18px; bottom: 98px; height: 28px; line-height: 28px; padding: 0 12px; border-radius: 14px; font-size: 12px; color: #fffdf6;
+  background: rgba(60, 50, 38, .82); white-space: nowrap; pointer-events: none; opacity: 0; translate: 0 4px; transition: opacity .18s, translate .18s; }
+#weekTip.on { opacity: 1; translate: 0 0; }
+
+/* ---------- 门上的冰箱贴 ---------- */
+/* 放在门板（.face）里、变暗那层（.shade）下面：跟着门转、跟着门变暗。 */
+.mags { position: absolute; inset: 0; border-radius: 30px; pointer-events: none; }
+/* 变暗那层盖在冰箱贴上面，会把手指挡住：让它不接手指（按在它上面本来也是落到门上，结果一样） */
+.week-on #door .shade { pointer-events: none; }
+/* 外框（.mag）自己不带变换：门转开一点时，带变换的小块在 3D 里会点不中。转的是里面的 .mag-rot；影子在 .mag-sh 上，所以怎么转影子都朝同一边。 */
+.mag { position: absolute; pointer-events: auto; cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.mag-sh, .mag-rot { position: absolute; inset: 0; pointer-events: none; }
+.mag-sh { filter: drop-shadow(0 1px 1px rgba(8, 16, 10, .5)) drop-shadow(1px 4px 4px rgba(8, 16, 10, .34)); transition: filter .2s; }
+.mag-in { position: absolute; left: 50%; top: 50%; pointer-events: none; transform-origin: 50% 50%; transition: scale .26s cubic-bezier(.3, 1.9, .5, 1); }
+.mag-in img { display: block; width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+.mag.held { cursor: grabbing; }
+.mag.held .mag-in { scale: 1.14; transition: scale .12s ease-out; }
+.mag.held .mag-sh { transition: filter .12s; filter: drop-shadow(0 1px 1px rgba(8, 16, 10, .3)) drop-shadow(4px 13px 10px rgba(8, 16, 10, .4)); }
+.mag.wig .mag-in { animation: magWig .52s ease-out; }
+.mag.land .mag-in { animation: magLand .46s cubic-bezier(.3, 1.6, .5, 1); }
+.mag.pending { visibility: hidden; }
+@keyframes magWig { 0% { rotate: 0deg; } 18% { rotate: -11deg; } 40% { rotate: 9deg; } 62% { rotate: -5deg; } 82% { rotate: 2.5deg; } 100% { rotate: 0deg; } }
+@keyframes magLand { 0% { scale: 1.5; } 55% { scale: .9; } 100% { scale: 1; } }
+/* 拖的时候盖在门上接手指的一层（看不见） */
+.magcatch { position: absolute; inset: 0; display: none; pointer-events: auto; touch-action: none; cursor: grabbing; }
+.magcatch.on { display: block; }
+/* 新冰箱贴落到门上那一下的一圈 */
+.magring { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2px solid rgba(255, 244, 214, .85); pointer-events: none;
+  animation: magRing .5s ease-out forwards; }
+@keyframes magRing { 0% { scale: 1; opacity: .9; } 100% { scale: 4.6; opacity: 0; } }
+
+/* ---------- 没过关：角落企鹅说一句（样子照 .skin-a #bubble） ---------- */
+#weekBubble { right: 100px; top: 688px; height: 38px; line-height: 38px; padding: 0 14px; border-radius: 19px; font-size: 13px; color: var(--ink); white-space: nowrap;
+  background: var(--card); box-shadow: 0 1px 2px rgba(20, 30, 20, .3), 0 6px 16px rgba(20, 30, 20, .28); pointer-events: none;
+  opacity: 0; translate: 6px 0; transition: opacity .2s, translate .24s cubic-bezier(.3, 1.5, .5, 1); z-index: 30; }
+#weekBubble::after { content: ""; position: absolute; right: -5px; top: 14px; width: 12px; height: 12px; background: var(--card); border-radius: 0 3px 0 0; transform: rotate(45deg) skew(8deg, 8deg); }
+#weekBubble.on { opacity: 1; translate: 0 0; }
+#phone.week-hush #bubble { visibility: hidden; }
+
+/* ---------- 过关：整屏结算页 ---------- */
+#weekSheet { left: 0; top: 0; width: 390px; height: 844px; z-index: 60; display: none; overflow: hidden; opacity: 0; transition: opacity .28s;
+  background: radial-gradient(120% 70% at 50% 44%, #fff4da 0%, #fde3bd 52%, #f8cf9c 100%); }
+#weekSheet.show { display: block; }
+#weekSheet.on { opacity: 1; }
+#weekSheet > * { position: absolute; }
+#weekSheet .wrays { left: 50%; top: 366px; width: 900px; height: 900px; margin: -450px 0 0 -450px; border-radius: 50%; opacity: 0;
+  background: repeating-conic-gradient(rgba(255, 255, 255, .5) 0deg 9deg, rgba(255, 255, 255, 0) 9deg 22.5deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0, #000 22%, transparent 62%); mask-image: radial-gradient(circle, #000 0, #000 22%, transparent 62%); }
+#weekSheet.on .wrays { animation: wkFade .5s .35s forwards, wkSpin 46s linear infinite; }
+#weekSheet .wtitle { left: 0; top: 118px; width: 100%; text-align: center; font-size: 27px; font-weight: 800; letter-spacing: 1px; color: var(--brown, #6d5437); opacity: 0; }
+#weekSheet .wsub { left: 0; top: 164px; width: 100%; text-align: center; font-size: 15px; color: #8a6c47; opacity: 0; }
+#weekSheet.on .wtitle { animation: wkRise .42s .12s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+#weekSheet.on .wsub { animation: wkRise .42s 1.0s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+/* 一小块门板：冰箱贴外面那圈米色的边在浅色底上看不清，垫一块门的深绿色 */
+#weekSheet .wplate { left: 95px; top: 266px; width: 200px; height: 200px; border-radius: 44px; scale: 0; rotate: -8deg;
+  background: radial-gradient(120% 120% at 30% 18%, #5c7d5c 0%, #45654a 42%, #37523b 100%);
+  box-shadow: inset 0 3px 4px rgba(255, 255, 255, .16), inset 0 -8px 14px rgba(14, 26, 16, .3), 0 14px 26px rgba(92, 62, 24, .28), 0 2px 4px rgba(92, 62, 24, .2); }
+#weekSheet.on .wplate { animation: wkPlate .55s .28s cubic-bezier(.3, 1.5, .5, 1) forwards; }
+#weekSheet.on .wplate.thud { animation: wkThud .34s ease-out; scale: 1; rotate: -3deg; }
+#weekSheet .wmag { left: 195px; top: 366px; width: 0; height: 0; }
+#weekSheet .wmag img { position: absolute; left: 0; top: 0; translate: -50% -50%; opacity: 0; -webkit-user-drag: none;
+  filter: drop-shadow(0 2px 2px rgba(8, 16, 10, .45)) drop-shadow(3px 10px 9px rgba(8, 16, 10, .36)); }
+#weekSheet.on .wmag img { animation: wkSlap .5s .86s cubic-bezier(.4, 0, .6, 1) forwards, wkFloat 3.2s 1.5s ease-in-out infinite; }
+#weekSheet .wstar { left: 195px; top: 366px; width: 14px; height: 14px; margin: -7px 0 0 -7px; opacity: 0; background: #fff3c4;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+#weekSheet.on .wstar { animation: wkStar .7s 1.16s ease-out forwards; }
+#weekSheet .wpen { left: 214px; top: 482px; width: 150px; height: 214px; translate: 0 420px; transform-origin: 50% 100%; }
+#weekSheet .wpen .pose { opacity: 0; }
+#weekSheet .wpen .stand { opacity: 1; }
+#weekSheet.on .wpen { animation: wkJumpIn .62s .5s cubic-bezier(.25, 1.35, .5, 1) forwards, wkHop .62s 1.42s cubic-bezier(.3, 0, .5, 1) 2, wkBob 2.4s 2.7s ease-in-out infinite; }
+#weekSheet.on .wpen .stand { animation: wkOut .01s 1.42s forwards; }
+#weekSheet.on .wpen .cheer { animation: wkIn .01s 1.42s forwards; }
+#weekSheet .wpshadow { left: 289px; top: 688px; width: 110px; height: 22px; margin-left: -55px; border-radius: 50%; background: rgba(120, 82, 34, .22); opacity: 0; filter: blur(3px); }
+#weekSheet.on .wpshadow { animation: wkFade .3s .95s forwards; }
+#weekSheet .wgo { left: 95px; top: 742px; width: 200px; height: 54px; border-radius: 27px; font-size: 18px; font-weight: 700; letter-spacing: 2px; color: #fffdf6; opacity: 0; translate: 0 14px;
+  background: linear-gradient(#6c8a76, #506b5b); box-shadow: inset 0 2px 2px rgba(255, 255, 255, .25), 0 8px 16px rgba(60, 80, 62, .32); cursor: pointer; }
+#weekSheet.on .wgo { animation: wkRise .4s 1.9s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+#weekSheet .wgo:active { scale: .96; }
+@keyframes wkFade { to { opacity: 1; } }
+@keyframes wkIn { to { opacity: 1; } }
+@keyframes wkOut { to { opacity: 0; } }
+@keyframes wkSpin { to { rotate: 360deg; } }
+@keyframes wkRise { 0% { opacity: 0; translate: 0 14px; } 100% { opacity: 1; translate: 0 0; } }
+@keyframes wkPlate { 0% { scale: 0; rotate: -8deg; } 100% { scale: 1; rotate: -3deg; } }
+@keyframes wkThud { 0% { scale: 1; } 30% { scale: .94; } 100% { scale: 1; } }
+@keyframes wkSlap { 0% { opacity: 0; scale: 2.3; rotate: 16deg; } 12% { opacity: 1; } 62% { scale: .9; rotate: -8deg; opacity: 1; } 82% { scale: 1.05; rotate: -5deg; opacity: 1; } 100% { scale: 1; rotate: -6deg; opacity: 1; } }
+@keyframes wkFloat { 0%, 100% { translate: -50% -50%; } 50% { translate: -50% calc(-50% - 4px); } }
+@keyframes wkStar { 0% { opacity: 1; translate: 0 0; scale: .3; rotate: 0deg; } 70% { opacity: 1; } 100% { opacity: 0; translate: var(--dx) var(--dy); scale: 1.15; rotate: 90deg; } }
+@keyframes wkJumpIn { 0% { translate: 0 420px; } 100% { translate: 0 0; } }
+@keyframes wkHop { 0%, 100% { translate: 0 0; scale: 1 1; } 12% { scale: 1.06 .92; } 46% { translate: 0 -26px; scale: .97 1.04; } 88% { translate: 0 0; scale: 1.05 .94; } }
+@keyframes wkBob { 0%, 100% { scale: 1 1; } 50% { scale: 1.015 .985; } }
+/* 减少动态效果：全部直接到最后的样子 */
+#weekSheet.rm, #weekSheet.rm * { animation-duration: .001s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition: none !important; }
+#weekSheet.rm .wstar, #weekSheet.rm .wrays { display: none; }
+
+/* 收起以后：新冰箱贴飞到门上（盖在最上面；挡住手，飞的时候别的都点不了） */
+#weekFly { left: 0; top: 0; width: 390px; height: 844px; z-index: 61; display: none; }
+#weekFly.on { display: block; }
+#weekFly img { position: absolute; left: 0; top: 0; -webkit-user-drag: none; will-change: transform;
+  filter: drop-shadow(0 2px 2px rgba(8, 16, 10, .4)) drop-shadow(3px 10px 9px rgba(8, 16, 10, .32)); }

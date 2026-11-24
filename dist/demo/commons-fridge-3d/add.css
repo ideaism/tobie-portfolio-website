@@ -1,0 +1,135 @@
+/* 录入（底栏“放入”）和东西上的名字小标签、黄标。只有默认界面「冰箱贴」有：
+   这里的规则都挂在 .skin-a、#addLayer 或 #phone.add-open 上，旧界面 ?skin=0 和方向 B 一条都碰不到。 */
+
+/* ---------- 层板上的东西：名字小标签、黄标（app.js 的 decorate 挂上去） ---------- */
+/* 每样东西自己关成一层：里面的小标签、黄标（z-index 2）只在这样东西里面叠，不会浮到压暗层和详情卡上面去
+   （补位、录入新建的东西没有 transform，原来不成层，标签会盖在白卡上） */
+.skin-a .item { isolation: isolate; }
+/* 白纸小标签：贴在东西下半截正中，暖白底、细边、微微歪；只看我的打开时跟着东西一起变淡（--mf 是 app.js 写的） */
+.skin-a .item .nlab { position: absolute; left: 50%; top: 75%; translate: -50% -50%; z-index: 2; pointer-events: none;
+  padding: 0 3px; height: 15px; line-height: 14px; border-radius: 2px; white-space: nowrap;
+  font-family: var(--fun); font-size: 10px; color: #4f4130; letter-spacing: .02em;
+  background: #fffaf0; border: 1px solid rgba(109, 84, 55, .26);
+  box-shadow: 0 1px 1.5px rgba(60, 40, 15, .28); opacity: var(--mf, 1); }
+.skin-a .item .nlab.plain { font-family: var(--font); font-size: 9px; font-weight: 600; letter-spacing: 0; }
+/* 黄标：左上角一张柠檬黄的价签，写“临期”（右上角是主人贴纸，所以放左边）。左头一个小打孔 */
+.skin-a .item .ytag { position: absolute; left: -7px; top: -6px; z-index: 2; pointer-events: none; transform-origin: 100% 50%;
+  height: 15px; line-height: 15px; padding: 0 4px 0 9px; border-radius: 2px 3px 3px 2px; white-space: nowrap;
+  font-family: var(--font); font-size: 9px; font-weight: 800; color: #2a2614; letter-spacing: .04em;
+  background: #ffe234; box-shadow: 0 1px 1.5px rgba(70, 60, 10, .35); opacity: var(--mf, 1); }
+.skin-a .item .ytag::before { content: ""; position: absolute; left: 3px; top: 5.5px; width: 4px; height: 4px; border-radius: 50%; background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(70, 60, 10, .3); }
+/* 详情卡上的“临期” */
+.skin-a #sheet .meta .ylw { color: #2a2614; font-weight: 700; }
+.skin-a #sheet .meta .ylw { background: #ffe234; border-radius: 4px; padding: 0 5px; }
+.skin-a #sheet .meta .ylw::before { color: #b9b2a2; }
+/* 名字里有手写体缺的字：详情卡标题用正文字体 */
+.skin-a #sheet .title.plain { font-family: var(--font); font-weight: 700; font-size: 26px; }
+
+/* ---------- 面板开着时：严肃那只企鹅和它的气泡让开（一个画面只放一只），提示条浮在面板上面 ---------- */
+#phone.add-open #penguin, #phone.add-open #bubble, #phone.add-open #peek { visibility: hidden; }
+#phone.add-open #toast { z-index: 70; }
+
+/* ---------- 录入面板 ---------- */
+#addLayer { left: 0; top: 0; width: 390px; height: 844px; z-index: 50; display: none; font-family: var(--font); color: var(--ink); }
+#addLayer.on { display: block; }
+#addLayer .adim { position: absolute; inset: 0; background: rgba(38, 48, 43, .45); opacity: 0; }
+#addLayer .apanel { position: absolute; left: 0; bottom: 0; width: 390px; max-height: 78%; display: flex; flex-direction: column;
+  background: var(--card); border-radius: 28px 28px 0 0; box-shadow: 0 -8px 30px rgba(38, 48, 43, .16); transform: translateY(102%); }
+#addLayer .ahandle { flex: none; height: 26px; cursor: pointer; position: relative; }
+#addLayer .ahandle::before { content: ""; position: absolute; left: 50%; top: 10px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: #ddd6c6; }
+#addLayer .ascroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 0 22px 8px; scrollbar-width: none; }
+#addLayer .ascroll::-webkit-scrollbar { display: none; }
+#addLayer .afoot { flex: none; padding: 10px 22px 22px; background: var(--card); box-shadow: 0 -1px 0 rgba(38, 48, 43, .07); }
+
+/* 开心那只企鹅 + 气泡 */
+#addLayer .ahead { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+#addLayer .ahead img { width: 62px; height: 70px; object-fit: contain; flex: none; filter: drop-shadow(1px 3px 3px rgba(60, 40, 15, .2)); }
+#addLayer .ahead .abub { position: relative; padding: 9px 13px; border-radius: 16px; font-size: 14px; line-height: 1.4; color: var(--ink);
+  background: #fff6e6; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .12); }
+#addLayer .ahead .abub::before { content: ""; position: absolute; left: -5px; top: 50%; margin-top: -6px; width: 12px; height: 12px; background: #fff6e6;
+  box-shadow: -1px 1px 0 rgba(109, 84, 55, .12); transform: rotate(45deg); border-radius: 0 0 0 3px; }
+
+/* 看到一件没人认的东西（产品 found 的字） */
+#addLayer .aback { display: inline-block; margin: 0 0 8px; font-size: 13px; color: var(--sage); font-weight: 600; }
+#addLayer .akicker { font-size: 12px; color: #9a5f22; font-weight: 600; margin: 0 0 4px; }
+#addLayer .atitle { font-size: 22px; line-height: 1.25; font-weight: 700; margin: 0 0 6px; }
+#addLayer .alede { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 14px; }
+#addLayer .anote { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 8px 0 4px; }
+
+/* 常放的六样 */
+#addLayer .aglabel { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+#addLayer .aquick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 12px; }
+#addLayer .aquick button { height: 72px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .16), 0 1px 2px rgba(60, 40, 15, .08); font-size: 13px; color: var(--ink);
+  transition: transform .12s; }
+#addLayer .aquick button:active { transform: scale(.96); }
+#addLayer .aquick img { height: 36px; max-width: 54px; object-fit: contain; }
+
+/* + 其他 */
+#addLayer .aother { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 4px 0 12px; border-radius: 14px; margin: 0 0 10px;
+  background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2); }
+#addLayer .aother .aol { font-size: 13px; color: var(--sage); font-weight: 600; flex: none; }
+#addLayer .aother input { flex: 1; min-width: 0; height: 40px; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: var(--ink);
+  -webkit-user-select: text; user-select: text; }
+#addLayer .aother input::placeholder { color: #a9a395; }
+#addLayer .aother button { flex: none; height: 34px; padding: 0 12px; border-radius: 11px; font-size: 13px; font-weight: 600; color: #fff; background: var(--sage); }
+
+/* 拍购物小票（演示） */
+#addLayer .areceipt { width: 100%; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0 0 6px;
+  font-size: 14px; color: #3f5a4a; font-weight: 600; box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .45); background: transparent; }
+#addLayer .areceipt svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#addLayer .areceipt small { font-size: 10px; font-weight: 600; color: #9a5f22; background: #f5e5ce; border-radius: 6px; padding: 1px 5px; }
+#addLayer .areceipt:disabled { opacity: .55; }
+#addLayer .rwrap { overflow: hidden; margin: 4px 0 8px; }
+#addLayer .rpaper { position: relative; width: 236px; margin: 0 auto; padding: 12px 16px 20px; background: #fffefa; color: #3b3a35;
+  font-family: Consolas, "Courier New", ui-monospace, monospace; font-size: 12px; line-height: 1.75;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, .18), 0 4px 12px rgba(60, 40, 15, .1);
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 8px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 8px repeat-x;
+          mask: linear-gradient(#000 0 0) top / 100% calc(100% - 8px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 8px repeat-x; }
+#addLayer .rpaper .rh { text-align: center; letter-spacing: .1em; border-bottom: 1px dashed #c9c2b0; padding-bottom: 4px; margin-bottom: 4px; font-family: var(--font); font-weight: 700; }
+#addLayer .rpaper .rl { display: flex; justify-content: space-between; }
+#addLayer .rpaper .rl.got { color: #3f7a5a; }
+#addLayer .rpaper .rl.got span:first-child::after { content: " ✓"; }
+#addLayer .rpaper .rt { border-top: 1px dashed #c9c2b0; margin-top: 4px; padding-top: 4px; display: flex; justify-content: space-between; }
+#addLayer .rpaper .rscan { position: absolute; left: 6px; right: 6px; top: 0; height: 18px; pointer-events: none;
+  background: linear-gradient(rgba(80, 160, 120, 0), rgba(80, 160, 120, .28) 70%, rgba(60, 140, 100, .9) 70%, rgba(60, 140, 100, .9) 80%, rgba(80, 160, 120, 0) 80%); }
+#addLayer .rnote { text-align: center; font-size: 11px; color: var(--muted); margin: 6px 0 0; }
+
+/* 这一批 */
+#addLayer .acount { font-size: 13px; font-weight: 700; color: var(--ink); margin: 14px 0 6px; }
+#addLayer .aempty { font-size: 13px; color: #a9a395; text-align: center; padding: 14px 0 6px; }
+#addLayer .arow { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-top: 1px solid rgba(38, 48, 43, .08); }
+#addLayer .arow.enter { animation: arowIn .32s cubic-bezier(.3, 1.4, .5, 1); }
+@keyframes arowIn { from { opacity: 0; transform: translateY(8px) scale(.97); } }
+#addLayer .athumb { position: relative; flex: none; width: 50px; height: 50px; border-radius: 13px; background: #f7efe0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .1); }
+#addLayer .athumb img { position: absolute; left: 7px; top: 5px; width: 36px; height: 36px; object-fit: contain; object-position: 50% 100%; pointer-events: none; }
+#addLayer .athumb .nlab { position: absolute; left: 50%; bottom: 3px; translate: -50% 0; padding: 0 3px; height: 14px; line-height: 13px; border-radius: 2px; white-space: nowrap;
+  font-family: var(--fun); font-size: 9.5px; color: #4f4130; background: #fffaf0; border: 1px solid rgba(109, 84, 55, .26); box-shadow: 0 1px 1.5px rgba(60, 40, 15, .25); pointer-events: none; }
+#addLayer .athumb .nlab.plain { font-family: var(--font); font-size: 9px; font-weight: 600; }
+#addLayer .athumb .ytag { position: absolute; left: -5px; top: -5px; height: 14px; line-height: 14px; padding: 0 4px; border-radius: 2px; rotate: -7deg; pointer-events: none;
+  font-size: 9px; font-weight: 800; color: #2a2614; background: #ffe234; box-shadow: 0 1px 1.5px rgba(70, 60, 10, .35); }
+#addLayer .abody { flex: 1; min-width: 0; }
+#addLayer .aname { font-size: 15px; font-weight: 600; line-height: 20px; margin: 1px 0 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#addLayer .achips { display: flex; flex-wrap: wrap; gap: 5px; }
+#addLayer .achips button { height: 26px; padding: 0 9px; border-radius: 9px; font-size: 12px; color: var(--ink); background: #fffaf0;
+  box-shadow: inset 0 0 0 1px rgba(38, 48, 43, .16); white-space: nowrap; }
+#addLayer .achips button.set { color: #3f5a4a; box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .5); background: #eef3ee; }
+#addLayer .achips button.open { color: #9a5f22; box-shadow: inset 0 0 0 1.2px rgba(216, 146, 69, .5); background: #fbf1e3; }
+#addLayer .achips button.cold { color: #2f6570; box-shadow: inset 0 0 0 1.2px rgba(63, 122, 134, .42); background: #f1f8f8; }
+#addLayer .achips button:disabled { color: #8f978f; box-shadow: inset 0 0 0 1px rgba(38, 48, 43, .1); background: #f6f2e8; cursor: default; }
+#addLayer .achips button.yl { color: #6b6320; box-shadow: inset 0 0 0 1px rgba(160, 140, 20, .35); background: #fffbe0; }
+#addLayer .achips button.yl.on { color: #2a2614; font-weight: 700; background: #ffe234; box-shadow: 0 1px 1.5px rgba(70, 60, 10, .3); }
+#addLayer .ax { flex: none; width: 30px; height: 30px; margin-top: 10px; border-radius: 10px; font-size: 14px; color: #8f978f; }
+
+/* 底下：主按钮、看到一件没人认的东西 */
+#addLayer .ago { width: 100%; height: 54px; border-radius: 18px; font-size: 17px; font-weight: 700; letter-spacing: .02em; color: #fff; background: #3f5a4a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 2px 6px rgba(40, 60, 48, .3); transition: transform .12s; }
+#addLayer .ago:active { transform: scale(.98); }
+#addLayer .ago:disabled { color: #8f978f; background: #ebe6da; box-shadow: none; font-weight: 600; font-size: 15px; cursor: default; }
+#addLayer .afound { display: block; width: 100%; margin: 12px 0 4px; padding: 11px 0; border-radius: 14px; font-size: 13px; color: var(--muted);
+  box-shadow: inset 0 0 0 1px rgba(38, 48, 43, .14); background-image: none; border: 1px dashed rgba(38, 48, 43, .22); }
+
+/* 飞向层板的那一份 */
+#addFly { left: 0; top: 0; width: 390px; height: 844px; z-index: 45; pointer-events: none; }
+#addFly .af { position: absolute; left: 0; top: 0; transform-origin: 50% 50%; will-change: transform; }
+#addFly .af img { width: 100%; height: 100%; display: block; }

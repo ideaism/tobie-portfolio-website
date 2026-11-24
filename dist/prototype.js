@@ -175,7 +175,7 @@ function live(root) {
       routes.forEach(b => b.disabled = false);
       reload.disabled = false;
     }
-    frame.src = url + (route === 'home' ? '#home' : '#' + route);
+    frame.src = routes.length ? url + '#' + route : url;   // 冰箱 3D 小样（2026-11-24）没有入口按钮，不带 #
   }
   root.querySelector('[data-action="load"]').addEventListener('click', () => { load(); frame.focus(); });
   routes.forEach(b => b.addEventListener('click', () => load(b.dataset.route)));

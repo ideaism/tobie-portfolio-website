@@ -580,29 +580,27 @@ def smt_table(lang, anchor):
 
 
 # --------------------------------------------------------------------------
-# Commons Fridge: the real working prototype, embedded
+# Commons Fridge 07：3D 小样，嵌在本站（2026-11-24，交接单 6h，替掉原 08 节嵌的 v1.8 外链原型）。
+# dist/demo/commons-fridge-3d/ 由 tools/pack_fridge_demo.py 从 01-commons-fridge/3d-小样/试装/ 打包，不发外站请求；
+# 点「在这里运行」之前只有一张封面图（fridge/3d-home），点了才载入。JS 用 prototype.js 的 live()（没有入口按钮时不带 #）
 # --------------------------------------------------------------------------
-FRIDGE_URL = 'https://ideaism.github.io/commons-fridge-functional-v1/'
+FRIDGE_3D_URL = '/demo/commons-fridge-3d/'
 
-def fridge_live(lang, anchor):
-    routes = [('home', t('首页', 'Home', lang)), ('add', t('放进去', 'Put in', lang)), ('manage', t('查看与处理', 'Check & handle', lang)),
-              ('shop', t('买菜之前', 'Before you shop', lang)), ('found', t('发现了东西', 'Found something', lang))]
-    buttons = ''.join(f'<button type="button" data-route="{k}" disabled>{v}</button>' for k, v in routes)
-    return f'''<section class="proto frame-block" id="{anchor}" data-live="{FRIDGE_URL}" data-component="Live prototype">
-{_frame_label(t('The Commons Fridge · 功能原型 v1.8', 'The Commons Fridge · functional prototype v1.8', lang), t('可运行原型', 'Working prototype', lang), 'prov--live', 'fridge')}
-<div class="frame frame--canvas"><div class="live">
+def fridge_3d(lang, anchor):
+    T = lambda zh, en: t(zh, en, lang)
+    return f'''<section class="proto frame-block" id="{anchor}" data-live="{FRIDGE_3D_URL}" data-component="Live prototype">
+{_frame_label(T('The Commons Fridge · 3D 小样', 'The Commons Fridge · 3D prototype'), T('可运行原型', 'Working prototype'), 'prov--live', 'fridge')}
+<div class="frame frame--canvas"><div class="live live--3d">
  <div class="live__phone"><div class="phone"><div class="phone__screen">
-  <div class="live__poster"><img src="/assets/work/fridge/cf-home.webp" width="480" height="1062" alt="{t('功能原型首页截图：冰箱前的四个入口', 'Screenshot of the prototype home: four entry points at the fridge', lang)}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {t('在这里运行原型', 'Run the prototype here', lang)}</button></div>
+  <div class="live__poster"><img src="/assets/work/fridge/3d-home.webp" width="480" height="1039" alt="{T('3D 小样首页：冰箱门关着，底下是查看处理、放入、买菜前看一眼', '3D prototype home: the fridge door closed, with Check, Put in and Before you shop below')}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {T('在这里运行', 'Run it here')}</button></div>
  </div></div></div>
  <div class="proto__side">
-  <div class="proto__intro"><span class="label label--teal">{t('真实原型，不是示意', 'The real prototype, not a mock-up', lang)}</span><h3>{t('在冰箱前，只做这一刻需要的事。', 'At the fridge, do only what this moment needs.', lang)}</h3>
-   <p>{t('左边运行的是我部署的 v1.8 双语功能原型本身。数据只存在你这台设备的浏览器里，是虚构示例；不会上传，也不会同步给任何人。', 'On the left is the deployed v1.8 bilingual functional prototype itself. Records live only in this browser as fictional examples; nothing is uploaded or shared with anyone.', lang)}</p></div>
-  <div><span class="label">{t('直接跳到一个入口', 'Jump to an entry point', lang)}</span><div class="routes">{buttons}</div></div>
-  {_note(t('试试“放进去”：选一个计划再保存；然后去“查看与处理”，看看“不确定是谁的”物品为什么不能被随手清掉。', 'Try “Put in”: choose a plan and save it. Then open “Check & handle” and see why a “not sure whose” item cannot simply be cleared.', lang), t('Tobie 的注释', 'Tobie’s note', lang))}
-  <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_URL}" target="_blank" rel="noopener">↗ {t('新窗口全屏打开', 'Open full screen', lang)}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {t('重新载入', 'Reload', lang)}</button></div>
+  <div class="proto__intro"><h3>{T('打开门，拿起一样东西。', 'Open the door, pick something up.')}</h3>
+   <p>{T('拖到别的层，或者拖给企鹅吃掉。', 'Drag it to another shelf, or to the penguin to eat.')}</p></div>
+  <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_3D_URL}" target="_blank" rel="noopener">↗ {T('全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
  </div>
 </div>
-<p class="proto__prov">{t('嵌入的是公开部署的原型（GitHub Pages），每一屏都标着版本号。', 'Embedded from the public deployment (GitHub Pages); every screen shows its version.', lang)}</p>
+<p class="proto__prov">{T('嵌入的是 3D 小样本身，示例数据，只在这台设备上，刷新就复原。', 'The 3D prototype itself, with example data that stays on this device and resets on reload.')}</p>
 </div></section>'''
 
 
@@ -821,6 +819,6 @@ def section_demo(slug, number, lang):
     if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
     if slug == 'playbook' and number == 11: return drafter(lang)   # 2026-11-17：最后一节「2026 回看 · 活动起草助手」（交接单 ⑤）
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
-    if slug == 'commons-fridge' and number == 8: return fridge_live(lang, 'try')   # 2026-11-15：前面插了一节「从研究到功能」，原 05 顺延为 06；2026-11-18：前面又插了 06「产品化」（v2.0），顺延为 07；2026-11-23：前面又插了 07「3D 小样」，顺延为 08
+    if slug == 'commons-fridge' and number == 7: return fridge_3d(lang, 'try')   # 2026-11-24（交接单 6h）：v1.8 外链原型撤掉，换成 07「3D 小样」里嵌本站打包的小样；原 08「原型与结果」并进 07
     if slug == 'agent-matrix' and number == 7: return review_demo(lang, 'try') + sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）
     return ''

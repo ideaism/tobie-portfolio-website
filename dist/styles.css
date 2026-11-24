@@ -474,6 +474,7 @@ html:not(.js) .case-tab+.case-tab{margin-top:var(--s-9);border-top:1px solid var
 /* ---------- 14. Live prototype (Commons Fridge) ---------- */
 .live{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:var(--s-7);padding:var(--s-7);align-items:start}
 .live__phone .phone__screen{aspect-ratio:390/780;background:#F6F1E6}
+.live--3d .live__phone .phone__screen{aspect-ratio:390/844;background:#F3E3CF}   /* 冰箱 3D 小样 390×844（2026-11-24） */
 .live__phone iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#F6F1E6}
 .live__poster{position:absolute;inset:0;display:grid;place-items:end center;padding:22px}
 .live__poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}

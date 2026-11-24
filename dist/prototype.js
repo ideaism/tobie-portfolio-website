@@ -349,7 +349,7 @@ const recipeRules = (() => {
   return { blank, load, find, check, add, move, remove, nudge, toggleJoin, toggleChoose, setPct, count };
 })();
 
-/* 6a'. Campaign drafting assistant (PlayBook 11): a new design concept from 2026, not one of
+/* 6a'. Campaign drafting assistant (PlayBook 04; section 11 until 2026-11-24): a new design concept from 2026, not one of
    the three rebuilds. Plain data in, plain data out, so tests/draft_rules.test.js runs it in Node.
    A draft comes from 02-playbook/case-study/ai-起草助手-数据.json (prototypes.py writes it into the page).
    The visitor's changes are { tasks: {id: {qty, removed, accepted}}, recipes: {id: {qty: {item: n}, removed, accepted}} }. */
@@ -1158,7 +1158,7 @@ function commentLab(root) {
   paint();
 }
 
-/* 6e. Campaign drafting assistant (PlayBook 11). Pick a goal, read the draft, accept / edit (quantities
+/* 6e. Campaign drafting assistant (PlayBook 04; section 11 until 2026-11-24). Pick a goal, read the draft, accept / edit (quantities
    only) / remove each mission and recipe, see it checked again, and put a recipe on a read-only canvas
    drawn with the recipe editor's own pieces (.rz). Nothing is sent anywhere. */
 function drafterLab(root) {

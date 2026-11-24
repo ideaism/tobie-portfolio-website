@@ -780,7 +780,7 @@ html.studio-open{overflow:hidden}
 /* 重做演示的来源标签英文很长（Rebuilt in code, 2026 · interface from the source），窄屏上放不下会把整页撑出横向滚动：允许它收窄、折行（2026-11-16） */
 @media (max-width:520px){.prov--retro{flex:0 1 auto;min-width:0}}
 
-/* ---------- PlayBook 11：活动起草助手（2026-11-17，交接单 ⑤）----------
+/* ---------- PlayBook 04：活动起草助手（2026-11-17，交接单 ⑤；2026-11-24 从 11 挪到 04，交接单 ⑧）----------
    2026 年新做的设计示意，不属于规则 8 的三个重做演示。外壳用作品集自己的样式（.studio__btn、.studio__stepper、
    .studio__status、.studio__read、.chip、.case-brief），「放上画布」沿用 03 节配方编辑器的 .rz 部件（Tab、栏框、
    物品卡、红色数量角标、概率条、And / Or、Choose 1 Out Of N），只把定位从「录屏像素 × --u」改成能自己排的三栏，

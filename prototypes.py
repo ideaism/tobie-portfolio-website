@@ -9,7 +9,7 @@ Rules (docs/design-system.md §5):
   5. The three PlayBook Studio demos rebuilt in code (STUDIO, rule 8) may be
      operated freely inside stated limits; they say they are a 2026 rebuild,
      take their interface from the source, and invent no data.
-  6. The campaign drafting assistant (PlayBook 11, DRAFTER) is not a rebuild:
+  6. The campaign drafting assistant (PlayBook 04, DRAFTER; was 11 until 2026-11-24) is not a rebuild:
      it is a new design concept from 2026 and says so (CONCEPT). Its creators,
      items and campaigns are fictional and come from one JSON file in
      02-playbook, read at build time; the page makes no request for it.
@@ -629,7 +629,7 @@ def clips(lang):
 
 
 # --------------------------------------------------------------------------
-# PlayBook 11: campaign drafting assistant (a new design concept, 2026)
+# PlayBook 04: campaign drafting assistant (a new design concept, 2026; section 11 until 2026-11-24)
 #
 # 交接单 02-playbook/portfolio/handoff.md 第 4 节 ⑤；本人的结论在卡 20261116-001（做）、
 # 20261116-013（B 档：能点的示意加评分结果）、20261117-003（打分「都通过」）、20261117-024（「放上画布」选 A）。

@@ -421,6 +421,15 @@ html:not(.js) .case-tab+.case-tab{margin-top:var(--s-9);border-top:1px solid var
 .rail button[aria-current="step"]{background:var(--teal-wash);color:var(--ink);font-weight:700}
 .rail button[aria-current="step"] .pin{background:var(--teal);color:#fff;box-shadow:none}
 .rail button.is-done .pin{background:var(--ink);color:#fff;box-shadow:none}
+/* 冰箱 3D 小样右栏：手势 → 产品里的事（2026-11-24） */
+.gest{margin:0;border-top:1px solid var(--rule)}
+.gest>div{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:var(--s-4);padding:var(--s-3) 0;border-bottom:1px solid var(--rule);font-size:var(--fs-small);line-height:1.5}
+.gest>div:last-child{border-bottom:0}
+.gest dt{font-weight:700;color:var(--ink)}
+.gest dd{margin:0;color:var(--ink-2)}
+.gest__key{font-size:var(--fs-small);line-height:1.7;color:var(--ink-3)}
+.gest__key span{white-space:nowrap}
+.gest__key b{display:inline-grid;place-items:center;min-width:1.6em;height:1.6em;margin-right:2px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--rule-strong);background:#fff;color:var(--ink);font-size:.8125rem;font-weight:700;line-height:1}
 .proto__note{min-height:7.5em}
 .proto__note .note__text{font-size:1.0625rem}
 .proto__next{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:var(--fs-label);color:var(--teal-deep);background:var(--teal-wash);padding:10px 12px;border-radius:8px}

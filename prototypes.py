@@ -588,6 +588,15 @@ FRIDGE_3D_URL = '/demo/commons-fridge-3d/'
 
 def fridge_3d(lang, anchor):
     T = lambda zh, en: t(zh, en, lang)
+    # 右栏的“手势 → 产品里的事”（2026-11-24 打回后补：右边太空）。每一行都在打包进站的小样里点过，
+    # 出处见 claudestudy/evidence/2026-11-24-作品集-冰箱页换成3D小样/小样画面/右栏事实.txt。小样改了要重对。
+    rows = ''.join(f'<div><dt>{T(*a)}</dt><dd>{T(*b)}</dd></div>' for a, b in (
+        (('向右拖门把手', 'Drag the handle to the right'), ('开门', 'The door opens')),
+        (('点一样东西', 'Tap an item'), ('看它是谁的、放了几天、打算什么时候吃', 'See whose it is, how long it has been there, and the plan for it')),
+        (('把自己的东西拖给企鹅', 'Drag something of yours to the penguin'), ('处理掉了，企鹅得一条鱼', 'It is dealt with, and the penguin gets a fish')),
+        (('把自己的东西拖到别的层', 'Drag something of yours to another shelf'), ('换了位置，还是我的', 'It moves, and it is still yours')),
+        (('点二层「+2」里的果酱', 'Tap the jam inside “+2” on the second shelf'), ('小满的，放在我的层，没有处理按钮', 'Xiaoman’s, sitting on my shelf: no button to dispose of it')),
+    ))
     return f'''<section class="proto frame-block" id="{anchor}" data-live="{FRIDGE_3D_URL}" data-component="Live prototype">
 {_frame_label(T('The Commons Fridge · 3D 小样', 'The Commons Fridge · 3D prototype'), T('可运行原型', 'Working prototype'), 'prov--live', 'fridge')}
 <div class="frame frame--canvas"><div class="live live--3d">
@@ -595,7 +604,9 @@ def fridge_3d(lang, anchor):
   <div class="live__poster"><img src="/assets/work/fridge/3d-home.webp" width="480" height="1039" alt="{T('3D 小样首页：冰箱门关着，底下是查看处理、放入、买菜前看一眼', '3D prototype home: the fridge door closed, with Check, Put in and Before you shop below')}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {T('在这里运行', 'Run it here')}</button></div>
  </div></div></div>
  <div class="proto__side">
-  <div class="proto__intro"><h3>{T('开门，拿起二层那瓶牛奶，拖给企鹅。', 'Open the door, pick up the milk on the second shelf, drag it to the penguin.')}</h3></div>
+  <div class="proto__intro"><span class="label label--teal">{T('可以上手的小样', 'Hands-on prototype')}</span><h3>{T('开门，拿起二层那瓶牛奶，拖给企鹅。', 'Open the door, pick up the milk on the second shelf, drag it to the penguin.')}</h3><p>{T('下一版首页的小样，里面是示例数据。每个手势对应产品里的一件事：', 'A prototype of the next home screen, with example data. Each gesture stands for one thing in the product:')}</p></div>
+  <dl class="gest">{rows}</dl>
+  <p class="gest__key">{T('东西上的小圆贴：<span><b>我</b> 我的</span> · <span><b>共</b> 共用</span> · <span><b>满</b> <b>青</b> 室友的</span> · <span><b>?</b> 不知道是谁的</span>。放在自己那层的不贴。', 'Round stickers on items: <span><b>我</b> mine</span> · <span><b>共</b> shared</span> · <span><b>满</b> <b>青</b> a flatmate’s</span> · <span><b>?</b> nobody knows whose</span>. Items on their owner’s own shelf carry none.')}</p>
   <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_3D_URL}" target="_blank" rel="noopener">↗ {T('全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
  </div>
 </div>

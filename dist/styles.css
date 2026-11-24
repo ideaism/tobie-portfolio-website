@@ -932,7 +932,8 @@ html.studio-open{overflow:hidden}
    配方行：整行悬停、光标变手，表题旁一行小字。编辑器就是 03 节的 .rz（recipeLab），在 Studio 窗口里替换草案区域；
    和 03 节不同的只有可选配置带来的几处，都挂在 .rz[data-own]（物品用自己的图）、.rz[data-odds]（几选一也显示概率）上，
    03 节的三个演示没有这两个属性，样子不变。宽屏时录屏底图上 #Chargers 到最后一行物品那块用同色盖住，
-   换成这份草案的标签和物品；顶上「Craft Recipes 3」用同色盖住，写这条配方的名字。颜色取自 live-recipe-03.webp。 */
+   换成这份草案的标签和物品；顶上「Craft Recipes 3」用同色盖住，写这条配方的名字。颜色取自 live-recipe-03.webp。
+   宽屏规则用「> .studio >」只认编辑器自己那层 .proto：外面的起草助手也是 .proto 而不带 data-compact，不限定的话手机上也会套用。 */
 .dz-hint{font-family:var(--sans);font-size:var(--fs-micro);font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-3)}
 .dz-rows--recipes .dz-recipe{cursor:pointer;touch-action:manipulation;transition:background var(--t-fast)}
 .dz-rows--recipes .dz-recipe:hover{background:var(--canvas);box-shadow:-10px 0 0 var(--canvas),10px 0 0 var(--canvas)}
@@ -948,15 +949,15 @@ html.studio-open{overflow:hidden}
 .rz__tag{display:none}
 .rz[data-own] .rz-name{white-space:normal;line-height:1.1;padding:0 calc(6 * var(--u))}
 .rz[data-odds] .rz-group[data-choose] .rz-tile{height:calc(var(--tile-h) * var(--u))}
-.proto:not([data-compact]) .rz[data-own] .rz__lib::before{content:'';position:absolute;left:0;top:calc(164 * var(--u));width:calc(372 * var(--u));height:calc(805 * var(--u));background:#FCFCF9;transition:background var(--t-fast)}
-.proto:not([data-compact]) .rz[data-own] .rz__lib.is-over::before{background:#EEF1FC}
-.proto:not([data-compact]) .rz[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(268 * var(--u));max-width:calc(350 * var(--u));height:calc(26 * var(--u));font-size:calc(18.5 * var(--u));color:#141414;white-space:nowrap;overflow:hidden;pointer-events:none}
-.proto:not([data-compact]) .rz[data-own] .rz__tag::before{content:'';flex:none;border-left:calc(7 * var(--u)) solid transparent;border-right:calc(7 * var(--u)) solid transparent;border-bottom:calc(9 * var(--u)) solid #2B2B2B}
-.proto:not([data-compact]) .rz[data-own] .rz__title{display:block;position:absolute;z-index:1;left:calc(560 * var(--u));top:calc(4 * var(--u));width:calc(860 * var(--u));height:calc(44 * var(--u));line-height:calc(44 * var(--u));background:#FCFCF9;font-family:Inter,"Helvetica Neue","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-weight:700;font-size:calc(21 * var(--u));text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.proto:not([data-compact]) .rz[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 116) * var(--u));width:calc(128 * var(--u));height:calc(128 * var(--u))}
-.proto:not([data-compact]) .rz[data-own] .rz-lib > *{opacity:1}
-.proto:not([data-compact]) .rz[data-own] .rz-lib__ico{position:absolute;inset:0;border-radius:50%;background:#fff;border:1px solid #DADDDE;display:grid;place-items:center}
-.proto:not([data-compact]) .rz[data-own] .rz-lib__name{position:absolute;left:50%;top:calc(100% + 6 * var(--u));width:calc(172 * var(--u));margin-left:calc(-86 * var(--u));font-size:calc(15.5 * var(--u));line-height:1.12;text-align:center;color:#141414}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz__lib::before{content:'';position:absolute;left:0;top:calc(164 * var(--u));width:calc(372 * var(--u));height:calc(805 * var(--u));background:#FCFCF9;transition:background var(--t-fast)}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz__lib.is-over::before{background:#EEF1FC}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(268 * var(--u));max-width:calc(350 * var(--u));height:calc(26 * var(--u));font-size:calc(18.5 * var(--u));color:#141414;white-space:nowrap;overflow:hidden;pointer-events:none}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz__tag::before{content:'';flex:none;border-left:calc(7 * var(--u)) solid transparent;border-right:calc(7 * var(--u)) solid transparent;border-bottom:calc(9 * var(--u)) solid #2B2B2B}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz__title{display:block;position:absolute;z-index:1;left:calc(560 * var(--u));top:calc(4 * var(--u));width:calc(860 * var(--u));height:calc(44 * var(--u));line-height:calc(44 * var(--u));background:#FCFCF9;font-family:Inter,"Helvetica Neue","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-weight:700;font-size:calc(21 * var(--u));text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 116) * var(--u));width:calc(128 * var(--u));height:calc(128 * var(--u))}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib > *{opacity:1}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib__ico{position:absolute;inset:0;border-radius:50%;background:#fff;border:1px solid #DADDDE;display:grid;place-items:center}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib__name{position:absolute;left:50%;top:calc(100% + 6 * var(--u));width:calc(172 * var(--u));margin-left:calc(-86 * var(--u));font-size:calc(15.5 * var(--u));line-height:1.12;text-align:center;color:#141414}
 
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
 

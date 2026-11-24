@@ -476,8 +476,10 @@ def figure_html(f, lang):
         # 'stack'（2026-11-23，Agent Matrix 07 节）：几张很扁的横条图（13:1）上下排，每张下面一行小字说是哪张；并排的话字会缩到看不清
         # 放大按钮挪到图下面那行的右边（styles.css .stack .enlarge::after），不盖住扁图上的按钮和字；小字留空时那一行照样留着放按钮；没有小字的图用图注当 alt
         # 每张图的显示宽度不超过导出图的宽度（不放大，和手机条的 partials / whole 一样）：2026-11-24 起 02 节的看板截图只有 667 宽，不加这条会被拉到整栏宽、发虚
+        # 2026-11-25（Agent Matrix 03 节）：items 每项可带第三个元素 src_en，英文页用它；没有就沿用中文图。max-width 取实际选中那张的宽度
+        pick = lambda it: it[2] if lang == 'en' and len(it) > 2 and it[2] else it[0]
         rows = ''.join(f'<figure style="max-width:{MANIFEST[src][0]}px"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang) or cap_text)}">{img(src, T(lbl, lang) or cap_text)}</button>'
-                       f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
+                       f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in ((pick(it), it[1]) for it in f['items']))
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
     if kind == 'anims':
         # 'anims'（2026-11-23，冰箱 07 节）：小样录屏（动态 WebP），不放大，不带放大按钮；每张自己的图注写在下面。

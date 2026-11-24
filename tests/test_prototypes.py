@@ -318,7 +318,7 @@ class FigureTests(unittest.TestCase):
                 self.assertLessEqual(set(fx), {'of', 'top', 'left', 'right'})
                 self.assertLess(fx.get('left', 0) + fx.get('right', 0), fx['of'])
                 self.assertLess(fx.get('top', 0), fx['of'] * 9 / 16)
-        plain = dict(FIGURES[('playbook', 9)][0])
+        plain = dict(FIGURES[('playbook', 10)][0])   # 2026-11-24：Remix 从 09 顺延为 10
         self.assertNotIn('scroll', plain)
         self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default
 

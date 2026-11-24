@@ -876,6 +876,78 @@ html.studio-open{overflow:hidden}
   .dz-self{scroll-margin-bottom:120px}   /* 换草案时自查要露出来，别被贴底的状态栏挡住 */
 }
 
+/* ---------- PlayBook 04：起草助手套上 Studio 窗口（2026-11-24，交接单 ⑧，卡 20261124-006 选 A）----------
+   照 Studio 定稿「新建挑战」（02-playbook/portfolio/figures/studio-remix-new-challenge@2x.png）取色：页底 #F7F9FA、卡片白、
+   分隔线 #D5DCE0、侧边栏亮着的一行底 #F3F7F8 字 #F95757（原稿是浅灰底红字，不是浅红底）、搜索框底 #F7F9FA 字 #808080、
+   次按钮黑 #1A1A1A 或浅灰 #E9F0F2 黑字。主按钮原稿是 #F95757 白字，白字只有 3.2:1，过不了规则 4，带字的按钮改用深一档的
+   #D63A3A（4.6:1）；字标、侧边栏这类装饰仍用 #F95757。侧边栏和顶栏 aria-hidden、点不了。窗口里把作品集的颜色变量换成 Studio 的，
+   .studio__btn 等部件原样用，按 data-key 结尾分主次（drafterLab 不改）。说明、状态栏、评分留在窗口外，是作品集自己的话。 */
+.case-section>h2+.case-sub{margin:calc(-1 * var(--s-3)) 0 var(--s-5)}
+.sk{--sk-red:#F95757;--sk-red-text:#D63A3A;--sk-line:#D5DCE0;--sk-page:#F7F9FA;--sk-on:#F3F7F8;--sk-grey:#E9F0F2;--sk-black:#1A1A1A;
+  --sans:"Lexend","Avenir Next","Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;--mono:var(--sans);
+  --ink:#1A1A1A;--ink-2:#4D4D4D;--ink-3:#666;--rule:var(--sk-line);--rule-strong:#C4CDD2;--teal:#1A1A1A;--teal-wash:var(--sk-on);--canvas:var(--sk-page);
+  container-type:inline-size;font-family:var(--sans);color:var(--ink);min-width:0}
+.sk__win{display:grid;grid-template-columns:184px minmax(0,1fr);background:var(--sk-page);border-radius:8px;box-shadow:0 0 0 1px var(--sk-line),0 12px 28px -20px rgba(14,42,39,.45);overflow:hidden}
+.sk__side{display:flex;flex-direction:column;gap:22px;padding:18px 10px;background:#fff;border-right:1px solid var(--sk-line);user-select:none}
+.sk__brand{display:flex;align-items:center;gap:8px;padding:0 6px;font-size:15px;font-weight:600;color:#000;white-space:nowrap}
+.sk__brand b{color:var(--sk-red);font-weight:700}
+.sk__mark{flex:none;width:26px;height:18px}
+.sk__nav{display:grid;gap:2px}
+.sk__item{position:relative;display:flex;align-items:center;gap:9px;padding:9px 8px 9px 16px;border-radius:5px;font-size:12.5px;line-height:1.2;color:var(--sk-black);white-space:nowrap}
+.sk__item svg{flex:none;width:17px;height:17px}
+.sk__item[data-on]{background:var(--sk-on);color:var(--sk-red);font-weight:600}
+.sk__caret{position:absolute;left:5px;top:50%;margin-top:-4px;border:4px solid transparent;border-left:5px solid currentColor;border-right:0}
+.sk__item .sk__plus{width:14px;height:14px;margin-left:auto}
+.sk__main{display:grid;grid-template-rows:auto 1fr;min-width:0}
+.sk__top{display:flex;align-items:center;gap:12px;min-height:54px;padding:0 20px;background:#fff;border-bottom:1px solid var(--sk-line);user-select:none}
+.sk__top .sk__brand{display:none}
+.sk__search{display:flex;align-items:center;gap:8px;flex:1 1 auto;min-width:0;max-width:540px;height:34px;padding:0 12px;border-radius:6px;background:var(--sk-page);color:#808080;font-size:12.5px}
+.sk__search svg{flex:none;width:16px;height:16px}
+.sk__ph{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sk__page{display:grid;gap:var(--s-4);grid-template-columns:minmax(0,1fr);padding:20px;min-width:0}
+.sk .dz-goal{border-radius:6px;box-shadow:inset 0 0 0 1px var(--sk-line)}
+.sk .dz-goal:hover{box-shadow:inset 0 0 0 1.5px var(--sk-black)}
+.sk .dz-goal[aria-pressed="true"]{background:var(--sk-on);box-shadow:inset 0 0 0 2px var(--sk-red)}
+.sk .dz-draft{border-radius:8px;box-shadow:0 0 0 1px var(--sk-line);container-type:inline-size}
+.sk .dz-head h3{color:#1D2129}
+/* 按钮：主 = 红底白字（采纳、放上画布），次 = 黑底白字（修改）或浅灰底黑字（删掉、数量加减）；圆角照原稿 4px */
+.sk .studio__btn{font-family:var(--sans);font-weight:500;border-radius:4px;background:var(--sk-grey);color:var(--sk-black);box-shadow:none}
+.sk .studio__btn:hover{box-shadow:inset 0 0 0 1.5px var(--sk-black)}
+.sk .studio__btn[data-key$=":accept"],.sk .studio__btn[data-key$=":place"]{background:var(--sk-red-text);color:#fff}
+.sk .studio__btn[data-key$=":accept"]:hover,.sk .studio__btn[data-key$=":place"]:hover{box-shadow:inset 0 0 0 1.5px #8F1F1F}
+.sk .studio__btn[data-key$=":accept"][aria-pressed="true"],.sk .studio__btn[data-key$=":place"][aria-pressed="true"]{background:#fff;color:var(--sk-red-text);box-shadow:inset 0 0 0 1.5px var(--sk-red-text)}
+.sk .studio__btn[data-key$=":edit"]{background:var(--sk-black);color:#fff}
+.sk .studio__btn[data-key$=":edit"][aria-expanded="true"]{background:#fff;color:var(--sk-black);box-shadow:inset 0 0 0 1.5px var(--sk-black)}
+.sk .studio__btn--quiet{text-decoration:none;padding-left:10px;padding-right:10px}
+.sk .studio__btn--quiet:hover{color:var(--sk-black)}
+.sk .studio__btn[aria-disabled="true"]{background:transparent;color:#808080;box-shadow:none;outline:1px dashed var(--rule-strong);outline-offset:-1px}
+.sk .dz-row[data-accepted]{box-shadow:inset 3px 0 0 var(--sk-red-text)}
+.sk .dz-check--ok .dz-check__k{color:#2E7D4F}
+.sk .dz-why li::before{background:var(--sk-red)}
+/* 窗口里比原来窄了一条侧边栏：草案卡不够宽时，任务表的操作按钮挪到每行下面一行（手机上 ≤820px 本来就是竖排，不动） */
+@media (min-width:821px){
+  @container (max-width:760px){
+    .sk .dz-rows--tasks .dz-row{grid-template-columns:4.5rem 6.5rem minmax(0,1fr) 6rem 8rem}
+    .sk .dz-rows--tasks .dz-acts{grid-column:1 / -1;justify-content:flex-start}
+    .sk .dz-rows--tasks .dz-row--head>:last-child{display:none}
+  }
+}
+/* 窗口本身太窄（平板竖屏一类）就收起侧边栏 */
+@container (max-width:720px){
+  .sk__win{grid-template-columns:minmax(0,1fr)}
+  .sk__side{display:none}
+  .sk__top .sk__brand{display:flex}
+}
+@media (max-width:820px){
+  .sk__win{grid-template-columns:minmax(0,1fr);border-radius:6px}
+  .sk__side{display:none}
+  .sk__top{min-height:46px;padding:0 12px;justify-content:space-between}
+  .sk__top .sk__brand{display:flex;padding:0;font-size:14px}
+  .sk__search{flex:none;width:34px;height:34px;padding:0;justify-content:center;background:transparent;color:var(--sk-black)}
+  .sk__ph{display:none}
+  .sk__page{padding:var(--s-3)}
+}
+
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
 
 /* ---------- 方案 A：手机条在手机宽度下折成两列，不再左右滑（2026-11-17 修法对比） ----------

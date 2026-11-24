@@ -224,7 +224,7 @@ def collage(slug, lang):
                 + img('gen/cf-door', t('插画：贴满冰箱贴的共享冰箱门，一只手拿手机碰门上的小贴片', 'Illustration: a shared fridge door covered in magnets, a hand tapping a sticker with a phone', lang), 'cover-bg').replace('<img', '<img style="object-position:100% 50%"')
                 + f'<div class="cover-chips" aria-hidden="true">{chips}</div>'
                 + img('fridge/3d-home', t('Commons Fridge 3D 小样首页', 'Commons Fridge 3D prototype home', lang), 'cover-phone').replace('<img', '<img style="left:9cqw;top:12cqw;width:21cqw;--r:-4deg"')
-                + img('fridge/penguin-add', t('小企鹅贴纸', 'Penguin sticker', lang), 'cover-sticker').replace('<img', '<img style="left:26cqw;bottom:3cqw;width:11cqw"')
+                # 2026-11-24：手机里换成 3D 小样首页后，画面角上已经有严肃那只企鹅；原来叠在手机右下的开心企鹅贴纸（fridge/penguin-add）拿掉，一个画面只放一只
                 + '</div>')
     return ''
 

@@ -249,6 +249,15 @@ JOBS = {
     'agent-matrix/ba-smt-after': (SRC / 'work' / 'agent-matrix' / 'ba-smt-after.png', 2880, 86),
     'agent-matrix/ba-fridge-before': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-before.png', 963, 88),
     'agent-matrix/ba-fridge-after': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-after.png', 984, 88),
+    # 2026-11-25 第二轮：03 节英文页配英文截图
+    'agent-matrix/ba-playbook-before-en': (SRC / 'work' / 'agent-matrix' / 'ba-playbook-before-en.png', 906, 88),
+    'agent-matrix/ba-playbook-after-en': (SRC / 'work' / 'agent-matrix' / 'ba-playbook-after-en.png', 920, 88),
+    'agent-matrix/ba-covers-before-en': (SRC / 'work' / 'agent-matrix' / 'ba-covers-before-en.png', 3192, 86),
+    'agent-matrix/ba-covers-after-en': (SRC / 'work' / 'agent-matrix' / 'ba-covers-after-en.png', 3192, 86),
+    'agent-matrix/ba-smt-before-en': (SRC / 'work' / 'agent-matrix' / 'ba-smt-before-en.png', 2880, 86),
+    'agent-matrix/ba-smt-after-en': (SRC / 'work' / 'agent-matrix' / 'ba-smt-after-en.png', 2880, 86),
+    'agent-matrix/ba-fridge-before-en': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-before-en.png', 963, 88),
+    'agent-matrix/ba-fridge-after-en': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-after-en.png', 984, 88),
 }
 
 # 动图（2026-11-23，冰箱 07「3D 小样」，交接单 6f ②、6g）：小样录屏 GIF → 动态 WebP（有损），不缩放。

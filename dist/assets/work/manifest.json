@@ -3,7 +3,15 @@
   3192,
   2104
  ],
+ "agent-matrix/ba-covers-after-en": [
+  3192,
+  2104
+ ],
  "agent-matrix/ba-covers-before": [
+  3192,
+  2104
+ ],
+ "agent-matrix/ba-covers-before-en": [
   3192,
   2104
  ],
@@ -11,23 +19,47 @@
   984,
   1615
  ],
+ "agent-matrix/ba-fridge-after-en": [
+  984,
+  1722
+ ],
  "agent-matrix/ba-fridge-before": [
   963,
   965
+ ],
+ "agent-matrix/ba-fridge-before-en": [
+  963,
+  1201
  ],
  "agent-matrix/ba-playbook-after": [
   920,
   1110
  ],
+ "agent-matrix/ba-playbook-after-en": [
+  920,
+  1150
+ ],
  "agent-matrix/ba-playbook-before": [
   906,
   826
+ ],
+ "agent-matrix/ba-playbook-before-en": [
+  906,
+  854
  ],
  "agent-matrix/ba-smt-after": [
   2880,
   1460
  ],
+ "agent-matrix/ba-smt-after-en": [
+  2880,
+  1460
+ ],
  "agent-matrix/ba-smt-before": [
+  2880,
+  1400
+ ],
+ "agent-matrix/ba-smt-before-en": [
   2880,
   1400
  ],

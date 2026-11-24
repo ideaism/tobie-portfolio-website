@@ -414,6 +414,16 @@ PlayBook
     - 兴业 SMT：改之前 = 提交 `68f2447` 的 `dist`（兴业和大通写在同一页）`/work/smt/` 第一屏；改之后 = 本机 `/work/smt/` 第一屏（顶部两个标签页）。都是 1440 宽 2 倍，只裁上下（去掉导航栏和项目卡以下），左右不裁。
     - The Commons Fridge：改之前 = `claudestudy/evidence/2026-11-18-冰箱v2一节合进网站-2-新06节-产品化-本机改后.png` 左边中文那一栏，裁 (25, 109, 988, 1074)，去掉证据图的标题和说明；改之后 = `05-agent-matrix/portfolio/cards/pics/13-线上-冰箱3D小样一节.png`（线上 07 节）裁到 08 节标签之前 (0, 0, 984, 1615)。没用本机还没验过的冰箱改动。
 - 沿用旧证据的：`fig-sequence`、`fig-who-waits`、飞书两张、示例审核卡、撤回 8 秒三张、审核中心小原型和批次图，图和图注都没改，只换了挂的节号。
+- 第二轮（2026-11-25）：
+  - 03 节英文页换英文截图。`build.py` 的 `stack`：每项可以带第三个元素 `src_en`，英文页用它，没有就沿用中文图；`max-width` 取实际用的那张图的宽。01 节飞书、04 节撤回两组没带第三个元素，照旧。八张英文图 `sources/work/agent-matrix/ba-*-en.png`（备份同上），和中文图框同一块：
+    - PlayBook 改之前：11-15 的证据只有一张英文页（`2026-11-15-PlayBook交互-07-桌面-英文页.jpg`，停在录屏第一屏，不是同一块），所以从提交 `a961374`（11-15 GMT 15:40，一步一步走的那版，`b8d3392` 起已换成能拖的编辑器）重建 `dist`，本机起服务截 `/en/work/playbook/` 的 `#try-recipe`（1280 宽 1 倍），点到第 4 步「Empty canvas」停住，裁 (7, 58, 913, 912)。拖动中的瞬间没截，用的是停在同一步的静止画面。
+    - PlayBook 改之后：本机 `/en/work/playbook/` 的 `[data-studio="recipe"]`，1280 宽 1 倍，裁到 1150 高（英文换行比中文多，比中文图高 40）。
+    - 首页封面：`8a5747a`、`971f168` 两个 `dist` 的 `/en/`，截法拼法和中文一样。
+    - 兴业 SMT：`68f2447` 的 `/en/work/smt/` 和本机 `/en/work/smt/` 第一屏，裁的行和中文一样。英文页顶上那行小字本来就带「兴业」两个汉字，原样。
+    - The Commons Fridge 改之前：同一张证据图右边英文那一栏，裁 (1017, 109, 1980, 1310)（左边留的边距和中文一样，下面裁到注释框下 37 px，和中文一样）。
+    - The Commons Fridge 改之后：线上 `https://www.tobiefeng.com/en/work/commons-fridge/` 的 `#section-7`（2026-11-25 用无头 Chrome 截，1440 宽 1 倍，四周留 24 px），裁到原型块下沿 (0, 0, 984, 1722)。线上这一节现在的动图停在的帧和中文那张（11-24 截的 `13-线上-冰箱3D小样一节.png`）不一样，中文图没重截。
+  - 02 节审核中心小原型：去掉标题「卡顶上多了一行：还剩几张。」和 Tobie 的注释「第 1 版我钉了两处……换到手机宽看第 2 版。」（中英都去），没补别的句子。右栏只剩宽度切换和两个工具按钮，`dist/styles.css` 的 `.rv__side` 改成两列两头对齐；手机宽本来就是一列。没有测试断言这两句。
+  - 封面小样只是小样，网站封面没换（`build.py` `matrix_cover`、`fig-who-waits`、sources 和 manifest 都没动）。源文件 `05-agent-matrix/portfolio/figures/src/cover-sample.mjs`，不在 `prepare_assets` 的 `JOBS` 里；出图和首页卡片示意在 `05-agent-matrix/portfolio/cards/pics/15-*`。
 
 ## 2026-11-25：PlayBook 起草助手从「新建活动」进入（交接单 ⑩，只合到本机，没部署、没推送）
 

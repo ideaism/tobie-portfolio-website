@@ -1038,7 +1038,8 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .rv__poster{position:relative;height:100%}
 .rv__poster img{width:100%;height:100%;object-fit:cover;object-position:top left}
 .rv__poster .btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(14,42,39,.25)}
-.rv__side{display:grid;grid-template-columns:auto 1fr auto;gap:var(--s-5);align-items:center}
+/* 2026-11-25：右栏去掉注释后只剩宽度切换和工具按钮，两头对齐 */
+.rv__side{display:grid;grid-template-columns:auto auto;justify-content:space-between;gap:var(--s-5);align-items:center}
 .rv__side .note{margin:0}
 @media (max-width:860px){.rv__side{grid-template-columns:1fr}.rv__side .routes{display:none}}
 @media (max-width:640px){.rv{padding:var(--s-5)}.rv__screen{height:min(680px,80vh)}}

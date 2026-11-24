@@ -900,12 +900,11 @@ def review_demo(lang, anchor):
     return f'''<section class="proto frame-block" id="{anchor}" data-review="{REVIEW_URL}" data-component="Live prototype">
 {_frame_label(T('审核中心 · 看卡', 'Review centre · card view'), T('可运行原型', 'Working prototype'), 'prov--live', 'matrix')}
 <div class="frame frame--canvas"><div class="rv">
- <div class="proto__intro"><span class="label label--teal">{T('真实代码，示例卡', 'Real code, example cards')}</span><h3>{T('卡顶上多了一行：还剩几张。', 'One new line at the top: how many are left.')}</h3>
+ <div class="proto__intro"><span class="label label--teal">{T('真实代码，示例卡', 'Real code, example cards')}</span>
   <p>{T('点右上角「还剩 4 张」，或者通过一张。', 'Click “还剩 4 张” (4 left) at the top right, or approve a card.')}</p></div>
  <div class="rv__screen" data-screen data-size="wide"><div class="rv__poster"><img src="/assets/work/agent-matrix/review-demo-poster.webp" alt="{T('审核中心看卡页截图：顶上一行「还剩 4 张 · 下一张」，卡头下面是前几张', 'Screenshot of the card view: “4 left · next” at the top, earlier cards under the header')}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {T('在这里运行', 'Run it here')}</button></div></div>
  <div class="rv__side">
   <div class="routes" role="group" aria-label="{T('宽度', 'Width')}">{sizes}</div>
-  {_note(T('第 1 版我钉了两处：纯文字卡左右空得太多；手机上不要弹小列表。换到手机宽看第 2 版。', 'On version 1 I pinned two problems: text-only cards left too much space at the sides, and the phone should not pop up a list. Switch to phone width to see version 2.'), T('Tobie 的注释', 'Tobie’s note'))}
   <div class="proto__tools"><a class="tool-btn" href="{REVIEW_URL}" target="_blank" rel="noopener">↗ {T('新窗口全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
  </div>
 </div>

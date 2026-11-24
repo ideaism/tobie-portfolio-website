@@ -666,8 +666,9 @@ DRAFTER = {
  'anchor': 'try-drafter',
  'label': ['PlayBook · 活动起草助手', 'PlayBook · Campaign drafting assistant'],
  'title': ['选一个目标，改一份草案', 'Pick a goal, edit a draft'],
- 'intro': ['选一个创作者目标，看助手起草的活动。每个任务、每条配方都可以接受、改数量或删掉；改过以后，下面会按现在的样子重新检查。双击一条配方，它会在 Studio 的配方编辑器里打开，可以接着拖。',
-           'Pick a creator’s goal and read the campaign the assistant drafted. Every mission and every recipe can be accepted, edited (quantities only) or removed; once you change something, the draft is checked again as it now stands. Double-click a recipe to open it in the Studio recipe editor and keep working on it by dragging.'],
+ # 2026-11-25（交接单 ⑩）：开头一句照交接单原文，换成从入口进来的点法
+ 'intro': ['从 Campaign 旁边的 + 新建活动，选「用一句话起草」，再选一个创作者目标，看助手起草的活动。每个任务、每条配方都可以接受、改数量或删掉；改过以后，下面会按现在的样子重新检查。双击一条配方，它会在 Studio 的配方编辑器里打开，可以接着拖。',
+           'Start a new campaign from the + next to Campaign, choose ‘Draft from one sentence’, then pick a creator’s goal and read the campaign the assistant drafts. Every mission and every recipe can be accepted, edited (quantities only) or removed; once you change something, the draft is checked again as it now stands. Double-click a recipe to open it in the Studio recipe editor and keep working on it by dragging.'],
  'score': ['评分结果', 'Score'],
  'score_text': ['三份草案 × 五条检查 = 十五项，全部通过', '3 drafts × 5 checks = 15 checks, all passed'],
  'score_checks': ['五条检查', 'The five checks'],
@@ -694,6 +695,15 @@ DRAFTER = {
    'edit': ['修改', 'Edit'], 'edit_done': ['改好了', 'Done'],
    'remove': ['删除', 'Remove'], 'restore': ['恢复', 'Restore'], 'restore_all': ['全部恢复', 'Restore all'],
    'back': ['回到草案', 'Back to draft'],
+   # 2026-11-25（交接单 ⑩）：从「新建活动」进来。页面标题 Campaign / New Campaign 照 Studio 用英文（和 studio_skin 一样）
+   'h_list': ['Campaign', 'Campaign'], 'h_new': ['New Campaign', 'New Campaign'],
+   'list_empty': ['还没有活动', 'No campaigns yet'],
+   'new': ['新建活动', 'New campaign'],
+   'from_blank': ['从空白开始', 'Start from blank'],
+   'from_sentence': ['用一句话起草', 'Draft from one sentence'],
+   'blank_only': ['这个示意只演示起草。', 'This demo only shows drafting.'],
+   'goal_ph': ['用一句话说出这次活动的目标', 'Describe the campaign goal in one sentence'],
+   'said_start': ['点 Campaign 旁边的 +，新建一个活动。', 'Click the + next to Campaign to start a new campaign.'],
    'act': ['{act}：{name}', '{act}: {name}'],
    'edit_hint': ['只改数量，1 到 9。', 'Quantities only, 1 to 9.'],
    'less': ['{name} 减 1', 'One fewer {name}'], 'more': ['{name} 加 1', 'One more {name}'],
@@ -775,9 +785,12 @@ def _drafter_editor(lang):
 # 左边侧边栏、上面顶栏只是装饰（aria-hidden、没有链接和按钮，点不了），中英文页都照原稿用英文；颜色在 styles.css 的 .sk 一段。
 # 里面的 [data-goals]、[data-draft] 原样，drafterLab 不动。
 # 2026-11-25（交接单 ⑨）：每项带 data-nav，配方编辑器打开时 drafterLab 把亮的那项从 Campaign 挪到 Craft Recipes，回到草案再挪回来。
+# 2026-11-25（交接单 ⑩，卡 20261125-004 选 A）：Campaign 后面的「+」是真按钮（新建活动，演示从这里开始）；
+# 侧边栏收起时（窗口窄、手机）顶栏字标右边另有一个同样的「+」，CSS 只露一个。别的菜单项、字标、搜索框仍是装饰，各自 aria-hidden。
 SKIN_NAV = [('dashboard', 'Dashboard'), ('campaign', 'Campaign'), ('items', 'Items'), ('recipes', 'Craft Recipes'),
             ('missions', 'Missions'), ('remix', 'PlayBook Remix'), ('economy', 'My Creator Economy')]
 SKIN_ON = 'campaign'
+SKIN_NEW = 'campaign'   # 「+」跟着 Campaign，不跟着亮的那项走（原稿「新建挑战」里亮的是 PlayBook Remix，+ 仍在 Campaign 后面）
 SKIN_SEARCH = 'Search Items / Recipes / Missions / Campaigns / Tags / Public Resources'
 _SKIN_ICONS = {   # 24×24 线框图标，照原稿侧边栏的样子画的简化版；不写 xmlns（内联 SVG 不需要，页面里也不出现网址）
  'dashboard': '<rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M9.5 4v16"/>',
@@ -797,20 +810,24 @@ def _skin_icon(name):
     return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{_SKIN_ICONS[name]}</svg>'
 
 
-def studio_skin(inner):
-    """Wrap a demo in a PlayBook Studio window: sidebar and top bar are decoration only."""
-    brand = f'<span class="sk__brand">{_SKIN_MARK}<span><b>PlayBook</b> Studio</span></span>'
-    caret = '<i class="sk__caret"></i>'
-    plus = _skin_icon('plus').replace('<svg ', '<svg class="sk__plus" ', 1)
+def studio_skin(inner, new_label):
+    """Wrap a demo in a PlayBook Studio window: sidebar and top bar are decoration, except the + that starts a new campaign."""
+    brand = f'<span class="sk__brand" aria-hidden="true">{_SKIN_MARK}<span><b>PlayBook</b> Studio</span></span>'
+    caret = '<i class="sk__caret" aria-hidden="true"></i>'
+    new = lambda where: (f'<button type="button" class="sk__new" data-new="{where}" aria-label="{new_label}" title="{new_label}">'
+                         f'{_skin_icon("plus")}</button>')
     nav = ''
     for k, name in SKIN_NAV:
-        on = k == SKIN_ON
-        nav += (f'<span class="sk__item" data-nav="{k}"{" data-on" if on else ""}>{caret if on else ""}'
-                f'{_skin_icon(k)}<span>{name}</span>{plus if on else ""}</span>')
+        on = ' data-on' if k == SKIN_ON else ''
+        look = f'{_skin_icon(k)}<span>{name}</span>'
+        if k == SKIN_NEW:
+            nav += f'<span class="sk__item" data-nav="{k}"{on}>{caret if on else ""}<span class="sk__deco" aria-hidden="true">{look}</span>{new("side")}</span>'
+        else:
+            nav += f'<span class="sk__item" data-nav="{k}"{on} aria-hidden="true">{caret if on else ""}{look}</span>'
     return f'''<div class="sk" data-component="Studio window"><div class="sk__win">
-   <div class="sk__side" aria-hidden="true">{brand}<span class="sk__nav">{nav}</span></div>
+   <div class="sk__side">{brand}<span class="sk__nav">{nav}</span></div>
    <div class="sk__main">
-    <div class="sk__top" aria-hidden="true">{brand}<span class="sk__search">{_skin_icon('search')}<span class="sk__ph">{SKIN_SEARCH}</span></span></div>
+    <div class="sk__top">{brand}{new("top")}<span class="sk__search" aria-hidden="true">{_skin_icon('search')}<span class="sk__ph">{SKIN_SEARCH}</span></span></div>
     <div class="sk__page">{inner}</div>
    </div>
   </div></div>'''
@@ -828,7 +845,7 @@ def drafter(lang):
 <div class="frame frame--canvas">
  <div class="drafter">
   <div class="proto__intro"><span class="label label--teal">{t('可以点的示意', 'Try it', lang)}</span><h3>{T(DRAFTER['title'])}</h3><p>{T(DRAFTER['intro'])}</p></div>
-  {studio_skin(f'<div class="dz-pick" role="group" aria-label="{T(DRAFTER["t"]["pick"])}" data-goals></div><div class="dz-draft" data-draft></div>')}
+  {studio_skin(f'<div class="dz-pick" role="group" aria-label="{T(DRAFTER["t"]["pick"])}" data-goals></div><div class="dz-draft" data-draft></div>', T(DRAFTER['t']['new']))}
   <div class="dz-bar"><p class="studio__status" data-status role="status"></p><div class="dz-bar__tools" data-tools></div></div>
   {score}
  </div>

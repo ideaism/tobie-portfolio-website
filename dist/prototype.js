@@ -1178,7 +1178,7 @@ function drafterLab(root) {
   const status = root.querySelector('[data-status]'), tools = root.querySelector('[data-tools]');
   const say = text => { status.textContent = text; };
   const num = n => T.nums[n - 1] || String(n);
-  let pick = 0, st = D.fresh(cfg.drafts[0]), editing = new Set();
+  let pick = -1, st = null, editing = new Set();   // no goal yet: the demo starts at Campaign's empty list (交接单 ⑩)
   const draft = () => cfg.drafts[pick];
   const itemName = id => (draft().items.find(i => i.id === id) || { name: id }).name;
   const taskName = id => fillIn(T.task, { n: id });
@@ -1223,9 +1223,12 @@ function drafterLab(root) {
     b.append(el('span', 'dz-goal__n', fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.creator), el('span', 'dz-goal__goal', d.goal), el('span', 'dz-goal__persona', d.persona));
     b.addEventListener('click', () => {
       if (i === pick) return;
+      const first = pick < 0;
       pick = i; st = D.fresh(d); editing = new Set();
+      field.value = d.goal;   // the sentence goes into the box, then the draft appears under it
+      view.hidden = false;
       draw();
-      say(fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
+      say(first ? '' : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
       // the assistant's own check sits at the top of the draft: bring it into view (draft two's problem must be seen at once)
       view.querySelector('.dz-self')?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
     });
@@ -1271,13 +1274,12 @@ function drafterLab(root) {
   const E = cfg.editor, page = root.querySelector('.sk__page'), sk = root.querySelector('.sk');
   const nav = [...root.querySelectorAll('.sk__item[data-nav]')], home = (nav.find(n => n.hasAttribute('data-on')) || {}).dataset?.nav;
   let ed = null;   // { node, id, y } while the editor is open
-  const navTo = k => {   // the sidebar's lit item moves, caret and plus with it
+  const navTo = k => {   // the sidebar's lit item moves, and the caret with it (the + stays with Campaign)
     const on = nav.find(n => n.hasAttribute('data-on')), to = nav.find(n => n.dataset.nav === k);
     if (!on || !to || on === to) return;
     on.removeAttribute('data-on'); to.setAttribute('data-on', '');
-    const caret = on.querySelector('.sk__caret'), plus = on.querySelector('.sk__plus');
+    const caret = on.querySelector('.sk__caret');
     if (caret) to.prepend(caret);
-    if (plus) to.append(plus);
   };
   function openEditor(id) {
     if (ed) return;
@@ -1319,7 +1321,7 @@ function drafterLab(root) {
     studio.append(stage, read, bar, tools);
     node.append(back, studio);
     ed = { node, id, y: window.scrollY };
-    goals.hidden = view.hidden = true;
+    ask.hidden = true;
     root.setAttribute('data-editing', '');
     page.append(node);
     navTo('recipes');
@@ -1333,7 +1335,7 @@ function drafterLab(root) {
     const { node, id, y } = ed;
     node.remove();
     ed = null;
-    goals.hidden = view.hidden = false;
+    ask.hidden = false;
     root.removeAttribute('data-editing');
     navTo(home);
     window.scrollTo({ top: y, behavior: 'instant' });   // back where the visitor was: at this recipe (the page scrolls smoothly otherwise)
@@ -1502,11 +1504,64 @@ function drafterLab(root) {
   function draw() {
     const key = root.contains(document.activeElement) ? document.activeElement.dataset.key : null;
     goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === pick)));
+    if (pick < 0) { view.replaceChildren(); restoreAll.hidden = true; return; }
     view.replaceChildren(head(), selfCheck(), tasksBlock(), itemsBlock(), recipesBlock(), whyBlock(), recheck());
     restoreAll.hidden = !D.removedCount(draft(), st);
     if (key) root.querySelector(`[data-key="${key}"]`)?.focus({ preventScroll: true });
   }
+
+  /* 6. the way in (交接单 ⑩, card 20261125-004): Campaign's empty list → the + next to Campaign → New Campaign →
+     Draft from one sentence → a goal goes into the box → the draft. Start from blank is there but only says so. */
+  const news = [...root.querySelectorAll('[data-new]')];
+  const screen = (cls, ...kids) => { const s = el('div', 'dz-screen ' + cls); s.append(...kids); return s; };
+  const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const card = (key, text, icon, fn, main) => {
+    const b = el('button', 'dz-card' + (main ? ' dz-card--main' : ''));
+    b.type = 'button';
+    b.dataset.key = key;
+    b.innerHTML = svg(icon);   // a fixed icon, no data in it
+    b.append(el('span', 'dz-card__t', text));
+    b.addEventListener('click', fn);
+    return b;
+  };
+  const list = screen('dz-list', el('h3', 'dz-h', T.h_list), el('p', 'dz-empty', T.list_empty));
+  const blank = card('new:blank', T.from_blank, '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>', () => say(T.blank_only));
+  blank.setAttribute('aria-disabled', 'true');
+  const sentence = card('new:sentence', T.from_sentence, '<path d="M4 7h11M4 12h8M4 17h6"/><path d="m18 4 .9 2.1L21 7l-2.1.9L18 10l-.9-2.1L15 7l2.1-.9zM17 13.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>', () => go('ask'), true);
+  const cards = el('div', 'dz-cards');
+  cards.append(blank, sentence);
+  const create = screen('dz-new', el('h3', 'dz-h', T.h_new), cards);
+  const field = el('input', 'dz-field');   // looks like the input; the goal cards fill it in
+  field.type = 'text';
+  field.readOnly = true;
+  field.tabIndex = -1;
+  field.placeholder = T.goal_ph;
+  field.setAttribute('aria-label', T.goal_ph);
+  const ask = screen('dz-ask', btn('← ' + T.new, () => go('new'), { key: 'ask:back', cls: 'dz-ed__back' }), field, goals, view);
+  page.prepend(list, create, ask);
+  function go(k, init) {
+    if (ed) closeEditor();
+    list.hidden = k !== 'list';
+    create.hidden = k !== 'new';
+    ask.hidden = k !== 'ask';
+    root.dataset.at = k;
+    if (k === 'ask') { pick = -1; st = null; editing = new Set(); field.value = ''; view.hidden = true; draw(); }   // a new campaign each time
+    if (init) return;
+    news.forEach(b => b.removeAttribute('data-hint'));   // found it: the hint has done its job
+    say('');
+    if (sk.getBoundingClientRect().top < 0) sk.scrollIntoView({ block: 'start', behavior: 'instant' });
+    (k === 'new' ? sentence : goals.querySelector('.dz-goal'))?.focus({ preventScroll: true });
+  }
+  news.forEach(b => b.addEventListener('click', () => go('new')));
   draw();
+  go('list', true);
+  say(T.said_start);
+  // the + breathes two or three times once the window is on screen, then stops (CSS; off with reduced motion)
+  const hint = () => { if (root.dataset.at === 'list') news.forEach(b => b.setAttribute('data-hint', '')); };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); hint(); } }, { rootMargin: '0px 0px -30% 0px' });
+    io.observe(sk);
+  } else hint();
 }
 
 /* ---------- 7. The three rebuilt demos: one visible at a time ---------- */

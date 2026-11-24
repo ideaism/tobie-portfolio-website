@@ -92,16 +92,25 @@ class DrafterTests(unittest.TestCase):
             self.assertEqual(page.count('class="meta case-sub"'), 1, lang)
 
     def test_studio_window_is_decoration_only(self):
+        # 交接单 ⑩ 起：窗口里唯一能点的是 Campaign 后面的「+」（窄屏时在顶栏字标右边），别的还是装饰
         for lang in ('zh', 'en'):
             html = section_demo('playbook', 4, lang)
             self.assertEqual(html.count('class="sk"'), 1)
-            side = re.search(r'<div class="sk__side" aria-hidden="true">(.*?)</div>', html, re.S)
-            top = re.search(r'<div class="sk__top" aria-hidden="true">(.*?)</div>', html, re.S)
+            side = re.search(r'<div class="sk__side">(.*?)</div>', html, re.S)
+            top = re.search(r'<div class="sk__top">(.*?)</div>', html, re.S)
             self.assertTrue(side and top, lang)
-            for part in (side.group(1), top.group(1)):
+            for part, where in ((side.group(1), 'side'), (top.group(1), 'top')):
                 self.assertNotIn('<a', part)
-                self.assertNotIn('<button', part)
                 self.assertNotIn('tabindex', part)
+                self.assertEqual(re.findall(r'<button[^>]*data-new="(\w+)"', part), [where])
+                self.assertEqual(part.count('<button'), 1)
+            label = DRAFTER['t']['new'][0 if lang == 'zh' else 1]
+            self.assertEqual(html.count(f'aria-label="{label}"'), 2)
+            items = re.findall(r'<span class="sk__item" data-nav="(\w+)"([^>]*)>', side.group(1))
+            for k, attrs in items:
+                self.assertEqual('aria-hidden="true"' in attrs, k != 'campaign', k)
+            self.assertIn('<span class="sk__deco" aria-hidden="true">', side.group(1))
+            self.assertIn('<span class="sk__search" aria-hidden="true">', top.group(1))
             for name in ('Dashboard', 'Campaign', 'Items', 'Craft Recipes', 'Missions', 'PlayBook Remix', 'My Creator Economy'):
                 self.assertIn(f'<span>{name}</span>', side.group(1))   # 中英文页都用英文，照原稿
             self.assertEqual(side.group(1).count('data-on'), 1)
@@ -170,7 +179,7 @@ class DrafterTests(unittest.TestCase):
             for dr in draft_data()['drafts']:
                 self.assertLessEqual(len(dr['items']), len(ed['lib_at']), dr['id'])
             # 侧边栏：每项带 data-nav，亮的那项编辑器打开时挪到 Craft Recipes
-            side = re.search(r'<div class="sk__side" aria-hidden="true">(.*?)</div>', html, re.S).group(1)
+            side = re.search(r'<div class="sk__side">(.*?)</div>', html, re.S).group(1)
             self.assertEqual(re.findall(r'data-nav="(\w+)"', side), [k for k, _ in SKIN_NAV])
             self.assertIn('recipes', dict(SKIN_NAV))
         js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
@@ -197,6 +206,41 @@ class DrafterTests(unittest.TestCase):
         for line in css.splitlines():   # 新加的样式都挂在 03 节没有的属性上
             if 'rz__tag' in line or 'rz-lib__name{position:absolute' in line or '.rz__lib::before' in line:
                 self.assertTrue('[data-own]' in line or line.startswith('.rz__tag{display:none}'), line)
+
+    def test_way_in_from_new_campaign(self):
+        # 交接单 ⑩（卡 20261125-004 选 A）：Campaign 空列表 → + → New Campaign 两张卡 → 一句话输入框 + 三个目标 → 草案
+        t = DRAFTER['t']
+        self.assertEqual(t['h_list'], ['Campaign', 'Campaign'])
+        self.assertEqual(t['h_new'], ['New Campaign', 'New Campaign'])
+        self.assertEqual(t['from_blank'], ['从空白开始', 'Start from blank'])
+        self.assertEqual(t['from_sentence'], ['用一句话起草', 'Draft from one sentence'])
+        self.assertEqual(t['goal_ph'], ['用一句话说出这次活动的目标', 'Describe the campaign goal in one sentence'])
+        self.assertEqual(t['said_start'], ['点 Campaign 旁边的 +，新建一个活动。', 'Click the + next to Campaign to start a new campaign.'])
+        self.assertEqual(t['blank_only'], ['这个示意只演示起草。', 'This demo only shows drafting.'])
+        self.assertEqual(t['new'], ['新建活动', 'New campaign'])
+        intro = DRAFTER['intro']
+        self.assertTrue(intro[0].startswith('从 Campaign 旁边的 + 新建活动，选「用一句话起草」，再选一个创作者目标'), intro[0])
+        self.assertTrue(intro[1].startswith('Start a new campaign from the + next to Campaign, choose ‘Draft from one sentence’, then pick a creator’s goal'), intro[1])
+        for s in intro:
+            self.assertNotIn('放上画布', s)
+            self.assertNotIn('canvas', s)
+        zh, en = CASES['playbook']['sections'][3]['text'][0]
+        self.assertIn('创作者在 Studio 新建活动时，可以选择用一句话说出目标', zh)
+        self.assertIn('when creating a new campaign in Studio, the creator can choose to state a goal in one sentence', en)
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
+        for must in ('let pick = -1, st = null', "go('list', true)", 'say(T.said_start)', "setAttribute('data-hint', '')",
+                     "removeAttribute('data-hint')", "blank.setAttribute('aria-disabled', 'true')", 'say(T.blank_only)',
+                     'field.readOnly = true', 'field.value = d.goal', "() => go('new')", "() => go('ask')", 'if (ed) closeEditor()'):
+            self.assertIn(must, lab)
+        css = (ROOT / 'dist' / 'styles.css').read_text(encoding='utf-8')
+        for must in ('.sk__new[data-hint]{animation:sk-breathe 1.5s ease-in-out 3}',
+                     '@media (prefers-reduced-motion:reduce){.sk__new[data-hint]{animation:none}}',
+                     '@container (max-width:720px){.sk__top .sk__new{display:inline-grid}}',
+                     # 配方编辑器开着时收起外面的侧边栏，编辑器拿整个窗口宽
+                     '[data-drafter][data-editing] .sk__win{grid-template-columns:minmax(0,1fr)}',
+                     '[data-drafter][data-editing] .sk__side{display:none}'):
+            self.assertIn(must, css)
 
     def test_draft_rules_in_node(self):
         node = shutil.which('node')

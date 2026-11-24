@@ -682,7 +682,7 @@ DRAFTER = {
    'h_tasks': ['任务', 'Missions'], 'h_items': ['物品', 'Items'], 'h_recipes': ['配方', 'Recipes'],
    'h_why': ['为什么这样配', 'Why it is set up this way'],
    'h_recheck': ['按现在的改动重新检查', 'Checked again with your changes'],
-   'h_canvas': ['放上画布', 'On the canvas'],
+   'open_hint': ['双击配方，在编辑器里打开', 'Double-click a recipe to open it in the editor'],
    'col_platform': ['在哪做', 'Where'], 'col_what': ['做什么', 'What'], 'col_freq': ['频率', 'How often'], 'col_reward': ['奖励', 'Reward'],
    'col_item': ['物品', 'Item'], 'col_rarity': ['普通或稀有', 'Common or rare'], 'col_source': ['怎么得到', 'How to get it'],
    'common': ['普通', 'Common'], 'rare': ['稀有', 'Rare'],
@@ -693,7 +693,7 @@ DRAFTER = {
    'accept': ['接受', 'Accept'], 'accepted': ['已接受', 'Accepted'],
    'edit': ['修改', 'Edit'], 'edit_done': ['改好了', 'Done'],
    'remove': ['删除', 'Remove'], 'restore': ['恢复', 'Restore'], 'restore_all': ['全部恢复', 'Restore all'],
-   'place': ['放上画布', 'Put on canvas'], 'placed': ['在画布上', 'On the canvas'],
+   'back': ['回到草案', 'Back to draft'],
    'act': ['{act}：{name}', '{act}: {name}'],
    'edit_hint': ['只改数量，1 到 9。', 'Quantities only, 1 to 9.'],
    'less': ['{name} 减 1', 'One fewer {name}'], 'more': ['{name} 加 1', 'One more {name}'],
@@ -704,12 +704,10 @@ DRAFTER = {
    're_contention': ['{item}不够同时合这几条配方，只能选一条。', 'There is not enough {item} for these recipes together; only one of them can be crafted.'],
    're_platform': ['剩下的 {n} 个任务里，只有 {k} 个在原平台上，不到一半。', 'Only {k} of the {n} remaining missions happen on the home platforms, which is less than half.'],
    're_no_tasks': ['一个任务都不剩了。', 'No missions are left.'],
-   're_structure': ['放不进画布：{why}', 'Does not fit on the canvas: {why}'],
+   're_structure': ['放不进配方编辑器：{why}', 'Does not fit in the recipe editor: {why}'],
    're_removed': ['删掉的 {n} 项不参与检查。', 'The {n} removed part(s) are left out of the check.'],
    'items_note': ['物品图是用 Codex 生成的示意图，照 03 节 Studio 图标的风格画的。', 'Item art was generated with Codex as illustration, drawn to match the Studio icons in section 03.'],
-   'canvas_ro': ['只读示意', 'Read-only sketch'],
-   'canvas_empty': ['点一条配方的「放上画布」，它会按 Studio 配方编辑器的三栏摆在这里。', 'Click “Put on canvas” on a recipe to lay it out here in the three areas of the Studio recipe editor.'],
-   'canvas_gone': ['{name}已经删掉，画布上不再摆它。', '{name} has been removed, so it is no longer on the canvas.'],
+   'open_gone': ['{name}已经删掉，恢复以后才能在编辑器里打开。', '{name} has been removed; restore it to open it in the editor.'],
    'said_pick': ['换成了{name}，之前的改动都清空了。', 'Switched to {name}; earlier changes are cleared.'],
    'said_accept': ['{name} 标成已接受。', '{name} is marked as accepted.'],
    'said_unaccept': ['{name} 取消了接受。', '{name} is no longer marked as accepted.'],
@@ -717,7 +715,8 @@ DRAFTER = {
    'said_removed': ['{name} 删掉了，不再参与检查。', '{name} removed; it is left out of the check.'],
    'said_restored': ['{name} 恢复了。', '{name} restored.'],
    'said_restore_all': ['删掉的都恢复了。', 'Everything removed is back.'],
-   'said_placed': ['{name} 放上了画布（只读）。', '{name} is on the canvas (read-only).'],
+   'said_open': ['{name} 在配方编辑器里打开了。这里改的不会写回草案。', '{name} is open in the recipe editor. Changes here do not go back into the draft.'],
+   'said_back': ['回到了草案，{name} 还是草案里的样子。', 'Back to the draft; {name} is as the draft has it.'],
    'sum_some': ['重新检查：{n} 个问题。', 'Checked again: {n} problem(s).'],
    'sum_none': ['重新检查：没有发现问题。', 'Checked again: no problems found.'],
  },
@@ -736,10 +735,38 @@ def _drafter_config(lang):
         'drafts': _pick(d['drafts'], lang),
         # 结构合法：用 03 节配方编辑器的同一份上限和规则验（recipeRules）
         'limits': recipe['limits'],
-        'geo': recipe['geo'],
         # 2026-11-18（交接单 ⑥）：物品图的地址由草案 id + 物品 id 拼出来，数据文件不用改；图由 tools/prepare_assets.py 导出
         'item_src': DRAFTER_ITEM_SRC,
         't': {**{k: v[i] for k, v in DRAFTER['t'].items()}, **{k: recipe['t'][k][i] for k in read_keys}},
+        # 2026-11-25（交接单 ⑨）：双击配方打开的编辑器就是 03 节的 recipeLab，用它的画面、上限和文字；
+        # 物品、开局摆放、数量、标题由 drafterLab 按这份草案填（prototype.js 的 openEditor）
+        'editor': _drafter_editor(lang),
+    }
+
+
+# 编辑器里和 03 节说法不同的几句：03 节讲的是录屏，这里讲的是示意
+DRAFTER_EDITOR_T = {
+    'tools': ['底部工具栏（示意，点不了）', 'Bottom toolbar (illustration only)'],
+    'upload': ['Upload（示意，不会上传）', 'Upload (illustration; nothing is uploaded)'],
+    'said_cond': ['Condition 这一栏在这里不放物品。', 'The Condition area takes no items here.'],
+    'said_tools': ['底部工具栏只照 Studio 原样摆着，这里点不了。', 'The bottom toolbar is only shown as it is in Studio; it does nothing here.'],
+    'said_upload': ['这是示意，不会上传；在这里改的也不会写回草案。', 'This is a concept: nothing is uploaded, and changes here do not go back into the draft.'],
+    'said_reset': ['回到草案里这条配方的样子。', 'Back to the recipe as the draft has it.'],
+    'said_choose_on': ['这一组变成 {n} 选 1：按概率给其中一样。', 'This group is now choose 1 out of {n}: one of them is given, by the odds shown.'],
+    'said_choose_off': ['取消了几选一，每样各算各的概率。', 'Choose-one is off; each item has its own probability.'],
+    'qty': DRAFTER['t']['qty'],
+}
+
+
+def _drafter_editor(lang):
+    recipe = STUDIO['playbook-recipe']
+    full = _studio_config(recipe, lang)
+    return {
+        'frame': full['frame'], 'chrome': full['chrome'], 'icons': full['icons'],
+        'limits': full['limits'], 'output_w': full['output_w'], 'default_pct': recipe['default_pct'],
+        'geo': {**full['geo'], 'tile-h': 168},   # 草案物品的名字长，产出卡片高一点，名字能放两行
+        'lib_at': [list(it[-1]) for it in recipe['items']],   # 物品库的八个位置，照录屏
+        't': {**full['t'], **{k: t(v[0], v[1], lang) for k, v in DRAFTER_EDITOR_T.items()}},
     }
 
 
@@ -747,6 +774,7 @@ def _drafter_config(lang):
 # （Figma XDyOn5545LrSOsCwqUcED7 画框 5671:57226，导出图 02-playbook/portfolio/figures/studio-remix-new-challenge@2x.png）：
 # 左边侧边栏、上面顶栏只是装饰（aria-hidden、没有链接和按钮，点不了），中英文页都照原稿用英文；颜色在 styles.css 的 .sk 一段。
 # 里面的 [data-goals]、[data-draft] 原样，drafterLab 不动。
+# 2026-11-25（交接单 ⑨）：每项带 data-nav，配方编辑器打开时 drafterLab 把亮的那项从 Campaign 挪到 Craft Recipes，回到草案再挪回来。
 SKIN_NAV = [('dashboard', 'Dashboard'), ('campaign', 'Campaign'), ('items', 'Items'), ('recipes', 'Craft Recipes'),
             ('missions', 'Missions'), ('remix', 'PlayBook Remix'), ('economy', 'My Creator Economy')]
 SKIN_ON = 'campaign'
@@ -777,7 +805,7 @@ def studio_skin(inner):
     nav = ''
     for k, name in SKIN_NAV:
         on = k == SKIN_ON
-        nav += (f'<span class="sk__item"{" data-on" if on else ""}>{caret if on else ""}'
+        nav += (f'<span class="sk__item" data-nav="{k}"{" data-on" if on else ""}>{caret if on else ""}'
                 f'{_skin_icon(k)}<span>{name}</span>{plus if on else ""}</span>')
     return f'''<div class="sk" data-component="Studio window"><div class="sk__win">
    <div class="sk__side" aria-hidden="true">{brand}<span class="sk__nav">{nav}</span></div>
@@ -876,5 +904,8 @@ def section_demo(slug, number, lang):
     if slug == 'playbook' and number == 5: return flow('playbook-craft', lang, 'try-app')   # App 合成流：2026-11-24 从 04 顺延为 05
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 7: return fridge_3d(lang, 'try')   # 2026-11-24（交接单 6h）：v1.8 外链原型撤掉，换成 07「3D 小样」里嵌本站打包的小样；原 08「原型与结果」并进 07
-    if slug == 'agent-matrix' and number == 7: return review_demo(lang, 'try') + sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）
+    # 2026-11-21：新 07「重新定义」（交接单第 9 节）放的是审核中心小原型和批次图。
+    # 2026-11-25 重讲成 5 节（交接单第 14 节，卡 20261125-001）：小原型挪到 02「搬到作品集」（#try 锚点跟着走），批次图留在 04「重新定义」
+    if slug == 'agent-matrix' and number == 2: return review_demo(lang, 'try')
+    if slug == 'agent-matrix' and number == 4: return sittings(lang)
     return ''

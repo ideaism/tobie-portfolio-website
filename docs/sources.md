@@ -393,3 +393,24 @@ PlayBook
 - 标题和正文：标签换成「04 / 活动起草助手」/「04 / Campaign drafting assistant」（去掉「2026 回看」）；标题下面一行小号灰字「Studio 上线后补的设计，没有上线。」/ “Designed after Studio launched; not shipped.”（`cases.py` 新键 `sub`，`build.py` 写成 `<p class="meta case-sub">`）；正文第 1 段照交接单 ⑧ 原文换掉，其余几段、CONCEPT 来源标签不变。三句都是交接单里的原文，不是 publisher 写的。
 - Studio 窗口：照 Studio 定稿「新建挑战」画（Figma `XDyOn5545LrSOsCwqUcED7` 画框 `5671:57226`，导出图 `02-playbook/portfolio/figures/studio-remix-new-challenge@2x.png`）。侧边栏菜单七项、顶栏搜索框的占位字照原稿英文，中英文页一样；只是装饰（`aria-hidden`，没有链接和按钮）。侧边栏图标是照原稿画的简化线框，字标的三角是照原稿画的。颜色从 2 倍导出图上取：页底 `#F7F9FA`、卡片和侧边栏白、分隔线 `#D5DCE0`、亮着的一行底 `#F3F7F8` 字 `#F95757`（交接单写的是浅红底，原稿是浅灰底红字，照原稿）、字标「PlayBook」`#F95757`「Studio」黑、搜索框底 `#F7F9FA` 字 `#808080`、黑按钮 `#1A1A1A`、浅灰按钮 `#E9F0F2` 黑字、输入框描边 `#D5DCE0`。主按钮原稿 `#F95757` 白字，对比度 3.2:1，过不了设计规范规则 4，带字的红按钮改用 `#D63A3A`（4.6:1），这是 publisher 的判断。字体用 Lexend 起头的一串系统字体，网站没有加载 Lexend，没装的电脑上退到 Segoe UI / PingFang。
 - 演示的行为、文案、数据（`02-playbook/case-study/ai-起草助手-数据.json`）、物品图都没动；`dist/prototype.js` 只改了两处注释里的节号。按钮的主次用 CSS 按 `data-key` 结尾（`:accept`、`:place`、`:edit`、`:remove`）区分。
+
+## 2026-11-25：Agent Matrix 重讲（5 节）（只合到本机，没部署、没推送）
+
+- 依据：卡 20261124-009 本人选 C（整个案例从作品集讲起，游戏退成一节背景）；卡 20261124-012 本人选 A（大纲和标题）；卡 20261125-001 本人通过新正文。交接单 `../05-agent-matrix/portfolio/handoff.md` 第 13、14 节。
+- 正文：`cases.py` 里 agent-matrix 整块由 `05-agent-matrix/portfolio/重讲-正文-生成脚本.py` 的数据生成后替换，没有手抄，一个字没改；逐句和 `重讲-正文.md` 核对过。改之前的 8 节原样冻结在 `05-agent-matrix/portfolio/重讲-沿用的旧文本.json`，生成脚本改成从它读旧句子，不再读 `cases.py`。
+- 标题：`build.py` 的 `PROJECTS` 和 `CASE_TITLES` 换成「我先设计 AI 怎么问我，再用它改这份作品集。」/ “I designed how AI asks me. Then I used it to rework this portfolio.”；首页摘要直接用新导语（`CASES['agent-matrix']['deck']`）。封面图和封面标签没换。
+- 节号怎么挪（旧 8 节 → 新 5 节）：
+  - 新 01「背景」：旧 01 的「九个问题」图 + 旧 02 的飞书两张截图。旧 01 的「十四个 agent 分工」图不再放（源图和 webp 都留着）。
+  - 新 02「搬到作品集」：新出的每天卡数图 + 旧 03 的示例审核卡，都放在原型前；审核中心小原型从旧 07 挪来，`#try` 锚点跟着到 02。
+  - 新 03「改了什么」：新出的四组前后对照。
+  - 新 04「重新定义」：旧 07 的撤回 8 秒两组图 + 批次图（203 张卡的处理记录）。
+  - 新 05「下一步」：旧 06 的「当时在等的六张卡」+ 旧 08 的信任等级图。
+- 新图和数据的时间：
+  - `fig-trust-zh/en`：`05-agent-matrix/portfolio/figures/src/build.mjs` 重出，台账换成 `~/其他任务/claudestudy/ledger/trust.md` 2026-11-24 那版（逐格核对：编程 · 网页 × Claude = L1 · 连续 0/5 · 被纠正 3 次，其余格和 11-23 一样）。阶梯上亮的级别从台账里出现过的级别算（L0、L1）。
+  - `fig-daily-cards-zh/en`：同一个脚本新出。数据 `~/其他任务/claudestudy/evidence/2026-11-24-agent-matrix-重讲-取数/cards_full.json`（北京时间 11-24 21:32 取），按卡片创建日（北京时间）数，11-15 到 11-24。重算脚本和结果在 `claudestudy/evidence/2026-11-25-agent-matrix-重讲合入/每天卡数-重算*`：作品集 10 天合计 181、全部项目合计 220，和正文对得上。柱顶的数是当天全部项目，深色是作品集。图上没有卡片标题和卡号。
+  - 四组前后对照（`sources/work/agent-matrix/ba-*.png`，私有备份 `04-shared/网站原图/work/agent-matrix/`，`prov: original`，不放大，导出最大宽 = 原图宽）：
+    - PlayBook：改之前 = `claudestudy/evidence/2026-11-15-PlayBook交互-02-桌面-配方编辑-拖动中.jpg`（11-15 一步一步走的那版）裁 (312, 69, 1218, 895)；改之后 = 本机 `/work/playbook/` 的 `[data-studio="recipe"]` 一块，1280 宽 1 倍截图，裁到 1110 高（2026-11-25 截）。
+    - 首页封面：改之前 = 分支 `preview/covers-mbti` 提交 `8a5747a`（11-17 GMT 12:54，四张共用一种摆法，当天在卡 020 第 3 版被打回）的 `dist`，`git archive` 到临时目录起本机服务，四个作品的封面框各截一张（1440 宽 2 倍）拼成 2×2；改之后 = 提交 `971f168`（11-18 封面定稿）的 `dist`，同样截法拼法。两张都不含 Agent Matrix 的封面。
+    - 兴业 SMT：改之前 = 提交 `68f2447` 的 `dist`（兴业和大通写在同一页）`/work/smt/` 第一屏；改之后 = 本机 `/work/smt/` 第一屏（顶部两个标签页）。都是 1440 宽 2 倍，只裁上下（去掉导航栏和项目卡以下），左右不裁。
+    - The Commons Fridge：改之前 = `claudestudy/evidence/2026-11-18-冰箱v2一节合进网站-2-新06节-产品化-本机改后.png` 左边中文那一栏，裁 (25, 109, 988, 1074)，去掉证据图的标题和说明；改之后 = `05-agent-matrix/portfolio/cards/pics/13-线上-冰箱3D小样一节.png`（线上 07 节）裁到 08 节标签之前 (0, 0, 984, 1615)。没用本机还没验过的冰箱改动。
+- 沿用旧证据的：`fig-sequence`、`fig-who-waits`、飞书两张、示例审核卡、撤回 8 秒三张、审核中心小原型和批次图，图和图注都没改，只换了挂的节号。

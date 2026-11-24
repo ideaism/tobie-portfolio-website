@@ -782,9 +782,8 @@ html.studio-open{overflow:hidden}
 
 /* ---------- PlayBook 04：活动起草助手（2026-11-17，交接单 ⑤；2026-11-24 从 11 挪到 04，交接单 ⑧）----------
    2026 年新做的设计示意，不属于规则 8 的三个重做演示。外壳用作品集自己的样式（.studio__btn、.studio__stepper、
-   .studio__status、.studio__read、.chip、.case-brief），「放上画布」沿用 03 节配方编辑器的 .rz 部件（Tab、栏框、
-   物品卡、红色数量角标、概率条、And / Or、Choose 1 Out Of N），只把定位从「录屏像素 × --u」改成能自己排的三栏，
-   --u 固定 1px，尺寸读 03 节同一份 geo。 */
+   .studio__status、.studio__read、.chip、.case-brief）。2026-11-25（交接单 ⑨）：「放上画布」那块只读三栏去掉了，
+   双击配方打开的是 03 节同一个配方编辑器（.rz），样式在 .sk 一段后面。 */
 .drafter{padding:var(--s-6);display:grid;gap:var(--s-5);grid-template-columns:minmax(0,1fr)}
 .drafter .proto__intro p{max-width:62ch}
 .proto[data-drafter] .frame{overflow:visible}   /* 窄屏上状态栏贴底，画框不能裁 */
@@ -832,30 +831,12 @@ html.studio-open{overflow:hidden}
 .dz-recipe__parts dd{margin:0}
 .dz-recheck .dz-finding{background:var(--beak-wash)}
 .dz-recheck .dz-finding--ok{display:block;background:var(--teal-wash);color:var(--teal-deep);font-family:var(--mono);font-size:var(--fs-label)}
-.dz-ro{text-transform:none;letter-spacing:0}
-.dz-empty{font-size:var(--fs-small);color:var(--ink-3);padding:14px;border:1px dashed var(--rule-strong);border-radius:8px}
 .dz-bar{display:grid;gap:var(--s-2)}
 .dz-bar__tools{display:flex;gap:var(--s-4)}
 .dz-score{margin:0;max-width:none}
 .dz-score__list{margin:0;padding-left:1.3em}
-/* 只读的画布：03 节 .rz 的部件，排成三栏 */
-.dz-rz{--u:1px;position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.5fr);gap:14px;padding:16px;border-radius:10px;box-shadow:0 0 0 1px rgba(14,42,39,.12)}
-.dz-rz .rz-box,.dz-rz .rz-panel{position:relative;inset:auto;width:auto;height:auto;min-height:150px;padding:calc(var(--box-tab) * var(--u) + 14px) 10px 14px;transition:none}
-.dz-slots{display:flex;flex-direction:column;align-items:center;gap:10px}
-.dz-none{color:#9AA3A5;padding-top:20px}
-.dz-rz .rz-chain{position:static;flex-wrap:wrap;gap:10px}
-.dz-tile{position:relative;width:auto;min-width:calc(var(--tile-w) * var(--u));max-width:100%;height:auto;padding:12px 10px;overflow:visible;cursor:default;justify-content:center}
-.dz-rz .rz-tile:hover{border-color:#D0D7D9}
-.dz-rz .rz-name{white-space:normal;line-height:1.25}
-.dz-rz .rz-n{left:auto;right:-9px;top:-9px}
-.dz-rz .rz-group[data-multi],.dz-rz .rz-pill,.dz-rz .rz-choose{cursor:default}
-.dz-rz .rz-pill:hover{border-color:#D0D7D9;background:#FBFBFA}
-.dz-rz .rz-choose{height:auto;margin-bottom:0}
-.dz-rz .rz-group[data-choose] .dz-tile{height:auto}
-/* 2026-11-18（交接单 ⑥）：物品图。画布上图在上、名字在下（照 03 节配方编辑器的物品块），物品表里名字前一个小图；图是装饰，名字一直在旁边 */
+/* 2026-11-18（交接单 ⑥）：物品图。物品表里名字前一个小图；图是装饰，名字一直在旁边（编辑器里的物品图见 .sk 一段后面） */
 .drafter .dz-art{display:block;max-width:none;object-fit:contain}   /* .drafter 打头：要压过 .frame img{width:100%} */
-.dz-rz .dz-tile__ico{width:72px;height:72px;background:#fff}
-.drafter .dz-tile__ico .dz-art{width:54px;height:54px}
 .dz-item{display:inline-flex;align-items:center;gap:10px;vertical-align:middle}
 .drafter .dz-art--row{flex:none;width:32px;height:32px}
 .dz-note{margin-top:2px}
@@ -870,7 +851,6 @@ html.studio-open{overflow:hidden}
   .dz-acts{justify-content:flex-start}
   .dz-recipe{grid-template-columns:minmax(0,1fr)}
   .dz-check,.dz-finding{grid-template-columns:minmax(0,1fr)}
-  .dz-rz{grid-template-columns:minmax(0,1fr)}
   .dz-bar{position:sticky;bottom:0;z-index:5;margin:0 calc(-1 * var(--s-3));padding:var(--s-3);background:#F6F8F6;box-shadow:0 -1px 0 var(--rule),0 -10px 18px -14px rgba(14,42,39,.4)}
   .dz-bar .studio__status:empty{display:none}
   .dz-self{scroll-margin-bottom:120px}   /* 换草案时自查要露出来，别被贴底的状态栏挡住 */
@@ -910,12 +890,12 @@ html.studio-open{overflow:hidden}
 .sk .dz-goal[aria-pressed="true"]{background:var(--sk-on);box-shadow:inset 0 0 0 2px var(--sk-red)}
 .sk .dz-draft{border-radius:8px;box-shadow:0 0 0 1px var(--sk-line);container-type:inline-size}
 .sk .dz-head h3{color:#1D2129}
-/* 按钮：主 = 红底白字（采纳、放上画布），次 = 黑底白字（修改）或浅灰底黑字（删掉、数量加减）；圆角照原稿 4px */
+/* 按钮：主 = 红底白字（采纳），次 = 黑底白字（修改）或浅灰底黑字（删掉、数量加减）；圆角照原稿 4px */
 .sk .studio__btn{font-family:var(--sans);font-weight:500;border-radius:4px;background:var(--sk-grey);color:var(--sk-black);box-shadow:none}
 .sk .studio__btn:hover{box-shadow:inset 0 0 0 1.5px var(--sk-black)}
-.sk .studio__btn[data-key$=":accept"],.sk .studio__btn[data-key$=":place"]{background:var(--sk-red-text);color:#fff}
-.sk .studio__btn[data-key$=":accept"]:hover,.sk .studio__btn[data-key$=":place"]:hover{box-shadow:inset 0 0 0 1.5px #8F1F1F}
-.sk .studio__btn[data-key$=":accept"][aria-pressed="true"],.sk .studio__btn[data-key$=":place"][aria-pressed="true"]{background:#fff;color:var(--sk-red-text);box-shadow:inset 0 0 0 1.5px var(--sk-red-text)}
+.sk .studio__btn[data-key$=":accept"]{background:var(--sk-red-text);color:#fff}
+.sk .studio__btn[data-key$=":accept"]:hover{box-shadow:inset 0 0 0 1.5px #8F1F1F}
+.sk .studio__btn[data-key$=":accept"][aria-pressed="true"]{background:#fff;color:var(--sk-red-text);box-shadow:inset 0 0 0 1.5px var(--sk-red-text)}
 .sk .studio__btn[data-key$=":edit"]{background:var(--sk-black);color:#fff}
 .sk .studio__btn[data-key$=":edit"][aria-expanded="true"]{background:#fff;color:var(--sk-black);box-shadow:inset 0 0 0 1.5px var(--sk-black)}
 .sk .studio__btn--quiet{text-decoration:none;padding-left:10px;padding-right:10px}
@@ -947,6 +927,36 @@ html.studio-open{overflow:hidden}
   .sk__ph{display:none}
   .sk__page{padding:var(--s-3)}
 }
+
+/* ---------- PlayBook 04：双击配方，在配方编辑器里打开（2026-11-25，交接单 ⑨，卡 20261125-002 本人打回）----------
+   配方行：整行悬停、光标变手，表题旁一行小字。编辑器就是 03 节的 .rz（recipeLab），在 Studio 窗口里替换草案区域；
+   和 03 节不同的只有可选配置带来的几处，都挂在 .rz[data-own]（物品用自己的图）、.rz[data-odds]（几选一也显示概率）上，
+   03 节的三个演示没有这两个属性，样子不变。宽屏时录屏底图上 #Chargers 到最后一行物品那块用同色盖住，
+   换成这份草案的标签和物品；顶上「Craft Recipes 3」用同色盖住，写这条配方的名字。颜色取自 live-recipe-03.webp。 */
+.dz-hint{font-family:var(--sans);font-size:var(--fs-micro);font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.dz-rows--recipes .dz-recipe{cursor:pointer;touch-action:manipulation;transition:background var(--t-fast)}
+.dz-rows--recipes .dz-recipe:hover{background:var(--canvas);box-shadow:-10px 0 0 var(--canvas),10px 0 0 var(--canvas)}
+.dz-rows--recipes .dz-recipe[data-accepted]:hover{box-shadow:inset 3px 0 0 var(--sk-red-text,var(--teal)),10px 0 0 var(--canvas)}
+.dz-rows--recipes .dz-recipe:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.dz-rows--recipes .dz-recipe .dz-edit{cursor:auto}
+[data-drafter][data-editing] .dz-bar{display:none}   /* 编辑器有自己的状态栏和工具 */
+.sk{scroll-margin-top:96px}
+.dz-ed.proto{margin:0;display:grid;gap:var(--s-3);justify-items:start;min-width:0}
+.dz-ed .studio{padding:0;width:100%}
+.dz-ed .proto__tools{padding-top:0;border-top:0}
+.sk .dz-ed .studio__btn[aria-pressed="true"]{background:var(--sk-black);color:#fff}
+.rz__tag{display:none}
+.rz[data-own] .rz-name{white-space:normal;line-height:1.1;padding:0 calc(6 * var(--u))}
+.rz[data-odds] .rz-group[data-choose] .rz-tile{height:calc(var(--tile-h) * var(--u))}
+.proto:not([data-compact]) .rz[data-own] .rz__lib::before{content:'';position:absolute;left:0;top:calc(164 * var(--u));width:calc(372 * var(--u));height:calc(805 * var(--u));background:#FCFCF9;transition:background var(--t-fast)}
+.proto:not([data-compact]) .rz[data-own] .rz__lib.is-over::before{background:#EEF1FC}
+.proto:not([data-compact]) .rz[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(268 * var(--u));max-width:calc(350 * var(--u));height:calc(26 * var(--u));font-size:calc(18.5 * var(--u));color:#141414;white-space:nowrap;overflow:hidden;pointer-events:none}
+.proto:not([data-compact]) .rz[data-own] .rz__tag::before{content:'';flex:none;border-left:calc(7 * var(--u)) solid transparent;border-right:calc(7 * var(--u)) solid transparent;border-bottom:calc(9 * var(--u)) solid #2B2B2B}
+.proto:not([data-compact]) .rz[data-own] .rz__title{display:block;position:absolute;z-index:1;left:calc(560 * var(--u));top:calc(4 * var(--u));width:calc(860 * var(--u));height:calc(44 * var(--u));line-height:calc(44 * var(--u));background:#FCFCF9;font-family:Inter,"Helvetica Neue","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-weight:700;font-size:calc(21 * var(--u));text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proto:not([data-compact]) .rz[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 116) * var(--u));width:calc(128 * var(--u));height:calc(128 * var(--u))}
+.proto:not([data-compact]) .rz[data-own] .rz-lib > *{opacity:1}
+.proto:not([data-compact]) .rz[data-own] .rz-lib__ico{position:absolute;inset:0;border-radius:50%;background:#fff;border:1px solid #DADDDE;display:grid;place-items:center}
+.proto:not([data-compact]) .rz[data-own] .rz-lib__name{position:absolute;left:50%;top:calc(100% + 6 * var(--u));width:calc(172 * var(--u));margin-left:calc(-86 * var(--u));font-size:calc(15.5 * var(--u));line-height:1.12;text-align:center;color:#141414}
 
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
 

@@ -237,6 +237,18 @@ JOBS = {
     # 甘特只留前 13 行：原图 05-agent-matrix/portfolio/figures/raw/feishu-gantt.png 裁 (0, 0, 1418, 476) 另存为 feishu-gantt-top13.png；看板原样
     'agent-matrix/feishu-gantt-top13': (SRC / 'work' / 'agent-matrix' / 'feishu-gantt-top13.png', 1418, 90),
     'agent-matrix/feishu-kanban': (SRC / 'work' / 'agent-matrix' / 'feishu-kanban.png', 667, 90),
+    # 2026-11-25 重讲（交接单第 14 节，卡 20261125-001）：02 节每天的卡数（figures/src/build.mjs 新出，1800 宽）；
+    # 03 节四组前后对照，最大宽 = 原图宽，不放大。每张从哪来见 docs/sources.md「2026-11-25：Agent Matrix 重讲（5 节）」
+    'agent-matrix/fig-daily-cards-zh': (SRC / 'work' / 'agent-matrix' / 'fig-daily-cards-zh.png', 1800, 88),
+    'agent-matrix/fig-daily-cards-en': (SRC / 'work' / 'agent-matrix' / 'fig-daily-cards-en.png', 1800, 88),
+    'agent-matrix/ba-playbook-before': (SRC / 'work' / 'agent-matrix' / 'ba-playbook-before.png', 906, 88),
+    'agent-matrix/ba-playbook-after': (SRC / 'work' / 'agent-matrix' / 'ba-playbook-after.png', 920, 88),
+    'agent-matrix/ba-covers-before': (SRC / 'work' / 'agent-matrix' / 'ba-covers-before.png', 3192, 86),
+    'agent-matrix/ba-covers-after': (SRC / 'work' / 'agent-matrix' / 'ba-covers-after.png', 3192, 86),
+    'agent-matrix/ba-smt-before': (SRC / 'work' / 'agent-matrix' / 'ba-smt-before.png', 2880, 86),
+    'agent-matrix/ba-smt-after': (SRC / 'work' / 'agent-matrix' / 'ba-smt-after.png', 2880, 86),
+    'agent-matrix/ba-fridge-before': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-before.png', 963, 88),
+    'agent-matrix/ba-fridge-after': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-after.png', 984, 88),
 }
 
 # 动图（2026-11-23，冰箱 07「3D 小样」，交接单 6f ②、6g）：小样录屏 GIF → 动态 WebP（有损），不缩放。

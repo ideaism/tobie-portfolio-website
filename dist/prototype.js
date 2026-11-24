@@ -517,19 +517,29 @@ function recipeLab(root) {
   const items = Object.fromEntries(cfg.items.map((it, n) => [it.id, { ...it, n }]));
   const readout = root.querySelector('[data-read]');
   readout.hidden = false;
+  // optional, for an editor opened from elsewhere (04 drafting assistant): items with their own pictures (`art`),
+  // how many of each input (`qty`, by item id; otherwise 1), odds shown inside choose-one groups (`odds`),
+  // a tag line over the library (`lib_tag`). None of them is set for the 03 demo, which stays as it was.
+  const counted = s => { const q = {}; if (cfg.qty) [...s.require, ...s.optional].forEach(p => { if (cfg.qty[p.id] > 1) q[p.uid] = cfg.qty[p.id]; }); return q; };
   let state = R.load(cfg.start);
+  let qty = counted(state);   // piece uid -> how many; a piece keeps its number when it is moved
   let held = null;   // what is in hand: { lib: item id } from the library, or { uid } of a placed piece
+  const many = uid => String(qty[uid] || 1);
 
   const icon = id => {
     const i = el('i', 'rz-ico');
+    if (items[id].art) { i.style.backgroundImage = `url("${items[id].art}")`; i.style.backgroundSize = 'contain'; i.style.backgroundPosition = 'center'; return i; }
     i.style.backgroundImage = `url("${cfg.icons}")`;
     i.style.backgroundPosition = `${items[id].n / (cfg.items.length - 1) * 100}% 0`;
     return i;
   };
   stage.classList.add('rz');
+  if (cfg.items.some(it => it.art)) stage.dataset.own = '';
+  if (cfg.odds) stage.dataset.odds = '';
   const chrome = el('div', 'rz__chrome');
   chrome.style.backgroundImage = `url("${cfg.chrome}")`;
   const lib = el('div', 'rz__lib');
+  if (cfg.lib_tag) lib.append(el('span', 'rz__tag', cfg.lib_tag));
   cfg.items.forEach(it => {
     const b = el('button', 'rz-lib');
     b.type = 'button';
@@ -584,7 +594,7 @@ function recipeLab(root) {
       b.type = 'button';
       b.dataset.uid = p.uid; b.dataset.key = 'p:' + p.uid; b.dataset.item = p.id;
       b.setAttribute('aria-label', fillIn(T.in_item, { name: nameOf(p.id), zone: ZONE[zone] }));
-      b.append(icon(p.id), el('b', 'rz-n', '1'));
+      b.append(icon(p.id), el('b', 'rz-n', many(p.uid)));
       lift(b, { id: p.id, uid: p.uid });
       return b;
     }));
@@ -608,11 +618,12 @@ function recipeLab(root) {
         const t = el('button', 'rz-tile');
         t.type = 'button';
         t.dataset.uid = p.uid; t.dataset.key = 'p:' + p.uid; t.dataset.item = p.id;
-        t.setAttribute('aria-label', fillIn(T.out_item, { name: nameOf(p.id) }) + (g.choose ? '' : ` ${p.pct}%`));
+        const odds = !g.choose || cfg.odds;
+        t.setAttribute('aria-label', fillIn(T.out_item, { name: nameOf(p.id) }) + (odds ? ` ${p.pct}%` : ''));
         const c = el('span', 'rz-tile__ico');
-        c.append(icon(p.id), el('b', 'rz-n', '1'));
+        c.append(icon(p.id), el('b', 'rz-n', many(p.uid)));
         t.append(c);
-        if (!g.choose) t.append(el('span', 'rz-pct', p.pct + '%'));
+        if (odds) t.append(el('span', 'rz-pct', p.pct + '%'));
         t.append(el('span', 'rz-name', items[p.id].out));
         lift(t, { id: p.id, uid: p.uid });
         ge.append(t);
@@ -632,13 +643,13 @@ function recipeLab(root) {
 
   function sentence() {
     if (!R.count(state)) return T.read_empty;
-    const names = list => list.map(p => items[p.id].out).join(T.read_sep);
+    const names = list => list.map(p => (qty[p.uid] ? fillIn(T.qty, { name: items[p.id].out, n: qty[p.uid] }) : items[p.id].out)).join(T.read_sep);
     let s = T.read + (state.require.length ? fillIn(T.read_in, { list: names(state.require) }) : T.read_no_in);
     if (state.optional.length) s += fillIn(T.read_opt, { list: names(state.optional) });
     if (!state.groups.length) return s + T.read_no_out;
     const word = k => (k === 'and' ? T.read_and : T.read_or);
     const parts = state.groups.map(g => {
-      if (g.choose) return fillIn(T.read_choose, { list: names(g.items) });
+      if (g.choose) return fillIn(T.read_choose, { list: cfg.odds ? g.items.map(p => items[p.id].out + ' ' + p.pct + '%').join(T.read_sep) : names(g.items) });
       const inner = g.items.map((p, i) => (i ? word(g.joins[i - 1]) : '') + items[p.id].out + ' ' + p.pct + '%').join('');
       return g.items.length > 1 && state.groups.length > 1 ? fillIn(T.read_wrap, { list: inner }) : inner;
     });
@@ -675,7 +686,7 @@ function recipeLab(root) {
       const step = d => { if (R.nudge(state, uid, d)) draw(); else say(T.no_edge); };
       if (loc.zone === 'output') {
         const g = state.groups[loc.group];
-        if (!g.choose) {
+        if (!g.choose || cfg.odds) {
           const pct = v => { R.setPct(state, uid, v); draw(); };
           const stepper = el('span', 'studio__stepper');
           stepper.append(el('span', 'studio__lbl', T.bar_pct), button('−', () => pct(loc.item.pct - 5), { key: 'less', label: T.bar_less }),
@@ -804,10 +815,10 @@ function recipeLab(root) {
     return '';
   }
 
-  const set = (next, text) => { state = next; held = null; draw(); say(text); };
+  const set = (next, text) => { state = next; qty = counted(next); held = null; draw(); say(text); };
   root.querySelector('[data-action="reset"]').addEventListener('click', () => set(R.load(cfg.start), T.said_reset));
   tool('⌫ ' + T.clear, () => set(R.blank(), T.said_clear));
-  tool('▦ ' + T.sample, () => set(R.load(cfg.sample), T.said_sample));
+  if (cfg.sample) tool('▦ ' + T.sample, () => set(R.load(cfg.sample), T.said_sample));
   watch((w, compact) => {
     root.toggleAttribute('data-compact', compact);
     stage.style.setProperty('--u', w / (compact ? 600 : cfg.frame[0]) + 'px');
@@ -1167,7 +1178,7 @@ function drafterLab(root) {
   const status = root.querySelector('[data-status]'), tools = root.querySelector('[data-tools]');
   const say = text => { status.textContent = text; };
   const num = n => T.nums[n - 1] || String(n);
-  let pick = 0, st = D.fresh(cfg.drafts[0]), editing = new Set(), placed = null;
+  let pick = 0, st = D.fresh(cfg.drafts[0]), editing = new Set();
   const draft = () => cfg.drafts[pick];
   const itemName = id => (draft().items.find(i => i.id === id) || { name: id }).name;
   const taskName = id => fillIn(T.task, { n: id });
@@ -1212,7 +1223,7 @@ function drafterLab(root) {
     b.append(el('span', 'dz-goal__n', fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.creator), el('span', 'dz-goal__goal', d.goal), el('span', 'dz-goal__persona', d.persona));
     b.addEventListener('click', () => {
       if (i === pick) return;
-      pick = i; st = D.fresh(d); editing = new Set(); placed = null;
+      pick = i; st = D.fresh(d); editing = new Set();
       draw();
       say(fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
       // the assistant's own check sits at the top of the draft: bring it into view (draft two's problem must be seen at once)
@@ -1255,12 +1266,100 @@ function drafterLab(root) {
     draw();
     say(fillIn(T.said_qty, { name: nameOf(kind, id), item: itemName(item), n }) + summary());
   }
-  function place(id) {
-    placed = id;
-    draw();
-    say(fillIn(T.said_placed, { name: nameOf('recipe', id) }));
-    const c = view.querySelector('[data-canvas]');
-    if (c) c.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+  /* 5. double-click a recipe: it opens in the recipe editor of section 03 (recipeLab), inside the same Studio window.
+     What is changed there stays there: the draft, its check and its score are not touched. */
+  const E = cfg.editor, page = root.querySelector('.sk__page'), sk = root.querySelector('.sk');
+  const nav = [...root.querySelectorAll('.sk__item[data-nav]')], home = (nav.find(n => n.hasAttribute('data-on')) || {}).dataset?.nav;
+  let ed = null;   // { node, id, y } while the editor is open
+  const navTo = k => {   // the sidebar's lit item moves, caret and plus with it
+    const on = nav.find(n => n.hasAttribute('data-on')), to = nav.find(n => n.dataset.nav === k);
+    if (!on || !to || on === to) return;
+    on.removeAttribute('data-on'); to.setAttribute('data-on', '');
+    const caret = on.querySelector('.sk__caret'), plus = on.querySelector('.sk__plus');
+    if (caret) to.prepend(caret);
+    if (plus) to.append(plus);
+  };
+  function openEditor(id) {
+    if (ed) return;
+    const r = draft().recipes.find(x => x.id === id), name = nameOf('recipe', id);
+    if (st.recipes[id].removed) { say(fillIn(T.open_gone, { name })); return; }
+    const cur = D.asChanged(r, st), out = r.output.items;
+    const conf = {
+      ...E, kind: 'recipe', heading: r.name, lib_tag: '#' + draft().campaign.name, odds: true,
+      items: draft().items.map((it, n) => ({ id: it.id, name: it.name, out: it.name, pct: E.default_pct, lib: E.lib_at[n], art: fillIn(cfg.item_src, { draft: draft().id, item: it.id }) })),
+      start: {
+        require: cur.require.map(m => m.item), optional: cur.optional.map(m => m.item),
+        groups: r.output.choose_one ? [{ choose: out.length > 1, items: out.map(o => [o.item, o.pct]) }] : out.map(o => ({ items: [[o.item, o.pct]] })),
+      },
+      qty: Object.fromEntries(cur.require.concat(cur.optional).map(m => [m.item, m.qty])),
+    };
+    // the same parts studioShell looks for in section 03's markup
+    const node = el('div', 'proto dz-ed');
+    node.dataset.config = JSON.stringify(conf);
+    node.dataset.component = 'Recipe editor';
+    const back = btn('← ' + T.back, closeEditor, { key: 'editor:back', cls: 'dz-ed__back' });
+    const studio = el('div', 'studio'), stage = el('div', 'studio__stage'), read = el('p', 'studio__read');
+    stage.dataset.stage = '';
+    stage.setAttribute('role', 'group');
+    stage.setAttribute('aria-label', name);
+    Object.entries(E.geo).forEach(([k, v]) => stage.style.setProperty('--' + k, v));
+    read.dataset.read = '';
+    read.hidden = true;
+    const bar = el('div', 'studio__bar'), controls = el('div', 'studio__controls'), status = el('p', 'studio__status');
+    controls.dataset.bar = '';
+    status.dataset.status = '';
+    status.setAttribute('role', 'status');
+    bar.append(controls, status);
+    // no "Enlarge" here: the Studio window around it is a size container, which would hold a fixed overlay inside it
+    const tools = el('div', 'proto__tools'), reset = el('button', 'tool-btn', '↺ ' + E.t.reset);
+    tools.dataset.tools = '';
+    reset.type = 'button';
+    reset.dataset.action = 'reset';
+    tools.append(reset);
+    studio.append(stage, read, bar, tools);
+    node.append(back, studio);
+    ed = { node, id, y: window.scrollY };
+    goals.hidden = view.hidden = true;
+    root.setAttribute('data-editing', '');
+    page.append(node);
+    navTo('recipes');
+    recipeLab(node);
+    status.textContent = fillIn(T.said_open, { name });
+    if (sk.getBoundingClientRect().top < 0) sk.scrollIntoView({ block: 'start', behavior: 'instant' });
+    back.focus({ preventScroll: true });
+  }
+  function closeEditor() {
+    if (!ed) return;
+    const { node, id, y } = ed;
+    node.remove();
+    ed = null;
+    goals.hidden = view.hidden = false;
+    root.removeAttribute('data-editing');
+    navTo(home);
+    window.scrollTo({ top: y, behavior: 'instant' });   // back where the visitor was: at this recipe (the page scrolls smoothly otherwise)
+    const row = view.querySelector(`[data-key="recipe:${id}:open"]`);
+    if (row) {
+      row.focus({ preventScroll: true });
+      const b = row.getBoundingClientRect();
+      if (b.top < 0 || b.bottom > innerHeight) row.scrollIntoView({ block: 'center', behavior: 'instant' });
+    }
+    say(fillIn(T.said_back, { name: nameOf('recipe', id) }));
+  }
+  // a double-click with a mouse, two taps on a touch screen, Enter from the keyboard; never the row's own buttons
+  let tap = { id: null, at: 0 }, touchy = false;
+  const ownControl = e => e.target.closest('button, .dz-edit');
+  function openable(li, id) {
+    li.tabIndex = 0;
+    li.dataset.key = `recipe:${id}:open`;
+    li.setAttribute('aria-describedby', 'dz-open-hint');
+    li.addEventListener('pointerdown', e => { touchy = e.pointerType === 'touch' || e.pointerType === 'pen'; });
+    li.addEventListener('mousedown', e => { if (e.detail > 1 && !ownControl(e)) e.preventDefault(); });   // no text selection on a double-click
+    li.addEventListener('dblclick', e => { if (!touchy && !ownControl(e)) openEditor(id); });
+    li.addEventListener('click', e => {
+      if (!touchy || ownControl(e)) return;
+      if (tap.id === id && e.timeStamp - tap.at < 450) { tap = { id: null, at: 0 }; openEditor(id); } else tap = { id, at: e.timeStamp };
+    });
+    li.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target === li) { e.preventDefault(); openEditor(id); } });
   }
   function actions(kind, id, extra = []) {
     const s = partOf(kind, id), k = kind + ':' + id, name = nameOf(kind, id);
@@ -1344,6 +1443,9 @@ function drafterLab(root) {
   }
   function recipesBlock() {
     const b = block(T.h_recipes), ol = el('ol', 'dz-rows dz-rows--recipes');
+    const hint = el('span', 'dz-hint', T.open_hint);
+    hint.id = 'dz-open-hint';
+    b.querySelector('.dz-block__title').append(' ', hint);
     draft().recipes.forEach(r => {
       const s = st.recipes[r.id], li = el('li', 'dz-row dz-recipe');
       mark(li, s);
@@ -1354,9 +1456,8 @@ function drafterLab(root) {
       part(T.req, r.require.map(m => qty(m.item, s.qty[m.item])).join(T.sep));
       part(T.opt, r.optional.length ? r.optional.map(m => qty(m.item, m.qty) + T.dash + m.effect).join(T.sep) : T.none);
       part(T.out, (r.output.choose_one ? fillIn(T.choose, { n: r.output.items.length }) + T.colon : '') + r.output.items.map(o => `${itemName(o.item)} ${o.pct}%`).join(T.sep));
-      const onCanvas = placed === r.id;
-      const put = btn(onCanvas ? T.placed : T.place, () => place(r.id), { key: `recipe:${r.id}:place`, pressed: onCanvas, label: fillIn(T.act, { act: T.place, name: nameOf('recipe', r.id) }) });
-      li.append(title, parts, actions('recipe', r.id, [put]));
+      openable(li, r.id);
+      li.append(title, parts, actions('recipe', r.id));
       if (editing.has('recipe:' + r.id) && !s.removed) li.append(editor('recipe', r.id, r.require.map(m => [m.item, s.qty[m.item]])));
       ol.append(li);
     });
@@ -1398,74 +1499,10 @@ function drafterLab(root) {
     if (gone) b.append(el('p', 'meta', fillIn(T.re_removed, { n: gone })));
     return b;
   }
-  /* 5. the recipe on a read-only canvas: the recipe editor's three areas, drawn with its own pieces */
-  function canvasBlock() {
-    const b = block(T.h_canvas, 'dz-canvas');
-    b.dataset.canvas = '';
-    b.querySelector('.dz-block__title').append(' ', el('span', 'chip dz-ro', T.canvas_ro));
-    const r = placed == null ? null : draft().recipes.find(x => x.id === placed);
-    if (!r) { b.append(el('p', 'dz-empty', T.canvas_empty)); return b; }
-    if (st.recipes[r.id].removed) { b.append(el('p', 'dz-empty', fillIn(T.canvas_gone, { name: recipeName(r) }))); return b; }
-    const cur = D.asChanged(r, st), { state } = D.canvas(cur, LIM);
-    const count = {};
-    cur.require.forEach(m => { count['require:' + m.item] = m.qty; });
-    cur.optional.forEach(m => { count['optional:' + m.item] = m.qty; });
-    const stage = el('div', 'rz dz-rz');
-    Object.entries(cfg.geo).forEach(([k, v]) => stage.style.setProperty('--' + k, v));
-    stage.setAttribute('aria-label', recipeName(r));
-    stage.setAttribute('role', 'group');
-    const ico = id => { const c = el('span', 'rz-tile__ico dz-tile__ico'); c.append(itemArt(id)); return c; };
-    const tile = (id, zone) => { const t = el('div', 'rz-tile dz-tile'); t.append(ico(id), el('span', 'rz-name', itemName(id)), el('b', 'rz-n', String(count[zone + ':' + id]))); return t; };
-    const column = (name, zone) => {
-      const c = el('div', 'rz-box dz-col'), slots = el('div', 'dz-slots');
-      c.append(el('div', 'rz-tab', name));
-      const list = state[zone].map(p => tile(p.id, zone));
-      slots.append(...(list.length ? list : [el('span', 'dz-none', '—')]));
-      c.append(slots);
-      return c;
-    };
-    const pill = kind => el('span', 'rz-pill', kind === 'and' ? 'And' : 'Or');
-    const out = el('div', 'rz-panel rz-panel--out dz-col'), chain = el('div', 'rz-chain dz-chain');
-    out.append(el('div', 'rz-tab', 'Output'));
-    state.groups.forEach((g, gi) => {
-      if (gi) chain.append(pill(state.joins[gi - 1]));
-      const ge = el('div', 'rz-group');
-      ge.toggleAttribute('data-multi', g.items.length > 1);
-      ge.toggleAttribute('data-choose', g.choose);
-      if (g.choose) ge.append(el('span', 'rz-choose', `Choose 1 Out Of ${g.items.length}`));
-      g.items.forEach((p, i) => {
-        if (i) ge.append(pill(g.joins[i - 1]));
-        const t = el('div', 'rz-tile dz-tile');
-        t.append(el('span', 'rz-pct', p.pct + '%'), ico(p.id), el('span', 'rz-name', itemName(p.id)));
-        ge.append(t);
-      });
-      chain.append(ge);
-    });
-    out.append(chain);
-    stage.append(column('Require', 'require'), column('Optional', 'optional'), out);
-    b.append(stage, el('p', 'studio__read', reads(state, count)));
-    return b;
-  }
-  // "Reads as": the same wording the recipe editor in section 03 uses
-  function reads(s, count) {
-    const names = (list, zone) => list.map(p => qty(p.id, count[zone + ':' + p.id])).join(T.read_sep);
-    let text = T.read + (s.require.length ? fillIn(T.read_in, { list: names(s.require, 'require') }) : T.read_no_in);
-    if (s.optional.length) text += fillIn(T.read_opt, { list: names(s.optional, 'optional') });
-    if (!s.groups.length) return text + T.read_no_out;
-    const word = k => (k === 'and' ? T.read_and : T.read_or);
-    const parts = s.groups.map(g => {
-      const each = g.items.map(p => `${itemName(p.id)} ${p.pct}%`);
-      if (g.choose) return fillIn(T.read_choose, { list: each.join(T.read_sep) });
-      const inner = each.map((x, i) => (i ? word(g.joins[i - 1]) : '') + x).join('');
-      return g.items.length > 1 && s.groups.length > 1 ? fillIn(T.read_wrap, { list: inner }) : inner;
-    });
-    return text + fillIn(T.read_out, { list: parts.map((p, i) => (i ? word(s.joins[i - 1]) : '') + p).join('') });
-  }
-
   function draw() {
     const key = root.contains(document.activeElement) ? document.activeElement.dataset.key : null;
     goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === pick)));
-    view.replaceChildren(head(), selfCheck(), tasksBlock(), itemsBlock(), recipesBlock(), whyBlock(), recheck(), canvasBlock());
+    view.replaceChildren(head(), selfCheck(), tasksBlock(), itemsBlock(), recipesBlock(), whyBlock(), recheck());
     restoreAll.hidden = !D.removedCount(draft(), st);
     if (key) root.querySelector(`[data-key="${key}"]`)?.focus({ preventScroll: true });
   }

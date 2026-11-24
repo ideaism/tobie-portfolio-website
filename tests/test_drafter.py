@@ -67,7 +67,8 @@ class DrafterTests(unittest.TestCase):
             self.assertIn(f'<span class="prov ">{CONCEPT[n]}</span>', html)
             self.assertNotIn(REBUILT[n], html)
             self.assertNotIn(REBUILT_TAG[n], html)
-            self.assertNotIn('data-studio', html, 'not a recipeLab instance')
+            # 2026-11-25（交接单 ⑨）：双击配方时才由 JS 建一个 recipeLab，页面里不写死 data-studio（03 节的三个演示照旧是那三个）
+            self.assertNotIn('data-studio', html, 'the editor is built on double-click, not in the markup')
             self.assertNotIn('http', html, 'nothing is loaded from anywhere')
 
     def test_section_04_right_after_studio_and_the_only_one_with_it(self):
@@ -145,6 +146,57 @@ class DrafterTests(unittest.TestCase):
         art = js[js.index('const itemArt'):js.index('return im;', js.index('const itemArt'))]
         for must in ("im.alt = ''", "setAttribute('aria-hidden', 'true')", "im.loading = 'lazy'"):
             self.assertIn(must, art)
+
+    def test_double_click_opens_the_recipe_editor(self):
+        # 2026-11-25（交接单 ⑨，卡 20261125-002）：去掉「放上画布」和只读三栏；双击配方在 03 节同一个配方编辑器里打开
+        from prototypes import SKIN_NAV, _drafter_config, _studio_config
+        self.assertEqual(DRAFTER['t']['open_hint'], ['双击配方，在编辑器里打开', 'Double-click a recipe to open it in the editor'])
+        self.assertEqual(DRAFTER['t']['back'], ['回到草案', 'Back to draft'])
+        for k in ('place', 'placed', 'h_canvas', 'canvas_ro', 'canvas_empty', 'canvas_gone', 'said_placed'):
+            self.assertNotIn(k, DRAFTER['t'])
+        recipe = STUDIO['playbook-recipe']
+        for lang in ('zh', 'en'):
+            html = section_demo('playbook', 4, lang)
+            for gone in ('放上画布', 'Put on canvas', 'On the canvas', '只读示意'):
+                self.assertNotIn(gone, html)
+            ed = _drafter_config(lang)['editor']
+            full = _studio_config(recipe, lang)
+            for k in ('frame', 'chrome', 'limits', 'output_w'):
+                self.assertEqual(ed[k], full[k], k)
+            self.assertEqual(ed['lib_at'], [list(it[-1]) for it in recipe['items']])
+            self.assertEqual({**ed['geo'], 'tile-h': recipe['geo']['tile-h']}, recipe['geo'])   # 只有产出卡片高一点
+            for k in ('start', 'sample', 'items', 'heading'):   # 这些由 drafterLab 按草案填
+                self.assertNotIn(k, ed)
+            for dr in draft_data()['drafts']:
+                self.assertLessEqual(len(dr['items']), len(ed['lib_at']), dr['id'])
+            # 侧边栏：每项带 data-nav，亮的那项编辑器打开时挪到 Craft Recipes
+            side = re.search(r'<div class="sk__side" aria-hidden="true">(.*?)</div>', html, re.S).group(1)
+            self.assertEqual(re.findall(r'data-nav="(\w+)"', side), [k for k, _ in SKIN_NAV])
+            self.assertIn('recipes', dict(SKIN_NAV))
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
+        for must in ("addEventListener('dblclick'", "e.key === 'Enter'", 'recipeLab(node)', "navTo('recipes')", 'window.scrollTo({ top: y', 'D.asChanged(r, st)'):
+            self.assertIn(must, lab)
+        for gone in ('canvasBlock', 'function place(', 'T.place'):
+            self.assertNotIn(gone, lab)
+
+    def test_recipe_editor_options_stay_off_in_section_03(self):
+        # recipeLab 的可选配置（物品自己的图、数量、几选一显示概率、物品库标签）只在 04 节的编辑器里给；03 节的配置里一个都没有
+        from prototypes import _studio_config
+        for lang in ('zh', 'en'):
+            cfg = _studio_config(STUDIO['playbook-recipe'], lang)
+            for k in ('qty', 'odds', 'lib_tag'):
+                self.assertNotIn(k, cfg)
+            self.assertFalse(any('art' in it for it in cfg['items']))
+            self.assertIn('sample', cfg)
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        lab = js[js.index('function recipeLab'):js.index('/* 6d.')]
+        for guard in ('if (items[id].art)', 'if (cfg.qty)', 'if (cfg.lib_tag)', 'if (cfg.odds)', 'if (cfg.sample)', 'cfg.odds ?'):
+            self.assertIn(guard, lab)
+        css = (ROOT / 'dist' / 'styles.css').read_text(encoding='utf-8')
+        for line in css.splitlines():   # 新加的样式都挂在 03 节没有的属性上
+            if 'rz__tag' in line or 'rz-lib__name{position:absolute' in line or '.rz__lib::before' in line:
+                self.assertTrue('[data-own]' in line or line.startswith('.rz__tag{display:none}'), line)
 
     def test_draft_rules_in_node(self):
         node = shutil.which('node')

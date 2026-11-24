@@ -396,39 +396,54 @@ FIGURES = {
  ],
  # ---------------- Agent Matrix ----------------
  # 2026-11-17：四张图，中英文各一张（'src' 中文页，'src_en' 英文页）。本人在卡 20261115-001 第 3 版通过；图注照交接单第 3 节。
- # 白底的图，用普通图框。02、03、04 节要的三张截图（飞书看板、一张审核卡、一页状态文件）还在等本人（卡 20261115-005），没到之前不放。
+ # 2026-11-25 重讲成 5 节（交接单第 14 节，卡 20261125-001；卡 20261124-009 选 C、20261124-012 选 A）。图跟着挪：
+ #   旧 01 九个问题 + 旧 02 飞书两张 → 新 01；旧 03 审核卡 → 新 02（前面加每天卡数）；新 03 四组前后对照是新出的；
+ #   旧 07 撤回 8 秒 → 新 04；旧 06 等着的六张卡 + 旧 08 信任等级 → 新 05。旧 01 的十四个 agent 分工图不再放（文件留着）。
  ('agent-matrix', 1): [
-  {'kind': 'image', 'src': 'agent-matrix/fig-agents-zh', 'src_en': 'agent-matrix/fig-agents-en', 'prov': 'diagram', 'project': 'matrix',
-   'label': ['十四个 agent 的分工和流水线', 'Fourteen agents: roles and pipeline'],
-   'caption': ['十四个 agent 各管一块，「通过」只在我这里。', 'Fourteen agents, one area each. Approval sits only with me.']},
   {'kind': 'image', 'src': 'agent-matrix/fig-sequence-zh', 'src_en': 'agent-matrix/fig-sequence-en', 'prov': 'diagram', 'project': 'matrix',
    'label': ['九个问题，各引出一个机制', 'Nine problems, one mechanism each'],
    'caption': ['每个机制，都是被一个具体的问题逼出来的。', 'Every mechanism was forced by one specific problem.']},
- ],
- # 2026-11-24（交接单第 11 节，卡 20261124-005 选 A）：02 节飞书多维表两张截图，照 07 节上下叠放（'stack'）：上面甘特（只留前 13 行），下面看板（原样）。
- # 图注已写明上 / 下，每张图下面不再出小字；build.py 的 stack 不读 'alt'，两张图的替代文字用的是图注，'alt' 只留作记录
- ('agent-matrix', 2): [
+  # 2026-11-24（交接单第 11 节，卡 20261124-005 选 A）：飞书多维表两张截图上下叠放（'stack'）：上面甘特（只留前 13 行），下面看板（原样）。
+  # 图注已写明上 / 下，每张图下面不再出小字；build.py 的 stack 不读 'alt'，两张图的替代文字用的是图注，'alt' 只留作记录
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
    'label': ['', ''],
    'items': [('agent-matrix/feishu-gantt-top13', ['', '']), ('agent-matrix/feishu-kanban', ['', ''])],
    'alt': ['飞书多维表的两张截图。上：甘特视图，13 行任务，每行有状态、进度条和横跨 2026 年 10 月到 12 月的时间条。下：看板视图，按未开始、进行中、完成分三列，每张卡写着计划开始、计划结束、进度和项目。', 'Two screenshots of a Feishu Base table. Top: the Gantt view with 13 tasks, each with a status, a progress bar and a time bar running from October to December 2026. Bottom: the kanban view in three columns (not started, in progress, done); each card shows planned start, planned end, progress and project.'],
    'caption': ['上：我定的计划。下：agent 此刻在做什么。', 'Top: the plan I set. Bottom: what each agent is doing now.']},
  ],
- # 2026-11-21：03 节「一张审核卡」（卡 20261115-005 要的三张之一）。用审核中心小原型拍的示例卡，整卡比一屏高，放进 16:9 窗口上下滑，左侧菜单不动
- ('agent-matrix', 3): [
-  {'kind': 'image', 'src': 'agent-matrix/review-card', 'prov': 'original', 'project': 'matrix', 'scroll': True,
+ # 新 02：每天卡数（cards_full.json 按卡片创建日重算，见 docs/sources.md）和一张示例审核卡，放在正文后、原型前（'before_demo'）；原型是审核中心小原型（#try）。
+ # 审核卡是 2026-11-21 用审核中心小原型拍的示例卡，整卡比一屏高，放进 16:9 窗口上下滑，左侧菜单不动
+ ('agent-matrix', 2): [
+  {'kind': 'image', 'src': 'agent-matrix/fig-daily-cards-zh', 'src_en': 'agent-matrix/fig-daily-cards-en', 'prov': 'diagram', 'project': 'matrix', 'before_demo': True,
+   'label': ['每天新来的卡', 'New cards each day'],
+   'caption': ['柱子上的数是当天所有项目的卡，深色是作品集的。', 'The number above each bar counts every project that day; the dark part is the portfolio.']},
+  {'kind': 'image', 'src': 'agent-matrix/review-card', 'prov': 'original', 'project': 'matrix', 'scroll': True, 'before_demo': True,
    'fixed': {'of': 2880, 'left': 496},
    'label': ['一张审核卡', 'A review card'],
    'caption': ['一张卡回答五个问题。这是示例卡，不是真实待办。', 'One card answers five questions. This is an example card, not a live item.']},
  ],
- ('agent-matrix', 6): [
-  {'kind': 'image', 'src': 'agent-matrix/fig-who-waits-zh', 'src_en': 'agent-matrix/fig-who-waits-en', 'prov': 'diagram', 'project': 'matrix',
-   'label': ['当时在等的六张卡', 'The six cards that were waiting'],
-   'caption': ['不急、有推荐选项的可以先走；要我亲眼看、亲手做的仍然等我。', 'Non-urgent cards with a recommended option can go ahead; what I must see or do myself still waits.']},
+ # 新 03：四组前后对照，顺序同表格四行。上下叠放（'stack'），改之前在上、改之后在下。每张从哪来见 docs/sources.md「2026-11-25：Agent Matrix 重讲（5 节）」
+ ('agent-matrix', 3): [
+  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
+   'label': ['PlayBook 配方编辑', 'PlayBook recipe editor'],
+   'items': [('agent-matrix/ba-playbook-before', ['改之前 · 11-15', 'Before · Nov 15']), ('agent-matrix/ba-playbook-after', ['改之后', 'After'])],
+   'caption': ['原来下面是固定的六步，现在没有固定顺序。', 'There used to be six fixed steps below; now there is no set order.']},
+  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
+   'label': ['首页四张封面', 'The four home covers'],
+   'items': [('agent-matrix/ba-covers-before', ['改之前 · 11-17', 'Before · Nov 17']), ('agent-matrix/ba-covers-after', ['改之后 · 11-18', 'After · Nov 18'])],
+   'caption': ['PlayBook 的摆法留着，另外三张各换一种。', 'PlayBook keeps its layout; the other three each get their own.']},
+  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
+   'label': ['兴业 SMT 案例页顶部', 'Top of the SMT case page'],
+   'items': [('agent-matrix/ba-smt-before', ['改之前', 'Before']), ('agent-matrix/ba-smt-after', ['改之后', 'After'])],
+   'caption': ['顶部多了两个标签页，兴业和大通各占一个。', 'Two tabs at the top now, one for Industrial Securities and one for Daton.']},
+  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
+   'label': ['The Commons Fridge 的一节', 'A section of The Commons Fridge'],
+   'items': [('agent-matrix/ba-fridge-before', ['停下的那一版 · 11-18', 'The version that stopped · Nov 18']), ('agent-matrix/ba-fridge-after', ['之后上线的 3D 一节 · 11-24', 'The 3D section that went live · Nov 24'])],
+   'caption': ['停下的那一版只有文字；之后冰箱本身成了界面。', 'The version that stopped was text only; afterwards the fridge itself became the interface.']},
  ],
- # 2026-11-23（交接单第 10 节）：撤回 8 秒。都裁自示例数据截图（卡上有「示例卡片」）；'before_demo'：放在正文后、原型前，紧跟 text 6。
+ # 2026-11-23（交接单第 10 节）：撤回 8 秒。都裁自示例数据截图（卡上有「示例卡片」）；'before_demo'：放在正文后、原型（批次图）前。2026-11-25 从旧 07 挪到新 04
  # 改之前 / 改之后两条 13:1 的扁图并排会缩到三分之一宽、字看不清，所以上下排（'stack'）
- ('agent-matrix', 7): [
+ ('agent-matrix', 4): [
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix', 'before_demo': True,
    'label': ['', ''],   # 每张图下面已经写了改之前 / 改之后，上面不再出一行图名
    'items': [('agent-matrix/undo-before', ['改之前', 'Before']), ('agent-matrix/undo-after', ['改之后', 'After'])],
@@ -438,7 +453,11 @@ FIGURES = {
    'items': [('agent-matrix/undo-restored', ['', ''])],
    'caption': ['撤回以后，意见和图上批注都还在。', 'After Undo, the comment and the pinned note are still there.']},
  ],
- ('agent-matrix', 8): [   # 2026-11-21：前面插了新 07「重新定义」，「下一步」顺延为 08
+ # 2026-11-25：旧 06「等着的六张卡」和旧 08 信任等级并进新 05「下一步」。信任图换成 2026-11-24 的台账（ledger/trust.md 逐格核对）
+ ('agent-matrix', 5): [
+  {'kind': 'image', 'src': 'agent-matrix/fig-who-waits-zh', 'src_en': 'agent-matrix/fig-who-waits-en', 'prov': 'diagram', 'project': 'matrix',
+   'label': ['当时在等的六张卡', 'The six cards that were waiting'],
+   'caption': ['不急、有推荐选项的可以先走；要我亲眼看、亲手做的仍然等我。', 'Non-urgent cards with a recommended option can go ahead; what I must see or do myself still waits.']},
   {'kind': 'image', 'src': 'agent-matrix/fig-trust-zh', 'src_en': 'agent-matrix/fig-trust-en', 'prov': 'diagram', 'project': 'matrix',
    'label': ['四级信任等级和台账', 'Four trust levels and the ledger'],
    'caption': ['每类任务从最低一级开始。', 'Every task type starts at the lowest level.']},

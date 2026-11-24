@@ -223,7 +223,7 @@ def collage(slug, lang):
         return ('<div class="collage collage--ill collage--door" style="--bg:#F3E7D1">'
                 + img('gen/cf-door', t('插画：贴满冰箱贴的共享冰箱门，一只手拿手机碰门上的小贴片', 'Illustration: a shared fridge door covered in magnets, a hand tapping a sticker with a phone', lang), 'cover-bg').replace('<img', '<img style="object-position:100% 50%"')
                 + f'<div class="cover-chips" aria-hidden="true">{chips}</div>'
-                + img('fridge/cf-home', t('Commons Fridge 原型首页', 'Commons Fridge prototype home', lang), 'cover-phone').replace('<img', '<img style="left:9cqw;top:12cqw;width:21cqw;--r:-4deg"')
+                + img('fridge/3d-home', t('Commons Fridge 3D 小样首页', 'Commons Fridge 3D prototype home', lang), 'cover-phone').replace('<img', '<img style="left:9cqw;top:12cqw;width:21cqw;--r:-4deg"')
                 + img('fridge/penguin-add', t('小企鹅贴纸', 'Penguin sticker', lang), 'cover-sticker').replace('<img', '<img style="left:26cqw;bottom:3cqw;width:11cqw"')
                 + '</div>')
     return ''
@@ -474,7 +474,8 @@ def figure_html(f, lang):
     if kind == 'stack':
         # 'stack'（2026-11-23，Agent Matrix 07 节）：几张很扁的横条图（13:1）上下排，每张下面一行小字说是哪张；并排的话字会缩到看不清
         # 放大按钮挪到图下面那行的右边（styles.css .stack .enlarge::after），不盖住扁图上的按钮和字；小字留空时那一行照样留着放按钮；没有小字的图用图注当 alt
-        rows = ''.join(f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang) or cap_text)}">{img(src, T(lbl, lang) or cap_text)}</button>'
+        # 每张图的显示宽度不超过导出图的宽度（不放大，和手机条的 partials / whole 一样）：2026-11-24 起 02 节的看板截图只有 667 宽，不加这条会被拉到整栏宽、发虚
+        rows = ''.join(f'<figure style="max-width:{MANIFEST[src][0]}px"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang) or cap_text)}">{img(src, T(lbl, lang) or cap_text)}</button>'
                        f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items'])
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
     if kind == 'anims':

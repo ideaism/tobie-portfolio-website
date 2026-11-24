@@ -595,7 +595,7 @@ def fridge_3d(lang, anchor):
   <div class="live__poster"><img src="/assets/work/fridge/3d-home.webp" width="480" height="1039" alt="{T('3D 小样首页：冰箱门关着，底下是查看处理、放入、买菜前看一眼', '3D prototype home: the fridge door closed, with Check, Put in and Before you shop below')}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {T('在这里运行', 'Run it here')}</button></div>
  </div></div></div>
  <div class="proto__side">
-  <div class="proto__intro"><h3>{T('开门，拿起一样东西，拖给企鹅。', 'Open the door, pick something up, drag it to the penguin.')}</h3></div>
+  <div class="proto__intro"><h3>{T('开门，拿起二层那瓶牛奶，拖给企鹅。', 'Open the door, pick up the milk on the second shelf, drag it to the penguin.')}</h3></div>
   <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_3D_URL}" target="_blank" rel="noopener">↗ {T('全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
  </div>
 </div>

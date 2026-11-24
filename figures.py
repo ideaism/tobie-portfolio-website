@@ -337,7 +337,7 @@ FIGURES = {
   {'kind': 'phones', 'prov': 'original', 'project': 'fridge', 'n': 2,
    'label': ['3D 小样 · 首页与放进去', '3D prototype · home and putting in'],
    'items': [('fridge/3d-home', ['在冰箱前：只做这一刻需要的事', 'At the fridge: only what this moment needs']), ('fridge/3d-add-plan', ['放进去：记下一个计划', 'Put in: record a plan'])],
-   'caption': ['不再要求完整库存，而是在四个具体时刻提供帮助。', 'Instead of a complete inventory, help at four concrete moments.']},
+   'caption': ['不再要求完整库存，只在放入、查看处理、买菜前这几个时刻帮忙。', 'No complete inventory: help only when putting in, checking, and before shopping.']},
  ],
  ('commons-fridge', 3): [
   {'kind': 'image', 'src': 'fridge/sub-failures', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
@@ -350,7 +350,7 @@ FIGURES = {
  ('commons-fridge', 4): [
   {'kind': 'phones', 'prov': 'original', 'project': 'fridge', 'n': 2,
    'label': ['3D 小样 · 位置、归属与权限', '3D prototype · location, ownership and permission'],
-   'items': [('fridge/3d-other-on-my-shelf', ['小满的果酱在我的层：没有处理按钮', 'Xiaoman’s jam on my shelf: no button to deal with it']), ('fridge/3d-unknown', ['没人认的保鲜盒：“不知道是谁的”', 'An unclaimed container: “not sure whose”'])],
+   'items': [('fridge/3d-other-on-my-shelf', ['小满的果酱在我的层：没有处理按钮', 'Xiaoman’s jam on my shelf: no button to dispose of it']), ('fridge/3d-unknown', ['没人认的保鲜盒：“不知道是谁的”', 'An unclaimed container: “not sure whose”'])],
    'caption': ['没人认的东西一直是“不知道是谁的”，直到有人说“这是我的”。', 'An unclaimed item stays “not sure whose” until someone says “this is mine”.']},
  ],
  ('commons-fridge', 5): [

@@ -27,7 +27,7 @@ python3 verify.py                     # with the server running
 node --check dist/site.js dist/prototype.js
 ```
 
-`dist/` is the complete portable site. Fonts (Atkinson Hyperlegible Next / Mono, OFL) and images are self-hosted. The only external request is the Commons Fridge prototype, loaded into the page only when a visitor presses “Run the prototype here”.
+`dist/` is the complete portable site. Fonts (Atkinson Hyperlegible Next / Mono, OFL) and images are self-hosted. The Commons Fridge 3D prototype is packaged into `dist/demo/commons-fridge-3d/` by `tools/pack_fridge_demo.py` (model-viewer 3.5.0 served locally) and loads only when a visitor presses “Run it here”; the site makes no external requests.
 
 ## Publish (2026-10-20)
 `tools/publish.sh check` runs build → tests → JS syntax → `verify.py` (starts a temporary server on 4173 if none is running); `tools/publish.sh deploy` (the old Vercel deploy) is retired since 2026-11-14; the live site www.tobiefeng.com is updated with `~/其他任务/部署中心/tools/部署国内版.sh`, after the owner says so. Case changes arrive as handoff files from the project folders; see [`docs/handoff-contract.md`](docs/handoff-contract.md).

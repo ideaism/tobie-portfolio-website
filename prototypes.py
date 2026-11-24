@@ -759,10 +759,13 @@ def _skin_icon(name):
 def studio_skin(inner):
     """Wrap a demo in a PlayBook Studio window: sidebar and top bar are decoration only."""
     brand = f'<span class="sk__brand">{_SKIN_MARK}<span><b>PlayBook</b> Studio</span></span>'
-    nav = ''.join(f'<span class="sk__item"{" data-on" if k == SKIN_ON else ""}>'
-                  f'{"<i class=\"sk__caret\"></i>" if k == "campaign" else ""}{_skin_icon(k)}<span>{name}</span>'
-                  f'{_skin_icon("plus").replace("<svg ", "<svg class=\"sk__plus\" ", 1) if k == "campaign" else ""}</span>'
-                  for k, name in SKIN_NAV)
+    caret = '<i class="sk__caret"></i>'
+    plus = _skin_icon('plus').replace('<svg ', '<svg class="sk__plus" ', 1)
+    nav = ''
+    for k, name in SKIN_NAV:
+        on = k == SKIN_ON
+        nav += (f'<span class="sk__item"{" data-on" if on else ""}>{caret if on else ""}'
+                f'{_skin_icon(k)}<span>{name}</span>{plus if on else ""}</span>')
     return f'''<div class="sk" data-component="Studio window"><div class="sk__win">
    <div class="sk__side" aria-hidden="true">{brand}<span class="sk__nav">{nav}</span></div>
    <div class="sk__main">

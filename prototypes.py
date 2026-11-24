@@ -730,6 +730,48 @@ def _drafter_config(lang):
     }
 
 
+# 2026-11-24（交接单 ⑧，卡 20261124-006 选 A）：演示套上 Studio 窗口的样子。照 Studio 定稿「新建挑战」
+# （Figma XDyOn5545LrSOsCwqUcED7 画框 5671:57226，导出图 02-playbook/portfolio/figures/studio-remix-new-challenge@2x.png）：
+# 左边侧边栏、上面顶栏只是装饰（aria-hidden、没有链接和按钮，点不了），中英文页都照原稿用英文；颜色在 styles.css 的 .sk 一段。
+# 里面的 [data-goals]、[data-draft] 原样，drafterLab 不动。
+SKIN_NAV = [('dashboard', 'Dashboard'), ('campaign', 'Campaign'), ('items', 'Items'), ('recipes', 'Craft Recipes'),
+            ('missions', 'Missions'), ('remix', 'PlayBook Remix'), ('economy', 'My Creator Economy')]
+SKIN_ON = 'campaign'
+SKIN_SEARCH = 'Search Items / Recipes / Missions / Campaigns / Tags / Public Resources'
+_SKIN_ICONS = {   # 24×24 线框图标，照原稿侧边栏的样子画的简化版；不写 xmlns（内联 SVG 不需要，页面里也不出现网址）
+ 'dashboard': '<rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M9.5 4v16"/>',
+ 'campaign': '<path d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1V19c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6.5V20M6 9.5h3M6 13h3M15 9.5h3M15 13h3"/>',
+ 'items': '<rect x="3.5" y="8" width="17" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8C10.5 5 7 4.5 7 6.5S10 8 12 8zm0 0c1.5-3 5-3.5 5-1.5S14 8 12 8z"/>',
+ 'recipes': '<path d="M8 4h10a2 2 0 0 1 2 2v1.5h-4"/><path d="M16 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.5h9"/><path d="M8 4a2 2 0 0 0-2 2v10.5M9.5 9h3.5M9.5 12.5h3.5"/>',
+ 'missions': '<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 14v4.5M8 20h8"/>',
+ 'remix': '<circle cx="12" cy="7" r="3"/><path d="M10.5 10v3H5.5A1.5 1.5 0 0 0 4 14.5V17h16v-2.5a1.5 1.5 0 0 0-1.5-1.5h-5v-3M4 20h16"/>',
+ 'economy': '<path d="M12 4v16M8 20h8M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
+ 'search': '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
+ 'plus': '<path d="M12 5v14M5 12h14"/>',
+}
+_SKIN_MARK = '<svg class="sk__mark" viewBox="0 0 30 20" aria-hidden="true"><path d="M13 20 21 6l9 14z" fill="#1A1A1A"/><path d="M0 20 10 3l10 17z" fill="#F95757" stroke="#fff" stroke-width="1.5"/></svg>'
+
+
+def _skin_icon(name):
+    return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{_SKIN_ICONS[name]}</svg>'
+
+
+def studio_skin(inner):
+    """Wrap a demo in a PlayBook Studio window: sidebar and top bar are decoration only."""
+    brand = f'<span class="sk__brand">{_SKIN_MARK}<span><b>PlayBook</b> Studio</span></span>'
+    nav = ''.join(f'<span class="sk__item"{" data-on" if k == SKIN_ON else ""}>'
+                  f'{"<i class=\"sk__caret\"></i>" if k == "campaign" else ""}{_skin_icon(k)}<span>{name}</span>'
+                  f'{_skin_icon("plus").replace("<svg ", "<svg class=\"sk__plus\" ", 1) if k == "campaign" else ""}</span>'
+                  for k, name in SKIN_NAV)
+    return f'''<div class="sk" data-component="Studio window"><div class="sk__win">
+   <div class="sk__side" aria-hidden="true">{brand}<span class="sk__nav">{nav}</span></div>
+   <div class="sk__main">
+    <div class="sk__top" aria-hidden="true">{brand}<span class="sk__search">{_skin_icon('search')}<span class="sk__ph">{SKIN_SEARCH}</span></span></div>
+    <div class="sk__page">{inner}</div>
+   </div>
+  </div></div>'''
+
+
 def drafter(lang):
     d = draft_data()
     T = lambda pair: t(*pair, lang)
@@ -742,8 +784,7 @@ def drafter(lang):
 <div class="frame frame--canvas">
  <div class="drafter">
   <div class="proto__intro"><span class="label label--teal">{t('可以点的示意', 'Try it', lang)}</span><h3>{T(DRAFTER['title'])}</h3><p>{T(DRAFTER['intro'])}</p></div>
-  <div class="dz-pick" role="group" aria-label="{T(DRAFTER['t']['pick'])}" data-goals></div>
-  <div class="dz-draft" data-draft></div>
+  {studio_skin(f'<div class="dz-pick" role="group" aria-label="{T(DRAFTER["t"]["pick"])}" data-goals></div><div class="dz-draft" data-draft></div>')}
   <div class="dz-bar"><p class="studio__status" data-status role="status"></p><div class="dz-bar__tools" data-tools></div></div>
   {score}
  </div>

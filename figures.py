@@ -332,10 +332,11 @@ FIGURES = {
    'label': ['四条情绪曲线，同一条横轴', 'Four curves, one shared axis'],
    'caption': ['纵轴是相对位置，高度本身不重要，要看的是形状：三条曲线能回升，一条不能。除了 A，其余三条都在第四阶段落到最低——出了问题、得有人开口的那一刻。最低点是人与人之间的事，不是技术问题。', 'The vertical axis is relative; what matters is the shape, not the height: three curves recover, one does not. Every curve except A bottoms out at stage 4, the moment something is wrong and someone has to say so. The lowest point is social, not technical.']},
  ],
+ # 2026-11-24（交接单 6h）：02、04 两节的四张 v1.7 截图换成 3D 小样里同一件事的画面（tools/prepare_assets.py 'fridge/3d-*'，docs/sources.md）
  ('commons-fridge', 2): [
   {'kind': 'phones', 'prov': 'original', 'project': 'fridge', 'n': 2,
-   'label': ['v1.7 原型 · 四个入口', 'v1.7 prototype · four entry points'],
-   'items': [('fridge/cf-home', ['在冰箱前：只做这一刻需要的事', 'At the fridge: only what this moment needs']), ('fridge/cf-add', ['放进去：记下一个计划', 'Put in: record a plan'])],
+   'label': ['3D 小样 · 首页与放进去', '3D prototype · home and putting in'],
+   'items': [('fridge/3d-home', ['在冰箱前：只做这一刻需要的事', 'At the fridge: only what this moment needs']), ('fridge/3d-add-plan', ['放进去：记下一个计划', 'Put in: record a plan'])],
    'caption': ['不再要求完整库存，而是在四个具体时刻提供帮助。', 'Instead of a complete inventory, help at four concrete moments.']},
  ],
  ('commons-fridge', 3): [
@@ -348,9 +349,9 @@ FIGURES = {
  ],
  ('commons-fridge', 4): [
   {'kind': 'phones', 'prov': 'original', 'project': 'fridge', 'n': 2,
-   'label': ['House 视图 · 位置、归属与权限', 'House view · location, ownership and permission'],
-   'items': [('fridge/cf-house', ['按区域分组，而不是按人', 'Grouped by area, not by person']), ('fridge/cf-found', ['发现物品：保留“不确定是谁的”', 'Found something: keep “not sure whose”'])],
-   'caption': ['看得见不等于有权处理：未认领的物品保持“不确定”，直到有人明确声明。', 'Seeing something does not grant permission: an unclaimed item stays “not sure whose” until someone explicitly claims it.']},
+   'label': ['3D 小样 · 位置、归属与权限', '3D prototype · location, ownership and permission'],
+   'items': [('fridge/3d-other-on-my-shelf', ['小满的果酱在我的层：没有处理按钮', 'Xiaoman’s jam on my shelf: no button to deal with it']), ('fridge/3d-unknown', ['没人认的保鲜盒：“不知道是谁的”', 'An unclaimed container: “not sure whose”'])],
+   'caption': ['没人认的东西一直是“不知道是谁的”，直到有人说“这是我的”。', 'An unclaimed item stays “not sure whose” until someone says “this is mine”.']},
  ],
  ('commons-fridge', 5): [
   {'kind': 'image', 'src': 'fridge/photo-touch', 'prov': 'photo', 'project': 'fridge', 'narrow': True,
@@ -383,7 +384,8 @@ FIGURES = {
  ],
  # 2026-11-18：前面插了 06「产品化」（v2.0，交接单 6e），「下一步」从 07 顺延为 08，这两张图跟着挪；新 06 节这次不放图
  # 2026-11-23：前面又插了 07「3D 小样」，「下一步」顺延为 09
- ('commons-fridge', 9): [
+ # 2026-11-24（交接单 6h）：原 08「原型与结果」并进 07，「下一步」回到 08
+ ('commons-fridge', 8): [
   {'kind': 'image', 'src': 'fridge/sub-test-not-run', 'prov': 'submission', 'project': 'fridge', 'bg': '#F6F0E3',
    'label': ['一套备好的比较测试', 'A comparison test, printed and ready'],
    'caption': ['评估材料是齐的：参与者说明、观察表、评分表、NFC 读取测试表、三种顺序的卡片和选择矩阵。获批的伦理路线只覆盖关于已有习惯的访谈，所以这套测试留到下一轮。', 'The evaluation kit is complete — participant instructions, an observer sheet, a rating sheet, an NFC read-test sheet, sequence cards in three orders and a selection matrix. The approved ethics route covered interviews about existing habits, so this test is for the next round.']},

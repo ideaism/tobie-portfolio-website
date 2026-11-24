@@ -595,12 +595,11 @@ def fridge_3d(lang, anchor):
   <div class="live__poster"><img src="/assets/work/fridge/3d-home.webp" width="480" height="1039" alt="{T('3D 小样首页：冰箱门关着，底下是查看处理、放入、买菜前看一眼', '3D prototype home: the fridge door closed, with Check, Put in and Before you shop below')}" loading="lazy"><button type="button" class="btn" data-action="load">▶ {T('在这里运行', 'Run it here')}</button></div>
  </div></div></div>
  <div class="proto__side">
-  <div class="proto__intro"><h3>{T('打开门，拿起一样东西。', 'Open the door, pick something up.')}</h3>
-   <p>{T('拖到别的层，或者拖给企鹅吃掉。', 'Drag it to another shelf, or to the penguin to eat.')}</p></div>
+  <div class="proto__intro"><h3>{T('开门，拿起一样东西，拖给企鹅。', 'Open the door, pick something up, drag it to the penguin.')}</h3></div>
   <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_3D_URL}" target="_blank" rel="noopener">↗ {T('全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
  </div>
 </div>
-<p class="proto__prov">{T('嵌入的是 3D 小样本身，示例数据，只在这台设备上，刷新就复原。', 'The 3D prototype itself, with example data that stays on this device and resets on reload.')}</p>
+<p class="proto__prov">{T('嵌入的是 3D 小样本身，示例数据，只在这台设备上，刷新就复原。', 'The 3D prototype itself, in Chinese, with example data that stays on this device and resets on reload.')}</p>
 </div></section>'''
 
 

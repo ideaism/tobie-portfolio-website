@@ -3,12 +3,13 @@
   python tools/pack_fridge_demo.py
 
 只读 ../01-commons-fridge/3d-小样/试装/（另一条线的东西，这里一个字节都不改），只写 dist/demo/commons-fridge-3d/（先清空再写）。
-做的事，和小样自己的 试装/打包网站.py 一样，多了三处：
+做的事，和小样自己的 试装/打包网站.py 一样，多了四处：
   1. 路径改成同级：../img/ → img/，../tripo/ → tripo/。
   2. model-viewer 不从 jsdelivr 拉，用本站一份：tools/vendor/model-viewer-3.5.0/（npm 包 @google/model-viewer@3.5.0 的
      dist/model-viewer.min.js 原样，Apache-2.0，LICENSE 一起放；出处和校验值见 docs/sources.md）。拷之前核对 sha256。
   3. 图片 PNG 转成 WebP（同尺寸，透明通道无损，颜色 quality 90），js / css / html 里的 .png 跟着改成 .webp。
      原 PNG 一共约 21 MB，转完见脚本最后一行。
+  4. index.html 里 alt="" 的装饰图补 aria-hidden="true"（本站 verify.py 的无障碍检查要求）。
 只拷默认网址用得到的：网页/ 里的 js、css、html、env-warm.jpg、手写体子集；img/trim/ 全部；img/stage.png、stage-b.png；
 tripo/web/ 里 data.js 引用的 8 个 .glb（penguin-cheer.glb 没人引用、standin/ 只给 ?standin=1，都不拷）。
 最后检查：没有剩下的 ../，没有指向外站的 script，引用到的本地文件都在。
@@ -60,8 +61,10 @@ def main():
         if not p.is_file():
             continue
         if p.suffix in ('.js', '.css', '.html'):
-            text = io.open(p, encoding='utf-8', newline='').read()
-            io.open(OUT / p.name, 'w', encoding='utf-8', newline='').write(fix(text))
+            text = fix(io.open(p, encoding='utf-8', newline='').read())
+            if p.suffix == '.html':   # alt="" 的都是装饰图（台面、企鹅各个姿势），补 aria-hidden，读屏跳过；verify.py 只认带 aria-hidden 的空 alt
+                text = re.sub(r'<img (?![^>]*aria-hidden)([^>]*alt=""[^>]*)>', r'<img aria-hidden="true" >', text)
+            io.open(OUT / p.name, 'w', encoding='utf-8', newline='').write(text)
         elif p.suffix in ('.jpg', '.png'):
             shutil.copy(p, OUT / p.name)
     shutil.copy(W / 'fonts' / 'zcool-kuaile-subset.woff2', OUT / 'fonts')

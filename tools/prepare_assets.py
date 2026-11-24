@@ -233,6 +233,10 @@ JOBS = {
     'agent-matrix/undo-before': (SRC / 'work' / 'agent-matrix' / 'undo-before.png', 1192, 90),
     'agent-matrix/undo-after': (SRC / 'work' / 'agent-matrix' / 'undo-after.png', 1192, 90),
     'agent-matrix/undo-restored': (SRC / 'work' / 'agent-matrix' / 'undo-restored.png', 1032, 90),
+    # 2026-11-24（交接单第 11 节，卡 20261124-005 选 A）：02 节飞书多维表两张截图，1 倍图，最大宽 = 原图宽。
+    # 甘特只留前 13 行：原图 05-agent-matrix/portfolio/figures/raw/feishu-gantt.png 裁 (0, 0, 1418, 476) 另存为 feishu-gantt-top13.png；看板原样
+    'agent-matrix/feishu-gantt-top13': (SRC / 'work' / 'agent-matrix' / 'feishu-gantt-top13.png', 1418, 90),
+    'agent-matrix/feishu-kanban': (SRC / 'work' / 'agent-matrix' / 'feishu-kanban.png', 667, 90),
 }
 
 # 动图（2026-11-23，冰箱 07「3D 小样」，交接单 6f ②、6g）：小样录屏 GIF → 动态 WebP（有损），不缩放。

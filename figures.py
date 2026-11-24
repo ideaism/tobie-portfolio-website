@@ -404,6 +404,15 @@ FIGURES = {
    'label': ['九个问题，各引出一个机制', 'Nine problems, one mechanism each'],
    'caption': ['每个机制，都是被一个具体的问题逼出来的。', 'Every mechanism was forced by one specific problem.']},
  ],
+ # 2026-11-24（交接单第 11 节，卡 20261124-005 选 A）：02 节飞书多维表两张截图，照 07 节上下叠放（'stack'）：上面甘特（只留前 13 行），下面看板（原样）。
+ # 图注已写明上 / 下，每张图下面不再出小字；build.py 的 stack 不读 'alt'，两张图的替代文字用的是图注，'alt' 只留作记录
+ ('agent-matrix', 2): [
+  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
+   'label': ['', ''],
+   'items': [('agent-matrix/feishu-gantt-top13', ['', '']), ('agent-matrix/feishu-kanban', ['', ''])],
+   'alt': ['飞书多维表的两张截图。上：甘特视图，13 行任务，每行有状态、进度条和横跨 2026 年 10 月到 12 月的时间条。下：看板视图，按未开始、进行中、完成分三列，每张卡写着计划开始、计划结束、进度和项目。', 'Two screenshots of a Feishu Base table. Top: the Gantt view with 13 tasks, each with a status, a progress bar and a time bar running from October to December 2026. Bottom: the kanban view in three columns (not started, in progress, done); each card shows planned start, planned end, progress and project.'],
+   'caption': ['上：我定的计划。下：agent 此刻在做什么。', 'Top: the plan I set. Bottom: what each agent is doing now.']},
+ ],
  # 2026-11-21：03 节「一张审核卡」（卡 20261115-005 要的三张之一）。用审核中心小原型拍的示例卡，整卡比一屏高，放进 16:9 窗口上下滑，左侧菜单不动
  ('agent-matrix', 3): [
   {'kind': 'image', 'src': 'agent-matrix/review-card', 'prov': 'original', 'project': 'matrix', 'scroll': True,

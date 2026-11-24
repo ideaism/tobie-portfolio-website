@@ -63,7 +63,7 @@ def main():
         if p.suffix in ('.js', '.css', '.html'):
             text = fix(io.open(p, encoding='utf-8', newline='').read())
             if p.suffix == '.html':   # alt="" 的都是装饰图（台面、企鹅各个姿势），补 aria-hidden，读屏跳过；verify.py 只认带 aria-hidden 的空 alt
-                text = re.sub(r'<img (?![^>]*aria-hidden)([^>]*alt=""[^>]*)>', r'<img aria-hidden="true" >', text)
+                text = re.sub(r'<img (?![^>]*aria-hidden)([^>]*\balt=""[^>]*)>', r'<img aria-hidden="true" \1>', text)
             io.open(OUT / p.name, 'w', encoding='utf-8', newline='').write(text)
         elif p.suffix in ('.jpg', '.png'):
             shutil.copy(p, OUT / p.name)

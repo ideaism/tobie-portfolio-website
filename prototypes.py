@@ -635,9 +635,11 @@ def clips(lang):
 # 20261116-013（B 档：能点的示意加评分结果）、20261117-003（打分「都通过」）、20261117-024（「放上画布」选 A）。
 # 不属于 docs/design-system.md 规则 8 管的三个重做演示：这是 2026 年新做的设计，物品、创作者、活动都是虚构的。
 # 数据只有一份：02-playbook 里的 JSON，构建时读进来写进页面（data-config），页面运行时不发任何请求。
-# 「放上画布」只读地画出配方编辑器的三栏，样式沿用 03 节的 .rz，结构用 03 节的 recipeRules 验；
-# 不新建 recipeLab，不碰 STUDIO（03 节的测试要求那里正好三个演示、八样物品）。
-# 引擎：dist/prototype.js 的 draftRules（纯函数，tests/draft_rules.test.js 在 Node 里跑）和 drafterLab。
+# 2026-11-25（交接单 ⑨，卡 20261125-002 本人打回）：「放上画布」那块只读三栏去掉了。双击一条配方（触屏双击、
+# 聚焦后按 Enter 也行），在 Studio 窗口里打开 03 节同一个配方编辑器（recipeLab，能拖），物品库换成这份草案的物品和图，
+# 这条配方摆好、带数量和概率；改动不写回草案。recipeLab 的这些都是可选配置（_drafter_config 的 editor），
+# 不给时 03 节的演示和原来一模一样。STUDIO 不动（03 节的测试要求那里正好三个演示、八样物品）。
+# 引擎：dist/prototype.js 的 draftRules（纯函数，tests/draft_rules.test.js 在 Node 里跑）、drafterLab、recipeLab。
 # --------------------------------------------------------------------------
 DRAFT_DATA = Path(__file__).resolve().parent.parent / '02-playbook' / 'case-study' / 'ai-起草助手-数据.json'
 CONCEPT = ['2026 年新做的设计示意', 'New design concept, 2026']
@@ -664,8 +666,8 @@ DRAFTER = {
  'anchor': 'try-drafter',
  'label': ['PlayBook · 活动起草助手', 'PlayBook · Campaign drafting assistant'],
  'title': ['选一个目标，改一份草案', 'Pick a goal, edit a draft'],
- 'intro': ['选一个创作者目标，看助手起草的活动。每个任务、每条配方都可以接受、改数量或删掉；改过以后，下面会按现在的样子重新检查。配方可以放上画布，看它摆进 Studio 配方编辑器的样子。',
-           'Pick a creator’s goal and read the campaign the assistant drafted. Every mission and every recipe can be accepted, edited (quantities only) or removed; once you change something, the draft is checked again as it now stands. A recipe can be put on the canvas to see how it would sit in the Studio recipe editor.'],
+ 'intro': ['选一个创作者目标，看助手起草的活动。每个任务、每条配方都可以接受、改数量或删掉；改过以后，下面会按现在的样子重新检查。双击一条配方，它会在 Studio 的配方编辑器里打开，可以接着拖。',
+           'Pick a creator’s goal and read the campaign the assistant drafted. Every mission and every recipe can be accepted, edited (quantities only) or removed; once you change something, the draft is checked again as it now stands. Double-click a recipe to open it in the Studio recipe editor and keep working on it by dragging.'],
  'score': ['评分结果', 'Score'],
  'score_text': ['三份草案 × 五条检查 = 十五项，全部通过', '3 drafts × 5 checks = 15 checks, all passed'],
  'score_checks': ['五条检查', 'The five checks'],

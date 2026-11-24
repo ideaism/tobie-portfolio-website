@@ -815,8 +815,8 @@ def section_demo(slug, number, lang):
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
     # 2026-11-16：PlayBook 前面插了一节「用户与动线」，Studio 从 02 顺延为 03，App 从 03 顺延为 04
     if slug == 'playbook' and number == 3: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
-    if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
-    if slug == 'playbook' and number == 11: return drafter(lang)   # 2026-11-17：最后一节「2026 回看 · 活动起草助手」（交接单 ⑤）
+    if slug == 'playbook' and number == 4: return drafter(lang)   # 2026-11-17 加在最后一节（交接单 ⑤）；2026-11-24 挪到 03 Studio 后面当 04（交接单 ⑧）
+    if slug == 'playbook' and number == 5: return flow('playbook-craft', lang, 'try-app')   # App 合成流：2026-11-24 从 04 顺延为 05
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 7: return fridge_3d(lang, 'try')   # 2026-11-24（交接单 6h）：v1.8 外链原型撤掉，换成 07「3D 小样」里嵌本站打包的小样；原 08「原型与结果」并进 07
     if slug == 'agent-matrix' and number == 7: return review_demo(lang, 'try') + sittings(lang)   # 2026-11-21：新 07「重新定义」（交接单第 9 节）

@@ -509,6 +509,8 @@ def case_layout(c, key, lang, anchor='section'):
     for n, s in enumerate(c['sections']):
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
         h += f'\n<section class="case-section" id="{anchor}-{n+1}"><p class="label label--teal">{n+1:02d} · {label}</p><h2>{s["title"][i]}</h2>'
+        if 'sub' in s:   # 'sub'（2026-11-24，PlayBook 04 节）：标题下面一行小号灰字，不是正文；没有这个键的章节一个字都不变
+            h += f'<p class="meta case-sub">{s["sub"][i]}</p>'
         paras = [f'<p>{para[i]}</p>' for para in s['text']]
         box = 'outcome' if s.get('outcome') else 'prose'
         if 'rows' in s:

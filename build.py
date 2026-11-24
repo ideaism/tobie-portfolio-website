@@ -136,8 +136,9 @@ PROJECTS = [
  # 2026-11-17 新增第五个案例（交接单 05-agent-matrix/portfolio/handoff.md 第 0 节；标题是卡 20261115-002 选的 A）
  {'slug': 'agent-matrix', 'project': 'matrix', 'name': 'Agent Matrix', 'year': '2026',
   'type': ['个人项目 · 多 agent 协作', 'Personal project · Multi-agent workflow'],
-  'title': ['十四个 agent 都在等我，所以我先设计它们怎么问我。', 'Fourteen agents were waiting on me, so I designed how they ask.'],
-  'summary': ['我一个人带 14 个 AI agent 做一个游戏。它们做得很快，我看不过来。这个案例讲我怎么设计「agent 怎么问我、我怎么答、答案怎么回去」，以及我不在线的时候，哪些地方还离不开我、我怎么补。', 'I direct 14 AI agents building a game. They produce faster than I can review. This case is about designing how agents ask me, how I answer, and how the answer gets back to them, and about where the system still needed me when I was not there, and how I closed each gap.'],
+  # 2026-11-25 重讲（交接单第 13 节，卡 20261125-001）：标题换成新标题的后半句（卡 20261124-012 选 A），摘要直接用新导语
+  'title': ['我先设计 AI 怎么问我，再用它改这份作品集。', 'I designed how AI asks me. Then I used it to rework this portfolio.'],
+  'summary': CASES['agent-matrix']['deck'],
   'chips': [['问题定义', '协作流程', '复盘'], ['Problem framing', 'Workflow design', 'Retrospective']],
   'label': ['Agent Matrix · 当时在等的六张卡', 'Agent Matrix · the six cards that were waiting'], 'prov': 'diagram'},
  {'slug': 'qingju', 'project': 'qingju', 'name': 'Qingju · 青桔', 'year': '2021',
@@ -398,7 +399,7 @@ BRIEF_LABELS = [['问题', 'Problem'], ['我的关键决定', 'Key decisions'], 
 DECISION_LABELS = [['问题', 'Problem'], ['考虑过的方案', 'Alternative considered'], ['为什么没选', 'Why not'], ['结果', 'Outcome']]
 
 CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
-    'agent-matrix': ['十四个 agent 都在等我，所以我先设计它们怎么问我。', 'Fourteen agents were waiting on me, so I designed how they ask.'],   # 卡 20261115-002 选 A；PDF 里还没有这个案例
+    'agent-matrix': ['我先设计 AI 怎么问我，再用它改这份作品集。', 'I designed how AI asks me. Then I used it to rework this portfolio.'],   # 2026-11-25 重讲，卡 20261124-012 选 A（原来是卡 20261115-002 选的 A）；PDF 里还没有这个案例
     'qingju': ['让成长体系，回到骑行本身。', 'Connect cycling rewards to the reasons people ride.'],
     'playbook': ['把复杂规则，变成可参与的体验。', 'Turn creator rules into fan experiences.'],
     'smt': ['从业务单元，建立界面秩序。', 'Make a securities interface reusable.'],

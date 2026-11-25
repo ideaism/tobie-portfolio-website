@@ -1110,7 +1110,7 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
   .dz-cover{min-height:64px}
   .dz-info{padding:14px 12px}
   .dz-info__title{font-size:19px}
-  .dz-field{font-size:12px;padding-left:34px}
+  .dz-field{font-size:11.5px;padding:0 6px 0 32px}
   .dz-ico--ai{left:10px}
   .dz-illo{zoom:.8}
   .dz-void{min-height:400px}

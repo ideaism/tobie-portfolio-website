@@ -1252,7 +1252,7 @@ a.tt-card:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px
 @media (min-width: 901px) {
   .crumb { position: sticky; top: 0; z-index: 12; padding-top: 10px; margin-top: -10px; background: var(--bg); }
   .sec { scroll-margin-top: 56px; }
-  .cols:not(.solo) > .col-side { position: sticky; top: 56px; max-height: calc(100vh - 56px - var(--decide-h, 140px) - 8px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .cols:not(.solo) > .col-side { position: sticky; top: 56px; max-height: calc(100vh - 56px - var(--decide-h, 140px) - 56px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; } /* 减的第二个 56px 是卡片底下那段留白：滑到底时这栏不被推到顶上那行下面 */
 }
 @media (min-width: 901px) and (max-width: 1140px) { body[data-nav="collapsed"] .crumb { padding-left: 32px; } } /* 收起菜单时左上角那颗按钮浮在这里 */
 @supports (animation-timeline: scroll()) {

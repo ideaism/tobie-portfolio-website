@@ -1400,7 +1400,8 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
 [data-drafter] .dz-illo__pic::after{background:var(--dz-img-empty) center / cover no-repeat,linear-gradient(170deg,#FDEDEA,#F7C1B6 38%,#D98C8C 62%,#7F8FA6)}
 @container (min-width:840px){
   [data-drafter] .dz-camp{--k:var(--sku);--ka:var(--sku)}
-  [data-drafter] .dz-ask{grid-template-rows:calc(24.3 * var(--sku)) minmax(0,1fr);gap:calc(12 * var(--sku));padding:calc(12 * var(--sku))}
+  [data-drafter] .dz-top{height:calc(195.6 * var(--sku))}   /* Figma 有数据：名字卡 100 + 空 8 + 起草卡 150 = 258（×0.758） */
+  [data-drafter] .dz-ask{grid-template-rows:calc(24.3 * var(--sku)) minmax(0,1fr);gap:calc(12 * var(--sku));padding:calc(12 * var(--sku));border-top-width:calc(6 * var(--sku))}
   [data-drafter] .dz-ask__box{min-height:0}
   [data-drafter] .dz-field{field-sizing:fixed;height:100%}
   [data-drafter] .dz-tabs{line-height:calc(14 * var(--sku))}

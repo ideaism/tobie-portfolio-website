@@ -92,7 +92,8 @@ class DrafterTests(unittest.TestCase):
             self.assertEqual(page.count('class="meta case-sub"'), 1, lang)
 
     def test_studio_window_is_decoration_only(self):
-        # 交接单 ⑩ 起：窗口里唯一能点的是 Campaign 后面的「+」（窄屏时在顶栏字标右边），别的还是装饰
+        # 交接单 ⑩ 起：Campaign 后面的「+」是真按钮（窄屏时在顶栏字标右边）；⑪ 起侧边栏的 Campaign 字样也是按钮（回活动列表），
+        # 下面一级活动名是按钮（回活动页），开局藏着；顶栏右边 Pro Mode、铃铛、头像和名字是装饰。别的还是装饰
         for lang in ('zh', 'en'):
             html = section_demo('playbook', 4, lang)
             self.assertEqual(html.count('class="sk"'), 1)
@@ -103,14 +104,20 @@ class DrafterTests(unittest.TestCase):
                 self.assertNotIn('<a', part)
                 self.assertNotIn('tabindex', part)
                 self.assertEqual(re.findall(r'<button[^>]*data-new="(\w+)"', part), [where])
-                self.assertEqual(part.count('<button'), 1)
+            self.assertEqual(top.group(1).count('<button'), 1)
+            self.assertEqual(side.group(1).count('<button'), 3)
+            self.assertIn('<button type="button" class="sk__deco" data-list>', side.group(1))
+            self.assertIn('<button type="button" class="sk__sub" data-sub hidden></button>', side.group(1))
             label = DRAFTER['t']['new'][0 if lang == 'zh' else 1]
             self.assertEqual(html.count(f'aria-label="{label}"'), 2)
             items = re.findall(r'<span class="sk__item" data-nav="(\w+)"([^>]*)>', side.group(1))
             for k, attrs in items:
                 self.assertEqual('aria-hidden="true"' in attrs, k != 'campaign', k)
-            self.assertIn('<span class="sk__deco" aria-hidden="true">', side.group(1))
+            self.assertIn('<span class="sk__foot" aria-hidden="true">', html)
             self.assertIn('<span class="sk__search" aria-hidden="true">', top.group(1))
+            who = DRAFTER['t']['creator'][0 if lang == 'zh' else 1]
+            self.assertIn('<span class="sk__me" aria-hidden="true"><span class="sk__pro">Pro Mode', top.group(1))
+            self.assertIn(f'<span class="sk__name" data-who>{who}</span>', top.group(1))
             for name in ('Dashboard', 'Campaign', 'Items', 'Craft Recipes', 'Missions', 'PlayBook Remix', 'My Creator Economy'):
                 self.assertIn(f'<span>{name}</span>', side.group(1))   # 中英文页都用英文，照原稿
             self.assertEqual(side.group(1).count('data-on'), 1)
@@ -160,7 +167,7 @@ class DrafterTests(unittest.TestCase):
         # 2026-11-25（交接单 ⑨，卡 20261125-002）：去掉「放上画布」和只读三栏；双击配方在 03 节同一个配方编辑器里打开
         from prototypes import SKIN_NAV, _drafter_config, _studio_config
         self.assertEqual(DRAFTER['t']['open_hint'], ['双击配方，在编辑器里打开', 'Double-click a recipe to open it in the editor'])
-        self.assertEqual(DRAFTER['t']['back'], ['回到草案', 'Back to draft'])
+        self.assertEqual(DRAFTER['t']['back'], ['回到活动', 'Back to campaign'])   # ⑪：编辑器是从活动页打开的
         for k in ('place', 'placed', 'h_canvas', 'canvas_ro', 'canvas_empty', 'canvas_gone', 'said_placed'):
             self.assertNotIn(k, DRAFTER['t'])
         recipe = STUDIO['playbook-recipe']
@@ -207,40 +214,68 @@ class DrafterTests(unittest.TestCase):
             if 'rz__tag' in line or 'rz-lib__name{position:absolute' in line or '.rz__lib::before' in line:
                 self.assertTrue('[data-own]' in line or line.startswith('.rz__tag{display:none}'), line)
 
-    def test_way_in_from_new_campaign(self):
-        # 交接单 ⑩（卡 20261125-004 选 A）：Campaign 空列表 → + → New Campaign 两张卡 → 一句话输入框 + 三个目标 → 草案
+    def test_way_in_from_create_like_the_studio_campaign_pages(self):
+        # 交接单 ⑪（卡 20261125-002 第 3 版打回）：照 Studio 原稿的 Campaign 三页——空状态 → Create → 活动页（一句话起草条 +
+        # 三块面板）→ 选目标填进面板；侧边栏 Campaign 回活动列表（Future Campaigns 一张草稿卡）。⑩ 的 New Campaign 两张卡去掉
         t = DRAFTER['t']
-        self.assertEqual(t['h_list'], ['Campaign', 'Campaign'])
-        self.assertEqual(t['h_new'], ['New Campaign', 'New Campaign'])
-        self.assertEqual(t['from_blank'], ['从空白开始', 'Start from blank'])
-        self.assertEqual(t['from_sentence'], ['用一句话起草', 'Draft from one sentence'])
+        for gone in ('h_list', 'h_new', 'from_blank', 'from_sentence', 'list_empty', 'days', 'h_tasks', 'h_items', 'h_recipes'):
+            self.assertNotIn(gone, t)
+        both = lambda v: [v, v]
+        self.assertEqual(t['empty_h'], both('You Don’t Have a Campaign Yet'))   # 照原稿，两种语言页都是英文
+        self.assertEqual(t['empty_p'], both('Create Your First Campaign Here!'))
+        self.assertEqual(t['create'], both('Create'))
+        self.assertEqual(t['untitled'], both('Untitled Campaign'))
+        self.assertEqual(t['left'], both('Left in {n} days'))
+        self.assertEqual(t['future'], both('Future Campaigns'))
+        self.assertEqual(t['scheduled'], both('Scheduled On {d}'))
+        self.assertEqual(t['draft_tag'], ['草稿', 'Draft'])
+        self.assertEqual((t['p_missions'], t['p_items'], t['p_recipes']), (both('Missions'), both('Item Rewards'), both('Crafting Recipes')))
+        self.assertEqual((t['tab_all'], t['tab_on']), (both('All Tasks'), both('Ongoing Tasks')))
+        self.assertEqual(t['start_missions'], both('Start your first mission here!'))
+        self.assertEqual(t['creator'], both('Creator'))
         self.assertEqual(t['goal_ph'], ['用一句话说出这次活动的目标', 'Describe the campaign goal in one sentence'])
-        self.assertEqual(t['said_start'], ['点 Campaign 旁边的 +，新建一个活动。', 'Click the + next to Campaign to start a new campaign.'])
+        self.assertEqual(t['said_start'], ['点 Create，新建一个活动。', 'Click Create to start a new campaign.'])
         self.assertEqual(t['blank_only'], ['这个示意只演示起草。', 'This demo only shows drafting.'])
+        self.assertEqual(t['give_get'], ['交出 {give}，得到 {get}', 'Give {give}, get {get}'])
         self.assertEqual(t['new'], ['新建活动', 'New campaign'])
         intro = DRAFTER['intro']
-        self.assertTrue(intro[0].startswith('从 Campaign 旁边的 + 新建活动，选「用一句话起草」，再选一个创作者目标'), intro[0])
-        self.assertTrue(intro[1].startswith('Start a new campaign from the + next to Campaign, choose ‘Draft from one sentence’, then pick a creator’s goal'), intro[1])
+        self.assertTrue(intro[0].startswith('点 Create 新建活动，在一句话起草条里选一个创作者目标，看助手把任务、物品和配方填进活动页。'), intro[0])
+        self.assertTrue(intro[1].startswith('Click Create to start a new campaign, pick a creator’s goal in the one-sentence bar, '
+                                            'and watch the assistant fill the campaign page with missions, items and recipes.'), intro[1])
         for s in intro:
             self.assertNotIn('放上画布', s)
             self.assertNotIn('canvas', s)
-        zh, en = CASES['playbook']['sections'][3]['text'][0]
+            self.assertNotIn('用一句话起草」', s)
+        zh, en = CASES['playbook']['sections'][3]['text'][0]   # 正文第 1 段照 ⑩ 留下的样子
         self.assertIn('创作者在 Studio 新建活动时，可以选择用一句话说出目标', zh)
         self.assertIn('when creating a new campaign in Studio, the creator can choose to state a goal in one sentence', en)
+        for lang in ('zh', 'en'):
+            html = section_demo('playbook', 4, lang)
+            for gone in ('New Campaign', '从空白开始', 'Start from blank'):
+                self.assertNotIn(gone, html)
         js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
         lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
-        for must in ('let pick = -1, st = null', "go('list', true)", 'say(T.said_start)', "setAttribute('data-hint', '')",
-                     "removeAttribute('data-hint')", "blank.setAttribute('aria-disabled', 'true')", 'say(T.blank_only)',
-                     'field.readOnly = true', 'field.value = d.goal', "() => go('new')", "() => go('ask')", 'if (ed) closeEditor()'):
+        for must in ('let made = false, pick = -1, st = null', "go('empty', true)", 'say(T.said_start)', "setAttribute('data-hint', '')",
+                     "removeAttribute('data-hint')", "c.setAttribute('aria-disabled', 'true')", 'say(T.blank_only)',
+                     'field.readOnly = true', 'field.value = d.goal', "toCampaigns.addEventListener('click', () => go('list'))",
+                     "sub.addEventListener('click', () => go('camp'))", "card.addEventListener('click', () => go('camp'))",
+                     "news.forEach(b => b.addEventListener('click', create))", 'if (ed) closeEditor()', 'camp.hidden = true', 'camp.hidden = false',
+                     'dz-start', 'dz-gifts', 'dz-cc', 'dz-illo'):
             self.assertIn(must, lab)
+        for gone in ("go('new')", "go('ask')", 'blank.setAttribute', 'dz-card'):
+            self.assertNotIn(gone, lab)
         css = (ROOT / 'dist' / 'styles.css').read_text(encoding='utf-8')
-        for must in ('.sk__new[data-hint]{animation:sk-breathe 1.5s ease-in-out 3}',
-                     '@media (prefers-reduced-motion:reduce){.sk__new[data-hint]{animation:none}}',
+        for must in ('.dz-create[data-hint]{animation:dz-breathe 1.5s ease-in-out 3}',
+                     '@media (prefers-reduced-motion:reduce){.dz-create[data-hint]{animation:none}}',
                      '@container (max-width:720px){.sk__top .sk__new{display:inline-grid}}',
+                     '.dz-start{display:grid;', 'border:1px dashed var(--sk-red)', '.dz-tag--blue{background:#3D6FE8}',
+                     '.dz-panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))',
                      # 配方编辑器开着时收起外面的侧边栏，编辑器拿整个窗口宽
                      '[data-drafter][data-editing] .sk__win{grid-template-columns:minmax(0,1fr)}',
                      '[data-drafter][data-editing] .sk__side{display:none}'):
             self.assertIn(must, css)
+        for gone in ('.sk__new[data-hint]', '.dz-card{', '.dz-cards{', '.dz-rows'):
+            self.assertNotIn(gone, css)
 
     def test_draft_rules_in_node(self):
         node = shutil.which('node')

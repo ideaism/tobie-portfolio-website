@@ -1169,16 +1169,20 @@ function commentLab(root) {
   paint();
 }
 
-/* 6e. Campaign drafting assistant (PlayBook 04; section 11 until 2026-11-24). Pick a goal, read the draft, accept / edit (quantities
-   only) / remove each mission and recipe, see it checked again, and put a recipe on a read-only canvas
-   drawn with the recipe editor's own pieces (.rz). Nothing is sent anywhere. */
+/* 6e. Campaign drafting assistant (PlayBook 04; section 11 until 2026-11-24). Create a campaign, pick a goal in its one-sentence bar,
+   read what the assistant fills in, accept / edit (quantities only) / remove each mission and recipe, see it checked again,
+   and double-click a recipe to open it in the recipe editor (.rz). Nothing is sent anywhere.
+   2026-11-25 (交接单 ⑪, card 20261125-002 v3 sent back): the pages inside the Studio window follow Studio's own Campaign pages
+   (02-playbook/portfolio/figures/参考-本人贴图/): the empty state → Create → the campaign page ("Campaign/新账号", three panels
+   Missions / Item Rewards / Crafting Recipes) → the campaign list (Future Campaigns). */
 function drafterLab(root) {
   const cfg = JSON.parse(root.dataset.config), T = cfg.t, D = draftRules, LIM = cfg.limits;
   const goals = root.querySelector('[data-goals]'), view = root.querySelector('[data-draft]');
   const status = root.querySelector('[data-status]'), tools = root.querySelector('[data-tools]');
   const say = text => { status.textContent = text; };
   const num = n => T.nums[n - 1] || String(n);
-  let pick = -1, st = null, editing = new Set();   // no goal yet: the demo starts at Campaign's empty list (交接单 ⑩)
+  // made: a campaign exists (Create was clicked). pick: the goal picked in its one-sentence bar (-1: none yet, the panels are empty)
+  let made = false, pick = -1, st = null, editing = new Set();
   const draft = () => cfg.drafts[pick];
   const itemName = id => (draft().items.find(i => i.id === id) || { name: id }).name;
   const taskName = id => fillIn(T.task, { n: id });
@@ -1194,6 +1198,23 @@ function drafterLab(root) {
     im.width = im.height = 192;
     im.src = fillIn(cfg.item_src, { draft: draft().id, item: id });
     return im;
+  };
+  // fixed line icons drawn for this window (no data in them); the panels reuse the sidebar's icons from prototypes.py
+  const ICON = {
+    pencil: '<path d="M14.5 5.5l4 4L9 19H5v-4z"/><path d="M12.5 7.5l4 4"/>',
+    trash: '<path d="M5 7h14M10 7V4.5h4V7M7 7l1 13h8l1-13M10.5 11v5M13.5 11v5"/>',
+    save: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/>',
+    expand: '<path d="M14 5h5v5M10 19H5v-5M19 5l-5.5 5.5M5 19l5.5-5.5"/>',
+    cal: '<rect x="4" y="5.5" width="16" height="14" rx="1.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+    spark: '<path d="M11 3.5l1.7 5 5 1.7-5 1.7-1.7 5-1.7-5-5-1.7 5-1.7z"/><path d="M18.5 15l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/>',
+    up: '<path d="m7 14 5-5 5 5"/>',
+    ...cfg.icons,
+  };
+  const ico = (name, cls) => {
+    const s = el('span', 'dz-ico' + (cls ? ' ' + cls : ''));
+    s.setAttribute('aria-hidden', 'true');
+    s.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[name]}</svg>`;
+    return s;
   };
 
   // a button in the portfolio's own style; a blocked one says why instead of going dead
@@ -1215,22 +1236,26 @@ function drafterLab(root) {
     return T.gap + (n ? fillIn(T.sum_some, { n }) : T.sum_none);
   };
 
-  /* 1. the three goals */
+  /* 1. the three goals: small cards under the one-sentence bar */
+  const field = el('input', 'dz-field');   // looks like the input; the goal cards fill it in
+  field.type = 'text';
+  field.readOnly = true;
+  field.tabIndex = -1;
+  field.placeholder = T.goal_ph;
+  field.setAttribute('aria-label', T.goal_ph);
   cfg.drafts.forEach((d, i) => {
     const b = el('button', 'dz-goal');
     b.type = 'button';
     b.dataset.key = 'goal:' + i;
-    b.append(el('span', 'dz-goal__n', fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.creator), el('span', 'dz-goal__goal', d.goal), el('span', 'dz-goal__persona', d.persona));
+    b.title = d.persona;
+    b.append(el('span', 'dz-goal__n', d.creator), el('span', 'dz-goal__goal', d.goal));
     b.addEventListener('click', () => {
       if (i === pick) return;
       const first = pick < 0;
       pick = i; st = D.fresh(d); editing = new Set();
-      field.value = d.goal;   // the sentence goes into the box, then the draft appears under it
-      view.hidden = false;
+      field.value = d.goal;   // the sentence goes into the box, then the three panels fill in under it
       draw();
-      say(first ? '' : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
-      // the assistant's own check sits at the top of the draft: bring it into view (draft two's problem must be seen at once)
-      view.querySelector('.dz-self')?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+      say(first ? T.said_filled : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
     });
     goals.append(b);
   });
@@ -1321,10 +1346,11 @@ function drafterLab(root) {
     studio.append(stage, read, bar, tools);
     node.append(back, studio);
     ed = { node, id, y: window.scrollY };
-    ask.hidden = true;
+    camp.hidden = true;
     root.setAttribute('data-editing', '');
     page.append(node);
     navTo('recipes');
+    side();
     recipeLab(node);
     status.textContent = fillIn(T.said_open, { name });
     if (sk.getBoundingClientRect().top < 0) sk.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -1335,9 +1361,10 @@ function drafterLab(root) {
     const { node, id, y } = ed;
     node.remove();
     ed = null;
-    ask.hidden = false;
+    camp.hidden = false;
     root.removeAttribute('data-editing');
     navTo(home);
+    side();
     window.scrollTo({ top: y, behavior: 'instant' });   // back where the visitor was: at this recipe (the page scrolls smoothly otherwise)
     const row = view.querySelector(`[data-key="recipe:${id}:open"]`);
     if (row) {
@@ -1388,23 +1415,77 @@ function drafterLab(root) {
     return box;
   }
 
-  /* 2. the draft */
+  /* 2. the campaign page, as in Studio's "Campaign/新账号": a head card (name, date, days left; the one-sentence bar where Studio
+     has Impressions / Money), a cover, then three panels. Empty panels are Studio's dashed frames with "+ Create"
+     (illustration only: they say so); once a goal is picked the assistant's missions, items and recipes are in them. */
   const block = (title, cls) => { const b = el('section', 'dz-block' + (cls ? ' ' + cls : '')); b.append(el('h4', 'label dz-block__title', title)); return b; };
-  const cell = (k, v, cls) => {
-    const c = el('span', 'dz-cell' + (cls ? ' ' + cls : ''));
-    c.append(el('span', 'dz-k', k));
-    const value = el('span', 'dz-v');
-    if (v instanceof Node) value.append(v); else value.textContent = v;
-    c.append(value);
-    return c;
-  };
-  const headRow = cols => { const h = el('li', 'dz-row dz-row--head'); h.setAttribute('aria-hidden', 'true'); cols.forEach(c => h.append(el('span', 'dz-cell', c))); return h; };
   const mark = (li, s) => { li.toggleAttribute('data-removed', s.removed); li.toggleAttribute('data-accepted', s.accepted && !s.removed); };
-
-  function head() {
-    const d = draft(), h = el('div', 'dz-head');
-    h.append(el('h3', '', d.campaign.name), el('p', 'meta', `${fillIn(T.draft, { n: num(pick + 1) })} · ${d.creator} · ${fillIn(T.days, { n: d.campaign.days })}`));
-    return h;
+  function panel(kind, heading, icon) {
+    const p = el('section', 'dz-panel dz-panel--' + kind), h = el('div', 'dz-panel__head'), h4 = el('h4', 'dz-panel__h');
+    h4.append(ico(icon), el('span', '', heading));
+    const t = el('span', 'dz-panel__tools');
+    t.append(ico('save'), ico('expand'));
+    const tabs = el('p', 'dz-tabs');
+    tabs.setAttribute('aria-hidden', 'true');
+    tabs.append(el('span', 'dz-tab dz-tab--on', T.tab_all), el('span', 'dz-tab', T.tab_on));
+    h.append(h4, t);
+    p.append(h, tabs);
+    return p;
+  }
+  function startHere(p, kind, heading, text) {
+    const f = el('div', 'dz-start'), art = el('span', 'dz-start__art');
+    art.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 7; i++) art.append(el('i'));   // a few grey circles stand in for the original's illustration
+    const c = createBtn('start:' + kind, () => say(T.blank_only), 'dz-create--sm');
+    c.setAttribute('aria-disabled', 'true');
+    c.setAttribute('aria-label', fillIn(T.act, { act: T.create, name: heading }));
+    f.append(art, c, el('p', 'dz-start__t', text));
+    p.append(f);
+  }
+  function missionList(p) {
+    const ol = el('ol', 'dz-list');
+    draft().tasks.forEach(t => {
+      const s = st.tasks[t.id], li = el('li', 'dz-li dz-mis');
+      mark(li, s);
+      const top = el('div', 'dz-li__top'), reward = el('span', 'dz-item'), meta = el('p', 'dz-li__meta');
+      top.append(el('span', 'dz-li__id', taskName(t.id)), el('span', 'dz-plat', t.platform));
+      reward.append(itemArt(t.reward.item, 'dz-art--xs'), el('span', '', qty(t.reward.item, s.qty)));
+      meta.append(el('span', '', t.frequency.label), reward);
+      li.append(top, el('p', 'dz-li__what', t.what), meta, actions('task', t.id));
+      if (editing.has('task:' + t.id) && !s.removed) li.append(editor('task', t.id, [[t.reward.item, s.qty]]));
+      ol.append(li);
+    });
+    p.append(ol);
+  }
+  function itemGrid(p) {
+    const ul = el('ul', 'dz-gifts');
+    draft().items.forEach(i => {
+      const li = el('li', 'dz-gift');
+      li.title = (T[i.rarity] || i.rarity) + ' · ' + i.source;
+      li.append(itemArt(i.id, 'dz-art--gift'), el('span', 'dz-gift__n', i.name));
+      ul.append(li);
+    });
+    p.append(ul, el('p', 'meta dz-note', T.items_note));
+  }
+  function recipeList(p) {
+    const hint = el('p', 'dz-hint', T.open_hint), ol = el('ol', 'dz-list');
+    hint.id = 'dz-open-hint';
+    draft().recipes.forEach(r => {
+      const s = st.recipes[r.id], li = el('li', 'dz-li dz-recipe'), head = el('div', 'dz-rc'), nm = el('span', 'dz-rc__name');
+      mark(li, s);
+      nm.append(el('span', 'dz-li__id', fillIn(T.recipe, { n: num(r.id) })), el('strong', '', r.name));
+      head.append(itemArt(r.output.items[0].item, 'dz-art--rc'), nm);
+      const outs = r.output.items;
+      const give = r.require.map(m => qty(m.item, s.qty[m.item])).join(T.sep);
+      const get = (r.output.choose_one ? fillIn(T.choose, { n: outs.length }) + T.colon : '') + outs.map(o => itemName(o.item) + (o.pct === 100 ? '' : ' ' + o.pct + '%')).join(T.sep);
+      li.append(head, el('p', 'dz-li__what', fillIn(T.give_get, { give, get })));
+      if (r.optional.length) li.append(el('p', 'dz-li__meta dz-li__opt', T.opt + T.colon + r.optional.map(m => qty(m.item, m.qty) + T.dash + m.effect).join(T.sep)));
+      openable(li, r.id);
+      li.append(actions('recipe', r.id));
+      if (editing.has('recipe:' + r.id) && !s.removed) li.append(editor('recipe', r.id, r.require.map(m => [m.item, s.qty[m.item]])));
+      ol.append(li);
+    });
+    p.append(hint, ol);
   }
   function selfCheck() {
     const b = block(T.h_self, 'dz-self'), ul = el('ul', 'dz-checks');
@@ -1414,56 +1495,6 @@ function drafterLab(root) {
       ul.append(li);
     });
     b.append(ul);
-    return b;
-  }
-  function tasksBlock() {
-    const b = block(T.h_tasks), ol = el('ol', 'dz-rows dz-rows--tasks');
-    ol.append(headRow(['', T.col_platform, T.col_what, T.col_freq, T.col_reward, '']));
-    draft().tasks.forEach(t => {
-      const s = st.tasks[t.id], li = el('li', 'dz-row');
-      mark(li, s);
-      li.append(el('span', 'dz-row__id', taskName(t.id)), cell(T.col_platform, el('span', 'chip', t.platform)), cell(T.col_what, t.what, 'dz-cell--main'),
-                cell(T.col_freq, t.frequency.label), cell(T.col_reward, qty(t.reward.item, s.qty)), actions('task', t.id));
-      if (editing.has('task:' + t.id) && !s.removed) li.append(editor('task', t.id, [[t.reward.item, s.qty]]));
-      ol.append(li);
-    });
-    b.append(ol);
-    return b;
-  }
-  function itemsBlock() {
-    const b = block(T.h_items), ol = el('ol', 'dz-rows dz-rows--items');
-    ol.append(headRow([T.col_item, T.col_rarity, T.col_source]));
-    draft().items.forEach(i => {
-      const li = el('li', 'dz-row');
-      const name = el('span', 'dz-item');
-      name.append(itemArt(i.id, 'dz-art--row'), el('span', '', i.name));
-      li.append(cell(T.col_item, name, 'dz-cell--main'), cell(T.col_rarity, T[i.rarity] || i.rarity), cell(T.col_source, i.source));
-      ol.append(li);
-    });
-    b.append(ol, el('p', 'meta dz-note', T.items_note));
-    return b;
-  }
-  function recipesBlock() {
-    const b = block(T.h_recipes), ol = el('ol', 'dz-rows dz-rows--recipes');
-    const hint = el('span', 'dz-hint', T.open_hint);
-    hint.id = 'dz-open-hint';
-    b.querySelector('.dz-block__title').append(' ', hint);
-    draft().recipes.forEach(r => {
-      const s = st.recipes[r.id], li = el('li', 'dz-row dz-recipe');
-      mark(li, s);
-      const title = el('div', 'dz-recipe__title');
-      title.append(el('span', 'dz-row__id', fillIn(T.recipe, { n: num(r.id) })), el('strong', '', r.name));
-      const parts = el('dl', 'dz-recipe__parts');
-      const part = (k, v) => { const p = el('div'); p.append(el('dt', '', k), el('dd', '', v)); parts.append(p); };
-      part(T.req, r.require.map(m => qty(m.item, s.qty[m.item])).join(T.sep));
-      part(T.opt, r.optional.length ? r.optional.map(m => qty(m.item, m.qty) + T.dash + m.effect).join(T.sep) : T.none);
-      part(T.out, (r.output.choose_one ? fillIn(T.choose, { n: r.output.items.length }) + T.colon : '') + r.output.items.map(o => `${itemName(o.item)} ${o.pct}%`).join(T.sep));
-      openable(li, r.id);
-      li.append(title, parts, actions('recipe', r.id));
-      if (editing.has('recipe:' + r.id) && !s.removed) li.append(editor('recipe', r.id, r.require.map(m => [m.item, s.qty[m.item]])));
-      ol.append(li);
-    });
-    b.append(ol);
     return b;
   }
   function whyBlock() {
@@ -1501,63 +1532,135 @@ function drafterLab(root) {
     if (gone) b.append(el('p', 'meta', fillIn(T.re_removed, { n: gone })));
     return b;
   }
+
+  /* 6. the screens. Studio's "Campaign" with no campaign yet → Create (here, the + next to Campaign or the + in the narrow top bar)
+     → the campaign page → Campaign in the sidebar (or ← Campaign) → the campaign list; its card goes back to the campaign page. */
+  const news = [...root.querySelectorAll('[data-new]')], toCampaigns = root.querySelector('[data-list]');
+  const sub = root.querySelector('[data-sub]'), who = root.querySelector('[data-who]');
+  const screen = (cls, ...kids) => { const s = el('div', 'dz-screen ' + cls); s.append(...kids); return s; };
+  function createBtn(key, fn, cls) {
+    const b = el('button', 'dz-create' + (cls ? ' ' + cls : ''));
+    b.type = 'button';
+    b.dataset.key = key;
+    b.append(ico('plus'), el('span', '', T.create));
+    b.addEventListener('click', fn);
+    return b;
+  }
+  // dates: the campaign starts tomorrow (the day after it is made), written the way Studio writes them
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const nth = n => n + ((n % 100 - n % 10 === 10) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' })[n % 10] || 'th');
+  const day = new Date();
+  day.setDate(day.getDate() + 1);
+  const longDate = `${MONTHS[day.getMonth()]} ${nth(day.getDate())} ${day.getFullYear()}`, shortDate = `${MONTHS[day.getMonth()].slice(0, 3)} ${nth(day.getDate())}`;
+
+  // the empty state: Studio's stacked campaign card, redrawn (fixed illustration text from the original, no data)
+  const illo = el('div', 'dz-illo');
+  illo.setAttribute('aria-hidden', 'true');
+  illo.innerHTML = '<div class="dz-illo__back"><p><b>Christmas Special Campaign</b><i>6 days Left</i></p><span>Total Earnings</span></div>'
+    + '<div class="dz-illo__pic"></div>'
+    + '<div class="dz-illo__card"><p><b>Christmas Special Campaign</b><i>6 days Left</i></p><span>Total Earnings</span>'
+    + '<p class="dz-illo__money"><b>$800.21</b><i>$60.21 TODAY</i></p><span>Daily Earnings</span>'
+    + '<svg viewBox="0 0 240 46" preserveAspectRatio="none"><defs><linearGradient id="dz-illo-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F95757" stop-opacity=".55"/><stop offset="1" stop-color="#F95757" stop-opacity="0"/></linearGradient></defs>'
+    + '<path d="M0 8C14 3 28 4 44 14S70 30 92 24 120 12 142 20 176 32 200 24 226 14 240 17V46H0z" fill="url(#dz-illo-fill)"/>'
+    + '<path d="M0 8C14 3 28 4 44 14S70 30 92 24 120 12 142 20 176 32 200 24 226 14 240 17" fill="none" stroke="#F95757" stroke-width="1.6"/></svg>'
+    + '<p class="dz-illo__axis"><span>Jan 1st</span><span>Today</span></p></div>';
+  const emptyCreate = createBtn('create:empty', create);
+  const empty = screen('dz-void', illo, el('h3', 'dz-void__h', T.empty_h), el('p', 'dz-void__p', T.empty_p), emptyCreate);
+
+  // the campaign page
+  const title = el('h3', 'dz-info__title'), left = el('span', 'dz-tag');
+  const info = el('section', 'dz-info'), nameRow = el('div', 'dz-info__top'), named = el('div', 'dz-info__name'), acts = el('span', 'dz-info__tools');
+  named.append(title, ico('pencil', 'dz-ico--sm'));
+  acts.append(ico('trash'), ico('save'));
+  nameRow.append(named, acts);
+  const date = el('p', 'dz-info__date');
+  date.append(ico('cal', 'dz-ico--sm'), el('span', '', longDate), left);
+  const ask = el('div', 'dz-ask'), box = el('div', 'dz-ask__box');
+  box.append(ico('spark', 'dz-ico--ai'), field);
+  ask.append(box, goals);
+  info.append(nameRow, date, ask);
+  const cover = el('div', 'dz-cover');
+  cover.setAttribute('aria-hidden', 'true');
+  const top = el('div', 'dz-top');
+  top.append(info, cover);
+  const back = el('button', 'dz-tolist', '← ' + T.to_list);
+  back.type = 'button';
+  back.dataset.key = 'camp:list';
+  back.addEventListener('click', () => go('list'));
+  const camp = screen('dz-camp', back, top, view);
+
+  // the campaign list: Future Campaigns, one card (this campaign, a draft), + Create on the right
+  const lcName = el('strong', 'dz-cc__name'), lcArt = el('span', 'dz-cc__art'), card = el('button', 'dz-cc');
+  const lcHead = el('span', 'dz-cc__head'), lcText = el('span', 'dz-cc__text');
+  lcHead.append(lcName, el('span', 'dz-tag dz-tag--blue', T.draft_tag));
+  lcText.append(lcHead, el('span', 'dz-cc__when', fillIn(T.scheduled, { d: shortDate })));
+  lcArt.setAttribute('aria-hidden', 'true');
+  card.type = 'button';
+  card.dataset.key = 'list:card';
+  card.append(lcText, lcArt);
+  card.addEventListener('click', () => go('camp'));
+  const listHead = el('div', 'dz-list__head'), lh = el('h3', 'dz-list__h'), cards = el('div', 'dz-ccs');
+  lh.append(el('span', '', T.future), ico('up', 'dz-ico--sm'));
+  listHead.append(lh, createBtn('create:list', create));
+  cards.append(card);
+  const list = screen('dz-campaigns', listHead, cards);
+  page.prepend(empty, camp, list);
+  const screens = { empty, camp, list };
+
   function draw() {
     const key = root.contains(document.activeElement) ? document.activeElement.dataset.key : null;
     goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === pick)));
-    if (pick < 0) { view.replaceChildren(); restoreAll.hidden = true; return; }
-    view.replaceChildren(head(), selfCheck(), tasksBlock(), itemsBlock(), recipesBlock(), whyBlock(), recheck());
-    restoreAll.hidden = !D.removedCount(draft(), st);
+    const d = pick < 0 ? null : draft(), name = d ? d.campaign.name : T.untitled;
+    title.textContent = lcName.textContent = sub.textContent = name;
+    left.textContent = fillIn(T.left, { n: d ? d.campaign.days : 14 });
+    who.textContent = d ? d.creator : T.creator;
+    cover.dataset.look = lcArt.dataset.look = d ? d.id : '';
+    const pm = panel('missions', T.p_missions, 'missions'), pi = panel('items', T.p_items, 'items'), pr = panel('recipes', T.p_recipes, 'recipes');
+    if (d) { missionList(pm); itemGrid(pi); recipeList(pr); }
+    else { startHere(pm, 'missions', T.p_missions, T.start_missions); startHere(pi, 'items', T.p_items, T.start_items); startHere(pr, 'recipes', T.p_recipes, T.start_recipes); }
+    const panels = el('div', 'dz-panels');
+    panels.append(pm, pi, pr);
+    if (d) {   // the assistant's own check and why it is set up this way: white cards under the panels, further down the same page
+      const more = el('div', 'dz-more');
+      more.append(selfCheck(), recheck(), whyBlock());
+      view.replaceChildren(panels, more);
+    } else view.replaceChildren(panels);
+    restoreAll.hidden = !d || !D.removedCount(d, st);
     if (key) root.querySelector(`[data-key="${key}"]`)?.focus({ preventScroll: true });
   }
-
-  /* 6. the way in (交接单 ⑩, card 20261125-004): Campaign's empty list → the + next to Campaign → New Campaign →
-     Draft from one sentence → a goal goes into the box → the draft. Start from blank is there but only says so. */
-  const news = [...root.querySelectorAll('[data-new]')];
-  const screen = (cls, ...kids) => { const s = el('div', 'dz-screen ' + cls); s.append(...kids); return s; };
-  const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  const card = (key, text, icon, fn, main) => {
-    const b = el('button', 'dz-card' + (main ? ' dz-card--main' : ''));
-    b.type = 'button';
-    b.dataset.key = key;
-    b.innerHTML = svg(icon);   // a fixed icon, no data in it
-    b.append(el('span', 'dz-card__t', text));
-    b.addEventListener('click', fn);
-    return b;
-  };
-  const list = screen('dz-list', el('h3', 'dz-h', T.h_list), el('p', 'dz-empty', T.list_empty));
-  const blank = card('new:blank', T.from_blank, '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>', () => say(T.blank_only));
-  blank.setAttribute('aria-disabled', 'true');
-  const sentence = card('new:sentence', T.from_sentence, '<path d="M4 7h11M4 12h8M4 17h6"/><path d="m18 4 .9 2.1L21 7l-2.1.9L18 10l-.9-2.1L15 7l2.1-.9zM17 13.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>', () => go('ask'), true);
-  const cards = el('div', 'dz-cards');
-  cards.append(blank, sentence);
-  const create = screen('dz-new', el('h3', 'dz-h', T.h_new), cards);
-  const field = el('input', 'dz-field');   // looks like the input; the goal cards fill it in
-  field.type = 'text';
-  field.readOnly = true;
-  field.tabIndex = -1;
-  field.placeholder = T.goal_ph;
-  field.setAttribute('aria-label', T.goal_ph);
-  const ask = screen('dz-ask', btn('← ' + T.new, () => go('new'), { key: 'ask:back', cls: 'dz-ed__back' }), field, goals, view);
-  page.prepend(list, create, ask);
+  function side() {   // the campaign under Campaign in the sidebar: there once made, red while its page is open
+    sub.hidden = !made;
+    const on = root.dataset.at === 'camp' && !ed;
+    sub.toggleAttribute('data-on', on);
+    if (on) sub.setAttribute('aria-current', 'page'); else sub.removeAttribute('aria-current');
+  }
   function go(k, init) {
     if (ed) closeEditor();
-    list.hidden = k !== 'list';
-    create.hidden = k !== 'new';
-    ask.hidden = k !== 'ask';
+    if (k !== 'empty' && !made) k = 'empty';
+    Object.entries(screens).forEach(([n, s]) => { s.hidden = n !== k; });
     root.dataset.at = k;
-    if (k === 'ask') { pick = -1; st = null; editing = new Set(); field.value = ''; view.hidden = true; draw(); }   // a new campaign each time
+    side();
     if (init) return;
-    news.forEach(b => b.removeAttribute('data-hint'));   // found it: the hint has done its job
     say('');
     if (sk.getBoundingClientRect().top < 0) sk.scrollIntoView({ block: 'start', behavior: 'instant' });
-    (k === 'new' ? sentence : goals.querySelector('.dz-goal'))?.focus({ preventScroll: true });
+    const f = k === 'camp' ? goals.querySelector('.dz-goal[aria-pressed="true"]') || goals.querySelector('.dz-goal') : k === 'list' ? card : emptyCreate;
+    f?.focus({ preventScroll: true });
   }
-  news.forEach(b => b.addEventListener('click', () => go('new')));
+  function create() {   // a new campaign each time: Untitled, empty panels (this concept keeps one campaign)
+    made = true;
+    pick = -1; st = null; editing = new Set(); field.value = '';
+    emptyCreate.removeAttribute('data-hint');   // found it: the hint has done its job
+    draw();
+    go('camp');
+  }
+  news.forEach(b => b.addEventListener('click', create));
+  toCampaigns.addEventListener('click', () => go('list'));
+  sub.addEventListener('click', () => go('camp'));
   draw();
-  go('list', true);
+  go('empty', true);
   say(T.said_start);
-  // the + breathes two or three times once the window is on screen, then stops (CSS; off with reduced motion)
-  const hint = () => { if (root.dataset.at === 'list') news.forEach(b => b.setAttribute('data-hint', '')); };
+  // + Create breathes two or three times once the window is on screen, then stops (CSS; off with reduced motion)
+  const hint = () => { if (root.dataset.at === 'empty') emptyCreate.setAttribute('data-hint', ''); };
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); hint(); } }, { rootMargin: '0px 0px -30% 0px' });
     io.observe(sk);

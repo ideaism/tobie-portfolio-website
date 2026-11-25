@@ -425,6 +425,17 @@ PlayBook
   - 02 节审核中心小原型：去掉标题「卡顶上多了一行：还剩几张。」和 Tobie 的注释「第 1 版我钉了两处……换到手机宽看第 2 版。」（中英都去），没补别的句子。右栏只剩宽度切换和两个工具按钮，`dist/styles.css` 的 `.rv__side` 改成两列两头对齐；手机宽本来就是一列。没有测试断言这两句。
   - 封面小样只是小样，网站封面没换（`build.py` `matrix_cover`、`fig-who-waits`、sources 和 manifest 都没动）。源文件 `05-agent-matrix/portfolio/figures/src/cover-sample.mjs`，不在 `prepare_assets` 的 `JOBS` 里；出图和首页卡片示意在 `05-agent-matrix/portfolio/cards/pics/15-*`。
 
+## 2026-11-25：PlayBook 起草助手的页面照 Studio 原稿的 Campaign 三页（交接单 ⑪，只合到本机，没部署、没推送）
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑪ 起草助手：页面照 Studio 原稿的 Campaign 三页做」；本人贴的三张原稿 `02-playbook/portfolio/figures/参考-本人贴图/studio-campaign-还没有活动.png`、`studio-campaign-新账号-空活动页.png`、`studio-campaign-活动列表.png`。没调 Figma，没抠原稿里的插画。
+- 交接单原文的：空状态「You Don’t Have a Campaign Yet」「Create Your First Campaign Here!」「+ Create」（两种语言页都是英文）；「Untitled Campaign」「Left in 14 days」；输入框提示（同 ⑩）；三块面板名 Missions / Item Rewards / Crafting Recipes、All Tasks / Ongoing Tasks、「Start your first … here!」；「交出 … 得到 …」；「双击配方，在编辑器里打开」；「← 回到活动」/ “← Back to campaign”；Future Campaigns、草稿 / Draft、Scheduled On …；状态栏「点 Create，新建一个活动。」/ “Click Create to start a new campaign.”；说明第一句。
+- publisher 写的：说明后两句（中「每个任务、每条配方都可以接受、改数量或删掉；改过以后，活动页下面会按现在的样子重新检查。双击一条配方，它会在 Studio 的配方编辑器里打开，可以接着拖。」英 “Every mission and every recipe can be accepted, edited (quantities only) or removed; once you change something, the campaign is checked again as it now stands, further down the page. Double-click a recipe to open it in the Studio recipe editor and keep working on it by dragging.”）；第一次选目标时状态栏「草案填进了活动页，往下滚能看到助手的自查。」；回到活动时「回到了活动页，{配方} 还是草案里的样子。」；Item Rewards / Crafting Recipes 面板的空状态句照原稿写成「Create your first item reward here!」「Create your first crafting recipe here!」。
+- 原稿取色：页底 `#F7F9FA`、卡片白、红 `#F95757`、空面板虚线框底 `#FEF6F6`、「$60.21 TODAY」浅红底 `#FEEEEE` 字 `#F96C6C`、蓝标签 `#5784F9`。带白字的红按钮、红标签用 `#D63A3A`，蓝标签用 `#3D6FE8`（原色配白字不到 4.5:1）。
+- 画法：空状态的两张叠着的活动卡和收益曲线用 HTML / SVG 重画，右边的插画换成柔和的渐变块；空面板里的插画换成七个白圆圈；活动封面和列表卡右边的图是每份草案一种色调的渐变块。原稿 Impressions / Money 那一块的位置放一句话起草条（只读输入框 + AI 星星图标，下面三张目标小卡）。顶栏右边 Pro Mode 开关、铃铛（红点）、圆头像、名字（选目标前写 Creator，选后写创作者名）、下拉箭头，`aria-hidden`；手机上只留铃铛和头像。侧边栏 Campaign 下面一级是活动名，在活动页时红字；侧边栏底下设置、退出两个装饰图标。
+- 流程：开局空状态 → Create（「+ Create」在窗口第一次进屏幕时呼吸 3 次，⑩ 的提示从侧边栏 + 挪过来；减少动效时不动）→ Untitled Campaign、三块空面板（面板里的「+ Create」`aria-disabled`，点了只说「这个示意只演示起草。」）→ 选目标，面板填进任务、物品、配方，下面是自查、重新检查、为什么这样配 → 双击配方进编辑器（⑨），「← 回到活动」回原来的滚动位置 → 侧边栏 Campaign（侧边栏收起时用页面上的「← Campaign」）→ 活动列表只有 Future Campaigns 一张草稿卡，卡片回到活动页、改动都在；列表右上 Create 和侧边栏 + 都是重新建一个（这个示意只留一个活动）。⑩ 的 New Campaign 两张卡去掉。
+- 没动：草案数据、正文五段、自查和评分规则、物品图、03 节三个演示、⑨ 的编辑器本身。
+- 证据：`04-shared/qa/walkthrough/2026-11-25-playbook-起草助手-照原稿页面/`（无头 Chrome 真鼠标、真触屏、真键盘事件；`checks.json`、40 张截图、3 张和原稿并排的对比图）。⑩ 那份 `shots.mjs` 找的是 New Campaign 两张卡，不再能直接重跑，证据本身没改。
+
 ## 2026-11-25：PlayBook 起草助手从「新建活动」进入（交接单 ⑩，只合到本机，没部署、没推送）
 
 - 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑩ 起草助手：从「新建活动」进入」；卡 20261125-004 本人选 A。编辑器开着时收起外层侧边栏是总控加的（编辑器本身就是一整屏 Studio，自带返回、物品库和标题，1440 宽时原来只有约 650 px 宽）。

@@ -761,6 +761,8 @@ def _drafter_config(lang):
         # 2026-11-25（交接单 ⑨）：双击配方打开的编辑器就是 03 节的 recipeLab，用它的画面、上限和文字；
         # 物品、开局摆放、数量、标题由 drafterLab 按这份草案填（prototype.js 的 openEditor）
         'editor': _drafter_editor(lang),
+        # 2026-11-25（交接单 ⑪）：活动页三块面板的标题图标和「+ Create」用侧边栏同一套图标
+        'icons': {k: _SKIN_ICONS[k] for k in ('missions', 'items', 'recipes', 'plus')},
     }
 
 
@@ -812,6 +814,11 @@ _SKIN_ICONS = {   # 24×24 线框图标，照原稿侧边栏的样子画的简�
  'economy': '<path d="M12 4v16M8 20h8M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
  'search': '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
  'plus': '<path d="M12 5v14M5 12h14"/>',
+ # 2026-11-25（交接单 ⑪）：顶栏右边和侧边栏底下，照原稿 Campaign 三页
+ 'bell': '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5h4"/>',
+ 'down': '<path d="m7 10 5 5 5-5"/>',
+ 'gear': '<circle cx="12" cy="12" r="3"/><path d="M12 3.5 14 5l2.4-.4 1 2.2 2.1 1.2-.4 2.4L20.5 12 19 14l.4 2.4-2.2 1-1.2 2.1-2.4-.4L12 20.5 10 19l-2.4.4-1-2.2-2.1-1.2.4-2.4L3.5 12 5 10l-.4-2.4 2.2-1L8 4.5l2.4.4z"/>',
+ 'logout': '<path d="M14 4h5v16h-5M4 12h10M10 8l4 4-4 4"/>',
 }
 _SKIN_MARK = '<svg class="sk__mark" viewBox="0 0 30 20" aria-hidden="true"><path d="M13 20 21 6l9 14z" fill="#1A1A1A"/><path d="M0 20 10 3l10 17z" fill="#F95757" stroke="#fff" stroke-width="1.5"/></svg>'
 
@@ -820,8 +827,8 @@ def _skin_icon(name):
     return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{_SKIN_ICONS[name]}</svg>'
 
 
-def studio_skin(inner, new_label):
-    """Wrap a demo in a PlayBook Studio window: sidebar and top bar are decoration, except the + that starts a new campaign."""
+def studio_skin(inner, new_label, who='Creator'):
+    """Wrap a demo in a PlayBook Studio window: sidebar and top bar are decoration, except Campaign, its + and the campaign under it."""
     brand = f'<span class="sk__brand" aria-hidden="true">{_SKIN_MARK}<span><b>PlayBook</b> Studio</span></span>'
     caret = '<i class="sk__caret" aria-hidden="true"></i>'
     new = lambda where: (f'<button type="button" class="sk__new" data-new="{where}" aria-label="{new_label}" title="{new_label}">'
@@ -831,13 +838,19 @@ def studio_skin(inner, new_label):
         on = ' data-on' if k == SKIN_ON else ''
         look = f'{_skin_icon(k)}<span>{name}</span>'
         if k == SKIN_NEW:
-            nav += f'<span class="sk__item" data-nav="{k}"{on}>{caret if on else ""}<span class="sk__deco" aria-hidden="true">{look}</span>{new("side")}</span>'
+            # 2026-11-25（交接单 ⑪）：Campaign 本身也是按钮（回到活动列表；还没有活动时回到空状态），下面多一级活动名（有活动以后才出现）
+            nav += (f'<span class="sk__item" data-nav="{k}"{on}>{caret if on else ""}<button type="button" class="sk__deco" data-list>{look}</button>{new("side")}</span>'
+                    f'<button type="button" class="sk__sub" data-sub hidden></button>')
         else:
             nav += f'<span class="sk__item" data-nav="{k}"{on} aria-hidden="true">{caret if on else ""}{look}</span>'
+    foot = f'<span class="sk__foot" aria-hidden="true">{_skin_icon("gear")}<i></i>{_skin_icon("logout")}</span>'
+    # 顶栏右边照原稿：Pro Mode 开关、铃铛（红点）、圆头像、名字、下拉箭头；都是装饰，名字由 drafterLab 换成选中的创作者
+    me = (f'<span class="sk__me" aria-hidden="true"><span class="sk__pro">Pro Mode<i class="sk__switch"></i></span><i class="sk__vr"></i>'
+          f'<span class="sk__bell">{_skin_icon("bell")}</span><span class="sk__who"><i class="sk__av"></i><span class="sk__name" data-who>{who}</span>{_skin_icon("down")}</span></span>')
     return f'''<div class="sk" data-component="Studio window"><div class="sk__win">
-   <div class="sk__side">{brand}<span class="sk__nav">{nav}</span></div>
+   <div class="sk__side">{brand}<span class="sk__nav">{nav}</span>{foot}</div>
    <div class="sk__main">
-    <div class="sk__top">{brand}{new("top")}<span class="sk__search" aria-hidden="true">{_skin_icon('search')}<span class="sk__ph">{SKIN_SEARCH}</span></span></div>
+    <div class="sk__top">{brand}{new("top")}<span class="sk__search" aria-hidden="true">{_skin_icon('search')}<span class="sk__ph">{SKIN_SEARCH}</span></span>{me}</div>
     <div class="sk__page">{inner}</div>
    </div>
   </div></div>'''
@@ -855,7 +868,7 @@ def drafter(lang):
 <div class="frame frame--canvas">
  <div class="drafter">
   <div class="proto__intro"><span class="label label--teal">{t('可以点的示意', 'Try it', lang)}</span><h3>{T(DRAFTER['title'])}</h3><p>{T(DRAFTER['intro'])}</p></div>
-  {studio_skin(f'<div class="dz-pick" role="group" aria-label="{T(DRAFTER["t"]["pick"])}" data-goals></div><div class="dz-draft" data-draft></div>', T(DRAFTER['t']['new']))}
+  {studio_skin(f'<div class="dz-pick" role="group" aria-label="{T(DRAFTER["t"]["pick"])}" data-goals></div><div class="dz-body" data-draft></div>', T(DRAFTER['t']['new']), T(DRAFTER['t']['creator']))}
   <div class="dz-bar"><p class="studio__status" data-status role="status"></p><div class="dz-bar__tools" data-tools></div></div>
   {score}
  </div>

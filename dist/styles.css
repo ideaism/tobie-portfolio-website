@@ -1418,6 +1418,15 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
 [data-drafter] .dz-goal[aria-pressed="true"]{background:var(--sk-red-text);box-shadow:inset 0 0 0 1px var(--sk-red-text);color:#fff}
 .dz-draft[data-hint]{animation:dz-breathe 1.5s ease-in-out 3}
 @media (prefers-reduced-motion:reduce){.dz-draft[data-hint]{animation:none}}
+/* 窄窗口（竖排那一档）一排放不下三个页签加「起草」：页签分两行（名字 / 目标），字缩小；「起草」只按字宽，灰框不动 */
+@container (max-width:839px){
+  [data-drafter] .dz-ask__top{align-items:stretch}
+  [data-drafter] .dz-pick{flex:1 1 auto}
+  [data-drafter] .dz-goal{display:grid;align-content:center;flex:1 1 0;height:auto;padding:calc(4 * var(--k)) calc(5 * var(--k));font-size:calc(9.5 * var(--k));line-height:1.25;white-space:normal;text-align:center}
+  [data-drafter] .dz-goal__sep{display:none}
+  [data-drafter] .dz-goal__who{font-weight:600}
+  [data-drafter] .dz-draft{min-width:0;height:auto}
+}
 
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
 

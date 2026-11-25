@@ -747,7 +747,7 @@ DRAFTER = {
    'need_goal': ['先选左上一个目标，再点「起草」。', 'Pick a goal at the top left first, then click Draft.'],
    # 2026-11-25（交接单 ⑭，本人试用时在灰框里自己打了一句，点「起草」只得到拒绝）：一进活动页就选好第一个目标；
    # 状态行开头说清两步；自己写的句子也起草，按关键词挑最接近的一份，老实说只有三份事先起草好的
-   'said_camp': ['点「起草」看草案；也可以换个页签，或自己写一句。', 'Click Draft to see a draft; or switch tabs, or write your own sentence.'],
+   'said_camp': ['点「起草」看草案；也可以换个页签，或自己写一句。', 'Click Draft to see a draft; you can also switch tabs or write your own sentence.'],
    'typed_closest': ['这个示意只有三份事先起草好的草案，按你这句，先用最接近的「{name}」演示。',
                      'This demo has only three drafts written in advance; going by your sentence, it shows the closest one, “{name}”.'],
    'typed_none': ['这个示意只有三份事先起草好的草案，你这句对不上哪一份，先用第一份「{name}」演示。',
@@ -758,9 +758,9 @@ DRAFTER = {
  },
  # 交接单 ⑭：页签写「创作者 · 几个字的目标」，字从三份草案的 goal 里取（数据文件不改）
  'tabs': {
-   'halloween': ['露米 · 万圣节直播', 'Lumi · Halloween stream'],
-   'move': ['阿澈 · 换平台', 'Che · Moving platforms'],
-   'newsong': ['弥音 · 新歌拉新', 'Mion · New song, new fans'],
+   'halloween': ['露米 · 万圣节直播', 'Lumi · Halloween'],
+   'move': ['阿澈 · 换平台', 'Che · New platform'],
+   'newsong': ['弥音 · 新歌拉新', 'Mion · New fans'],
  },
  # 交接单 ⑭：自己写的句子按这些词挑最接近的一份（中英两页共用，命中最多的那份；都没命中用第一份）
  'match': {

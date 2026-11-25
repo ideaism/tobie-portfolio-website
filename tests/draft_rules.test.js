@@ -137,6 +137,23 @@ test('accepting alone is not a change; removing and restoring is', () => {
   assert.equal(D.changed(d, st), false);
 });
 
+test('a sentence of one’s own drafts the closest of the three (交接单 ⑭)', () => {
+  [zh, en].forEach(cfg => {
+    const at = text => D.closest(text, cfg.drafts, cfg.match);
+    const idx = id => cfg.drafts.findIndex(d => d.id === id);
+    assert.equal(at('我想要设定一个拉新活动'), idx('newsong'));   // what the owner typed
+    assert.equal(at('I want to set up a campaign to get new fans'), idx('newsong'));
+    assert.equal(at('想从 Twitch 搬家到 YouTube'), idx('move'));
+    assert.equal(at('We are switching to a new platform'), idx('move'));
+    assert.equal(at('万圣节守着我的直播'), idx('halloween'));
+    assert.equal(at('A Halloween stream'), idx('halloween'));
+    assert.equal(at('今天晚饭吃什么好呢'), -1);                    // nothing matches: the page uses the first draft
+    assert.equal(at('What should I cook for dinner tonight?'), -1);
+    assert.equal(at(''), -1);
+    cfg.drafts.forEach((d, i) => assert.equal(at(d.goal), i, `${d.id}'s own goal`));   // each sample goal finds its own draft
+  });
+});
+
 test('the recipe rules of section 03 are untouched by this', () => {
   assert.equal(typeof R.load, 'function');
   const s = R.blank();

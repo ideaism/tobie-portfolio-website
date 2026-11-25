@@ -1254,12 +1254,16 @@ function drafterLab(root) {
   const tabName = i => (cfg.tabs || {})[cfg.drafts[i].id] || cfg.drafts[i].creator;
   const field = el('textarea', 'dz-field');
   field.rows = 2;
-  field.readOnly = false;   // it can be typed in; only the three sample goals have drafts, Draft says so for anything else
+  field.readOnly = false;   // it can be typed in; a sentence of one's own drafts the closest of the three sample drafts (⑭)
   field.placeholder = T.goal_ph;
   field.setAttribute('aria-label', T.goal_ph);
   const lit = () => goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === sel)));
   cfg.drafts.forEach((d, i) => {
-    const b = el('button', 'dz-goal', tabName(i));   // ⑭: 「露米 · 万圣节直播」, so it reads as a goal
+    // ⑭: 「露米 · 万圣节直播」, so it reads as a goal; on a narrow window the name and the goal sit on two lines
+    const b = el('button', 'dz-goal'), [who, ...what] = tabName(i).split(' · ');
+    b.append(el('span', 'dz-goal__who', who));
+    if (what.length) b.append(el('span', 'dz-goal__sep', ' · '), el('span', 'dz-goal__what', what.join(' · ')));
+    b.setAttribute('aria-label', tabName(i));
     b.type = 'button';
     b.dataset.key = 'goal:' + i;
     b.title = d.persona;

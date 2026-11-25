@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from prototypes import CONCEPT, DRAFT_DATA, DRAFTER, REBUILT, REBUILT_TAG, STUDIO, draft_data, section_demo  # noqa: E402
+from prototypes import CONCEPT, DRAFT_DATA, DRAFTER, REBUILT, REBUILT_TAG, STUDIO, _drafter_config, draft_data, section_demo  # noqa: E402
 from cases import CASES  # noqa: E402
 
 
@@ -298,7 +298,7 @@ class DrafterTests(unittest.TestCase):
         self.assertEqual(t['draft_go'], ['起草', 'Draft'])
         self.assertEqual((t['freq'], t['reward']), (['频次', 'Frequency'], ['奖励', 'Reward']))
         self.assertEqual(t['platforms'], ['Related Platforms', 'Related Platforms'])
-        for k in ('said_goal', 'said_same', 'need_goal', 'only_samples', 'gone_tag'):
+        for k in ('said_goal', 'said_same', 'need_goal', 'gone_tag'):
             self.assertEqual(len(t[k]), 2, k)
         js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
         lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
@@ -327,6 +327,40 @@ class DrafterTests(unittest.TestCase):
         self.assertIn('--dz-img-empty:url(/assets/work/playbook/drafter-covers/miyin-new-song.webp)', block)
         for must in ("cover.setAttribute('aria-hidden', 'true')", "lcArt.setAttribute('aria-hidden', 'true')", "illo.setAttribute('aria-hidden', 'true')"):
             self.assertIn(must, lab)   # 封面都是装饰
+
+    def test_the_bar_reads_at_a_glance(self):
+        # 交接单 ⑭（本人试用时在灰框里打了一句，点「起草」只得到拒绝）：一进来就选好第一个目标、「起草」呼吸；
+        # 页签写「创作者 · 几个字的目标」；自己写的句子也起草，按关键词挑最接近的一份，状态行老实说
+        t = DRAFTER['t']
+        self.assertNotIn('only_samples', t)
+        self.assertEqual(t['said_camp'], ['点「起草」看草案；也可以换个页签，或自己写一句。',
+                                          'Click Draft to see a draft; you can also switch tabs or write your own sentence.'])
+        self.assertEqual(t['typed_closest'][0], '这个示意只有三份事先起草好的草案，按你这句，先用最接近的「{name}」演示。')
+        for k in ('typed_closest', 'typed_none'):
+            self.assertEqual([s.count('{name}') for s in t[k]], [1, 1], k)
+        self.assertEqual(DRAFTER['tabs']['halloween'][0], '露米 · 万圣节直播')
+        self.assertEqual(DRAFTER['tabs']['move'][0], '阿澈 · 换平台')
+        self.assertEqual(DRAFTER['tabs']['newsong'][0], '弥音 · 新歌拉新')
+        for lang, i in (('zh', 0), ('en', 1)):
+            cfg = _drafter_config(lang)
+            self.assertEqual(set(cfg['tabs']), {d['id'] for d in cfg['drafts']})
+            for d in cfg['drafts']:
+                self.assertTrue(cfg['tabs'][d['id']].startswith(d['creator'] + ' · '), (lang, d['id']))   # 名字照数据
+                self.assertTrue(cfg['match'][d['id']])
+            self.assertNotIn('only_samples', cfg['t'])
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        self.assertNotIn('only_samples', js)
+        lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
+        for must in ('field.value = cfg.drafts[0].goal', "drafting.setAttribute('data-hint', '')", "drafting.removeAttribute('data-hint')",
+                     'D.closest(text, cfg.drafts, cfg.match', 'T.typed_none', 'T.typed_closest', 'say(T.said_camp)', "'dz-goal__who'", "'dz-goal__what'"):
+            self.assertIn(must, lab)
+        css = (ROOT / 'dist' / 'styles.css').read_text(encoding='utf-8')
+        start = css.index('PlayBook 04：起草条一眼看懂')
+        block = css[start:css.index('/* ========== ', start)]
+        for must in ('.dz-draft[data-hint]{animation:dz-breathe 1.5s ease-in-out 3}',
+                     '@media (prefers-reduced-motion:reduce){.dz-draft[data-hint]{animation:none}}',
+                     'background:#fff;box-shadow:inset 0 0 0 1px', '[data-drafter] .dz-goal[aria-pressed="true"]{background:var(--sk-red-text)'):
+            self.assertIn(must, block)
 
     def test_draft_rules_in_node(self):
         node = shutil.which('node')

@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261125c'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261125d'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -446,7 +446,24 @@ def figure_html(f, lang):
                 l, r, tp = f'{pw("left"):.4f}%', f'{100 - pw("right"):.4f}%', f'{ph("top"):.4f}%'
                 clip = f'polygon(0 0,100% 0,100% 100%,{r} 100%,{r} {tp},{l} {tp},{l} 100%,0 100%)'
                 vars_ = [f'--fix-l:{pw("left"):.4f}%', f'--fix-r:{pw("right"):.4f}%']
-                extra = img(src, '', 'shot-scroll__fixed').replace('<img ', '<img aria-hidden="true" ', 1).replace('class="shot-scroll__fixed"', f'class="shot-scroll__fixed" style="clip-path:{clip}"', 1)
+                over = lambda cls, st: img(src, '', cls).replace('<img ', '<img aria-hidden="true" ', 1).replace(f'class="{cls}"', f'class="{cls}" style="{st}"', 1)
+                # 2026-11-25（卡 20261126-005 本人打回：「滑动时顶部要贴在顶部」「右边上方留在上面」，界面不一定只是左右两栏）：
+                # 'sticky'：原界面里贴着顶栏跟着走的一栏（比如审核中心看卡页右边那栏），按原图像素写 {'x': [左, 右], 'y': [上, 下], 'at': 贴住时离窗口顶多远}。
+                #   再叠一层同一张图，只露出这一栏（往上多露 at − top 那一条空白，盖住滑过去的那一份）；site.js 把窗口滑了多少写进 --st，
+                #   这一层先跟着往上走，走到 at 就停住（CSS 里 translateY(max(-滑动距离, 停住的位置))）。
+                # 'bottom'：贴在底边不动的一条（比如审核中心的决定栏），从原图最底下量的高度；'fade'：这一条最上面渐隐的那一段（决定栏上沿是渐变的）。
+                sticky = ''
+                for s in fixed.get('sticky', []):
+                    (x0, x1), (y0, y1), at = s['x'], s['y'], s['at']
+                    hp = lambda v: v / of * iw / ih * 100
+                    ins = f'inset({hp(y0 - max(at - fixed.get("top", 0), 0)):.4f}% {100 - x1 / of * 100:.4f}% {100 - hp(y1):.4f}% {x0 / of * 100:.4f}%)'
+                    sticky += over('shot-scroll__fixed shot-scroll__sticky', f'clip-path:{ins};--dy:{hp(at - y0):.4f}%')
+                extra = sticky + (over('shot-scroll__fixed', f'clip-path:{clip}') if any(fixed.get(k) for k in ('top', 'left', 'right')) else '')
+                if fixed.get('bottom'):
+                    b, fd = ph('bottom'), ph('fade')
+                    mask = f'linear-gradient(to bottom,transparent {100 - b:.4f}%,#000 {100 - b + fd:.4f}%)'
+                    extra += over('shot-scroll__fixed shot-scroll__fixed--b', f'-webkit-mask-image:{mask};mask-image:{mask}')
+                    vars_.append(f'--fix-b:{fixed["bottom"] / of * 16 / 9 * 100:.4f}%')   # 占窗口高的百分比（窗口是 16:9）
             if vars_:
                 css = css + vars_
                 style = f' style="{";".join(css)}"'

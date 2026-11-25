@@ -413,12 +413,15 @@ FIGURES = {
  ],
  # 新 02：每天卡数（cards_full.json 按卡片创建日重算，见 docs/sources.md）和一张示例审核卡，放在正文后、原型前（'before_demo'）；原型是审核中心小原型（#try）。
  # 审核卡是 2026-11-21 用审核中心小原型拍的示例卡，整卡比一屏高，放进 16:9 窗口上下滑，左侧菜单不动
+ # 2026-11-25（卡 20261126-005 打回）：照审核中心现在的样子，顶上那行小字导航（到 y=100）、底下的决定栏（最下面 228，上沿 72 渐隐）也不动；
+ # 右边那栏（背景 / 你定了以后 / 记录，x 1944–2722、y 530–1638，按 2 倍图量的卡片边框）先跟着往上走，走到离顶 112 停住
  ('agent-matrix', 2): [
   {'kind': 'image', 'src': 'agent-matrix/fig-daily-cards-zh', 'src_en': 'agent-matrix/fig-daily-cards-en', 'prov': 'diagram', 'project': 'matrix', 'before_demo': True,
    'label': ['每天新来的卡', 'New cards each day'],
    'caption': ['柱子上的数是当天所有项目的卡，深色是作品集的。', 'The number above each bar counts every project that day; the dark part is the portfolio.']},
   {'kind': 'image', 'src': 'agent-matrix/review-card', 'prov': 'original', 'project': 'matrix', 'scroll': True, 'before_demo': True,
-   'fixed': {'of': 2880, 'left': 496},
+   'fixed': {'of': 2880, 'top': 100, 'left': 496, 'bottom': 228, 'fade': 72,
+             'sticky': [{'x': [1944, 2722], 'y': [530, 1638], 'at': 112}]},
    'label': ['一张审核卡', 'A review card'],
    'caption': ['一张卡回答五个问题。这是示例卡，不是真实待办。', 'One card answers five questions. This is an example card, not a live item.']},
  ],

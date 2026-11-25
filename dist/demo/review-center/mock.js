@@ -8,6 +8,9 @@
    可选参数：?theme=light|dark 强制深浅色（不带就跟系统）。 */
 (() => {
   "use strict";
+  // 嵌在作品集页面里时（2026-11-25，卡 20261126-005 本人：「滑动的时候整个页面会跟着滑动」）：小窗口里滑到头，不再带着作品集整页走。
+  // 单独打开（新窗口全屏）时不管，跟审核中心本身一样
+  if (window.top !== window) document.documentElement.style.overscrollBehavior = "contain";
   const T0 = Date.now(), H = 36e5;
   const ago = (h) => new Date(T0 - h * H).toISOString();
   const now = () => new Date().toISOString();

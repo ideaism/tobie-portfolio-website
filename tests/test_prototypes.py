@@ -311,10 +311,17 @@ class FigureTests(unittest.TestCase):
                     self.assertIn(hint, html)
                     self.assertEqual(html.count('data-enlarge'), 1)
                     fixed = f.get('fixed')
-                    self.assertEqual(html.count('<img '), 2 if fixed else 1)
-                    if fixed:   # v3: the unscrolled copy is decorative, clipped to the fixed chrome, and comes after the scrolling picture
-                        self.assertIn('<img aria-hidden="true" src=', html)
-                        self.assertIn('alt="" class="shot-scroll__fixed" style="clip-path:polygon(', html)
+                    # 2026-11-25: one copy for top / left / right, one more for 'bottom', one per 'sticky' column
+                    layers = (1 if fixed and any(fixed.get(k) for k in ('top', 'left', 'right')) else 0) + (1 if fixed and fixed.get('bottom') else 0) + len((fixed or {}).get('sticky', []))
+                    self.assertEqual(html.count('<img '), 1 + layers)
+                    self.assertEqual(html.count('<img aria-hidden="true" src='), layers)
+                    if fixed:   # v3: the unscrolled copies are decorative, clipped to the fixed chrome, and come after the scrolling picture
+                        if any(fixed.get(k) for k in ('top', 'left', 'right')):
+                            self.assertIn('alt="" class="shot-scroll__fixed" style="clip-path:polygon(', html)
+                        if fixed.get('bottom'):
+                            self.assertIn('class="shot-scroll__fixed shot-scroll__fixed--b" style="-webkit-mask-image:', html)
+                            self.assertIn('--fix-b:', html)
+                        self.assertEqual(html.count('class="shot-scroll__fixed shot-scroll__sticky" style="clip-path:inset('), len(fixed.get('sticky', [])))
                         self.assertLess(html.index('shot-scroll__view'), html.index('shot-scroll__fixed'))
         for (slug, n), figs in FIGURES.items():   # 'fixed' only goes with 'scroll', in source pixels that fit the picture's first 16:9 screen
             for f in figs:
@@ -322,9 +329,16 @@ class FigureTests(unittest.TestCase):
                 if not fx:
                     continue
                 self.assertTrue(f.get('scroll'), f'{slug}/{n}')
-                self.assertLessEqual(set(fx), {'of', 'top', 'left', 'right'})
+                self.assertLessEqual(set(fx), {'of', 'top', 'left', 'right', 'bottom', 'fade', 'sticky'})
                 self.assertLess(fx.get('left', 0) + fx.get('right', 0), fx['of'])
-                self.assertLess(fx.get('top', 0), fx['of'] * 9 / 16)
+                self.assertLess(fx.get('top', 0) + fx.get('bottom', 0), fx['of'] * 9 / 16)   # the fixed bars leave room in the first screen
+                self.assertLessEqual(fx.get('fade', 0), fx.get('bottom', 0))
+                w, h = MANIFEST[f['src']]
+                for st in fx.get('sticky', []):   # inside the picture, below the top bar, and short enough to fit between the bars
+                    (x0, x1), (y0, y1) = st['x'], st['y']
+                    self.assertTrue(0 <= x0 < x1 <= fx['of'] and 0 <= y0 < y1 <= fx['of'] * h / w, f'{slug}/{n}')
+                    self.assertTrue(fx.get('top', 0) <= st['at'] < y0, f'{slug}/{n}')
+                    self.assertLessEqual(st['at'] + (y1 - y0), fx['of'] * 9 / 16 - fx.get('bottom', 0), f'{slug}/{n}: the column would run under the bottom bar')
         plain = dict(FIGURES[('playbook', 9)][0])   # 2026-11-24：Remix 从 09 顺延为 10；2026-11-25 起草助手下线，回到 9
         self.assertNotIn('scroll', plain)
         self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default

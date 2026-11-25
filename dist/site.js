@@ -147,14 +147,32 @@ if (box) {
 }
 
 /* figures with 'scroll': the picture scrolls inside a 16:9 window (CSS only);
-   this just hides the "scroll to see more" hint once the bottom has been reached */
+   this hides the "scroll to see more" hint once the bottom has been reached, and (2026-11-25) hands the scroll
+   distance to the 'sticky' layer as --st so a side column can ride up and then stay, like it does in the real app */
 document.querySelectorAll('[data-scroll-shot]').forEach(shot => {
   const view = shot.querySelector('.shot-scroll__view');
-  const update = () => shot.classList.toggle('is-end', view.scrollHeight - view.scrollTop - view.clientHeight < 4);
+  const sticky = shot.querySelector('.shot-scroll__sticky');
+  const update = () => {
+    shot.classList.toggle('is-end', view.scrollHeight - view.scrollTop - view.clientHeight < 4);
+    if (sticky) shot.style.setProperty('--st', view.scrollTop);
+  };
   view.addEventListener('scroll', update, { passive: true });
   view.querySelector('img')?.addEventListener('load', update);
   window.addEventListener('resize', update, { passive: true });
   update();
+});
+
+/* 「更多系统模块」 (2026-11-25, card 20261126-005): an open row's header sticks under the top bar (CSS).
+   Closing it while it is stuck would leave the reader far below, in whatever came after the long body;
+   so after closing, bring the row back to the top of the screen */
+document.querySelectorAll('.case-module > summary').forEach(sum => {
+  const d = sum.parentElement;
+  sum.addEventListener('click', () => {
+    if (!d.open) return;
+    const bar = document.querySelector('.topbar')?.getBoundingClientRect().bottom || 0;
+    if (d.getBoundingClientRect().top >= bar - 1) return;
+    requestAnimationFrame(() => window.scrollBy({ top: d.getBoundingClientRect().top - bar, behavior: 'instant' }));   // not scrollIntoView: the page's scroll-padding (96px, for anchor jumps) would leave a gap
+  });
 });
 
 /* structure mode: shows the components this page is built from */

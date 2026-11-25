@@ -140,9 +140,10 @@ p,li{text-wrap:pretty}
 .enlarge::after{content:'';position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7'/%3E%3C/svg%3E") center/16px no-repeat;opacity:.85;transition:opacity var(--t-fast),transform var(--t-fast)}
 .enlarge:hover::after{opacity:1;transform:scale(1.06)}
 /* image figure with 'scroll' (2026-11-17): a 16:9 window; the picture keeps the window's width and scrolls up and down inside it.
-   Wheel, touch and arrow keys are the browser's own; at either end the page carries on scrolling. */
+   Wheel, touch and arrow keys are the browser's own. 2026-11-25 (card 20261126-005: 「滑动的时候整个页面会跟着滑动」):
+   at either end the page no longer carries on scrolling (overscroll-behavior:contain); move the pointer off the window to scroll the page. */
 .shot-scroll::after{content:'';position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.75));pointer-events:none;transition:opacity var(--t-fast)}
-.shot-scroll__view{aspect-ratio:16/9;overflow-x:hidden;overflow-y:auto;scroll-behavior:auto;overscroll-behavior:auto}
+.shot-scroll__view{aspect-ratio:16/9;overflow-x:hidden;overflow-y:auto;scroll-behavior:auto;overscroll-behavior:contain}
 .shot-scroll__view:focus-visible{outline-offset:-2px;box-shadow:none;border-radius:var(--r-frame)}
 .shot-scroll:has(.shot-scroll__view:focus-visible){box-shadow:0 0 0 6px rgba(247,119,95,.55)}
 .shot-scroll__view img{width:100%;max-width:none}
@@ -157,6 +158,12 @@ p,li{text-wrap:pretty}
 .shot-scroll--fixed .shot-scroll__view::-webkit-scrollbar{display:none}
 .shot-scroll--fixed::after{left:var(--fix-l,0);right:var(--fix-r,0)}
 .shot-scroll--fixed .shot-scroll__hint{left:calc(var(--fix-l,0%) + 12px)}
+/* 2026-11-25 (card 20261126-005): 'bottom' = a bar pinned to the window's bottom edge (the review centre's decision bar), drawn from a copy
+   aligned to the bottom and masked to that strip; 'sticky' = a side column that rides up with the content and then stays (translateY below). */
+.shot-scroll__fixed--b{top:auto;bottom:0}
+.shot-scroll__sticky{transform:translateY(max(calc(var(--st,0) * -1px),var(--dy,0%)))}
+.shot-scroll--fixed::after{bottom:var(--fix-b,0%)}
+.shot-scroll--fixed .shot-scroll__hint{bottom:calc(var(--fix-b,0%) + 12px)}
 @media print{.shot-scroll__view{aspect-ratio:auto;overflow:visible}.shot-scroll__hint,.shot-scroll__zoom,.shot-scroll::after,.shot-scroll__fixed{display:none}}
 
 /* phone + browser shells (device frames hold original screens only) */
@@ -1524,6 +1531,9 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .case-module>summary:hover .case-module__name{color:var(--teal)}
 .case-module>summary:focus-visible{outline:3px solid var(--beak);outline-offset:4px}
 .case-module__body{padding:var(--s-2) 0 var(--s-8)}
+/* 2026-11-25 (card 20261126-005: 「展开的内容滑动时顶部要贴在顶部」): an open row's header sticks just under the top bar
+   (68px + its 1px line) while its body scrolls under it; site.js brings the row back up if it is closed while stuck */
+.case-module[open]>summary{position:sticky;top:69px;z-index:6;background:var(--canvas);box-shadow:0 1px 0 var(--rule)}
 @media (max-width:640px){
   .case-module>summary{grid-template-columns:minmax(0,1fr) 28px}
   .case-module__title{grid-column:1;grid-row:2;font-size:var(--fs-small)}

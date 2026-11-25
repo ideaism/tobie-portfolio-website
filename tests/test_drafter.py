@@ -257,10 +257,10 @@ class DrafterTests(unittest.TestCase):
         lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
         for must in ('let made = false, pick = -1, st = null', "go('empty', true)", 'say(T.said_start)', "setAttribute('data-hint', '')",
                      "removeAttribute('data-hint')", "c.setAttribute('aria-disabled', 'true')", 'say(T.blank_only)',
-                     'field.readOnly = true', 'field.value = d.goal', "toCampaigns.addEventListener('click', () => go('list'))",
+                     'field.readOnly = false', 'field.value = d.goal', "toCampaigns.addEventListener('click', () => go('list'))",
                      "sub.addEventListener('click', () => go('camp'))", "card.addEventListener('click', () => go('camp'))",
                      "news.forEach(b => b.addEventListener('click', create))", 'if (ed) closeEditor()', 'camp.hidden = true', 'camp.hidden = false',
-                     'dz-start', 'dz-gifts', 'dz-cc', 'dz-illo'):
+                     'dz-start', 'dz-hive', 'dz-cc', 'dz-illo'):
             self.assertIn(must, lab)
         for gone in ("go('new')", "go('ask')", 'blank.setAttribute', 'dz-card'):
             self.assertNotIn(gone, lab)
@@ -290,6 +290,43 @@ class DrafterTests(unittest.TestCase):
         # 面板固定大小、里面自己滚；重画后各面板留在原来滚到的位置，换一页从顶上开始
         for must in ("el('div', 'dz-panel__body')", 'page.scrollTop = 0', ".querySelectorAll('.dz-panel__body')"):
             self.assertIn(must, lab)
+
+    def test_sixth_version_follows_the_figma_data_frame(self):
+        # 交接单 ⑬（卡 20261125-002 第 5 版本人打回）：起草条照 Figma 数据卡（页签 + 黑底「起草」+ 灰底一句话），页签带数字，
+        # 任务卡照 more.png 的上半截，物品 / 配方是蜂窝圆，空面板插图用物品图重画；三张封面是 Codex 出的图
+        t = DRAFTER['t']
+        self.assertEqual(t['draft_go'], ['起草', 'Draft'])
+        self.assertEqual((t['freq'], t['reward']), (['频次', 'Frequency'], ['奖励', 'Reward']))
+        self.assertEqual(t['platforms'], ['Related Platforms', 'Related Platforms'])
+        for k in ('said_goal', 'said_same', 'need_goal', 'only_samples', 'gone_tag'):
+            self.assertEqual(len(t[k]), 2, k)
+        js = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        lab = js[js.index('function drafterLab'):js.index('/* ---------- 7.', js.index('function drafterLab'))]
+        for must in ("el('button', 'dz-draft', T.draft_go)", 'function draftIt()', "'dz-ask__top'", 'dz-count', 'function hive(',
+                     "'dz-cell dz-cell--add'", 'c.dataset.tip = label', "addEventListener('dblclick'", 'dz-start__art', 'dz-ir__lines',
+                     'dz-im__card', 'dz-mis__thumb', 'dz-plat-ico', "addOnly('add:missions'", 'function counts()'):
+            self.assertIn(must, lab)
+        css = (ROOT / 'dist' / 'styles.css').read_text(encoding='utf-8')
+        start = css.rindex('/*', 0, css.index('PlayBook 04：起草助手第 6 版'))
+        block = css[start:css.index('/* ========== ', start)]
+        for must in ('[data-drafter] .dz-camp{--k:1.1px;--ka:1px}', '[data-drafter] .dz-camp{--k:var(--sku);--ka:var(--sku)}',
+                     '.dz-hive__row>*{flex:none;width:calc((100% - 5 * var(--g)) / 6);aspect-ratio:1}',
+                     '.dz-hive__row[data-odd]>:first-child{margin-left:calc((100% - 5 * var(--g)) / 12 + var(--g) / 2)}',
+                     '.dz-tab--on .dz-count{background:#3D6FE8', '.dz-draft{', '[data-drafter] .dz-goal[aria-pressed="true"]{background:var(--sk-red-text)'):
+            self.assertIn(must, block)
+        self.assertNotIn('container-type', block)   # 不加内层容器：--sku 里的 cqw 要按 .sk 算
+        # 编辑器顶上不留空：标签和物品库照 03 节的位置往上提
+        self.assertIn('[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(172 * var(--u));', css)
+        self.assertIn('[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 212) * var(--u));', css)
+        # 三张封面：网站用的 1000 宽 webp 都在，样式里按草案换图，空状态用弥音那张
+        manifest = json.loads((ROOT / 'dist' / 'assets' / 'work' / 'manifest.json').read_text(encoding='utf-8'))
+        for look, name in (('halloween', 'lumi-halloween'), ('move', 'ache-moving'), ('newsong', 'miyin-new-song')):
+            self.assertTrue((ROOT / 'dist' / 'assets' / 'work' / 'playbook' / 'drafter-covers' / f'{name}.webp').exists(), name)
+            self.assertEqual(manifest[f'playbook/drafter-covers/{name}'][0], 1000)
+            self.assertIn(f'[data-look="{look}"]{{--dz-img:url(/assets/work/playbook/drafter-covers/{name}.webp)}}', block)
+        self.assertIn('--dz-img-empty:url(/assets/work/playbook/drafter-covers/miyin-new-song.webp)', block)
+        for must in ("cover.setAttribute('aria-hidden', 'true')", "lcArt.setAttribute('aria-hidden', 'true')", "illo.setAttribute('aria-hidden', 'true')"):
+            self.assertIn(must, lab)   # 封面都是装饰
 
     def test_draft_rules_in_node(self):
         node = shutil.which('node')

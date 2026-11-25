@@ -285,6 +285,9 @@ DRAFTER_ITEMS = {
 for draft, item_ids in DRAFTER_ITEMS.items():
     for item in item_ids:
         JOBS[f'playbook/drafter-items/{draft}-{item}'] = (SRC / 'work' / 'playbook' / 'drafter-items' / f'{draft}-{item}.png', 192, 88)
+# 2026-11-25 交接单 ⑬：起草助手三张封面（Codex 生成，原图 1672×941 在 02-playbook/portfolio/figures/起草助手-封面/），只缩放压缩
+for cover in ('lumi-halloween', 'ache-moving', 'miyin-new-song'):
+    JOBS[f'playbook/drafter-covers/{cover}'] = (SRC / 'work' / 'playbook' / 'drafter-covers' / f'{cover}.png', 1000, 82)
 for r in range(3):
     for c in range(7):
         JOBS[f'qingju/lofi-r{r}c{c}'] = (SRC / 'work' / 'qingju-screens' / f'r{r}c{c}.png', 400, 88)

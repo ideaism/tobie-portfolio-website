@@ -606,7 +606,7 @@ def fridge_3d(lang, anchor):
  <div class="proto__side">
   <div class="proto__intro"><span class="label label--teal">{T('可以上手的小样', 'Hands-on prototype')}</span><h3>{T('开门，拿起二层那瓶牛奶，拖给企鹅。', 'Open the door, pick up the milk on the second shelf, drag it to the penguin.')}</h3><p>{T('下一版首页的小样，里面是示例数据。每个手势对应产品里的一件事：', 'A prototype of the next home screen, with example data. Each gesture stands for one thing in the product:')}</p></div>
   <dl class="gest">{rows}</dl>
-  <p class="gest__key">{T('东西上的小圆贴：<span><b>我</b> 我的</span> · <span><b>共</b> 共用</span> · <span><b>满</b> <b>青</b> 室友的</span> · <span><b>?</b> 不知道是谁的</span>。放在自己那层的不贴。', 'Round stickers on items: <span><b>我</b> mine</span> · <span><b>共</b> shared</span> · <span><b>满</b> <b>青</b> a flatmate’s</span> · <span><b>?</b> nobody knows whose</span>. Items on their owner’s own shelf carry none.')}</p>
+  <p class="gest__key">{T('东西上的小圆贴：<span><b>我</b> 我的</span> · <span><b>共</b> 共用</span> · <span><b>满</b> <b>青</b> 室友的</span> · <span><b>?</b> 不知道是谁的</span> · <span><b>请吃</b> 谁想吃都可以拿</span>。放在自己那层的不贴。', 'Round stickers on items: <span><b>我</b> mine</span> · <span><b>共</b> shared</span> · <span><b>满</b> <b>青</b> a flatmate’s</span> · <span><b>?</b> nobody knows whose</span> · <span><b>请吃</b> anyone may have it</span>. Items on their owner’s own shelf carry none.')}</p>
   <div class="proto__tools"><a class="tool-btn" href="{FRIDGE_3D_URL}" target="_blank" rel="noopener">↗ {T('全屏打开', 'Open full screen')}</a><button type="button" class="tool-btn" data-action="reset-frame" disabled>↺ {T('重新载入', 'Reload')}</button></div>
  </div>
 </div>

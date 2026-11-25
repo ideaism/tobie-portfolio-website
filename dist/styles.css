@@ -429,7 +429,7 @@ html:not(.js) .case-tab+.case-tab{margin-top:var(--s-9);border-top:1px solid var
 .gest dd{margin:0;color:var(--ink-2)}
 .gest__key{font-size:var(--fs-small);line-height:1.7;color:var(--ink-3)}
 .gest__key span{white-space:nowrap}
-.gest__key b{display:inline-grid;place-items:center;min-width:1.6em;height:1.6em;margin-right:2px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--rule-strong);background:#fff;color:var(--ink);font-size:.8125rem;font-weight:700;line-height:1}
+.gest__key b{display:inline-grid;place-items:center;min-width:1.6em;height:1.6em;padding:0 .3em;margin-right:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule-strong);background:#fff;color:var(--ink);font-size:.8125rem;font-weight:700;line-height:1}
 .proto__note{min-height:7.5em}
 .proto__note .note__text{font-size:1.0625rem}
 .proto__next{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:var(--fs-label);color:var(--teal-deep);background:var(--teal-wash);padding:10px 12px;border-radius:8px}
@@ -901,10 +901,10 @@ html.studio-open{overflow:hidden}
 .rz[data-odds] .rz-group[data-choose] .rz-tile{height:calc(var(--tile-h) * var(--u))}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz__lib::before{content:'';position:absolute;left:0;top:calc(164 * var(--u));width:calc(372 * var(--u));height:calc(805 * var(--u));background:#FCFCF9;transition:background var(--t-fast)}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz__lib.is-over::before{background:#EEF1FC}
-.proto:not([data-compact]) > .studio > .rz[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(268 * var(--u));max-width:calc(350 * var(--u));height:calc(26 * var(--u));font-size:calc(18.5 * var(--u));color:#141414;white-space:nowrap;overflow:hidden;pointer-events:none}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(172 * var(--u));max-width:calc(350 * var(--u));height:calc(26 * var(--u));font-size:calc(18.5 * var(--u));color:#141414;white-space:nowrap;overflow:hidden;pointer-events:none}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz__tag::before{content:'';flex:none;border-left:calc(7 * var(--u)) solid transparent;border-right:calc(7 * var(--u)) solid transparent;border-bottom:calc(9 * var(--u)) solid #2B2B2B}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz__title{display:block;position:absolute;z-index:1;left:calc(560 * var(--u));top:calc(4 * var(--u));width:calc(860 * var(--u));height:calc(44 * var(--u));line-height:calc(44 * var(--u));background:#FCFCF9;font-family:Inter,"Helvetica Neue","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-weight:700;font-size:calc(21 * var(--u));text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 116) * var(--u));width:calc(128 * var(--u));height:calc(128 * var(--u))}
+.proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 212) * var(--u));width:calc(128 * var(--u));height:calc(128 * var(--u))}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib > *{opacity:1}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib__ico{position:absolute;inset:0;border-radius:50%;background:#fff;border:1px solid #DADDDE;display:grid;place-items:center}
 .proto:not([data-compact]) > .studio > .rz[data-own] .rz-lib__name{position:absolute;left:50%;top:calc(100% + 6 * var(--u));width:calc(172 * var(--u));margin-left:calc(-86 * var(--u));font-size:calc(15.5 * var(--u));line-height:1.12;text-align:center;color:#141414}
@@ -1267,6 +1267,142 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
   /* 编辑器开着：窗口的边框、侧边栏、顶栏让开，编辑器自己的 16:9 底图就是窗口，和 03 节同宽同比例 */
   [data-drafter][data-editing] .sk__win,[data-drafter][data-editing] .sk__main,[data-drafter][data-editing] .sk__page{display:contents}
   [data-drafter][data-editing] .sk__top{display:none}
+}
+
+/* ---------- PlayBook 04：起草助手第 6 版（2026-11-25，交接单 ⑬，卡 20261125-002 第 5 版本人打回）----------
+   照本人导出的 Figma「演示」页 Campaign/有数据（figures/参考-本人贴图/有数据.png、figma-演示-有数据-结构.xml）和 Campaign/mission/more
+   （more.png，任务卡的排法）。数都是原稿像素（Figma 1440 宽 × 0.758），写成「数 × --k」：宽屏 --k = ⑫ 的 --sku，窄屏（⑪ 的竖排）
+   --k = 1.1px；空面板插图用 --ka（窄屏 1px，手机上放得下）。
+   ① 一句话起草条照 Figma 数据卡（548 × 114）：左上三个目标页签（原稿 Impressions / Money，选中红底白字）、右上黑底「起草」
+   （原稿 View in dashboard，120 × 24）、下面灰底一句话（能输入）；上下 12 / 24 / 12 / 53 / 12。
+   ② 面板页签后面带数字小块（24 × 18，选中蓝底白字）；面板内容从 82 开始。
+   ③ Missions：占满宽的红虚线「+ Create」187 × 27，任务卡 187 × 142、缝 13.6：标题一行，黄底缩略图 48.5，两组「小灰字 + 大字」，
+   Related Platforms + 平台圆标，最底一行接受 / 修改 / 删除。
+   ④ Item Rewards / Crafting Recipes：蜂窝，圆 49（随面板宽算）、缝 3，一排 6 个、下一排 5 个错开半格（25.8）；第一格红虚线圆 Create；
+   名字在悬停 / 聚焦的黑色小条里；点开的那条卡片插在它那一排下面（大图 79）。配方圆角上一个配方小标，接受了圆圈变红。
+   ⑤ 空面板：原稿的三张插图用 17 张物品图重画，位置照原稿（虚线框 254 高里）；Create 和下面小字不动。 */
+[data-drafter] .dz-camp{--k:1.1px;--ka:1px}
+/* ① 起草条 */
+.dz-ask__top{display:flex;align-items:center;justify-content:space-between;gap:calc(8 * var(--k));min-width:0}
+[data-drafter] .dz-pick{display:flex;flex-wrap:nowrap;gap:0;min-width:0;padding:0;border-radius:calc(2 * var(--k));background:#F2F4F5;overflow:visible}
+[data-drafter] .dz-goal{display:block;height:calc(22.7 * var(--k));padding:0 calc(10 * var(--k));border-radius:calc(2 * var(--k));background:transparent;box-shadow:none;font-size:calc(10 * var(--k));font-weight:400;line-height:calc(22.7 * var(--k));color:#6B6B6B;white-space:nowrap}
+[data-drafter] .dz-goal:hover{box-shadow:none;color:var(--sk-black)}
+[data-drafter] .dz-goal[aria-pressed="true"]{background:var(--sk-red-text);box-shadow:none;color:#fff}
+.dz-draft{flex:none;min-width:calc(120 * var(--k));height:calc(24.3 * var(--k));padding:0 calc(14 * var(--k));border:0;border-radius:calc(3 * var(--k));background:var(--sk-black);color:#fff;font:inherit;font-size:calc(10.5 * var(--k));font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:background var(--t-fast)}
+.dz-draft:hover{background:#3A3A3A}
+.dz-draft:focus-visible{outline:2px solid var(--sk-black);outline-offset:2px}
+[data-drafter] .dz-ask__box{position:relative;display:grid;min-height:calc(53 * var(--k));border-radius:calc(3 * var(--k));background:var(--sk-page);transition:box-shadow var(--t-fast)}
+[data-drafter] .dz-ask__box:focus-within{box-shadow:inset 0 0 0 1px var(--sk-black)}
+[data-drafter] .dz-field{display:block;width:100%;height:100%;min-height:0;padding:calc(7 * var(--k)) calc(10 * var(--k)) calc(7 * var(--k)) calc(27 * var(--k));border:0;border-radius:inherit;background:transparent;font:inherit;font-size:calc(11 * var(--k));font-weight:500;line-height:1.45;color:var(--sk-black);resize:none;overflow:auto;scrollbar-width:none;cursor:text}
+[data-drafter] .dz-field::-webkit-scrollbar{display:none}
+[data-drafter] .dz-ico--ai{top:calc(9 * var(--k));left:calc(9 * var(--k));transform:none}
+[data-drafter] .dz-ico--ai svg{width:calc(12 * var(--k));height:calc(12 * var(--k))}
+/* ② 页签上的数字 */
+[data-drafter] .dz-tabs{align-items:center;gap:calc(12 * var(--k))}
+.dz-tab{display:inline-flex;align-items:center;gap:calc(6 * var(--k))}
+.dz-count{display:inline-grid;place-items:center;min-width:calc(24 * var(--k));height:calc(18 * var(--k));padding:0 calc(5 * var(--k));border-radius:calc(9 * var(--k));background:#fff;box-shadow:0 0 0 1px #E6EAED;font-size:calc(11 * var(--k));font-weight:700;line-height:1;color:var(--sk-black)}
+.dz-tab--on .dz-count{background:#3D6FE8;box-shadow:none;color:#fff}
+/* ③ Missions */
+[data-drafter] .dz-create--wide,[data-drafter] .dz-cell--add{border:1px dashed var(--sk-red);background:#FEF6F6;color:var(--sk-red-text)}
+[data-drafter] .dz-create--wide{width:100%;height:calc(27 * var(--k));gap:calc(5 * var(--k));border-radius:calc(4 * var(--k));font-size:calc(11 * var(--k))}
+[data-drafter] .dz-create--wide:hover,[data-drafter] .dz-cell--add:hover{background:#FDE9E9}
+[data-drafter] .dz-create--wide .dz-ico,[data-drafter] .dz-cell--add .dz-ico{width:calc(12 * var(--k));height:calc(12 * var(--k));border-radius:50%;background:var(--sk-red);color:#fff}
+[data-drafter] .dz-create--wide .dz-ico svg,[data-drafter] .dz-cell--add .dz-ico svg{width:calc(9 * var(--k));height:calc(9 * var(--k))}
+[data-drafter] .dz-mcards{gap:calc(13.6 * var(--k))}
+[data-drafter] .dz-li.dz-mis{gap:0;align-content:start;min-height:calc(142 * var(--k));padding:calc(11 * var(--k)) calc(12 * var(--k)) calc(10 * var(--k));border-radius:calc(4 * var(--k));font-size:calc(10 * var(--k))}
+.dz-mis__head{display:flex;align-items:baseline;justify-content:space-between;gap:calc(6 * var(--k));min-width:0}
+[data-drafter] .dz-mis .dz-li__what{font-size:calc(11 * var(--k));font-weight:700;line-height:1.3}
+[data-drafter] .dz-mis .dz-li__id{flex:none;font-size:calc(8.5 * var(--k));color:#808080}
+.dz-mis__mid{display:flex;align-items:flex-start;gap:calc(12 * var(--k));margin-top:calc(9 * var(--k));min-width:0}
+.dz-mis__thumb{flex:none;display:grid;place-items:center;width:calc(48.5 * var(--k));height:calc(48.5 * var(--k));border-radius:calc(3 * var(--k));background:#FFD60A}
+.drafter .dz-mis__thumb .dz-art{width:76%;height:76%}
+.dz-mis__stats{display:flex;flex-wrap:wrap;gap:calc(4 * var(--k)) calc(12 * var(--k));min-width:0;padding-top:calc(6 * var(--k))}
+.dz-mis__stat{display:grid;gap:calc(4 * var(--k));min-width:0}
+.dz-mis__stat small{font-size:calc(8.5 * var(--k));line-height:1.2;color:#808080}
+.dz-mis__stat b{font-size:calc(13 * var(--k));font-weight:700;line-height:1.15;color:var(--sk-black);white-space:nowrap}
+.dz-mis__rel{margin:calc(9 * var(--k)) 0 0;font-size:calc(8 * var(--k));line-height:1.2;color:#808080}
+.dz-mis__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:calc(4 * var(--k)) calc(6 * var(--k));margin-top:calc(4 * var(--k))}
+.dz-plat-ico{display:inline-grid;flex:none;width:calc(18 * var(--k));height:calc(18 * var(--k))}
+.dz-plat-ico svg{width:100%;height:100%}
+[data-drafter] .dz-mis .dz-acts{gap:calc(4 * var(--k))}
+[data-drafter] .dz-panel .dz-mis .dz-acts .studio__btn{min-height:calc(20 * var(--k));padding:0 calc(7 * var(--k));font-size:calc(9.5 * var(--k))}
+[data-drafter] .dz-mis .dz-edit{margin-top:calc(8 * var(--k))}
+.dz-li.dz-mis[data-removed]>.dz-mis__foot{opacity:1;text-decoration:none}
+.dz-mis[data-removed] .dz-plat-ico{opacity:.5}
+/* ④ 蜂窝 */
+.dz-hive{--g:calc(3 * var(--k));display:grid;min-width:0}
+.dz-hive__row{display:flex;gap:var(--g)}
+.dz-hive__row>*{flex:none;width:calc((100% - 5 * var(--g)) / 6);aspect-ratio:1}
+.dz-hive__row[data-odd]>:first-child{margin-left:calc((100% - 5 * var(--g)) / 12 + var(--g) / 2)}
+.dz-cell{position:relative;display:grid;place-items:center;min-width:0;padding:0;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 1px #ECEEF0,0 calc(2 * var(--k)) calc(6 * var(--k)) rgba(0,0,0,.08);font:inherit;color:inherit;cursor:pointer;transition:box-shadow var(--t-fast)}
+.drafter .dz-cell .dz-art{width:72%;height:72%;pointer-events:none}
+.dz-cell:hover{box-shadow:0 0 0 1px var(--sk-black),0 calc(2 * var(--k)) calc(6 * var(--k)) rgba(0,0,0,.08)}
+.dz-cell:focus-visible{outline:2px solid var(--sk-black);outline-offset:2px}
+.dz-cell[aria-expanded="true"]{box-shadow:0 0 0 calc(2 * var(--k)) var(--sk-black)}
+.dz-cell[data-accepted]{box-shadow:0 0 0 calc(2 * var(--k)) var(--sk-red-text)}
+.dz-cell[data-removed] .dz-art{opacity:.3;filter:grayscale(1)}
+[data-drafter] .dz-create.dz-cell--add{flex-direction:column;gap:calc(2 * var(--k));height:auto;padding:0;border-radius:50%;font-size:calc(9.5 * var(--k));line-height:1}
+.dz-cell[data-tip]::after{content:attr(data-tip);position:absolute;left:50%;top:calc(100% - 7 * var(--k));z-index:3;width:max-content;max-width:calc(130 * var(--k));padding:calc(3 * var(--k)) calc(6 * var(--k));border-radius:calc(3 * var(--k));background:var(--sk-black);color:#fff;font-size:calc(9.5 * var(--k));line-height:1.3;text-align:center;transform:translateX(-50%);pointer-events:none;opacity:0;visibility:hidden}
+.dz-cell[data-tip]:hover::after,.dz-cell[data-tip]:focus-visible::after{opacity:1;visibility:visible}
+.dz-hive__row>.dz-cell:first-child::after{left:0;transform:none}
+.dz-hive__row>.dz-cell:last-child::after{left:auto;right:0;transform:none}
+[data-drafter] .dz-cell__mark{position:absolute;right:-4%;top:-4%;width:calc(16 * var(--k));height:calc(16 * var(--k));border-radius:50%;background:#fff;box-shadow:0 0 0 1px #F2BDBD;color:var(--sk-red-text)}
+[data-drafter] .dz-cell__mark svg{width:calc(10 * var(--k));height:calc(10 * var(--k))}
+[data-drafter] .dz-cell[data-accepted] .dz-cell__mark{background:var(--sk-red-text);box-shadow:none;color:#fff}
+[data-drafter] .dz-detail{margin:calc(6 * var(--k)) 0}
+.dz-detail__head{display:flex;align-items:center;gap:calc(10 * var(--k))}
+[data-drafter] .dz-art--big{flex:none;width:calc(79 * var(--k));height:calc(79 * var(--k));padding:calc(9 * var(--k));border-radius:50%;background:#fff;box-shadow:0 0 0 1px #E5E8EB,0 2px 8px rgba(0,0,0,.08)}
+[data-drafter] .dz-detail .dz-rc__name{gap:calc(3 * var(--k))}
+[data-drafter] .dz-panel--items .dz-note,[data-drafter] .dz-panel--recipes .dz-hint{margin-top:calc(4 * var(--k))}
+/* ⑤ 空面板插图 */
+[data-drafter] .dz-start{position:relative;height:calc(254 * var(--ka));min-height:0;align-content:end;gap:calc(7 * var(--ka));padding:0 10px calc(22 * var(--ka))}
+[data-drafter] .dz-start__art{position:absolute;top:0;left:50%;display:block;width:calc(306 * var(--ka));height:calc(200 * var(--ka));margin:0 0 0 calc(-153 * var(--ka))}
+[data-drafter] .dz-start__art--missions{width:calc(185 * var(--ka));margin-left:calc(-92.5 * var(--ka))}
+[data-drafter] .dz-start__art--recipes{width:calc(307 * var(--ka));margin-left:calc(-153.5 * var(--ka))}
+.dz-disc{position:absolute;left:calc((var(--x) - var(--d) / 2) * var(--ka));top:calc((var(--y) - var(--d) / 2) * var(--ka));display:grid;place-items:center;width:calc(var(--d) * var(--ka));height:calc(var(--d) * var(--ka));border-radius:50%;background:#fff;box-shadow:0 0 0 1px #F3E4E4,0 calc(2 * var(--ka)) calc(6 * var(--ka)) rgba(0,0,0,.09)}
+.drafter .dz-disc img,.drafter .dz-im__thumb img{display:block;width:74%;height:74%;max-width:none;object-fit:contain}
+.dz-ir__lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dz-im__back,.dz-im__card{position:absolute;border-radius:calc(3 * var(--ka));background:#fff;text-align:left;white-space:nowrap}
+.dz-im__back{left:calc(38 * var(--ka));top:calc(29 * var(--ka));width:calc(110 * var(--ka));height:calc(143 * var(--ka));padding:calc(8 * var(--ka)) calc(9 * var(--ka));box-shadow:0 1px calc(6 * var(--ka)) rgba(0,0,0,.06)}
+.dz-im__back b{display:block;font-size:calc(5.5 * var(--ka));font-weight:600;color:#666}
+.dz-im__card{left:calc(26 * var(--ka));top:calc(52 * var(--ka));width:calc(133 * var(--ka));height:calc(99 * var(--ka));box-shadow:0 calc(4 * var(--ka)) calc(14 * var(--ka)) rgba(0,0,0,.13)}
+.dz-im__card>b{position:absolute;left:calc(8.5 * var(--ka));top:calc(8 * var(--ka));font-size:calc(7 * var(--ka));font-weight:700;color:var(--sk-black)}
+.dz-im__thumb{position:absolute;left:calc(8.5 * var(--ka));top:calc(26 * var(--ka));display:grid;place-items:center;width:calc(33.5 * var(--ka));height:calc(33.5 * var(--ka));border-radius:calc(3 * var(--ka));background:#FFD60A}
+.dz-im__stat{position:absolute;left:calc(51.5 * var(--ka));top:calc(31 * var(--ka));display:grid;gap:calc(4 * var(--ka))}
+.dz-im__stat--2{left:calc(74.5 * var(--ka))}
+.dz-im__stat small,.dz-im__rel{font-size:calc(5 * var(--ka));line-height:1;color:#8C8C8C}
+.dz-im__stat b{font-size:calc(8.5 * var(--ka));font-weight:700;line-height:1;color:var(--sk-black)}
+.dz-im__rel{position:absolute;left:calc(8.5 * var(--ka));top:calc(68 * var(--ka))}
+.dz-im__dots{position:absolute;display:flex;gap:calc(3 * var(--ka))}
+[data-drafter] .dz-start__art .dz-im__dots i{width:calc(12 * var(--ka));height:calc(12 * var(--ka));border-radius:50%;background:#C4C4C4;box-shadow:none}
+.dz-im__back .dz-im__dots{left:calc(12 * var(--ka));top:calc(120 * var(--ka))}
+[data-drafter] .dz-start__art .dz-im__back .dz-im__dots i:nth-child(3){background:#3A3A3A}
+.dz-im__card .dz-im__dots{left:calc(8.5 * var(--ka));top:calc(80 * var(--ka))}
+[data-drafter] .dz-start__art .dz-im__dots--on i:nth-child(1){background:#1877F2}
+[data-drafter] .dz-start__art .dz-im__dots--on i:nth-child(2){background:#FF0000}
+[data-drafter] .dz-start__art .dz-im__dots--on i:nth-child(3){background:#000}
+[data-drafter] .dz-start__art .dz-im__dots--on i:nth-child(4){background:#9146FF}
+[data-drafter] .dz-start__art .dz-im__dots--on i:nth-child(5){background:#5865F2}
+/* 三张封面（交接单 ⑬ 附带，Codex 生成，原图 02-playbook/portfolio/figures/起草助手-封面/，1672 × 941；网站用 1000 宽 webp，
+   tools/prepare_assets.py 导出）。图都是装饰（外层 aria-hidden），用背景图 + cover，等于 object-fit:cover。渐变留在图下面垫底：
+   图没加载完、或者还没选目标（--dz-img 是 none）时看到的就是原来的渐变。
+   活动页右上封面、列表卡右边：当前草案那张；还没选目标时不放图（中性的渐变，publisher 定的，见交接单 ⑬ 核对）。
+   「还没有活动」页圣诞收益卡后面那张竖图：弥音那张，居中裁，后面那层淡、上下渐隐，前面那层清楚（照原稿的动漫街景）。 */
+[data-drafter]{--dz-img-empty:url(/assets/work/playbook/drafter-covers/miyin-new-song.webp)}
+[data-drafter] [data-look="halloween"]{--dz-img:url(/assets/work/playbook/drafter-covers/lumi-halloween.webp)}
+[data-drafter] [data-look="move"]{--dz-img:url(/assets/work/playbook/drafter-covers/ache-moving.webp)}
+[data-drafter] [data-look="newsong"]{--dz-img:url(/assets/work/playbook/drafter-covers/miyin-new-song.webp)}
+[data-drafter] .dz-cover,[data-drafter] .dz-cc__art{background:var(--dz-img,none) center / cover no-repeat,var(--dz-look)}
+[data-drafter] .dz-illo__pic{background:none}
+[data-drafter] .dz-illo__pic::before{content:'';position:absolute;inset:0;border-radius:inherit;background:var(--dz-img-empty) center / cover no-repeat,linear-gradient(170deg,#FBE6E3,#F5B8AE 40%,#C98E9C 70%,#8BA7B8);opacity:.5;-webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent)}
+[data-drafter] .dz-illo__pic::after{background:var(--dz-img-empty) center / cover no-repeat,linear-gradient(170deg,#FDEDEA,#F7C1B6 38%,#D98C8C 62%,#7F8FA6)}
+@container (min-width:840px){
+  [data-drafter] .dz-camp{--k:var(--sku);--ka:var(--sku)}
+  [data-drafter] .dz-ask{grid-template-rows:calc(24.3 * var(--sku)) minmax(0,1fr);gap:calc(12 * var(--sku));padding:calc(12 * var(--sku))}
+  [data-drafter] .dz-ask__box{min-height:0}
+  [data-drafter] .dz-tabs{line-height:calc(14 * var(--sku))}
+  [data-drafter] .dz-panel__body{overflow-x:hidden}
+  [data-drafter] .dz-start{padding:0 calc(10 * var(--sku)) calc(22 * var(--sku))}
 }
 
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */

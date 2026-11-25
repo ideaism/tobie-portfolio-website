@@ -1571,7 +1571,7 @@ function drafterLab(root) {
     const state = s ? (s.removed ? T.gone_tag : s.accepted ? T.accepted : '') : '';
     c.setAttribute('aria-label', label + (state ? T.sep + state : ''));
     c.setAttribute('aria-expanded', String(opened[kind] === id));
-    c.setAttribute('aria-controls', 'dz-card-' + kind);
+    c.setAttribute('aria-controls', 'dz-detail-' + kind);
     if (s) mark(c, s);
     c.addEventListener('click', e => {
       if (kind === 'recipes') {
@@ -1609,7 +1609,7 @@ function drafterLab(root) {
   }
   function hiveCard(kind, id) {
     const box = kind === 'items' ? itemCard(id) : recipeCard(id);
-    box.id = 'dz-card-' + kind;
+    box.id = 'dz-detail-' + kind;
     return box;
   }
   function itemCard(id) {

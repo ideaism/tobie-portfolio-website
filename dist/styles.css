@@ -1306,6 +1306,7 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
 /* ③ Missions */
 [data-drafter] .dz-create--wide,[data-drafter] .dz-cell--add{border:1px dashed var(--sk-red);background:#FEF6F6;color:var(--sk-red-text)}
 [data-drafter] .dz-create--wide{width:100%;height:calc(27 * var(--k));gap:calc(5 * var(--k));border-radius:calc(4 * var(--k));font-size:calc(11 * var(--k))}
+[data-drafter] .dz-create--wide + .dz-mcards{margin-top:calc(5.6 * var(--k))}   /* Figma：Create 到第一张卡 18，和卡与卡之间一样（面板自身行距 8 + 5.6） */
 [data-drafter] .dz-create--wide:hover,[data-drafter] .dz-cell--add:hover{background:#FDE9E9}
 [data-drafter] .dz-create--wide .dz-ico,[data-drafter] .dz-cell--add .dz-ico{width:calc(12 * var(--k));height:calc(12 * var(--k));border-radius:50%;background:var(--sk-red);color:#fff}
 [data-drafter] .dz-create--wide .dz-ico svg,[data-drafter] .dz-cell--add .dz-ico svg{width:calc(9 * var(--k));height:calc(9 * var(--k))}

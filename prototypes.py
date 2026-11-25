@@ -745,10 +745,28 @@ DRAFTER = {
    'said_goal': ['选了{name}的目标。点「起草」出草案。', 'Picked {name}’s goal. Click Draft to get a draft.'],
    'said_same': ['这个目标的草案已经在下面了。', 'The draft for this goal is already below.'],
    'need_goal': ['先选左上一个目标，再点「起草」。', 'Pick a goal at the top left first, then click Draft.'],
-   'only_samples': ['这个示意只能起草左上三个示例目标：选一个页签，再点「起草」。', 'This demo can only draft the three sample goals: pick a tab at the top left, then click Draft.'],
+   # 2026-11-25（交接单 ⑭，本人试用时在灰框里自己打了一句，点「起草」只得到拒绝）：一进活动页就选好第一个目标；
+   # 状态行开头说清两步；自己写的句子也起草，按关键词挑最接近的一份，老实说只有三份事先起草好的
+   'said_camp': ['点「起草」看草案；也可以换个页签，或自己写一句。', 'Click Draft to see a draft; or switch tabs, or write your own sentence.'],
+   'typed_closest': ['这个示意只有三份事先起草好的草案，按你这句，先用最接近的「{name}」演示。',
+                     'This demo has only three drafts written in advance; going by your sentence, it shows the closest one, “{name}”.'],
+   'typed_none': ['这个示意只有三份事先起草好的草案，你这句对不上哪一份，先用第一份「{name}」演示。',
+                  'This demo has only three drafts written in advance; your sentence matches none of them, so it shows the first one, “{name}”.'],
    'freq': ['频次', 'Frequency'], 'reward': ['奖励', 'Reward'],
    'platforms': ['Related Platforms', 'Related Platforms'],
    'gone_tag': ['已删除', 'Removed'],
+ },
+ # 交接单 ⑭：页签写「创作者 · 几个字的目标」，字从三份草案的 goal 里取（数据文件不改）
+ 'tabs': {
+   'halloween': ['露米 · 万圣节直播', 'Lumi · Halloween stream'],
+   'move': ['阿澈 · 换平台', 'Che · Moving platforms'],
+   'newsong': ['弥音 · 新歌拉新', 'Mion · New song, new fans'],
+ },
+ # 交接单 ⑭：自己写的句子按这些词挑最接近的一份（中英两页共用，命中最多的那份；都没命中用第一份）
+ 'match': {
+   'halloween': ['万圣节', '节日', '直播', '守着', '南瓜', '周五晚', 'halloween', 'holiday', 'festival', 'stream', 'pumpkin'],
+   'move': ['搬家', '搬到', '换平台', '转平台', '迁移', 'youtube', 'twitch', 'moving', 'move to', 'switch', 'migrat', 'new platform'],
+   'newsong': ['拉新', '新粉', '新歌', '新人', '歌', '涨粉', 'new fan', 'new song', 'song', 'newcomer', 'new viewer', 'attract', 'grow'],
  },
 }
 
@@ -773,6 +791,9 @@ def _drafter_config(lang):
         'editor': _drafter_editor(lang),
         # 2026-11-25（交接单 ⑪）：活动页三块面板的标题图标和「+ Create」用侧边栏同一套图标
         'icons': {k: _SKIN_ICONS[k] for k in ('missions', 'items', 'recipes', 'plus')},
+        # 2026-11-25（交接单 ⑭）：页签上的短目标、自己写一句时挑草案用的词
+        'tabs': {k: v[i] for k, v in DRAFTER['tabs'].items()},
+        'match': DRAFTER['match'],
     }
 
 

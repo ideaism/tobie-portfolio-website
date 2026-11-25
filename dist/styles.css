@@ -1409,6 +1409,16 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
   [data-drafter] .dz-start{padding:0 calc(10 * var(--sku)) calc(22 * var(--sku))}
 }
 
+/* ========== PlayBook 04：起草条一眼看懂（交接单 ⑭，2026-11-25）==========
+   页签写「创作者 · 几个字的目标」：没选的白底灰字、细边框，看得出能点；选中的红底白字（⑬ 的样子）。
+   「起草」在新建活动后带 Create 那样的呼吸，起草过一次就不再呼吸；减少动效时不动。 */
+[data-drafter] .dz-pick{gap:calc(4 * var(--k));background:transparent}
+[data-drafter] .dz-goal{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;background:#fff;box-shadow:inset 0 0 0 1px #D5DADD;color:#6B6B6B}
+[data-drafter] .dz-goal:hover{box-shadow:inset 0 0 0 1px #8A8F93;color:var(--sk-black)}
+[data-drafter] .dz-goal[aria-pressed="true"]{background:var(--sk-red-text);box-shadow:inset 0 0 0 1px var(--sk-red-text);color:#fff}
+.dz-draft[data-hint]{animation:dz-breathe 1.5s ease-in-out 3}
+@media (prefers-reduced-motion:reduce){.dz-draft[data-hint]{animation:none}}
+
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
 
 /* ---------- 方案 A：手机条在手机宽度下折成两列，不再左右滑（2026-11-17 修法对比） ----------

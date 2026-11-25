@@ -423,7 +423,17 @@ const draftRules = (() => {
     }
     return out;
   }
-  return { MIN, MAX, times, fresh, changed, removedCount, setQty, tasksLeft, recipesLeft, asChanged, supply, canvas, check };
+  // ⑭: a sentence the visitor wrote themselves -> the draft whose words it hits most (match: {draft id: [words]}); -1 when none
+  function closest(text, drafts, match) {
+    const s = String(text).toLowerCase();
+    let best = -1, most = 0;
+    drafts.forEach((d, i) => {
+      const n = (match[d.id] || []).filter(w => s.includes(w.toLowerCase())).length;
+      if (n > most) { most = n; best = i; }
+    });
+    return best;
+  }
+  return { MIN, MAX, times, fresh, changed, removedCount, setQty, tasksLeft, recipesLeft, asChanged, supply, canvas, check, closest };
 })();
 
 /* 6b. Shared pieces of the three demos */
@@ -1240,6 +1250,8 @@ function drafterLab(root) {
      Impressions / Money), the black button at its top right drafts (where Studio has View in dashboard), and the grey box under
      them holds the sentence. A tab puts its sentence into the box; Draft fills the three panels with that goal's draft. */
   let sel = -1;   // the goal whose tab is lit (its sentence is in the box); pick is the goal the panels were drafted for
+  let drafted = false;   // ⑭: Draft breathes (like Create) until it has been clicked into a draft once
+  const tabName = i => (cfg.tabs || {})[cfg.drafts[i].id] || cfg.drafts[i].creator;
   const field = el('textarea', 'dz-field');
   field.rows = 2;
   field.readOnly = false;   // it can be typed in; only the three sample goals have drafts, Draft says so for anything else
@@ -1247,7 +1259,7 @@ function drafterLab(root) {
   field.setAttribute('aria-label', T.goal_ph);
   const lit = () => goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === sel)));
   cfg.drafts.forEach((d, i) => {
-    const b = el('button', 'dz-goal', d.creator);
+    const b = el('button', 'dz-goal', tabName(i));   // ⑭: 「露米 · 万圣节直播」, so it reads as a goal
     b.type = 'button';
     b.dataset.key = 'goal:' + i;
     b.title = d.persona;
@@ -1262,12 +1274,22 @@ function drafterLab(root) {
   field.addEventListener('input', () => { sel = cfg.drafts.findIndex(d => d.goal === field.value.trim()); lit(); });
   field.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); draftIt(); } });
   function draftIt() {   // what clicking a goal card did before ⑬
-    if (sel < 0) { say(field.value.trim() ? T.only_samples : T.need_goal); return; }
-    if (sel === pick) { say(T.said_same); return; }
+    const text = field.value.trim();
+    if (!text) { say(T.need_goal); return; }
+    let typed = '';
+    if (sel < 0) {   // ⑭: a sentence of their own still drafts: the closest of the three (the first when nothing matches), said plainly
+      const near = D.closest(text, cfg.drafts, cfg.match || {});
+      sel = Math.max(near, 0);
+      lit();   // that tab lights up; the box keeps their sentence
+      typed = fillIn(near < 0 ? T.typed_none : T.typed_closest, { name: tabName(sel) });
+    }
+    drafted = true;
+    drafting.removeAttribute('data-hint');
+    if (sel === pick) { say(typed || T.said_same); return; }
     const d = cfg.drafts[sel], first = pick < 0;
     pick = sel; st = D.fresh(d); editing = new Set(); opened = {};
     draw();
-    say(first ? T.said_filled : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(pick + 1) }) + ' · ' + d.campaign.name }));
+    say(typed || (first ? T.said_filled : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(pick + 1) }) + ' · ' + d.campaign.name })));
   }
   const drafting = el('button', 'dz-draft', T.draft_go);
   drafting.type = 'button';
@@ -1828,10 +1850,13 @@ function drafterLab(root) {
   }
   function create() {   // a new campaign each time: Untitled, empty panels (this concept keeps one campaign)
     made = true;
-    pick = -1; sel = -1; st = null; editing = new Set(); opened = {}; field.value = '';
+    pick = -1; sel = 0; st = null; editing = new Set(); opened = {};
+    field.value = cfg.drafts[0].goal;   // ⑭: the first goal is already picked (draw() lights its tab), so Draft alone shows a result
+    if (!drafted) drafting.setAttribute('data-hint', '');   // and Draft breathes like Create did, until it is used once
     emptyCreate.removeAttribute('data-hint');   // found it: the hint has done its job
     draw();
     go('camp');
+    say(T.said_camp);
   }
   news.forEach(b => b.addEventListener('click', create));
   toCampaigns.addEventListener('click', () => go('list'));

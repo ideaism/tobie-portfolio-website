@@ -1298,7 +1298,7 @@ function drafterLab(root) {
      What is changed there stays there: the draft, its check and its score are not touched. */
   const E = cfg.editor, page = root.querySelector('.sk__page'), sk = root.querySelector('.sk');
   const nav = [...root.querySelectorAll('.sk__item[data-nav]')], home = (nav.find(n => n.hasAttribute('data-on')) || {}).dataset?.nav;
-  let ed = null;   // { node, id, y } while the editor is open
+  let ed = null, drawn = null;   // ed: { node, id, y, at } while the editor is open; drawn: the goal the panels were last drawn for
   const navTo = k => {   // the sidebar's lit item moves, and the caret with it (the + stays with Campaign)
     const on = nav.find(n => n.hasAttribute('data-on')), to = nav.find(n => n.dataset.nav === k);
     if (!on || !to || on === to) return;
@@ -1345,7 +1345,8 @@ function drafterLab(root) {
     tools.append(reset);
     studio.append(stage, read, bar, tools);
     node.append(back, studio);
-    ed = { node, id, y: window.scrollY };
+    // ⑫: on wide screens the window's content area and each panel scroll on their own; remember them for the way back
+    ed = { node, id, y: window.scrollY, at: [page, ...view.querySelectorAll('.dz-panel__body')].map(b => [b, b.scrollTop]) };
     camp.hidden = true;
     root.setAttribute('data-editing', '');
     page.append(node);
@@ -1358,10 +1359,11 @@ function drafterLab(root) {
   }
   function closeEditor() {
     if (!ed) return;
-    const { node, id, y } = ed;
+    const { node, id, y, at } = ed;
     node.remove();
     ed = null;
     camp.hidden = false;
+    at.forEach(([b, top]) => { b.scrollTop = top; });
     root.removeAttribute('data-editing');
     navTo(home);
     side();
@@ -1429,7 +1431,8 @@ function drafterLab(root) {
     tabs.setAttribute('aria-hidden', 'true');
     tabs.append(el('span', 'dz-tab dz-tab--on', T.tab_all), el('span', 'dz-tab', T.tab_on));
     h.append(h4, t);
-    p.append(h, tabs);
+    // ⑫: what goes in the panel sits in its own box, which scrolls inside a panel of fixed size on wide screens
+    p.append(h, tabs, el('div', 'dz-panel__body'));
     return p;
   }
   function startHere(p, kind, heading, text) {
@@ -1616,8 +1619,12 @@ function drafterLab(root) {
     who.textContent = d ? d.creator : T.creator;
     cover.dataset.look = lcArt.dataset.look = d ? d.id : '';
     const pm = panel('missions', T.p_missions, 'missions'), pi = panel('items', T.p_items, 'items'), pr = panel('recipes', T.p_recipes, 'recipes');
-    if (d) { missionList(pm); itemGrid(pi); recipeList(pr); }
-    else { startHere(pm, 'missions', T.p_missions, T.start_missions); startHere(pi, 'items', T.p_items, T.start_items); startHere(pr, 'recipes', T.p_recipes, T.start_recipes); }
+    const [bm, bi, br] = [pm, pi, pr].map(p => p.lastChild);
+    if (d) { missionList(bm); itemGrid(bi); recipeList(br); }
+    else { startHere(bm, 'missions', T.p_missions, T.start_missions); startHere(bi, 'items', T.p_items, T.start_items); startHere(br, 'recipes', T.p_recipes, T.start_recipes); }
+    // the panels are drawn again after every click: each keeps where it was scrolled to, unless another goal was picked
+    const kept = drawn === pick ? [...view.querySelectorAll('.dz-panel__body')].map(b => b.scrollTop) : [];
+    drawn = pick;
     const panels = el('div', 'dz-panels');
     panels.append(pm, pi, pr);
     if (d) {   // the assistant's own check and why it is set up this way: white cards under the panels, further down the same page
@@ -1625,6 +1632,7 @@ function drafterLab(root) {
       more.append(selfCheck(), recheck(), whyBlock());
       view.replaceChildren(panels, more);
     } else view.replaceChildren(panels);
+    [bm, bi, br].forEach((b, n) => { if (kept[n]) b.scrollTop = kept[n]; });
     restoreAll.hidden = !d || !D.removedCount(d, st);
     if (key) root.querySelector(`[data-key="${key}"]`)?.focus({ preventScroll: true });
   }
@@ -1642,6 +1650,7 @@ function drafterLab(root) {
     side();
     if (init) return;
     say('');
+    page.scrollTop = 0;   // ⑫: another page of the window starts at its top
     if (sk.getBoundingClientRect().top < 0) sk.scrollIntoView({ block: 'start', behavior: 'instant' });
     const f = k === 'camp' ? goals.querySelector('.dz-goal[aria-pressed="true"]') || goals.querySelector('.dz-goal') : k === 'list' ? card : emptyCreate;
     f?.focus({ preventScroll: true });

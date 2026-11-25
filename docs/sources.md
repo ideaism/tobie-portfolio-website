@@ -425,6 +425,13 @@ PlayBook
   - 02 节审核中心小原型：去掉标题「卡顶上多了一行：还剩几张。」和 Tobie 的注释「第 1 版我钉了两处……换到手机宽看第 2 版。」（中英都去），没补别的句子。右栏只剩宽度切换和两个工具按钮，`dist/styles.css` 的 `.rv__side` 改成两列两头对齐；手机宽本来就是一列。没有测试断言这两句。
   - 封面小样只是小样，网站封面没换（`build.py` `matrix_cover`、`fig-who-waits`、sources 和 manifest 都没动）。源文件 `05-agent-matrix/portfolio/figures/src/cover-sample.mjs`，不在 `prepare_assets` 的 `JOBS` 里；出图和首页卡片示意在 `05-agent-matrix/portfolio/cards/pics/15-*`。
 
+## 2026-11-25：PlayBook 起草助手的框架照原稿比例，只缩字和图（交接单 ⑫，只合到本机，没部署、没推送）
+
+- 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑫ 起草助手：框架照原稿比例，只缩字和图」；本人原话「不要更改原本划分的框架大小，可以调整文字和图片的大小」。尺寸从 ⑪ 那三张原稿里量（窗口按 1091 宽折算），数写在交接单 ⑫ 的 publisher 核对里。
+- 改法：只改样式和滚动。宽屏（窗口 ≥840px）时窗口 `aspect-ratio:1091 / 614`，每一块写成「原稿像素 × `--sku`」（`--sku` = `100cqw / 1091`）；面板里的内容放进 `.dz-panel__body`，面板大小固定、里面自己滑；内容区（`.sk__page`）在窗口里上下滑，滚动条藏起来；重画面板时留住各面板的滚动位置，换页从顶上开始；编辑器打开时窗口边框、侧边栏、顶栏让开（`display:contents` / `none`），编辑器底图就是 16:9 的窗口。窄于 840px 不变（⑪ 的排法）。
+- 没动：文字、颜色、流程、草案数据、正文、自查和评分规则、物品图、03 节三个演示、编辑器本身。
+- 证据：`04-shared/qa/walkthrough/2026-11-25-playbook-起草助手-框架照原稿/`（无头 Chrome 真鼠标、真滚轮、真触屏、真键盘；`checks.json`、截图、3 张和原稿同宽并排的对比图、3 张半透明叠图、`boxes.json` 方框位置对照表）。
+
 ## 2026-11-25：PlayBook 起草助手的页面照 Studio 原稿的 Campaign 三页（交接单 ⑪，只合到本机，没部署、没推送）
 
 - 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑪ 起草助手：页面照 Studio 原稿的 Campaign 三页做」；本人贴的三张原稿 `02-playbook/portfolio/figures/参考-本人贴图/studio-campaign-还没有活动.png`、`studio-campaign-新账号-空活动页.png`、`studio-campaign-活动列表.png`。没调 Figma，没抠原稿里的插画。

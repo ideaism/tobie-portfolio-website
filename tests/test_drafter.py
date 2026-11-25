@@ -277,6 +277,20 @@ class DrafterTests(unittest.TestCase):
         for gone in ('.sk__new[data-hint]', '.dz-card{', '.dz-cards{', '.dz-rows'):
             self.assertNotIn(gone, css)
 
+    def test_frame_keeps_the_reference_divisions(self):
+        # 交接单 ⑫：宽屏上窗口照原稿比例（1091:614），框架按原稿划分，字和图跟着缩；不用 transform: scale（会弄乱编辑器里拖拽的坐标）
+        css = (ROOT / 'dist' / 'styles.css').read_text(encoding='utf-8')
+        start = css.rindex('/*', 0, css.index('PlayBook 04：框架照原稿比例'))
+        block = css[start:css.index('/* ========== ', start)]
+        for must in ('@container (min-width:840px){', '--sku:calc(100cqw / 1091)', 'aspect-ratio:1091 / 614',
+                     '.dz-panel__body{', '[data-drafter][data-editing] .sk__top{display:none}'):
+            self.assertIn(must, block)
+        self.assertNotIn('transform:scale', re.sub(r'/\*.*?\*/', '', block, flags=re.S).replace(' ', ''))   # 注释里提到它不算
+        lab = (ROOT / 'dist' / 'prototype.js').read_text(encoding='utf-8')
+        # 面板固定大小、里面自己滚；重画后各面板留在原来滚到的位置，换一页从顶上开始
+        for must in ("el('div', 'dz-panel__body')", 'page.scrollTop = 0', ".querySelectorAll('.dz-panel__body')"):
+            self.assertIn(must, lab)
+
     def test_draft_rules_in_node(self):
         node = shutil.which('node')
         if not node:

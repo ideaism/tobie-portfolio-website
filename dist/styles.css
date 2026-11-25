@@ -1118,6 +1118,157 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
   .dz-gifts{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
+/* ---------- PlayBook 04：框架照原稿比例，只缩字和图（2026-11-25，交接单 ⑫，卡 20261125-002 第 4 版本人打回）----------
+   本人原话「不要更改原本划分的框架大小，可以调整文字和图片的大小」。窗口宽 ≥840px（1440 宽屏幕上是 872px）时，窗口按原稿
+   1091 × 614（16:9）摆，里面每一块都写成「原稿像素 × --sku」，--sku = 窗口宽 / 1091（cqw，跟着窗口宽缩；不用 transform:scale，
+   编辑器的拖拽坐标才不会错）。量出来的数在交接单 ⑫ 的 publisher 核对里：侧边栏 193、顶栏 35；活动页标题卡 548 × 192
+   （名字卡 76 + 3 的缝 + 一句话起草条 113）、封面 330、三块面板 211 / 330 / 330 宽、374 高到窗口底；列表卡 430 × 88，图占 29.5%；
+   空状态插图 435 × 257 居中。侧边栏和顶栏不动，内容区自己上下滑（滚动条藏起来，第一屏和原稿一样），面板大小不变、里面上下滑。
+   字、图标、物品图、按钮照原稿的相对大小缩；原稿没有的内容（任务卡、配方行、自查）字号取 1440 宽时约 10px。
+   窗口窄于 840px（屏幕 ≤1180 一类）照原稿比例字会小于约 9.5px，保留 ⑪ 的排法。编辑器打开时窗口里只放编辑器：
+   窗口的边框、侧边栏和顶栏让开，编辑器底图就是 16:9 的窗口，和 03 节同宽同比例，「回到活动」、读作、状态栏、工具在外面。 */
+.dz-panel__body{display:grid;gap:10px;align-content:start;min-width:0}
+@container (min-width:840px){
+  [data-drafter] .sk__win{--sku:calc(100cqw / 1091);aspect-ratio:1091 / 614;grid-template-columns:calc(193 * var(--sku)) minmax(0,1fr);grid-template-rows:minmax(0,1fr);border-radius:calc(8 * var(--sku))}
+  /* 侧边栏：字标中线 27、菜单每行 36.4 一格（亮的一块 30 高、左右 15 / 14）、图标 17、字 11、底下两个图标中线离底 28 */
+  [data-drafter] .sk__side{gap:calc(28 * var(--sku));padding:calc(18 * var(--sku)) calc(14 * var(--sku)) calc(19 * var(--sku)) calc(15 * var(--sku));overflow:hidden}
+  [data-drafter] .sk__brand{gap:calc(10 * var(--sku));padding:0 0 0 calc(7 * var(--sku));font-size:calc(16 * var(--sku));line-height:calc(18 * var(--sku))}
+  [data-drafter] .sk__mark{width:calc(23 * var(--sku));height:calc(16 * var(--sku))}
+  [data-drafter] .sk__nav{gap:calc(6.4 * var(--sku))}
+  [data-drafter] .sk__item{gap:calc(10 * var(--sku));height:calc(30 * var(--sku));padding:0 calc(8 * var(--sku)) 0 calc(19 * var(--sku));border-radius:calc(4 * var(--sku));font-size:calc(11 * var(--sku))}
+  [data-drafter] .sk__item svg{width:calc(17 * var(--sku));height:calc(17 * var(--sku))}
+  [data-drafter] .sk__deco{gap:calc(10 * var(--sku))}
+  [data-drafter] .sk__caret{left:calc(6 * var(--sku));margin-top:calc(-3.5 * var(--sku));border-width:calc(3.5 * var(--sku)) 0 calc(3.5 * var(--sku)) calc(4.5 * var(--sku))}
+  [data-drafter] .sk__new{width:calc(20 * var(--sku));height:calc(20 * var(--sku));margin:0 calc(-4 * var(--sku)) 0 auto}
+  [data-drafter] .sk__new svg{width:calc(12 * var(--sku));height:calc(12 * var(--sku))}
+  [data-drafter] .sk__sub{height:calc(30 * var(--sku));padding:0 calc(8 * var(--sku)) 0 calc(24 * var(--sku));border-radius:calc(4 * var(--sku));font-size:calc(11 * var(--sku));line-height:calc(30 * var(--sku))}
+  [data-drafter] .sk__foot{justify-content:center;gap:calc(34 * var(--sku));padding:0}
+  [data-drafter] .sk__foot svg{width:calc(16 * var(--sku));height:calc(16 * var(--sku))}
+  [data-drafter] .sk__foot i{height:calc(18 * var(--sku))}
+  /* 顶栏 35 高：搜索框 641 × 24（左边 13），右边 Pro Mode、开关 33 × 16、铃铛 15、头像 24、名字，字 10.5 */
+  [data-drafter] .sk__main{grid-template-rows:calc(35 * var(--sku)) minmax(0,1fr);min-height:0}
+  [data-drafter] .sk__top{gap:calc(6 * var(--sku));min-height:0;padding:0 calc(9 * var(--sku)) 0 calc(13 * var(--sku))}
+  [data-drafter] .sk__search{flex:0 1 calc(641 * var(--sku));max-width:none;height:calc(24 * var(--sku));gap:calc(6 * var(--sku));padding:0 calc(8 * var(--sku));border-radius:calc(4 * var(--sku));font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .sk__search svg{width:calc(12 * var(--sku));height:calc(12 * var(--sku))}
+  [data-drafter] .sk__me{gap:calc(13 * var(--sku));font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .sk__pro{gap:calc(6 * var(--sku))}
+  [data-drafter] .sk__switch{width:calc(33 * var(--sku));height:calc(16 * var(--sku));border-radius:calc(3 * var(--sku))}
+  [data-drafter] .sk__switch::after{right:calc(2 * var(--sku));top:calc(2 * var(--sku));width:calc(12 * var(--sku));height:calc(12 * var(--sku));border-radius:calc(2.5 * var(--sku))}
+  [data-drafter] .sk__vr{height:calc(18 * var(--sku))}
+  [data-drafter] .sk__bell svg{width:calc(15 * var(--sku));height:calc(15 * var(--sku))}
+  [data-drafter] .sk__bell::after{width:calc(5 * var(--sku));height:calc(5 * var(--sku))}
+  [data-drafter] .sk__who{gap:calc(6 * var(--sku))}
+  [data-drafter] .sk__av{width:calc(24 * var(--sku));height:calc(24 * var(--sku))}
+  [data-drafter] .sk__who svg{width:calc(10 * var(--sku));height:calc(10 * var(--sku))}
+  /* 内容区：左 8、上 6、右 6，底下不留（面板一直到窗口底）；自己上下滑，滚动条藏起来 */
+  [data-drafter]:not([data-editing]) .sk__page{align-content:start;gap:0;min-height:0;padding:calc(6 * var(--sku)) calc(6 * var(--sku)) 0 calc(8 * var(--sku));overflow-y:auto;scrollbar-width:none}
+  [data-drafter] .sk__page::-webkit-scrollbar{display:none}
+  [data-drafter] .dz-ico svg{width:calc(16 * var(--sku));height:calc(16 * var(--sku))}
+  [data-drafter] .dz-ico--sm svg{width:calc(13 * var(--sku));height:calc(13 * var(--sku))}
+  [data-drafter] .dz-tag{padding:calc(1.5 * var(--sku)) calc(7 * var(--sku));border-radius:calc(2 * var(--sku));font-size:calc(9.5 * var(--sku))}
+  [data-drafter] .dz-create{gap:calc(5 * var(--sku));height:calc(28 * var(--sku));padding:0 calc(14 * var(--sku));border-radius:calc(4 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-create svg{width:calc(11 * var(--sku));height:calc(11 * var(--sku))}
+  /* ① 空状态：插图 435 × 257（前卡 301 × 173 在 0,43；后卡 273 × 248 在 20,2；右边的图 142 × 257），连标题、副标题、Create 一起上下左右居中 */
+  [data-drafter] .dz-void{min-height:calc(573 * var(--sku));padding:0}
+  [data-drafter] .dz-illo{width:calc(435 * var(--sku));height:calc(257 * var(--sku));margin-bottom:calc(11 * var(--sku));font-size:calc(12.75 * var(--sku))}
+  [data-drafter] .dz-illo p{gap:calc(10 * var(--sku))}
+  [data-drafter] .dz-illo__back,[data-drafter] .dz-illo__card,[data-drafter] .dz-illo__pic,[data-drafter] .dz-illo__pic::after{border-radius:calc(4 * var(--sku))}
+  [data-drafter] .dz-illo__back{left:calc(20 * var(--sku));top:calc(2 * var(--sku));width:calc(273 * var(--sku));height:calc(248 * var(--sku));padding:calc(11 * var(--sku)) calc(15 * var(--sku))}
+  [data-drafter] .dz-illo__back i{padding:calc(1.3 * var(--sku)) calc(5 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-illo__back span{margin-top:calc(6 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-illo__pic{top:0;right:0;width:calc(142 * var(--sku));height:calc(257 * var(--sku))}
+  [data-drafter] .dz-illo__pic::after{left:calc(15 * var(--sku));top:calc(44 * var(--sku));width:calc(142 * var(--sku));height:calc(171 * var(--sku))}
+  [data-drafter] .dz-illo__card{top:calc(43 * var(--sku));width:calc(301 * var(--sku));height:calc(173 * var(--sku));padding:calc(12 * var(--sku)) calc(15 * var(--sku)) calc(8 * var(--sku))}
+  [data-drafter] .dz-illo__card>p:first-child b{font-size:calc(13.4 * var(--sku))}
+  [data-drafter] .dz-illo__card>p:first-child i{padding:calc(2.5 * var(--sku)) calc(6.4 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-illo__card>span{margin-top:calc(4 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-illo__money b{font-size:calc(25.5 * var(--sku))}
+  [data-drafter] .dz-illo__money i{padding:calc(3.8 * var(--sku)) calc(7.7 * var(--sku));font-size:calc(12 * var(--sku))}
+  [data-drafter] .dz-illo__card>span+svg{height:calc(34 * var(--sku))}
+  [data-drafter] .dz-illo__card>span:nth-of-type(2){margin-top:calc(6 * var(--sku));font-size:calc(10.2 * var(--sku))}
+  [data-drafter] .dz-illo__axis{font-size:calc(10.2 * var(--sku))}
+  [data-drafter] .dz-void__h{font-size:calc(17 * var(--sku))}
+  [data-drafter] .dz-void__p{margin:calc(5 * var(--sku)) 0 calc(24 * var(--sku));font-size:calc(12.6 * var(--sku))}
+  /* ② 活动页：上一排 192 高（标题卡 548 + 缝 6 + 封面 330），下一排三块面板 211 / 330 / 330、374 高，缝 6 */
+  [data-drafter] .dz-camp{gap:calc(6 * var(--sku))}
+  [data-drafter] .dz-top{grid-template-columns:minmax(0,548fr) minmax(0,330fr);gap:calc(6 * var(--sku));height:calc(192 * var(--sku))}
+  [data-drafter] .dz-info{grid-template-rows:calc(40 * var(--sku)) calc(36 * var(--sku)) minmax(0,1fr);gap:0;padding:0;border-radius:calc(5 * var(--sku));overflow:hidden}
+  [data-drafter] .dz-info__top{align-items:center;gap:calc(10 * var(--sku));padding:calc(2 * var(--sku)) calc(13 * var(--sku)) 0}
+  [data-drafter] .dz-info__name{gap:calc(8 * var(--sku))}
+  [data-drafter] .dz-info__title{font-size:calc(24 * var(--sku))}
+  [data-drafter] .dz-info__tools{gap:calc(10 * var(--sku));padding:0}
+  [data-drafter] .dz-info__date{flex-wrap:nowrap;gap:calc(7 * var(--sku));padding:0 calc(13 * var(--sku));font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .dz-ask{grid-template-rows:auto minmax(0,1fr);gap:calc(8 * var(--sku));margin:0;padding:calc(9 * var(--sku)) calc(12 * var(--sku)) calc(7 * var(--sku));border-top:calc(3 * var(--sku)) solid var(--sk-page)}
+  [data-drafter] .dz-ask__box{display:grid}   /* 输入框不留行高的空 */
+  [data-drafter] .dz-field{height:calc(22 * var(--sku));padding:0 calc(8 * var(--sku)) 0 calc(26 * var(--sku));border-radius:calc(3 * var(--sku));font-size:calc(11 * var(--sku))}
+  [data-drafter] .dz-ico--ai{left:calc(8 * var(--sku))}
+  [data-drafter] .dz-ico--ai svg{width:calc(13 * var(--sku));height:calc(13 * var(--sku))}
+  [data-drafter] .dz-pick{gap:calc(6 * var(--sku));min-height:0;overflow-y:auto;scrollbar-width:thin}   /* 三张目标卡放不下就在条里上下滑 */
+  [data-drafter] .dz-goal{gap:calc(2 * var(--sku));padding:calc(4 * var(--sku)) calc(7 * var(--sku));border-radius:calc(3 * var(--sku))}
+  [data-drafter] .dz-goal__n{font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-goal__goal{font-size:calc(11 * var(--sku));line-height:1.3}
+  [data-drafter] .dz-cover{min-height:0;border-radius:calc(5 * var(--sku))}
+  [data-drafter] .dz-body{gap:calc(6 * var(--sku))}
+  [data-drafter] .dz-panels{grid-template-columns:minmax(0,211fr) minmax(0,330fr) minmax(0,330fr);grid-template-rows:calc(374 * var(--sku));gap:calc(6.5 * var(--sku));align-items:stretch}
+  /* 面板：标题行中线 24、标签行中线 57、内容从 78 开始；空的时候红虚线框 254 高，Create 18 高，提示字中线离框顶 225 */
+  [data-drafter] .dz-panel{grid-template-rows:auto auto minmax(0,1fr);gap:calc(14 * var(--sku));min-height:0;padding:calc(12 * var(--sku)) calc(12 * var(--sku)) 0;border-radius:calc(5 * var(--sku));overflow:hidden}
+  [data-drafter] .dz-panel__head{height:calc(24 * var(--sku))}
+  [data-drafter] .dz-panel__h{gap:calc(7 * var(--sku));font-size:calc(13 * var(--sku))}
+  [data-drafter] .dz-panel__tools{gap:calc(8 * var(--sku))}
+  [data-drafter] .dz-panel__tools svg{width:calc(13 * var(--sku));height:calc(13 * var(--sku))}
+  [data-drafter] .dz-tabs{gap:calc(16 * var(--sku));font-size:calc(10 * var(--sku));line-height:calc(14 * var(--sku))}
+  [data-drafter] .dz-panel__body{gap:calc(8 * var(--sku));min-height:0;padding-bottom:calc(12 * var(--sku));overflow-y:auto;scrollbar-width:thin}
+  [data-drafter] .dz-start{gap:calc(7 * var(--sku));align-content:end;height:calc(254 * var(--sku));min-height:0;padding:0 calc(10 * var(--sku)) calc(22 * var(--sku))}
+  [data-drafter] .dz-start__art{gap:calc(8 * var(--sku));width:calc(160 * var(--sku));margin-bottom:calc(18 * var(--sku))}
+  [data-drafter] .dz-start__art i{width:calc(30 * var(--sku));height:calc(30 * var(--sku))}
+  [data-drafter] .dz-create--sm{height:calc(18 * var(--sku));padding:0 calc(10 * var(--sku));font-size:calc(10 * var(--sku))}
+  [data-drafter] .dz-start__t{font-size:calc(10.5 * var(--sku))}
+  /* 填进去以后（原稿没有）：字取 1440 宽时约 10px */
+  [data-drafter] .dz-list{gap:calc(8 * var(--sku))}
+  [data-drafter] .dz-li{gap:calc(6 * var(--sku));padding:calc(9 * var(--sku));border-radius:calc(4 * var(--sku));font-size:calc(12.5 * var(--sku))}
+  [data-drafter] .dz-li__top,[data-drafter] .dz-rc{gap:calc(8 * var(--sku))}
+  [data-drafter] .dz-li__id{font-size:calc(11 * var(--sku))}
+  [data-drafter] .dz-plat{padding:calc(1 * var(--sku)) calc(6 * var(--sku));font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .dz-li__meta{gap:calc(4 * var(--sku)) calc(10 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-li__meta .dz-item{gap:calc(5 * var(--sku))}
+  [data-drafter] .dz-art--xs{width:calc(20 * var(--sku));height:calc(20 * var(--sku))}
+  [data-drafter] .dz-art--rc{width:calc(38 * var(--sku));height:calc(38 * var(--sku));padding:calc(3 * var(--sku))}
+  [data-drafter] .dz-rc__name strong{font-size:calc(13 * var(--sku))}
+  [data-drafter] .dz-hint{font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .dz-gifts{gap:calc(12 * var(--sku)) calc(6 * var(--sku))}
+  [data-drafter] .dz-gift{gap:calc(5 * var(--sku))}
+  [data-drafter] .dz-art--gift{width:calc(60 * var(--sku));height:calc(60 * var(--sku));padding:calc(6 * var(--sku))}
+  [data-drafter] .dz-gift__n{font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-panel .dz-note{font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .dz-acts{gap:calc(5 * var(--sku))}
+  [data-drafter] .dz-panel .dz-acts .studio__btn{min-height:calc(26 * var(--sku));padding:calc(3 * var(--sku)) calc(8 * var(--sku));font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-panel .dz-edit{gap:calc(6 * var(--sku)) calc(10 * var(--sku));padding:calc(8 * var(--sku));border-radius:calc(6 * var(--sku))}
+  [data-drafter] .dz-panel .dz-edit .studio__hint,[data-drafter] .dz-panel .studio__stepper .studio__lbl,[data-drafter] .dz-panel .studio__stepper b{font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-panel .studio__stepper .studio__btn{min-width:calc(26 * var(--sku));min-height:calc(26 * var(--sku));font-size:calc(12 * var(--sku))}
+  /* 面板下面：自查、重新检查、为什么这样配（内容区往下滑才看到） */
+  [data-drafter] .dz-more{gap:calc(6 * var(--sku));margin-bottom:calc(6 * var(--sku))}
+  [data-drafter] .dz-more .dz-block{gap:calc(8 * var(--sku));padding:calc(12 * var(--sku)) calc(14 * var(--sku));border-radius:calc(5 * var(--sku))}
+  [data-drafter] .dz-more .dz-block__title{font-size:calc(13 * var(--sku))}
+  [data-drafter] .dz-more .dz-checks,[data-drafter] .dz-more .dz-why,[data-drafter] .dz-more .dz-findings{gap:calc(6 * var(--sku));font-size:calc(12.5 * var(--sku))}
+  [data-drafter] .dz-more .dz-check,[data-drafter] .dz-more .dz-finding{padding:calc(7 * var(--sku)) calc(10 * var(--sku));border-radius:calc(6 * var(--sku))}
+  [data-drafter] .dz-more .dz-check__k,[data-drafter] .dz-more .dz-finding__rule,[data-drafter] .dz-more .meta{font-size:calc(11 * var(--sku))}
+  /* ③ 活动列表：左 12、右 14；组标题中线 18.5、Create 61 × 19；卡片 430 × 88、缝 12，右边的图 29.5%，名字中线离卡顶 25、日期 48 */
+  [data-drafter] .dz-campaigns{gap:calc(6 * var(--sku));margin:calc(6 * var(--sku)) calc(8 * var(--sku)) 0 calc(4 * var(--sku))}
+  [data-drafter] .dz-list__head{gap:calc(12 * var(--sku));height:calc(19 * var(--sku))}
+  [data-drafter] .dz-list__h{gap:calc(5 * var(--sku));font-size:calc(13 * var(--sku))}
+  [data-drafter] .dz-list__head .dz-create{height:calc(19 * var(--sku));padding:0 calc(9 * var(--sku));font-size:calc(10.5 * var(--sku))}
+  [data-drafter] .dz-ccs{gap:calc(12 * var(--sku))}
+  [data-drafter] .dz-cc{grid-template-columns:minmax(0,1fr) 29.5%;height:calc(88 * var(--sku));min-height:0;border-radius:calc(5 * var(--sku))}
+  [data-drafter] .dz-cc__text{gap:calc(9 * var(--sku));padding:calc(16 * var(--sku)) calc(8 * var(--sku)) 0 calc(19 * var(--sku))}
+  [data-drafter] .dz-cc__head{gap:calc(5 * var(--sku)) calc(8 * var(--sku))}
+  [data-drafter] .dz-cc__name{font-size:calc(11.5 * var(--sku))}
+  [data-drafter] .dz-cc__when{font-size:calc(10 * var(--sku))}
+  [data-drafter] .dz-cc .dz-tag{padding:calc(1 * var(--sku)) calc(8 * var(--sku));font-size:calc(9.5 * var(--sku))}
+  /* 编辑器开着：窗口的边框、侧边栏、顶栏让开，编辑器自己的 16:9 底图就是窗口，和 03 节同宽同比例 */
+  [data-drafter][data-editing] .sk__win,[data-drafter][data-editing] .sk__main,[data-drafter][data-editing] .sk__page{display:contents}
+  [data-drafter][data-editing] .sk__top{display:none}
+}
+
 /* ========== 以下两段来自审核卡 20261118-008（手机条修法对比，本人选 A），原样取自 04-shared/qa/smt-2026-11-17-手机条修法对比/覆盖样式-A.css ========== */
 
 /* ---------- 方案 A：手机条在手机宽度下折成两列，不再左右滑（2026-11-17 修法对比） ----------

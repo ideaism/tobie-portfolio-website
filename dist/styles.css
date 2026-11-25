@@ -1295,6 +1295,7 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
 [data-drafter] .dz-ask__box:focus-within{box-shadow:inset 0 0 0 1px var(--sk-black)}
 [data-drafter] .dz-field{display:block;width:100%;height:100%;min-height:0;padding:calc(7 * var(--k)) calc(10 * var(--k)) calc(7 * var(--k)) calc(27 * var(--k));border:0;border-radius:inherit;background:transparent;font:inherit;font-size:calc(11 * var(--k));font-weight:500;line-height:1.45;color:var(--sk-black);resize:none;overflow:auto;scrollbar-width:none;cursor:text}
 [data-drafter] .dz-field::-webkit-scrollbar{display:none}
+[data-drafter] .dz-field{field-sizing:content;height:auto}   /* 手机宽度：长句子（英文）把灰框撑高，不藏在框里滚 */
 [data-drafter] .dz-ico--ai{top:calc(9 * var(--k));left:calc(9 * var(--k));transform:none}
 [data-drafter] .dz-ico--ai svg{width:calc(12 * var(--k));height:calc(12 * var(--k))}
 /* ② 页签上的数字 */
@@ -1356,7 +1357,7 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
 [data-drafter] .dz-panel--items .dz-note,[data-drafter] .dz-panel--recipes .dz-hint{margin-top:calc(4 * var(--k))}
 /* ⑤ 空面板插图 */
 [data-drafter] .dz-start{position:relative;height:calc(254 * var(--ka));min-height:0;align-content:end;gap:calc(7 * var(--ka));padding:0 10px calc(22 * var(--ka))}
-[data-drafter] .dz-start__art{position:absolute;top:0;left:50%;display:block;width:calc(306 * var(--ka));height:calc(200 * var(--ka));margin:0 0 0 calc(-153 * var(--ka))}
+[data-drafter] .dz-start__art{position:absolute;top:0;left:50%;display:block;pointer-events:none;width:calc(306 * var(--ka));height:calc(200 * var(--ka));margin:0 0 0 calc(-153 * var(--ka))}
 [data-drafter] .dz-start__art--missions{width:calc(185 * var(--ka));margin-left:calc(-92.5 * var(--ka))}
 [data-drafter] .dz-start__art--recipes{width:calc(307 * var(--ka));margin-left:calc(-153.5 * var(--ka))}
 .dz-disc{position:absolute;left:calc((var(--x) - var(--d) / 2) * var(--ka));top:calc((var(--y) - var(--d) / 2) * var(--ka));display:grid;place-items:center;width:calc(var(--d) * var(--ka));height:calc(var(--d) * var(--ka));border-radius:50%;background:#fff;box-shadow:0 0 0 1px #F3E4E4,0 calc(2 * var(--ka)) calc(6 * var(--ka)) rgba(0,0,0,.09)}
@@ -1400,6 +1401,7 @@ button.sk__deco:focus-visible,.sk__sub:focus-visible{outline:2px solid var(--sk-
   [data-drafter] .dz-camp{--k:var(--sku);--ka:var(--sku)}
   [data-drafter] .dz-ask{grid-template-rows:calc(24.3 * var(--sku)) minmax(0,1fr);gap:calc(12 * var(--sku));padding:calc(12 * var(--sku))}
   [data-drafter] .dz-ask__box{min-height:0}
+  [data-drafter] .dz-field{field-sizing:fixed;height:100%}
   [data-drafter] .dz-tabs{line-height:calc(14 * var(--sku))}
   [data-drafter] .dz-panel__body{overflow-x:hidden}
   [data-drafter] .dz-start{padding:0 calc(10 * var(--sku)) calc(22 * var(--sku))}

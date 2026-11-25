@@ -1576,7 +1576,7 @@ function drafterLab(root) {
     c.addEventListener('click', e => {
       if (kind === 'recipes') {
         if (touchy) {
-          if (tap.id === id && e.timeStamp - tap.at < 450) { tap = { id: null, at: 0 }; openEditor(id); return; }
+          if (tap.id === id && e.timeStamp - tap.at < 450) { tap = { id: null, at: 0 }; if (opened.recipes !== id) toggle(kind, id, c); openEditor(id); return; }   // like the mouse: the way back lands on this recipe's card
           tap = { id, at: e.timeStamp };
         } else if (e.detail > 1) return;   // the second click of a double-click: the card stays open and the editor opens (dblclick)
       }

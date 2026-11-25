@@ -425,6 +425,20 @@ PlayBook
   - 02 节审核中心小原型：去掉标题「卡顶上多了一行：还剩几张。」和 Tobie 的注释「第 1 版我钉了两处……换到手机宽看第 2 版。」（中英都去），没补别的句子。右栏只剩宽度切换和两个工具按钮，`dist/styles.css` 的 `.rv__side` 改成两列两头对齐；手机宽本来就是一列。没有测试断言这两句。
   - 封面小样只是小样，网站封面没换（`build.py` `matrix_cover`、`fig-who-waits`、sources 和 manifest 都没动）。源文件 `05-agent-matrix/portfolio/figures/src/cover-sample.mjs`，不在 `prepare_assets` 的 `JOBS` 里；出图和首页卡片示意在 `05-agent-matrix/portfolio/cards/pics/15-*`。
 
+## 2026-11-25：Agent Matrix 封面换成四个机器人（只合到本机，没部署、没推送）
+
+- 依据：卡 20261125-007 第 4 版本人选 A（小样 1：笔记本居中，四个机器人连线）。前三版的打回意见和每版改了什么写在交接单 `../05-agent-matrix/portfolio/handoff.md` 第 12 节。
+- 图从哪来：
+  - 底图：Codex 生成（`05-agent-matrix/portfolio/figures/gen/k1-row-toys.png`，提示词 `prompts/k1-row-toys.txt`，出图记录 `k1-row-toys.log` 里有和 Codex 原图一致的 SHA-256）。四个机器人、连线和中间的空位是生成的。
+  - 笔记本屏幕里的页面：本机网站的审核中心示例 `/demo/review-center/#/card/demo-04`，按它在封面上的实际大小直接渲染（1200×750 视口，设备像素比 0.933333，出图 = 屏幕的物理像素），一比一放进去，没有缩放。只有「示例项目」，没有真实卡片。
+  - 四个名字标签（Claude、Gemini、Codex、DeepSeek）和笔记本外壳是合成页里画的 HTML，不是生成的。
+  - 合成页：`05-agent-matrix/portfolio/figures/gen/compose-小样v4.html`（页面截图在同目录 `pages-v4/`），1200×788 两倍出图。正式版就是小样 1 原图，另存一份为 `figures/gen/cover-robots-正式版.png`。
+- 进网站：`sources/work/agent-matrix/cover-robots.png`（2400×1576，私有备份 `04-shared/网站原图/work/agent-matrix/`）；`tools/prepare_assets.py` 的 `JOBS` 加 `agent-matrix/cover-robots`（最大宽 2400，质量 86，不缩）。`build.py` 的 `matrix_cover()` 换成这一张；首页卡片和案例页开头共用。
+- 标签：`PROJECTS` 和 `CASE_HERO` 的 agent-matrix 换成 `cover-ill`（「原始界面 + 生成插画」/ Original UI + AI illustration），说明改成「Agent Matrix · 四个模型连到审核中心」/ “Agent Matrix · four models wired into the review center”。
+- 中英文用同一张：审核中心示例只有中文界面（没有 `/en/demo/`，`app.js` 不分语言），所以英文页的封面屏幕里也是中文页面。卡上原定「英文版换英文页面截图」没做到，验收卡里写明了。
+- 没动：`fig-who-waits` 还在原来那节当正文图；正文、其他封面、分享图（`share-zh.jpg` / `share-en.jpg`）都没换。
+- 证据：`~/其他任务/claudestudy/evidence/2026-11-25-agent-matrix-封面换上/`（中英首页卡片 1440、首页精选前两张 1440、中英案例页开头 1440、中文首页手机 375）；`verify.py` 14 页、192 个本地地址，`errors: []`。
+
 ## 2026-11-25：PlayBook 起草助手的框架照原稿比例，只缩字和图（交接单 ⑫，只合到本机，没部署、没推送）
 
 - 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑫ 起草助手：框架照原稿比例，只缩字和图」；本人原话「不要更改原本划分的框架大小，可以调整文字和图片的大小」。尺寸从 ⑪ 那三张原稿里量（窗口按 1091 宽折算），数写在交接单 ⑫ 的 publisher 核对里。

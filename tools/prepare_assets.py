@@ -226,6 +226,9 @@ JOBS = {
     'agent-matrix/fig-who-waits-en': (SRC / 'work' / 'agent-matrix' / 'fig-who-waits-en.png', 1800, 88),
     'agent-matrix/fig-trust-zh': (SRC / 'work' / 'agent-matrix' / 'fig-trust-zh.png', 1800, 88),
     'agent-matrix/fig-trust-en': (SRC / 'work' / 'agent-matrix' / 'fig-trust-en.png', 1800, 88),
+    # 2026-11-25（卡 20261125-007 第 4 版选 A）：首页和案例页封面。Codex 生成的底图 + 审核中心示例页（按封面上的大小直接渲染）+ 四个名字标签，
+    # 合成页在 05-agent-matrix/portfolio/figures/gen/compose-小样v4.html；2400 宽原图，不缩放
+    'agent-matrix/cover-robots': (SRC / 'work' / 'agent-matrix' / 'cover-robots.png', 2400, 86),
     # 2026-11-21（交接单第 9 节）：审核中心小原型的截图，1440 宽 2 倍图。03 节一张整卡、07 节原型载入前的封面
     'agent-matrix/review-card': (SRC / 'work' / 'agent-matrix' / 'review-card.png', 2880, 86),
     'agent-matrix/review-demo-poster': (SRC / 'work' / 'agent-matrix' / 'review-demo-poster.png', 2000, 86),

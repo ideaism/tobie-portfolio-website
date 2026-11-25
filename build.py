@@ -140,7 +140,8 @@ PROJECTS = [
   'title': ['我先设计 AI 怎么问我，再用它改这份作品集。', 'I designed how AI asks me. Then I used it to rework this portfolio.'],
   'summary': CASES['agent-matrix']['deck'],
   'chips': [['问题定义', '协作流程', '复盘'], ['Problem framing', 'Workflow design', 'Retrospective']],
-  'label': ['Agent Matrix · 当时在等的六张卡', 'Agent Matrix · the six cards that were waiting'], 'prov': 'diagram'},
+  # 2026-11-25 封面换成四个机器人连到审核中心（卡 20261125-007 选 A），标签跟着换
+  'label': ['Agent Matrix · 四个模型连到审核中心', 'Agent Matrix · four models wired into the review center'], 'prov': 'cover-ill'},
  {'slug': 'qingju', 'project': 'qingju', 'name': 'Qingju · 青桔', 'year': '2021',
   'type': ['青桔（滴滴）商业委托 · 训练营结项', 'Commercial brief from Qingju (DiDi) · Programme capstone'],
   'title': ['让成长体系，回到骑行本身。', 'Make growth part of the ride.'],
@@ -230,13 +231,14 @@ def collage(slug, lang):
     return ''
 
 def matrix_cover(lang):
-    """Agent Matrix 的临时封面（2026-11-17）：一张已经通过的图平放，整张显示，中英文页各用各的。
-    本人在卡 20261117-020 第 3 版上说封面不要全用一种风格（深色舞台那种只给 PlayBook），首页也要改版（卡 20261117-025），
-    所以这里不做新摆法；等首页改版定了、三张界面截图到了（卡 20261115-005）再正式做。"""
-    name = 'agent-matrix/fig-who-waits-' + ('zh' if lang == 'zh' else 'en')
+    """Agent Matrix 封面（2026-11-25，卡 20261125-007 第 4 版本人选 A）：Codex 生成的底图（四个机器人分在左右两边），
+    中间一台正放的笔记本，屏幕里是审核中心示例页（按封面上的大小直接渲染，不裁不压）；名字标签是合成时加的。
+    审核中心只有中文界面，中英文页用同一张。合成页：05-agent-matrix/portfolio/figures/gen/compose-小样v4.html"""
+    name = 'agent-matrix/cover-robots'
     w, h = MANIFEST[name]
-    return (f'<div class="collage" style="--bg:#FFFFFF;aspect-ratio:{w}/{h}">'
-            + img(name, t('图：当时在等的六张卡，三张可以先走，三张仍然要我', 'Diagram: the six cards that were waiting — three can go ahead, three still need me', lang)).replace('<img', '<img style="left:0;top:0;width:100%;border-radius:0;box-shadow:none"')
+    return (f'<div class="collage" style="--bg:#F2EFE9;aspect-ratio:{w}/{h}">'
+            + img(name, t('插画：Claude、Gemini、Codex、DeepSeek 四个机器人分在两边，各拉一根线连到中间笔记本上的审核中心页面',
+                          'Illustration: four robots — Claude, Gemini, Codex and DeepSeek — on either side, each wired to the review center open on a laptop in the middle', lang)).replace('<img', '<img style="left:0;top:0;width:100%;border-radius:0;box-shadow:none"')
             + '</div>')
 
 def cover(slug, lang):
@@ -387,7 +389,7 @@ def home(lang):
 
 # ------------------------------------------------------------------ case
 CASE_HERO = {
-    'agent-matrix': ('diagram', ['Agent Matrix · 当时在等的六张卡', 'Agent Matrix · the six cards that were waiting']),
+    'agent-matrix': ('cover-ill', ['Agent Matrix · 四个模型连到审核中心', 'Agent Matrix · four models wired into the review center']),
     'qingju': ('cover-ill', ['青桔 · 寻宝地图与路线讨论圈 · 2021', 'Qingju · treasure map and route discussion · 2021']),
     'playbook': ('original', ['PlayBook · Studio 活动页 + App 首页与任务页', 'PlayBook · Studio campaign page + App home and missions']),
     'smt': ('cover-gen', ['兴业 SMT · 项目卡', 'Industrial Securities SMT · project card']),

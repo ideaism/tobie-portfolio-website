@@ -1248,14 +1248,15 @@ a.tt-card:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px
 /* 卡片页滑动（2026-11-25，作品集卡 20261126-005 本人打回：「滑动时顶部要贴在顶部」「整页跟着滑」「右边上方留在上面」）：
    电脑上（宽于 900）最上面那行小字导航（还剩几张、上一张、下一张）贴在顶上，往下滑过一点才露出下沿那条线；
    右边那栏（背景、你定了以后、记录）贴在它下面跟着走，比一屏矮就整栏不动，比一屏高就在栏里自己滑，滑到头不带着整页走。
-   手机上本来就有贴顶的 .cardnav，右边那栏排在下面，都不动。作品集小原型（dist/demo/review-center/style.css）抄同一段 */
+   手机上本来就有贴顶的 .cardnav，右边那栏排在下面，都不动。
+   只管卡片页那行：进度页的返回链接也叫 .crumb（.p-crumb），贴顶会盖住进度页自己贴顶的 Tab 行（tests P24）。作品集小原型（dist/demo/review-center/style.css）抄同一段 */
 @media (min-width: 901px) {
-  .crumb { position: sticky; top: 0; z-index: 12; padding-top: 10px; margin-top: -10px; background: var(--bg); }
+  .crumb:not(.p-crumb) { position: sticky; top: 0; z-index: 12; padding-top: 10px; margin-top: -10px; background: var(--bg); }
   .sec { scroll-margin-top: 56px; }
   .cols:not(.solo) > .col-side { position: sticky; top: 56px; max-height: calc(100vh - 56px - var(--decide-h, 140px) - 56px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; } /* 减的第二个 56px 是卡片底下那段留白：滑到底时这栏不被推到顶上那行下面 */
 }
-@media (min-width: 901px) and (max-width: 1140px) { body[data-nav="collapsed"] .crumb { padding-left: 32px; } } /* 收起菜单时左上角那颗按钮浮在这里 */
+@media (min-width: 901px) and (max-width: 1140px) { body[data-nav="collapsed"] .crumb:not(.p-crumb) { padding-left: 32px; } } /* 收起菜单时左上角那颗按钮浮在这里 */
 @supports (animation-timeline: scroll()) {
-  @media (min-width: 901px) { .crumb { animation: crumb-line linear both; animation-timeline: scroll(root); animation-range: 0 24px; } }
+  @media (min-width: 901px) { .crumb:not(.p-crumb) { animation: crumb-line linear both; animation-timeline: scroll(root); animation-range: 0 24px; } }
   @keyframes crumb-line { to { box-shadow: 0 1px 0 var(--line); } }
 }

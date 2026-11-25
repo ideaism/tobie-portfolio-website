@@ -133,12 +133,12 @@ FIGURES = {
    'caption': ['上：客户方需求文档里的 App 结构。下：我按粉丝一次回访整理的参与链路，每个节点对应一组 App 中保真线框。', 'Top: the app structure in the client’s requirements. Bottom: the participation loop I organised around one fan visit; each node maps to a set of mid-fidelity wireframes.']},
   # 功能架构图：内容是 2024 年秋整理作品集时画的；2026-11-17 照原图重画，只换呈现方式（卡 20261117-001），中英文各一张
   {'kind': 'image', 'src': 'playbook/feature-map-zh', 'src_en': 'playbook/feature-map-en', 'prov': 'research', 'project': 'playbook',
-   'label': ['App 功能架构图 · 2024 年整理', 'App feature map · compiled in 2024'],
+   'label': ['App 功能架构图', 'App feature map'],
    'alt': ['功能树：主页面、物品百科、物品合成、社区、任务五个入口，以及个人主页、搜索、通知，各自展开到下一级页面', 'A feature tree: Home, Item catalogue, Crafting, Community and Missions, plus Profile, Search and Notifications, each expanded to its sub-pages'],
-   'caption': ['App 的功能架构：五个入口，加上个人主页、搜索和通知。2024 年秋整理。', 'The app’s feature map: five entry points plus profile, search and notifications. Compiled in autumn 2024.']},
+   'caption': ['App 的功能架构：五个入口，加上个人主页、搜索和通知。', 'The app’s feature map: five entry points plus profile, search and notifications.']},
  ],
  # 2026-11-24（交接单 ⑧）：起草助手从第 11 节挪到 04（没有图，演示挂在 prototypes.py section_demo），原 4–10 键顺延为 5–11
- ('playbook', 5): [
+ ('playbook', 4): [
   # 2026-11-16 第三批：加熔炉废案稿。它是 390×1080 的长屏，熔炉在最底部，不能裁成一屏高，放在 'whole'（整张显示），
   # 第三项 1 是它在这一排里的位置：早期 UI 之后、配方列表之前。五张排一排。
   {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 5,
@@ -147,13 +147,13 @@ FIGURES = {
    'whole': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace'], 1)],
    'caption': ['早期视觉确立了方向。我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'The early UI set a visual direction. I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.']},
  ],
- ('playbook', 6): [
+ ('playbook', 5): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
    'label': ['创作者上下文与搜索', 'Creator context and search'],
    'items': [('playbook/app-home', ['首页：上下文与进度', 'Home: context + progress']), ('playbook/app-inventory', ['背包：相关物品', 'Inventory: related items']), ('playbook/app-search', ['全局搜索：分类筛选', 'Global search: categories']), ('playbook/app-search-creators', ['搜索结果：创作者', 'Results: creators'])],
-   'caption': ['日常任务保留创作者上下文；2023 年 10 月的评审后，搜索改为跨社区的全局入口。', 'Everyday tasks keep the creator context; after the October 2023 review, search became a global, cross-community entry point.']},
+   'caption': ['日常任务保留创作者上下文；评审后，搜索改为跨社区的全局入口。', 'Everyday tasks keep the creator context; after a product review, search became a global, cross-community entry point.']},
  ],
- ('playbook', 7): [
+ ('playbook', 6): [
   # 2026-11-16（卡 20261115-026 选 B）：奖励弹窗是 330×453 的弹窗局部，不是整屏，从 items 挪到 partials：
   # 不加 screen 类，按原比例完整显示（见 build.py figure_html）。第三批换成 2 倍图（660×906），'cap' 把显示宽度上限留在 330；
   # 首页和弹窗之间加一张「领取之后」。
@@ -165,7 +165,7 @@ FIGURES = {
    'caption': ['日常的小进度贴在任务旁边；只有值得停下来的奖励才用弹窗和一次明确的领取。', 'Routine progress stays next to the task; only a reward worth pausing for gets a dialog and a deliberate claim.']},
  ],
  # 2026-11-16 第三批：07 节加展示柜四个状态；新增 08「交易与交换」，原 08「交付与反思」顺延为 09
- ('playbook', 8): [
+ ('playbook', 7): [
   # 「推荐选择」那张是 390×770，不是整屏，放在 'whole'（不套竖屏框，按原比例整张显示），第三项 1 是它在这一排里的位置
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
    'label': ['展示柜的四个状态', 'Four showcase states'],
@@ -173,7 +173,7 @@ FIGURES = {
    'whole': [('playbook/app-showcase-pick', ['推荐选择：从背包里推荐', 'Choosing: recommended from the inventory'], 1)],
    'caption': ['展示柜从空架子开始：点“一键展示”，系统从背包里推荐物品，选好后出现在个人主页上；别人来访时还能看到共同关注的创作者。', 'The showcase starts as an empty shelf. “One-click Show” recommends items from the inventory; once chosen they appear on the profile, and visitors also see the creators you both follow.']},
  ],
- ('playbook', 9): [
+ ('playbook', 8): [
   # 交易市场和以物换物各四屏，1 倍图（390 宽），2 倍图以后再换。
   # 七张 390×868 的屏只比竖屏框（390:844）高 3%，但底部正好是操作按钮（Refuse / Accept、List、Sure…），
   # 套竖屏框会把按钮切掉一半，所以放在 'whole' 里整张显示；只有 390×1203 的社区首页照常裁成一屏高。
@@ -196,7 +196,7 @@ FIGURES = {
  # 按 2 倍原图（sources/work/playbook/studio-remix-*@2x.png，2880 宽）上量的像素：
  #   新建挑战、挑战页：顶部搜索栏到 y=96（下沿那条线在 y=94–95），左侧菜单到 x=512（右边那条竖线在 x=510–511）；
  #   作品详情：没有左侧菜单；顶部条到 y=96（白底在 y=95 结束），右侧「Message From The Creator」栏从 x=2238 起（2880−2238=642）。
- ('playbook', 10): [
+ ('playbook', 9): [
   {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
    'label': ['粉丝挑战列表', 'Fan challenges'],
    'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']},
@@ -216,7 +216,7 @@ FIGURES = {
    'label': ['创作者联名', 'Creator collaborations'],
    'caption': ['已联名的物品按合作的创作者分组，另有待审批和收到的申请两个页签。', 'Collaborated items grouped by partner creator, with tabs for pending approvals and incoming requests.']},
  ],
- ('playbook', 11): [
+ ('playbook', 10): [
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],
@@ -391,7 +391,7 @@ FIGURES = {
    'label': ['一套备好的比较测试', 'A comparison test, printed and ready'],
    'caption': ['评估材料是齐的：参与者说明、观察表、评分表、NFC 读取测试表、三种顺序的卡片和选择矩阵。获批的伦理路线只覆盖关于已有习惯的访谈，所以这套测试留到下一轮。', 'The evaluation kit is complete — participant instructions, an observer sheet, a rating sheet, an NFC read-test sheet, sequence cards in three orders and a selection matrix. The approved ethics route covered interviews about existing habits, so this test is for the next round.']},
   {'kind': 'image', 'src': 'fridge/penguin-motion', 'prov': 'original', 'project': 'fridge', 'pad': True,
-   'label': ['展览动态研究 · 2026 年 9 月', 'Exhibition motion study · September 2026'],
+   'label': ['展览动态研究', 'Exhibition motion study'],
    'caption': ['角色的下一步：把邀请与确认做成触觉和动态反馈。', 'Next for the character: turning invite and acknowledge into tactile and motion feedback.']},
  ],
  # ---------------- Agent Matrix ----------------
@@ -426,11 +426,11 @@ FIGURES = {
  ('agent-matrix', 3): [
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
    'label': ['PlayBook 配方编辑', 'PlayBook recipe editor'],
-   'items': [('agent-matrix/ba-playbook-before', ['改之前 · 11-15', 'Before · Nov 15'], 'agent-matrix/ba-playbook-before-en'), ('agent-matrix/ba-playbook-after', ['改之后', 'After'], 'agent-matrix/ba-playbook-after-en')],
+   'items': [('agent-matrix/ba-playbook-before', ['改之前', 'Before'], 'agent-matrix/ba-playbook-before-en'), ('agent-matrix/ba-playbook-after', ['改之后', 'After'], 'agent-matrix/ba-playbook-after-en')],
    'caption': ['原来下面是固定的六步，现在没有固定顺序。', 'There used to be six fixed steps below; now there is no set order.']},
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
    'label': ['首页四张封面', 'The four home covers'],
-   'items': [('agent-matrix/ba-covers-before', ['改之前 · 11-17', 'Before · Nov 17'], 'agent-matrix/ba-covers-before-en'), ('agent-matrix/ba-covers-after', ['改之后 · 11-18', 'After · Nov 18'], 'agent-matrix/ba-covers-after-en')],
+   'items': [('agent-matrix/ba-covers-before', ['改之前', 'Before'], 'agent-matrix/ba-covers-before-en'), ('agent-matrix/ba-covers-after', ['改之后', 'After'], 'agent-matrix/ba-covers-after-en')],
    'caption': ['PlayBook 的摆法留着，另外三张各换一种。', 'PlayBook keeps its layout; the other three each get their own.']},
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
    'label': ['兴业 SMT 案例页顶部', 'Top of the SMT case page'],
@@ -438,7 +438,7 @@ FIGURES = {
    'caption': ['顶部多了两个标签页，兴业和大通各占一个。', 'Two tabs at the top now, one for Industrial Securities and one for Daton.']},
   {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
    'label': ['The Commons Fridge 的一节', 'A section of The Commons Fridge'],
-   'items': [('agent-matrix/ba-fridge-before', ['停下的那一版 · 11-18', 'The version that stopped · Nov 18'], 'agent-matrix/ba-fridge-before-en'), ('agent-matrix/ba-fridge-after', ['之后上线的 3D 一节 · 11-24', 'The 3D section that went live · Nov 24'], 'agent-matrix/ba-fridge-after-en')],
+   'items': [('agent-matrix/ba-fridge-before', ['停下的那一版', 'The version that stopped'], 'agent-matrix/ba-fridge-before-en'), ('agent-matrix/ba-fridge-after', ['之后上线的 3D 一节', 'The 3D section that went live'], 'agent-matrix/ba-fridge-after-en')],
    'caption': ['停下的那一版只有文字；之后冰箱本身成了界面。', 'The version that stopped was text only; afterwards the fridge itself became the interface.']},
  ],
  # 2026-11-23（交接单第 10 节）：撤回 8 秒。都裁自示例数据截图（卡上有「示例卡片」）；'before_demo'：放在正文后、原型（批次图）前。2026-11-25 从旧 07 挪到新 04

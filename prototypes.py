@@ -7,9 +7,12 @@ Rules (docs/design-system.md §5):
   3. Notes are Tobie's annotations, visually separate from the product.
   4. Every demo carries a provenance line.
   5. The three PlayBook Studio demos rebuilt in code (STUDIO, rule 8) may be
-     operated freely inside stated limits; they say they are a 2026 rebuild,
-     take their interface from the source, and invent no data.
-  6. The campaign drafting assistant (PlayBook 04, DRAFTER; was 11 until 2026-11-24) is not a rebuild:
+     operated freely inside stated limits; they say they are rebuilt from the
+     source (REBUILT, no year since 2026-11-25), take their interface from the
+     source, and invent no data.
+  6. The campaign drafting assistant (DRAFTER) is off the page since 2026-11-25
+     (the owner asked for it; section_demo no longer routes to it). The code and
+     its tests stay so it can come back. When it was on the page it was not a rebuild:
      it is a new design concept from 2026 and says so (CONCEPT). Its creators,
      items and campaigns are fictional and come from one JSON file in
      02-playbook, read at build time; the page makes no request for it.
@@ -165,7 +168,8 @@ FLOWS = {
 #   * what you can do is free inside stated limits (STUDIO[...]['limits']);
 #   * nothing the source does not contain is made up: only two items have a
 #     detail view, and the demo says so.
-# Every demo says in its provenance line that it is a 2026 rebuild (REBUILT).
+# Every demo says in its provenance line that it is rebuilt from the source (REBUILT).
+# 2026-11-25（作品集理解成本优化方案 第 1 批，本人要求不写「2026 年用代码重做」）：去掉年份和「用代码重做」，只说按原稿还原。
 # Engine: dist/prototype.js (recipeRules, recipeLab, itemsLab, commentLab).
 
 LIVE_SIZE = [1440, 810]
@@ -175,9 +179,9 @@ def _live(clip, n):
     return f'/assets/work/playbook/live-{clip}-{n:02d}.webp'
 
 
-REBUILT = ['2026 年按原稿和当年录屏用代码重做，界面元素取自原稿',
-           'This was rebuilt in code in 2026 from the source design and the recordings of the time; the interface elements are taken from the source']
-REBUILT_TAG = ['2026 年用代码重做 · 界面取自原稿', 'Rebuilt in code, 2026 · interface from the source']
+REBUILT = ['按原稿和当年录屏还原，界面元素取自原稿',
+           'Rebuilt from the source design and the recordings of the time; the interface elements are taken from the source']
+REBUILT_TAG = ['按原稿还原 · 界面取自原稿', 'Rebuilt from the source · interface from the original']
 
 # One recipe as plain data: what is required, what is optional, and the chain of output groups.
 _HALF = {'require': ['crates', 'key'], 'optional': [],
@@ -192,13 +196,10 @@ STUDIO = {
   'tab': ['配方编辑', 'Recipe editor'],
   'label': ['PlayBook Studio · 配方编辑', 'PlayBook Studio · Recipe editor'],
   'title': ['自己搭一条合成配方', 'Build a crafting recipe yourself'],
-  'intro': ['没有固定顺序。左边八样物品随便拖进 Require、Optional、Output，放进去的可以再挪、再拿掉。',
-            'There is no fixed order. Drag any of the eight items on the left into Require, Optional or Output; anything placed can be moved again or taken out.'],
-  'how': [['拖：物品拖进三个栏；放进去的拖到别的栏、别的组，或者拖回左边物品库拿掉。', 'Drag: items go into the three areas; a placed item can be dragged to another area or group, or back to the library to remove it.'],
-          ['点：And / Or 点一下就切换；点一样放进去的物品，在画面下方改概率、调先后，或者把它那一组变成「几选一」（直接点那一组的边框也行）。', 'Click: And / Or toggles on a click; click a placed item to change its probability or order below the canvas, or to make its group “choose 1 out of N” (clicking the frame of the group does the same).'],
-          ['不拖也行：先点左边的物品，再点要放的栏，或者用画面下方的按钮。', 'No dragging needed: click an item on the left, then the area it goes to, or use the buttons below the canvas.']],
-  'note': ['当年想让创作者看得见的，就是这条规则本身：要交什么、能得到什么、几样里给哪样。所以它被画成能摆弄的积木，而不是一张表单。',
-           'What creators needed to see was the rule itself: what to hand in, what comes out, which one of several. That is why it is drawn as blocks to move around rather than as a form.'],
+  # 2026-11-25（优化方案第 1 批）：侧边说明卡只留三条短提示，去掉 intro 和注释，视线还给画布
+  'how': [['把物品拖进 Require / Optional / Output', 'Drag items into Require / Optional / Output'],
+          ['点 And / Or 切换，点物品改概率', 'Click And / Or to switch; click an item to set its odds'],
+          ['拖回左边就拿掉', 'Drag it back to the left to remove it']],
   'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。',
                  REBUILT[1] + ' (UX and UI are both my work).'],
   'still': [_live('recipe', 8), ['配方编辑器：Require 里有宝箱和钥匙，Output 里是手柄和两种颜料', 'Recipe editor: a crate and a key in Require; a gamepad and two paints in Output']],
@@ -277,13 +278,9 @@ STUDIO = {
   'tab': ['物品与关系网', 'Items and their web'],
   'label': ['PlayBook Studio · 物品与关系网', 'PlayBook Studio · Items and their relationship web'],
   'title': ['点开一件物品，看它连着什么', 'Open an item and see what it connects to'],
-  'intro': ['点物品库里的物品。纸鹤和红耳机有详情；关系网里的物品可以拖着摆，点一下能顺着线走到另一件。',
-            'Click items in the library. The paper crane and the red headphones have a detail view; items in the relationship web can be dragged around, and a click follows a line to the other item.'],
-  'how': [['点：纸鹤、红耳机打开详情；其余 32 件原稿没画详情，点了会直说。', 'Click: the paper crane and the red headphones open a detail view; the source drew none for the other 32, and the demo says so.'],
-          ['拖：关系网里的物品可以拖到别的位置，连线跟着走。', 'Drag: items in the web can be moved, and the lines follow.'],
-          ['顺着线走：在纸鹤的关系网里点红耳机，就到了红耳机；反过来也一样。红色竖条收起或展开右边的详情。', 'Follow a line: click the headphones in the crane’s web to get to the headphones, and back again. The red tab folds the detail panel away or brings it back.']],
-  'note': ['一件物品值不值得收，常常取决于它能换成什么、由什么换来。关系网把这层关系画在物品详情里，不用翻配方表。',
-           'Whether an item is worth keeping often depends on what it can become and what it comes from. The relationship web shows that inside the item detail, without opening the recipe list.'],
+  'how': [['点纸鹤或红耳机，打开详情', 'Click the paper crane or the red headphones to open the detail'],
+          ['拖关系网里的物品，连线跟着走', 'Drag items in the web; the lines follow'],
+          ['点线那头的物品，走到它的详情', 'Click the item at the other end of a line to go to it']],
   'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。',
                  REBUILT[1] + ' (UX and UI are both my work).'],
   'still': [_live('items', 2), ['物品库和纸鹤的详情：三档价格和一张关系网', 'The item library with the paper crane’s detail: three price tiers and a relationship web']],
@@ -338,13 +335,9 @@ STUDIO = {
   'tab': ['评论', 'Comments'],
   'label': ['PlayBook Studio · 二创投稿的评论', 'PlayBook Studio · Commenting on a remix submission'],
   'title': ['把意见落在画面的具体位置上', 'Pin a comment to a place on the image'],
-  'intro': ['在图上拖一个框，或者直接点一下，写一句话发出去。可以留好几个标记，圆点能拖到别处。',
-            'Drag a box on the image, or just click a spot, then write a line and send it. You can leave several markers, and each dot can be dragged somewhere else.'],
-  'how': [['拖框或点一下：圈出想说的地方，回复框贴着它弹出来。', 'Drag a box or click: mark the place you mean, and the reply box opens next to it.'],
-          ['发送：选区收成一个圆点，带着你写的话；点圆点收起或展开。', 'Send: the area collapses into a dot that carries your line; click the dot to fold or unfold it.'],
-          ['来回调：圆点可以拖到别的位置；画面下方的清单能逐个删掉，或者全部清掉。', 'Adjust: a dot can be dragged to another place; the list below the image removes markers one by one, or all at once.']],
-  'note': ['创作者审粉丝投稿时，想说的话要落在画面的具体位置上，而不是笼统地说「这张图」。',
-           'When a creator reviews a fan submission, a comment should land on a specific place in the image, not on “the picture” in general.'],
+  'how': [['在图上拖个框或点一下', 'Drag a box on the image, or click a spot'],
+          ['写一句，发送', 'Write a line and send it'],
+          ['圆点能拖，下面清单能删', 'Drag a dot to move it; delete it from the list below']],
   'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。你写的字只留在这一页，刷新就没了，不会上传。',
                  REBUILT[1] + ' (UX and UI are both my work). What you type stays on this page until it is reloaded; nothing is uploaded.'],
   'still': [_live('comments', 2), ['一张粉丝投稿的大图，图上有一个蓝色圆点和一条留言气泡', 'A large fan submission image with a blue dot and a comment bubble on it']],
@@ -410,9 +403,9 @@ def studio(key, lang):
   <p class="studio__read" data-read hidden></p>
   <div class="studio__bar"><div class="studio__controls" data-bar></div><p class="studio__status" data-status role="status"></p></div>
   <div class="studio__side">
-   <div class="proto__intro"><span class="label label--teal">{t('可以自由操作', 'Free to play with', lang)}</span><h3>{t(*d['title'], lang)}</h3><p>{t(*d['intro'], lang)}</p>
-    <ul class="studio__how">{how}</ul></div>
-   <div class="studio__right">{_note(t(*d['note'], lang), t('Tobie 的注释', 'Tobie’s note', lang))}
+   <div class="proto__intro"><h3>{t(*d['title'], lang)}</h3>
+    <ol class="studio__how">{how}</ol></div>
+   <div class="studio__right">
     <div class="proto__tools" data-tools><button type="button" class="tool-btn" data-action="reset">↺ {T('reset')}</button><button type="button" class="tool-btn" data-action="big" data-on="{T('small')}" data-off="{T('big')}" hidden>⤢ {T('big')}</button></div></div>
   </div>
  </div>
@@ -429,7 +422,7 @@ def live_set(lang):
     panels = ''.join(f'<div data-live-panel="{k}" {"hidden" if n else ""}>{studio(k, lang)}</div>' for n, k in enumerate(keys))
     return f'''<div class="liveset" data-liveset data-component="Rebuilt prototypes">
 <div class="liveset__head"><span class="label label--teal">{t('亲手试', 'Try it', lang)}</span>
-<p>{t('当年录屏里的三段交互，2026 年按原稿用代码重做了一遍：没有固定顺序，东西可以随便拖、来回调。原始录屏在下面，可以对照。', 'The three interactions from the original recordings, rebuilt in code in 2026 from the source: no fixed order, and things can be dragged and adjusted freely. The recordings themselves are below for comparison.', lang)}</p>
+<p>{t('三段交互按原稿还原，没有固定顺序，可以随便拖、来回调。原始录屏在下面。', 'Three interactions rebuilt from the source, in no fixed order: drag and adjust freely. The original recordings are below.', lang)}</p>
 <div class="clips__tabs" role="group" aria-label="{t('选择一段交互', 'Choose an interaction', lang)}">{buttons}</div></div>
 {panels}</div>'''
 
@@ -970,8 +963,8 @@ def section_demo(slug, number, lang):
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
     # 2026-11-16：PlayBook 前面插了一节「用户与动线」，Studio 从 02 顺延为 03，App 从 03 顺延为 04
     if slug == 'playbook' and number == 3: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
-    if slug == 'playbook' and number == 4: return drafter(lang)   # 2026-11-17 加在最后一节（交接单 ⑤）；2026-11-24 挪到 03 Studio 后面当 04（交接单 ⑧）
-    if slug == 'playbook' and number == 5: return flow('playbook-craft', lang, 'try-app')   # App 合成流：2026-11-24 从 04 顺延为 05
+    # 2026-11-25（优化方案第 1 批）：04 起草助手下线（drafter() 留着没删），原 05 App 成为 04
+    if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 7: return fridge_3d(lang, 'try')   # 2026-11-24（交接单 6h）：v1.8 外链原型撤掉，换成 07「3D 小样」里嵌本站打包的小样；原 08「原型与结果」并进 07
     # 2026-11-21：新 07「重新定义」（交接单第 9 节）放的是审核中心小原型和批次图。

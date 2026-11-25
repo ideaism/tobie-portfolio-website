@@ -18,6 +18,7 @@ from prototypes import CONCEPT, DRAFT_DATA, DRAFTER, REBUILT, REBUILT_TAG, STUDI
 from cases import CASES  # noqa: E402
 
 
+@unittest.skip('2026-11-25 起草助手已从 PlayBook 页面下线（本人要求，作品集理解成本优化方案第 1 批）；代码和数据留着，回到页面时去掉这一行')
 class DrafterTests(unittest.TestCase):
     def test_data_comes_from_the_one_file_in_02_playbook(self):
         self.assertEqual(DRAFT_DATA.parent.parent.name, '02-playbook')

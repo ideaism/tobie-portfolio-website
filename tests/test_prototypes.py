@@ -80,13 +80,17 @@ class StudioTests(unittest.TestCase):
 
     def test_every_rebuilt_demo_says_it_is_a_rebuild(self):
         # 2026-11-16（卡 20261116-007）：不再强制出现「不是当年的交付物」/ "not a deliverable from the time"
-        for needle in ('2026', '重做', '界面元素取自原稿'):
+        # 2026-11-25（优化方案第 1 批）：不写年份、不写「用代码重做」，只说按原稿还原
+        for needle in ('还原', '界面元素取自原稿'):
             self.assertIn(needle, REBUILT[0])
-        for needle in ('2026', 'rebuilt in code', 'taken from the source'):
+        for needle in ('Rebuilt from the source', 'taken from the source'):
             self.assertIn(needle, REBUILT[1])
+        for pair in (REBUILT, REBUILT_TAG):
+            for s in pair:
+                self.assertNotIn('2026', s)
         for key, d in STUDIO.items():
-            self.assertTrue(d['provenance'][0].startswith(REBUILT[0]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')
-            self.assertTrue(d['provenance'][1].startswith(REBUILT[1]), f'{key}: the provenance line must open by saying this is a 2026 rebuild')
+            self.assertTrue(d['provenance'][0].startswith(REBUILT[0]), f'{key}: the provenance line must open by saying this is rebuilt from the source')
+            self.assertTrue(d['provenance'][1].startswith(REBUILT[1]), f'{key}: the provenance line must open by saying this is rebuilt from the source')
         for lang, n in (('zh', 0), ('en', 1)):
             html = section_demo('playbook', 3, lang)
             self.assertEqual(html.count(f'<p class="proto__prov">{REBUILT[n]}'), len(STUDIO), lang)
@@ -217,11 +221,14 @@ class StudioTests(unittest.TestCase):
 
     def test_bilingual_copy_and_placeholders(self):
         for key, d in STUDIO.items():
-            for field in ('tab', 'label', 'title', 'intro', 'note', 'provenance'):
+            for field in ('tab', 'label', 'title', 'provenance'):
                 self.assertEqual(len(d[field]), 2, f'{key}.{field}')
                 self.assertTrue(all(d[field]), f'{key}.{field}')
+            # 2026-11-25（优化方案第 1 批）：侧边卡最多三条短提示
+            self.assertLessEqual(len(d['how']), 3, key)
             for pair in d['how']:
                 self.assertEqual(len(pair), 2, key)
+                self.assertLessEqual(len(pair[0]), 20, f'{key}: {pair[0]}')
             for name, pair in d['t'].items():
                 self.assertEqual(len(pair), 2, f'{key}.t.{name}')
                 self.assertTrue(all(pair), f'{key}.t.{name}')
@@ -318,7 +325,7 @@ class FigureTests(unittest.TestCase):
                 self.assertLessEqual(set(fx), {'of', 'top', 'left', 'right'})
                 self.assertLess(fx.get('left', 0) + fx.get('right', 0), fx['of'])
                 self.assertLess(fx.get('top', 0), fx['of'] * 9 / 16)
-        plain = dict(FIGURES[('playbook', 10)][0])   # 2026-11-24：Remix 从 09 顺延为 10
+        plain = dict(FIGURES[('playbook', 9)][0])   # 2026-11-24：Remix 从 09 顺延为 10；2026-11-25 起草助手下线，回到 9
         self.assertNotIn('scroll', plain)
         self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default
 

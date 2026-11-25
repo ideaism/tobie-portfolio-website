@@ -1182,7 +1182,7 @@ function drafterLab(root) {
   const say = text => { status.textContent = text; };
   const num = n => T.nums[n - 1] || String(n);
   // made: a campaign exists (Create was clicked). pick: the goal picked in its one-sentence bar (-1: none yet, the panels are empty)
-  let made = false, pick = -1, st = null, editing = new Set();
+  let made = false, pick = -1, st = null, editing = new Set(), opened = {};   // opened: per honeycomb, the circle whose card is open (⑬)
   const draft = () => cfg.drafts[pick];
   const itemName = id => (draft().items.find(i => i.id === id) || { name: id }).name;
   const taskName = id => fillIn(T.task, { n: id });
@@ -1236,29 +1236,43 @@ function drafterLab(root) {
     return T.gap + (n ? fillIn(T.sum_some, { n }) : T.sum_none);
   };
 
-  /* 1. the three goals: small cards under the one-sentence bar */
-  const field = el('input', 'dz-field');   // looks like the input; the goal cards fill it in
-  field.type = 'text';
-  field.readOnly = true;
-  field.tabIndex = -1;
+  /* 1. the one-sentence bar, laid out like Figma's data card (⑬): the three goals are tabs at its top left (where Studio has
+     Impressions / Money), the black button at its top right drafts (where Studio has View in dashboard), and the grey box under
+     them holds the sentence. A tab puts its sentence into the box; Draft fills the three panels with that goal's draft. */
+  let sel = -1;   // the goal whose tab is lit (its sentence is in the box); pick is the goal the panels were drafted for
+  const field = el('textarea', 'dz-field');
+  field.rows = 2;
+  field.readOnly = false;   // it can be typed in; only the three sample goals have drafts, Draft says so for anything else
   field.placeholder = T.goal_ph;
   field.setAttribute('aria-label', T.goal_ph);
+  const lit = () => goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === sel)));
   cfg.drafts.forEach((d, i) => {
-    const b = el('button', 'dz-goal');
+    const b = el('button', 'dz-goal', d.creator);
     b.type = 'button';
     b.dataset.key = 'goal:' + i;
     b.title = d.persona;
-    b.append(el('span', 'dz-goal__n', d.creator), el('span', 'dz-goal__goal', d.goal));
     b.addEventListener('click', () => {
-      if (i === pick) return;
-      const first = pick < 0;
-      pick = i; st = D.fresh(d); editing = new Set();
-      field.value = d.goal;   // the sentence goes into the box, then the three panels fill in under it
-      draw();
-      say(first ? T.said_filled : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(i + 1) }) + ' · ' + d.campaign.name }));
+      sel = i;
+      field.value = d.goal;   // the sentence goes into the box; Draft fills in the three panels under it
+      lit();
+      say(i === pick ? T.said_same : fillIn(T.said_goal, { name: d.creator }));
     });
     goals.append(b);
   });
+  field.addEventListener('input', () => { sel = cfg.drafts.findIndex(d => d.goal === field.value.trim()); lit(); });
+  field.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); draftIt(); } });
+  function draftIt() {   // what clicking a goal card did before ⑬
+    if (sel < 0) { say(field.value.trim() ? T.only_samples : T.need_goal); return; }
+    if (sel === pick) { say(T.said_same); return; }
+    const d = cfg.drafts[sel], first = pick < 0;
+    pick = sel; st = D.fresh(d); editing = new Set(); opened = {};
+    draw();
+    say(first ? T.said_filled : fillIn(T.said_pick, { name: fillIn(T.draft, { n: num(pick + 1) }) + ' · ' + d.campaign.name }));
+  }
+  const drafting = el('button', 'dz-draft', T.draft_go);
+  drafting.type = 'button';
+  drafting.dataset.key = 'draft:go';
+  drafting.addEventListener('click', draftIt);
   const restoreAll = el('button', 'tool-btn', '↺ ' + T.restore_all);
   restoreAll.type = 'button';
   restoreAll.addEventListener('click', () => {

@@ -1,7 +1,8 @@
 // 查看处理（第五步，只有默认界面「冰箱贴」）：底栏“查看处理”点开，一整屏清单从底栏升上来，盖住冰箱和角落的企鹅。
 // 顶上是严肃那只企鹅和它现在气泡里那句话；四个过滤照产品（全部 / 个人 / 共用 / 这几天要吃的）：
 //   个人 = 不是共用的（别人的、不知道是谁的也算），共用 = 共用，这几天要吃的 = 计划是“这几天吃”。顶栏“只看我的”开着时只列我的。
-// 分组：“现在可以拿的”在最前（只看我的时不分这一组，产品里“只看我的”也没有），然后两台冰箱按层排，冷冻的排在每台最后；
+// 分组：最上面是“计划过了大半”（和企鹅气泡同一份 MARKS.attention；这台的在前，另一台的标题带名字），这些不再出现在下面各组；
+// 接着“现在可以拿的”（只看我的时不分这一组，产品里“只看我的”也没有），然后两台冰箱按层排，冷冻的排在每台最后；
 // 组里按状态排（过了 → 过了大半 → 还早 → 暂停）。每行：小图、名字、和层上同一种颜色的记号，不放按钮。
 // 点一行：清单落下去，app.js 的 showItem 串起 开门 → 转镜头 → 拉出那层 → 拿起来 → 开详情卡。
 (function () {
@@ -48,10 +49,18 @@
     return ids.map(id => F.recs[id]).filter(Boolean);
   }
   function groups() {
-    const all = K.FR.flatMap(F => recsOf(F).map(r => ({ r, F }))).filter(x => pass(x.r.it));
+    const out = [];
+    // 最上面：要注意的那张单子（和气泡同一份 MARKS.attention）。这台的在前，另一台的标题带它的名字
+    const att = new Set();
+    [K.cur, ...K.FR.filter(F => F !== K.cur)].forEach(F => {
+      const rs = MARKS.attention(F);
+      rs.forEach(r => att.add(r));
+      const shown = rs.filter(r => pass(r.it));
+      if (shown.length) out.push({ label: F === K.cur ? '计划过了大半' : `${D.fridges[F.i].name} · 计划过了大半`, cls: 'attn', fridge: F.i, recs: shown });
+    });
+    const all = K.FR.flatMap(F => recsOf(F).map(r => ({ r, F }))).filter(x => pass(x.r.it) && !att.has(x.r));
     const offer = K.mine ? [] : all.filter(x => OFFERS.includes(x.r.it.offer));
     const rest = all.filter(x => !offer.includes(x));
-    const out = [];
     if (offer.length) out.push({ label: '现在可以拿的', cls: 'offer', recs: sortRecs(offer.map(x => x.r)) });
     K.FR.forEach(F => {
       const fname = D.fridges[F.i].name, mine = rest.filter(x => x.F === F);
@@ -80,7 +89,7 @@
     say.innerHTML = K.cur.bubble || '';
     seg.querySelectorAll('button').forEach(b => { const on = b.dataset.f === S.f; b.classList.toggle('on', on); b.setAttribute('aria-checked', String(on)); });
     const gs = groups();
-    list.innerHTML = gs.length ? gs.map(g => `<section class="mgg ${g.cls}"><h3><span>${esc(g.label)}</span></h3>` + g.recs.map(r => {
+    list.innerHTML = gs.length ? gs.map(g => `<section class="mgg ${g.cls}"${g.fridge != null ? ` data-fr="${g.fridge}"` : ''}><h3><span>${esc(g.label)}</span></h3>` + g.recs.map(r => {
       const it = r.it, nm = nameOf(it);
       return `<button type="button" class="mgrow${it.kind === 'other' ? ' other' : ''}" data-id="${esc(it.id)}"><span class="mgimg"><img src="${D.img}item-${it.img}.webp" alt="" draggable="false"></span>`
         + `<span class="mgname">${esc(nm)}</span>${chip(r)}</button>`;
@@ -128,5 +137,6 @@
   window.MANAGE = { open, close, get on() { return S.on; }, get filter() { return S.f; },
     setFilter(f) { if (FILTERS.some(x => x[0] === f)) { S.f = f; if (S.on) render(); } },
     get rows() { return [...list.querySelectorAll('.mgrow')].map(b => b.dataset.id); },
-    get groups() { return [...list.querySelectorAll('.mgg h3')].map(h => h.textContent); } };
+    get groups() { return [...list.querySelectorAll('.mgg h3')].map(h => h.textContent); },
+    get attn() { return [...list.querySelectorAll('.mgg.attn')].map(s => ({ fridge: +s.dataset.fr, rows: [...s.querySelectorAll('.mgrow')].map(b => b.dataset.id) })); } };
 })();

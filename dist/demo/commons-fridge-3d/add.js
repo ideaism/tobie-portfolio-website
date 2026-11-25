@@ -26,6 +26,7 @@ const T = {
   receipt: '拍购物小票', demo: '演示', receiptNote: '演示用的小票。小样里不接真的识别。',   // 新
   yellow: '黄标 · 临期',                                                                    // 新
   foundLink: '不是我的，只是看到一件没人认的东西 →', back: '← 回到放入',
+  foundBtn: '看到没人认的东西',   // 第二批 6：跟“拍购物小票”并排的短字（原来那整句 foundLink 留着不删，现在没地方用）
   foundKicker: '看到一件不知道是谁的东西', foundTitle: '把它记下来，<br>不用问任何人。',
   foundLede: '记录本身就让它重新被看见。没有人会被点名。',
   foundNote: '归属锁定为「不知道是谁的」。这一条记录不会 @ 任何人，也不会催任何人认领。',
@@ -78,6 +79,10 @@ function reveal(el) {
 ['pointerdown', 'pointermove', 'pointerup', 'wheel'].forEach(t => layer.addEventListener(t, e => e.stopPropagation()));
 
 const CAM_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3v10H4z"/><circle cx="12" cy="13.2" r="3.3"/></svg>';
+// 第二批 6：“看到没人认的东西”前面一个圈里的问号（层板上没人认的东西贴的就是“?”），跟相机同一种线
+const ASK_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5"/><circle class="dot" cx="12" cy="16.6" r=".4"/></svg>';
+// 第二批 6：黄标开着时字前面一个勾
+const YL_CK = '<svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4L18.5 7.5"/></svg>';
 function quickBtn(name, plan) {
   const m = K.match(name);
   return `<button type="button" data-act="quick" data-name="${esc(name)}" data-plan="${esc(plan)}"><img src="${IMG(m.img)}" alt="">${esc(name)}</button>`;
@@ -95,10 +100,9 @@ function renderTop() {
       <p class="aglabel">${T.groupSoon}</p><div class="aquick">${T.quickSoon.map(n => quickBtn(n, '这几天吃')).join('')}</div>
       <p class="aglabel">${T.groupOpen}</p><div class="aquick">${T.quickOpen.map(n => quickBtn(n, '说不准')).join('')}</div>
       ${other}
-      <button type="button" class="areceipt" data-act="receipt"${S.receipt ? ' disabled' : ''}>${CAM_SVG}${T.receipt}<small>${T.demo}</small></button>
+      <div class="aduo"><button type="button" class="areceipt" data-act="receipt"${S.receipt ? ' disabled' : ''}>${CAM_SVG}${T.receipt}<small>${T.demo}</small></button><button type="button" class="afound" data-act="found">${ASK_SVG}${T.foundBtn}</button></div>
       <div class="rslot"></div>
-      <div class="abatch"></div>
-      <button type="button" class="afound" data-act="found">${T.foundLink}</button>`;
+      <div class="abatch"></div>`;
   }
   const inp = $('input', scroll);
   inp.addEventListener('input', () => { S.text[key()] = inp.value; });
@@ -117,7 +121,7 @@ function rowHTML(r, P, fresh) {
     <button type="button" class="athumb" data-act="img" data-id="${r.id}" aria-label="换一个样子"><img src="${IMG(r.img)}" alt="">${r.label ? labHTML(r.label) : ''}${r.yellow ? '<span class="ytag">临期</span>' : ''}</button>
     <div class="abody"><div class="aname">${esc(r.name)}</div><div class="achips">${own}${plan}
       <button type="button" class="${cold ? 'cold' : 'set'}" data-act="place" data-id="${r.id}">${esc(p.label)}</button>
-      <button type="button" class="yl${r.yellow ? ' on' : ''}" data-act="yellow" data-id="${r.id}" aria-pressed="${r.yellow}">${T.yellow}</button></div></div>
+      <button type="button" class="yl${r.yellow ? ' on' : ''}" data-act="yellow" data-id="${r.id}" aria-pressed="${r.yellow}">${r.yellow ? YL_CK : ''}${T.yellow}</button></div></div>
     <button type="button" class="ax" data-act="remove" data-id="${r.id}" aria-label="移除">✕</button></div>`;
 }
 function renderBatch(freshId) {

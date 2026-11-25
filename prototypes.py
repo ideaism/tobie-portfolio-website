@@ -739,6 +739,16 @@ DRAFTER = {
    'said_back': ['回到了活动页，{name} 还是草案里的样子。', 'Back to the campaign; {name} is as the draft has it.'],
    'sum_some': ['重新检查：{n} 个问题。', 'Checked again: {n} problem(s).'],
    'sum_none': ['重新检查：没有发现问题。', 'Checked again: no problems found.'],
+   # 2026-11-25（交接单 ⑬）：起草条照 Figma 数据卡排——左上三个目标页签、右上黑色「起草」按钮、下面灰底一句话（能输入）；
+   # 任务卡照 Figma 任务卡（频次 / 奖励两组数、Related Platforms 照原稿英文）；物品、配方画成蜂窝圆图
+   'draft_go': ['起草', 'Draft'],
+   'said_goal': ['选了{name}的目标。点「起草」出草案。', 'Picked {name}’s goal. Click Draft to get a draft.'],
+   'said_same': ['这个目标的草案已经在下面了。', 'The draft for this goal is already below.'],
+   'need_goal': ['先选左上一个目标，再点「起草」。', 'Pick a goal at the top left first, then click Draft.'],
+   'only_samples': ['这个示意只能起草左上三个示例目标：选一个页签，再点「起草」。', 'This demo can only draft the three sample goals: pick a tab at the top left, then click Draft.'],
+   'freq': ['频次', 'Frequency'], 'reward': ['奖励', 'Reward'],
+   'platforms': ['Related Platforms', 'Related Platforms'],
+   'gone_tag': ['已删除', 'Removed'],
  },
 }
 

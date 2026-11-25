@@ -55,7 +55,9 @@
       w.style.rotate = (h % 2 ? -36 : -42) + 'deg';
       host.append(w);
     } else if (mk === 'held') {
-      const t = div('mk mk-held' + (it.label && !tray ? ' low' : '') + (it.s === 0 && !tray ? ' l' : ''), `有人要处理 · ${holdH(it)} 小时`);   // 最左一格：往右靠，别顶到内壁
+      const t = div('mk mk-held' + (it.label && !tray ? ' low' : '') + (it.s === 0 && !tray ? ' l' : '') + (tray ? '' : ' short'), `有人要处理 · ${holdH(it)} 小时`);   // 最左一格：往右靠，别顶到内壁
+      // 第二批 3：层板上地方小，只写“30 小时”，前面一个小钟；整句留在托盘、白卡和“查看处理”里
+      if (!tray) { t.innerHTML = `<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.6"/><path d="M6 3.7V6l1.6 1.1"/></svg>${holdH(it)} 小时`; t.setAttribute('aria-label', `有人要处理 · ${holdH(it)} 小时`); }
       t.style.rotate = (h % 2 ? 2.5 : -2) + 'deg';
       host.append(t);
     } else if (mk === 'offer') {
@@ -78,16 +80,21 @@
   }
 
   // ---------- 企鹅的气泡：这台里计划过了大半的件数（层板上的、“+N”里收着的；冻着的、暂停的不算；只看我的打开时只算我的） ----------
+  // 要注意的那张单子：气泡件数、“查看处理”最上面一组、“买菜前看一眼”第一块都用它（三处件数对得上）。
+  // 冻着的、暂停的不算；只看我的打开时只算我的；过了的在前、过了大半的在后，同一档按 data 的顺序（层板上的、再“+N”里的）
+  function attention(F) {
+    const ids = F.data.items.map(i => i.id);
+    if (F.hid) Object.keys(F.hid).forEach(t => F.hid[t].forEach(i => ids.push(i.id)));
+    const seen = new Set(), rs = [];
+    ids.forEach(id => { const r = F.recs[id]; if (r && !seen.has(r)) { seen.add(r); rs.push(r); } });
+    Object.values(F.recs).forEach(r => { if (!seen.has(r)) { seen.add(r); rs.push(r); } });   // 万一有不在上面两处的（正在落位的）也算上
+    return rs.filter(r => r.frz == null && !(K.mine && r.it.kind !== 'mine') && attn(planState(r.it)))
+      .map((r, i) => ({ r, i, o: planState(r.it) === 'overdue' ? 0 : 1 })).sort((a, b) => a.o - b.o || a.i - b.i).map(x => x.r);
+  }
   function counted(F) {
-    let n = 0; const by = {};
-    Object.values(F.recs).forEach(r => {
-      if (r.frz != null) return;
-      const it = r.it;
-      if (K.mine && it.kind !== 'mine') return;
-      if (!attn(planState(it))) return;
-      n++; const t = r.hidden ? r.ht : it.t; by[t] = (by[t] || 0) + 1;
-    });
-    return { n, by };
+    const rs = attention(F), by = {};
+    rs.forEach(r => { const t = r.hidden ? r.ht : r.it.t; by[t] = (by[t] || 0) + 1; });
+    return { n: rs.length, by };
   }
   const bubbleHTML = n => n ? `有 <b>${n} 件</b>东西的计划过了大半。` : M.away ? '现在没有东西需要注意。' : '这箱都还新鲜';   // 产品 manage.statusOne / statusMany / nothingNow
   // 点气泡：拉出算进件数最多的那层（一样多取上面那层）；一件都没有就拉记号最多的那层；什么记号都没有就不动
@@ -158,12 +165,19 @@
     const F = rec.F || K.cur, it = rec.it;
     if (it.kind !== 'unknown' && !isHeld(it)) return;   // 产品：只有没人认的、有人挂起的才留回执
     if (rec.frz != null || rec.hidden || it.s == null || it.t == null) return;   // 冻着的、收在“+N”里的：层板上没有它的位置
-    M.notes.filter(n => n.F === F && n.t === it.t).forEach(dropNote);
+    const old = M.notes.filter(n => n.F === F && n.t === it.t);
+    old.forEach(dropNote);
     const el = div('mk-note', '已处理');
     el.style.rotate = (hash(it.id) % 2 ? -5 : 4) + 'deg';
     F.shelf.append(el);
     const n = { F, t: it.t, s: it.s, el, k: '' };
     M.notes.push(n); placeNote(n);
+    return { n, old };   // 撤销时（app.js）交回来：收掉这张，原来那张贴回去
+  }
+  function unhandle(tok) {
+    if (!tok) return;
+    if (M.notes.includes(tok.n)) dropNote(tok.n);
+    tok.old.forEach(o => { o.k = ''; o.F.shelf.append(o.el); M.notes.push(o); placeNote(o); });
   }
   function dropNote(n) { n.el.remove(); M.notes = M.notes.filter(x => x !== n); }
   function placeNote(n) {
@@ -256,7 +270,7 @@
   }
   function loop() { tick(); requestAnimationFrame(loop); }
 
-  window.MARKS = { act, sheet, handled, bubbleTap, planState, due, markOf: id => { for (const F of K.FR) if (F.recs[id]) return markOf(F.recs[id]); return null; },
+  window.MARKS = { act, sheet, handled, unhandle, attention, bubbleTap, planState, due, offered: isOffered, markOf: id => { for (const F of K.FR) if (F.recs[id]) return markOf(F.recs[id]); return null; },
     get away() { return M.away; }, setAway: on => { K.now(); setAway(!!on, true); },
     get bubble() { return K.FR.map(F => counted(F).n); }, get notes() { return M.notes.map(n => ({ fridge: n.F.i, t: n.t, s: n.s })); } };
   initAway();

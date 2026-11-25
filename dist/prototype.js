@@ -1560,7 +1560,7 @@ function drafterLab(root) {
       row.append(c);
     });
     const open = cells.find(c => c.getAttribute('aria-expanded') === 'true');
-    if (open) open.parentNode.after(card(kind, opened[kind]));
+    if (open) open.parentNode.after(hiveCard(kind, opened[kind]));
     return box;
   }
   function cell(kind, id, label, s) {
@@ -1600,14 +1600,14 @@ function drafterLab(root) {
     opened[kind] = opened[kind] === id ? null : id;
     box.querySelectorAll('.dz-cell[aria-expanded]').forEach(b => b.setAttribute('aria-expanded', String(b === c && opened[kind] === id)));
     if (opened[kind] == null) return;
-    const k = card(kind, id), body = box.closest('.dz-panel__body');
+    const k = hiveCard(kind, id), body = box.closest('.dz-panel__body');
     c.parentNode.after(k);
     if (body && body.scrollHeight > body.clientHeight) {   // wide screens: the card shows inside its panel, the page does not move
       const over = k.getBoundingClientRect().bottom - body.getBoundingClientRect().bottom;
       if (over > 0) body.scrollTop += over + 8;
     }
   }
-  function card(kind, id) {
+  function hiveCard(kind, id) {
     const box = kind === 'items' ? itemCard(id) : recipeCard(id);
     box.id = 'dz-card-' + kind;
     return box;
@@ -1748,7 +1748,9 @@ function drafterLab(root) {
   date.append(ico('cal', 'dz-ico--sm'), el('span', '', longDate), left);
   const ask = el('div', 'dz-ask'), box = el('div', 'dz-ask__box');
   box.append(ico('spark', 'dz-ico--ai'), field);
-  ask.append(box, goals);
+  const askTop = el('div', 'dz-ask__top');   // ⑬: tabs on the left, Draft on the right, the sentence in the grey box under them
+  askTop.append(goals, drafting);
+  ask.append(askTop, box);
   info.append(nameRow, date, ask);
   const cover = el('div', 'dz-cover');
   cover.setAttribute('aria-hidden', 'true');
@@ -1780,13 +1782,14 @@ function drafterLab(root) {
 
   function draw() {
     const key = root.contains(document.activeElement) ? document.activeElement.dataset.key : null;
-    goals.querySelectorAll('.dz-goal').forEach((b, i) => b.setAttribute('aria-pressed', String(i === pick)));
+    lit();
     const d = pick < 0 ? null : draft(), name = d ? d.campaign.name : T.untitled;
     title.textContent = lcName.textContent = sub.textContent = name;
     left.textContent = fillIn(T.left, { n: d ? d.campaign.days : 14 });
     who.textContent = d ? d.creator : T.creator;
     cover.dataset.look = lcArt.dataset.look = d ? d.id : '';
-    const pm = panel('missions', T.p_missions, 'missions'), pi = panel('items', T.p_items, 'items'), pr = panel('recipes', T.p_recipes, 'recipes');
+    const n = d ? counts() : {};
+    const pm = panel('missions', T.p_missions, 'missions', n.missions), pi = panel('items', T.p_items, 'items', n.items), pr = panel('recipes', T.p_recipes, 'recipes', n.recipes);
     const [bm, bi, br] = [pm, pi, pr].map(p => p.lastChild);
     if (d) { missionList(bm); itemGrid(bi); recipeList(br); }
     else { startHere(bm, 'missions', T.p_missions, T.start_missions); startHere(bi, 'items', T.p_items, T.start_items); startHere(br, 'recipes', T.p_recipes, T.start_recipes); }
@@ -1825,7 +1828,7 @@ function drafterLab(root) {
   }
   function create() {   // a new campaign each time: Untitled, empty panels (this concept keeps one campaign)
     made = true;
-    pick = -1; st = null; editing = new Set(); field.value = '';
+    pick = -1; sel = -1; st = null; editing = new Set(); opened = {}; field.value = '';
     emptyCreate.removeAttribute('data-hint');   // found it: the hint has done its job
     draw();
     go('camp');

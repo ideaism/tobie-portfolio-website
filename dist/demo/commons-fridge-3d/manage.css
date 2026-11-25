@@ -25,6 +25,8 @@
 #mgLayer .mgseg { position: absolute; left: 16px; top: 160px; width: 358px; height: 40px; padding: 3px; display: flex; gap: 2px; border-radius: 14px; background: rgba(109, 84, 55, .09); }
 #mgLayer .mgseg button { flex: 1 1 0; height: 34px; border-radius: 11px; font-size: 13px; color: var(--brown); white-space: nowrap; }
 #mgLayer .mgseg button[data-f="soon"] { flex-grow: 1.7; }
+#mgLayer .mgseg button { position: relative; }
+#mgLayer .mgseg button::after { content: ""; position: absolute; left: 0; right: 0; top: -5px; bottom: -5px; }   /* 第二批 3：看着 34 高，点按区 44 */
 #mgLayer .mgseg button.on { color: #fff; background: var(--sage); box-shadow: 0 1px 2px rgba(40, 60, 48, .3); }
 
 /* 清单 */
@@ -41,6 +43,7 @@
 #mgLayer .mgg.mine h3 span { color: #fff; background: linear-gradient(180deg, #62806c, #506b5b); }
 #mgLayer .mgg.cold h3 span { color: #24515a; background: linear-gradient(180deg, #f0fcff, #ceecf0); }
 #mgLayer .mgg.offer h3 span { color: #fff; background: linear-gradient(180deg, #e0574a, #c9402f); }
+#mgLayer .mgg.attn h3 span { color: #fff; background: linear-gradient(180deg, #f6a550, #e8832c); }   /* 要注意的那张单子：和“过了大半”胶带同一种橙 */
 
 #mgLayer .mgrow { display: flex; align-items: center; gap: 12px; width: 100%; height: 56px; padding: 0 12px 0 6px; margin-bottom: 6px; border-radius: 16px; text-align: left;
   background: var(--card); box-shadow: 0 1px 2px rgba(60, 40, 15, .1); transition: transform .14s cubic-bezier(.23, 1, .32, 1); }
@@ -57,7 +60,7 @@
 #mgLayer .mgc.tape.overdue { background: repeating-linear-gradient(90deg, rgba(255, 236, 220, .18) 0 2px, rgba(255, 236, 220, 0) 2px 6px), linear-gradient(180deg, #b4502f, #94391f); }
 #mgLayer .mgc.held { position: relative; padding: 0 8px 0 13px; border-radius: 3px 5px 5px 3px; color: #5f4527; background: linear-gradient(180deg, #f6e4c1, #ecd3a6); box-shadow: 0 1px 1.5px rgba(70, 45, 15, .3); }
 #mgLayer .mgc.held::before { content: ""; position: absolute; left: 4px; top: 8.5px; width: 5px; height: 5px; border-radius: 50%; background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(95, 69, 39, .35); }
-#mgLayer .mgc.offer { width: 30px; height: 30px; line-height: 26px; padding: 0; border-radius: 50%; border: 2px solid #fffaf0; text-align: center; font-size: 10.5px; font-weight: 800; color: #fff;
+#mgLayer .mgc.offer { width: 30px; height: 30px; line-height: 26px; padding: 0; border-radius: 50%; border: 2px solid #fffaf0; text-align: center; font-size: 11px; letter-spacing: -.04em; font-weight: 800; color: #fff;
   background: #d9483b; box-shadow: 0 1px 2px rgba(60, 40, 15, .35); }
 #mgLayer .mgc.ask { width: 24px; height: 24px; line-height: 20px; padding: 0; border-radius: 50%; border: 2px solid #fffaf0; text-align: center; font-size: 13px; font-weight: 800; color: #c0731f;
   background: #fffaf0; box-shadow: inset 0 0 0 1.5px #e3b06c, 0 1px 2px rgba(60, 40, 15, .3); }

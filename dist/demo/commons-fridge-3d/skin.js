@@ -71,9 +71,11 @@
     if (ex && it.yellow) meta += `<span class="ylw">临期</span>`;   // 贴了黄标（录入时打开的“黄标 · 临期”），样式在 add.css
     // 开了以后计划下面多一行小字（产品 strings.json：manage.openedNote）
     const mnote = ex && it.opened && !ex.frozen && it.plan ? `<div class="mnote">开了之后重新起算 · 今天</div>` : '';
+    // 默认界面：只有计划过了大半、过了的（ex.due）处理掉才换一条鱼，别的不写那行小字
+    const go = `<button class="go" data-act="eat"><span>处理掉它</span>${!ex || ex.due ? `<small><img src="${D.img}fish.webp" alt="">企鹅能吃到一条</small>` : ''}</button>`;
+    // 别人贴了“请吃”的（ex.offer）：只多一个“处理掉它”，开了、冷冻、更新这些还是主人的事
+    if (!canAct && ex && ex.offer && !ex.edit && !ex.thaw) btns = go;
     if (canAct) {
-      // 默认界面：只有计划过了大半、过了的（ex.due）处理掉才换一条鱼，别的不写那行小字
-      const go = `<button class="go" data-act="eat"><span>处理掉它</span>${!ex || ex.due ? `<small><img src="${D.img}fish.webp" alt="">企鹅能吃到一条</small>` : ''}</button>`;
       if (ex && ex.edit) btns = editHTML(ex.edit);
       else if (ex && ex.frozen && ex.thaw) btns = thawHTML(ex.thaw);
       else if (ex && ex.frozen) btns = go + `<div class="row3 two"><button data-act="thaw">拿出来解冻</button><button data-act="edit">更新</button></div>`;

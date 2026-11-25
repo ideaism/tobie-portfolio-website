@@ -6,9 +6,9 @@
 // 不换鱼的东西（还新鲜的、没计划的、没人认的、冻着的）扔进这里；换鱼的扔进来也照样庆祝（app.js 的 binDone）。
 // 图是 img/trim/bin-q-a.webp（435×600，卡 20261120-011 选的 A 踏板桶，原来像电饭煲的 bin-q.webp 留着没用）一张：叠两份，一份只露盖子、一份只露桶身。分界按图上量出来的接缝（两边高、中间低的弧线）
 // 用同一串点切，两份不重叠，掀盖子时不会带着一条绿边转。不接手势（pointer-events: none）。
-// 冷冻托盘开着时桶不出来，也不接东西。
+// 冷冻托盘开着时也出来、也接东西（托盘上冻着的东西能直接扔）。
 // 给 app.js 的口子 window.BIN：
-//   up(force)   拖起东西了：桶弹上来（冷冻托盘开着时不出来；force 是“处理掉它”，照样出来）   down()  松手没进桶：桶沉回去
+//   up(force)   拖起东西了：桶弹上来（force 是“处理掉它”）   down()  松手没进桶：桶沉回去
 //   track(x, y) 拖着时每帧报一次东西（中心，手机坐标）在哪：桶跟着变大小、到了桶上掀盖子；返回在不在桶上
 //   hovering    东西现在在不在桶上（带一点回差：进来要近一点，出去要远一点）   pull  0–1，到了桶上的程度（平滑过的）
 //   aim()       东西到了桶上时往哪偏（桶口右上方一点）            mouth() 桶口在哪（手机坐标，跟着桶动）
@@ -58,8 +58,9 @@
   const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
   function up(force) {
-    if (AP.frzTray && !force) return;   // 冷冻托盘开着：拖东西时桶不出来（白卡上点了“处理掉它”才出来，force）
+    // 冷冻托盘开着也出来：托盘上的东西也能拖进桶里（force 留着：白卡上点了“处理掉它”）
     if (S.pt !== 1) { S.pt = 1; S.wob = false; S.sinkAt = -1; S.hopAt = -1; S.hy = 0; S.hv = 0; }
+    else { S.sinkAt = -1; S.hopAt = -1; }   // 刚扔完、还没沉下去就又拖起一件：别再按上一次的时间沉下去（不然拖到一半桶没了）
   }
   function down() { S.pt = 0; S.hov = false; S.tg = 0; S.lnt = 0; S.sinkAt = -1; }
   function inZone(x, y, z) { return x > -40 && x < z.r && y > z.t && y < 900; }

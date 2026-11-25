@@ -1,6 +1,7 @@
 // 买菜前看一眼（第五步，只有默认界面「冰箱贴」）：底栏“买菜前看一眼”点开，门自己打开，下半屏升起一张卡，上半屏还看得到冰箱的几层。
 // 卡沿上探出开心那只企鹅；角落严肃的那只藏起来（一个画面只有一只）。
-// 第一块“需要先吃掉的”：照产品 shopView —— 计划过了大半、过了的，或者计划是“这几天吃”的，两台一起按状态排，最多 5 件。
+// 第一块“需要先吃掉的”：和企鹅气泡、“查看处理”最上面一组同一份（MARKS.attention）—— 计划过了大半、过了的；这台的在前再另一台，不截件数。
+//   每行名字后面一行小字“放了 N 天”（和详情卡同一个字段），同名的两件靠它分开。
 //   卡一升起，这几件在后面的层上轻轻跳一下、亮一圈；点哪一行那一件再跳一下。一件都没有写产品原话。
 // 第二块把产品的“屋内已经有的”“哪一区还有空间”合成一块：每层一行“名字　N 件　还有空间”，点一下换成“满了”（再点换回来）。
 //   标了“满了”的层：名牌末尾一个“满”字章（marks.js），“更新”“拿出来解冻”选层时带章（skin.js），“放入”选层时带章（这里接，add.js 不改）。
@@ -34,17 +35,15 @@
     if (F.hid) Object.keys(F.hid).forEach(t => F.hid[t].forEach(i => ids.push(i.id)));
     return ids.map(id => F.recs[id]).filter(r => r && r.frz == null);
   };
-  function eatFirst() {
-    const all = K.FR.flatMap(recsOf).filter(r => { const s = MARKS.planState(r.it); return s === 'midway' || s === 'overdue' || r.it.plan === '这几天吃'; });
-    return all.map((r, i) => ({ r, i, o: ORDER[MARKS.planState(r.it)] })).sort((a, b) => a.o - b.o || a.i - b.i).slice(0, 5).map(x => x.r);
-  }
+  // 和气泡、“查看处理”最上面一组同一份单子（MARKS.attention）：这台的在前，再另一台的；不截件数
+  const eatFirst = () => [K.cur, ...K.FR.filter(F => F !== K.cur)].flatMap(F => MARKS.attention(F));
   const countOf = (F, t) => F.data.items.filter(i => i.t === t).length + ((F.hid && F.hid[t]) || []).length;
   function render() {
     S.first = eatFirst();
     const first = S.first.length ? S.first.map(r => {
       const it = r.it, st = MARKS.planState(it);
       return `<button type="button" class="shrow" data-id="${esc(it.id)}"><span class="shimg"><img src="${D.img}item-${it.img}.webp" alt="" draggable="false"></span>`
-        + `<span class="shname">${esc(nameOf(it))}</span><i class="shplan ${st}">${esc(it.plan || '说不准')}</i></button>`;
+        + `<span class="shname">${esc(nameOf(it))}${it.days != null ? `<small class="shdays">放了 ${it.days} 天</small>` : ''}</span><i class="shplan ${st}">${esc(it.plan || '说不准')}</i></button>`;
     }).join('') : '<p class="shempty">现在没有需要先吃掉的东西。</p>';
     const zones = K.FR.map(F => `<div class="shfr"><span>${esc(D.fridges[F.i].name)}</span></div>` + F.data.shelves.map((s, t) =>
       `<button type="button" class="shzone${s.full ? ' full' : ''}" data-f="${F.i}" data-t="${t}"><span class="shzn">${esc(s.label)}</span>`

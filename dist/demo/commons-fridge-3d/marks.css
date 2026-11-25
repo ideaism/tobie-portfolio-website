@@ -22,11 +22,15 @@
 .skin-a .mk-held.low { top: calc(100% + 3px); }   /* 有名字小标签（75% 处）的东西：吊牌挂到下面去，不压字 */
 .skin-a .mk-held.l { left: -4px; translate: 0 0; }
 .titem .tbox > .mk-held { top: calc(100% - 10px); }
+/* 第二批 3：层板上的吊牌只写“30 小时”，前面一个小钟（线描，跟手提箱同一种笔画）；整句留在白卡和“查看处理”里 */
+.skin-a .mk-held.short { height: 17px; line-height: 17px; padding: 0 5px 0 10px; font-size: 11px; letter-spacing: 0; display: flex; align-items: center; gap: 2px; }
+.skin-a .mk-held.short::before { top: 6.5px; }
+.skin-a .mk-held.short svg { flex: none; width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- 请吃：右上角一颗红圆贴，开放期间换掉主人贴纸 ---------- */
-.skin-a .mk-offer { position: absolute; left: calc(100% - 15px); top: -11px; width: 26px; height: 26px; box-sizing: border-box; pointer-events: none; opacity: var(--mf, 1);
-  border-radius: 50%; border: 2px solid #fffaf0; background: #d9483b; color: #fff; text-align: center; line-height: 22px;
-  font-family: var(--font); font-size: 9.5px; font-weight: 800; letter-spacing: -.02em;
+.skin-a .mk-offer { position: absolute; left: calc(100% - 17px); top: -13px; width: 30px; height: 30px; box-sizing: border-box; pointer-events: none; opacity: var(--mf, 1);
+  border-radius: 50%; border: 2px solid #fffaf0; background: #d9483b; color: #fff; text-align: center; line-height: 26px;
+  font-family: var(--font); font-size: 11px; font-weight: 800; letter-spacing: -.04em;
   box-shadow: 0 1px 2px rgba(60, 40, 15, .4), 0 3px 6px rgba(60, 40, 15, .16); }
 .titem .tbox > .mk-offer { left: auto; right: -11px; top: -11px; }
 .skin-a .sticker.mk-off { visibility: hidden; }
@@ -45,6 +49,7 @@
 .skin-a .mk-awaybtn { position: absolute; top: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--brown, #7a582c); }
 .skin-a .mk-awaybtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .skin-a .mk-awaybtn:active { scale: .9; }
+.skin-a .mk-awaybtn::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; }   /* 第二批 3：看着还是 32 的圆，能点到 44×44 */
 .skin-a .mk-awaybtn.on { color: #fff; background: #506b5b; box-shadow: 0 1px 2px rgba(40, 60, 40, .35); }
 .skin-a .mk-awaybtn.on svg { width: 18px; height: 18px; }
 .skin-a .tp .mk-case { display: inline-block; width: 11px; height: 11px; margin: 0 4px 0 -2px; vertical-align: -1.5px; }
@@ -61,12 +66,15 @@
 .skin-a #sheet .mkhold { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; padding: 0 6px 0 14px; height: 44px;
   border-radius: 14px; background: #f6ead2; font-size: 13px; color: #6d4f2a; font-weight: 600; }
 .skin-a #sheet .mkhold button { height: 32px; padding: 0 12px; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--card);
-  box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2); }
-.skin-a #sheet .mkrow { display: grid; grid-template-columns: 1fr; margin-top: 4px; border-top: 1px solid rgba(38, 48, 43, .07); }
+  box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2); position: relative; }
+.skin-a #sheet .mkhold button::after { content: ""; position: absolute; left: 0; right: 0; top: -6px; bottom: -6px; }   /* 第二批 3：看着 32 高，能点到 44（正好是这条牛皮纸条的高） */
+/* 第二批 7：卡底这排改成跟“没人认的”卡上那两颗一样的描边圆角按钮（skin.css 的 .row2） */
+.skin-a #sheet .mkrow { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
 .skin-a #sheet .mkrow.n2 { grid-template-columns: 1fr 1fr; }
-.skin-a #sheet .mkrow.n3 { grid-template-columns: 1fr 1fr 1fr; }
-.skin-a #sheet .mkrow button { height: 44px; font-size: 14px; color: #3f5a4a; font-weight: 600; position: relative; }
-.skin-a #sheet .mkrow button + button::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 1px; background: rgba(38, 48, 43, .14); }
+.skin-a #sheet .mkrow.n3 { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.skin-a #sheet .mkrow button { height: 52px; padding: 0 6px; border-radius: 18px; font-size: 15px; font-weight: 600; color: #3f5a4a; background: var(--card); white-space: nowrap;
+  box-shadow: inset 0 0 0 1.5px rgba(80, 107, 91, .5), 0 1px 2px rgba(40, 60, 48, .08); }
+.skin-a #sheet .mkrow.n3 button { font-size: 13px; }
 .skin-a #sheet .mkpick { margin-top: 6px; padding: 10px 0 2px; border-top: 1px solid rgba(38, 48, 43, .07); }
 .skin-a #sheet .mkpick .mkq { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 

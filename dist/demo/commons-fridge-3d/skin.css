@@ -192,7 +192,10 @@ html.skin body { -webkit-font-smoothing: antialiased; }
 .skin-a .tp .chev { display: inline-block; width: 8px; height: 8px; margin: 0 -3px 0 3px; vertical-align: -.5px; stroke-width: 2.2; opacity: .75; }
 .skin-a .pull { pointer-events: auto; cursor: pointer; transition: scale .14s cubic-bezier(.23, 1, .32, 1); }
 .skin-a .pull.press { scale: .94; }
-.skin-a .name.pull::after { content: ""; position: absolute; left: -6px; right: -8px; top: -4px; bottom: -12px; }
+.skin-a .name.pull::after { content: ""; position: absolute; left: -6px; right: -8px; top: -14px; bottom: -13px; }
+/* 第二批 3：胶带的点按区上下各探到一共 44 高。名牌在层板 DOM 里排在东西前面，东西（和它自己 44 的 .hit）总压在这块上面，
+   所以东西身上点到的还是东西；只有东西之间、两层之间的空当归胶带 */
+.skin-a .more.pull::after { content: ""; position: absolute; inset: -6.5px; border-radius: 14px; }   /* “+N”：看着 34，点按区 44×44 */
 .skin-a .intray { visibility: hidden; }
 /* “+N”格下沿：收着的每样东西一个主人颜色的小泥点 */
 .skin-a .more .mdots { position: absolute; left: 0; right: 0; bottom: 3px; display: flex; justify-content: center; gap: 4px; line-height: 0; }
@@ -225,7 +228,7 @@ html.skin body { -webkit-font-smoothing: antialiased; }
 .titem.other .tbox::before { opacity: calc(.6 * var(--mf, 1)); }
 .titem .tlab { position: absolute; left: 50%; top: 100%; width: 80px; margin: 7px 0 0 -40px; text-align: center; pointer-events: none; font-family: var(--font); }
 .titem .tn { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; }
-.titem .ti { font-size: 10.5px; line-height: 14px; color: #8a6c47; white-space: nowrap; }
+.titem .ti { font-size: 11px; line-height: 14px; color: #8a6c47; white-space: nowrap; }
 .titem.mine .ti { color: var(--sage); }
 .titem .hit { position: absolute; left: -8px; right: -8px; top: -6px; bottom: -40px; }
 #trayLayer .tgh { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 5px; height: 18px; font-family: var(--fun); font-size: 12px; color: #7a5a30; white-space: nowrap; pointer-events: none; }
@@ -256,8 +259,12 @@ html.skin body { -webkit-font-smoothing: antialiased; }
 .skin-a #sheet .seg, .skin-a #sheet .zones { display: flex; flex-wrap: wrap; gap: 6px; }
 .skin-a #sheet .seg button, .skin-a #sheet .zones button { height: 34px; padding: 0 12px; border-radius: 12px; font-size: 13px; color: var(--ink); background: var(--card);
   box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .32); transition: transform .14s cubic-bezier(.23, 1, .32, 1); }
+/* 第二批 3：选项按钮看着还是 34 高，能点到的范围上下各探 5px 到 44；区域两行之间留 10px，上下两行的点按区刚好挨着不重叠 */
+.skin-a #sheet .seg button, .skin-a #sheet .zones button { position: relative; }
+.skin-a #sheet .seg button::after, .skin-a #sheet .zones button::after { content: ""; position: absolute; left: 0; right: 0; top: -5px; bottom: -5px; }
+.skin-a #sheet .zones { row-gap: 10px; }
 .skin-a #sheet .seg button.on, .skin-a #sheet .zones button.on { color: #fff; background: var(--sage); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(40, 60, 48, .3); }
-.skin-a #sheet .zones button { display: flex; align-items: center; gap: 5px; height: 32px; padding: 0 10px; font-size: 12px; }
+.skin-a #sheet .zones button { display: flex; align-items: center; gap: 5px; height: 34px; padding: 0 10px; font-size: 12px; }
 .skin-a #sheet .zones button.cz { color: #2f6570; box-shadow: inset 0 0 0 1.2px rgba(63, 122, 134, .42); background: #f1f8f8; }
 .skin-a #sheet .zones button.cz.on { color: #fff; background: #3f7a86; }
 .skin-a #sheet .zones button:disabled { color: #b9b2a2; box-shadow: inset 0 0 0 1.2px rgba(38, 48, 43, .1); background: #f6f2e8; cursor: default; }

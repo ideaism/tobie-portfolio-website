@@ -87,6 +87,9 @@ const src = name => D.img + 'item-' + name + '.webp';
 const draggable = it => it.kind === 'mine' || it.kind === 'shared';   // 能处理：喂企鹅、扔进桶、详情卡上的按钮（只有我的、共用的）
 // 能挪：默认界面里谁的东西都能按住拖起来换一层、放进冷冻（照产品，归属不变）；旧界面、方向 B 和以前一样只有能处理的才拖得动
 const movable = it => draggable(it) || (A && (it.kind === 'other' || it.kind === 'unknown'));
+// 能扔掉、能喂企鹅：我的、共用的，再加上别人贴了“请吃”（谁想吃都可以拿）的（只有默认界面；marks.js 判断请吃）。
+// 别人没贴请吃的、没人认的照旧：拖到企鹅身上不喂，飞回去
+const disposable = it => draggable(it) || (A && !!window.MARKS && !!MARKS.offered && MARKS.offered(it));
 function rectOf(it) {
   const [w, h] = D.sizes[it.img], maxH = it.t < 4 ? 52 : 40, k = Math.min(maxH / h, 62 / w);
   const W = w * k, H = h * k; return { x: X[it.s] - W / 2, y: S[it.t] + SOFF[it.t] - H, w: W, h: H };
@@ -605,29 +608,69 @@ function beginDrag(rec, from, p) {
   DR.on = true; DR.fx = p.x; DR.fy = DR.sy = p.y; DR.vx = DR.vy = 0;
   const ox0 = L.cx - p.x, oy0 = L.cy - p.y, s0 = L.s, sD = 92 / 170, sh0 = L.shOp, up0 = L.up;
   DR.ox = ox0; DR.oy = oy0; DR.s = s0; DR.nx = DR.ny = 0;
-  if (binOn() && draggable(rec.it)) BIN.up();   // 垃圾桶改版：拖起东西时桶从左下角弹上来（冷冻托盘开着时不出来）；别人的、没人认的只能挪，桶不出来
+  if (binOn() && disposable(rec.it)) BIN.up();   // 垃圾桶改版：拖起东西时桶从左下角弹上来（冷冻托盘开着时也出来）；别人没贴请吃的、没人认的只能挪，桶不出来
   tween(springMs(14, .55), e => { L.s = DR.s = spring(e, s0, sD, 0, 14, .55).x; }, { tag: 'dscale' });
   tween(240, e => { const q = easeOut(e / 240); DR.ox = lerp(ox0, 0, q); DR.oy = lerp(oy0, -38, q); L.shOp = lerp(sh0, 0.45, q); L.up = lerp(up0, 1, q); }, { tag: 'doff' });
-  G = { id: G ? G.id : -1, move(q) { DR.fx = q.x; DR.fy = q.y; }, up() { endDrag(); } };
+  DR.hist = [{ t: performance.now(), x: p.x, y: p.y }];
+  G = { id: G ? G.id : -1, move(q) { DR.fx = q.x; DR.fy = q.y; const n = performance.now(); DR.hist.push({ t: n, x: q.x, y: q.y }); while (DR.hist.length > 2 && n - DR.hist[0].t > 100) DR.hist.shift(); }, up() { endDrag(); } };
+}
+// 手指最近 100 毫秒的速度（像素/秒）；停下来超过 80 毫秒就是 0
+function fingerV() {
+  const h = DR.hist || [], n = performance.now();
+  if (h.length < 2 || n - h[h.length - 1].t > 80) return { x: 0, y: 0, s: 0 };
+  const a = h[0], b = h[h.length - 1], dt = (b.t - a.t) / 1000;
+  if (dt < 0.008) return { x: 0, y: 0, s: 0 };
+  const x = (b.x - a.x) / dt, y = (b.y - a.y) / dt;
+  return { x, y, s: Math.hypot(x, y) };
+}
+// 松手（或拖着）时东西要去的地方：手指 + 东西浮在手指上的偏移（不看还慢半拍的 L.cx）；甩出去的再往前推 0.1 秒（最多 120 像素）
+function dragAim(v = fingerV()) {
+  const x = DR.fx + DR.ox, y = DR.fy + DR.oy, k = Math.min(0.1, 120 / Math.max(1, v.s));
+  return { x, y, px: x + v.x * k, py: y + v.y * k };
+}
+const nearPen = (x, y) => Math.hypot(x - PC.x, y - PC.y) < 120;
+const inBinZone = (x, y) => x < 142 && y > 712;   // 和 bin.js 接东西的范围 ZIN 一样（东西中心）
+const onBin = (fx, fy) => fx < 150 && fy > 700;   // 手指压在弹上来的桶身/桶口上（桶左右 0–150，桶口约 690–710）
+// 手指在拉开的冷冻抽屉面上（看得见的那块：抽屉面左右，上沿 dwEdge 往上留 16，往下到屏幕底）
+function onDrawer(x, y) {
+  const k = kNow(), a = toScr(DRW.x, 0, k).x, b = toScr(DRW.x + DRW.w, 0, k).x;
+  return x >= a && x <= b && y > dwEdge() - 16;
 }
 function endDrag() {
   DR.on = false;
-  const d = Math.hypot(L.cx - PC.x, L.cy - PC.y), inBin = binOn() && BIN.hovering;
-  if (binOn() && (d < 120 || !inBin)) BIN.down();   // 没扔进桶：桶沉回底边下面
+  const rec = L.rec, can = disposable(rec.it);
+  let d = Math.hypot(L.cx - PC.x, L.cy - PC.y), inBin = binOn() && BIN.hovering;
+  // 默认界面：按手指松开的地方判断（东西慢半拍，快甩时还在半路）；甩出去的按甩的方向往前推一点。
+  // 先看企鹅、再看垃圾桶，最后才看冷冻抽屉：抽屉只在手指真的松在抽屉面上、而且不是甩向别处时才接
+  let pen = d < 120, fling = false;
+  if (A) {
+    const v = fingerV(), m = dragAim(v); fling = v.s > 900;
+    pen = pen || nearPen(m.x, m.y) || (fling && nearPen(m.px, m.py));
+    if (!pen && binOn() && can && !inBin && BIN.state.pt === 1 && (inBinZone(m.x, m.y) || onBin(DR.fx, DR.fy) || (fling && inBinZone(m.px, m.py)))) inBin = true;
+    if (pen) inBin = false;
+    DR.v = v; DR.m = m;
+  }
+  if (binOn() && (pen || !inBin)) BIN.down();   // 没扔进桶：桶沉回底边下面
   // 冷冻托盘开着时抽屉一直开着（不关）；从冷冻托盘上拖出来的东西本来就冻着，在抽屉上松手不算“放进冷冻”，飞回托盘
   // 在企鹅身上松手：什么都吃（不换鱼的吃掉了没有鱼，见 feed / ateNoFish）；在垃圾桶上松手扔进去（先于冷冻抽屉判断）
   // 默认界面：在冰箱里别的一层上松手 = 挪到那层（shelfAt / moveToShelf）
   const mv = A ? shelfAt() : -1; if (A) shelfMark(-1);
-  // 别人的、没人认的（只能挪）：在企鹅身上松手不喂，照常飞回去（shelfAt 在企鹅嘴边也是 -1）
-  if (d < 120 && draggable(L.rec.it)) { if (A && !TR.frz) dwSet(0); feed(); }
+  if (TR.away && mv < 0) { TR.away = false; awayTo(0); }   // 第二批 A：托盘让开着、没松在层上：托盘先弹回来，再按原来的规矩（企鹅、桶、飞回托盘）
+  // 抽屉：手指松在抽屉面上；甩着松手的（速度 > 900）只有往下甩、推出去的那一点也还在抽屉面上才算
+  const frz = A && !DW.busy && rec.frz == null && !TR.frz && onDrawer(DR.fx, DR.fy) && !(binOn() && (inBinZone(L.cx, L.cy) || inBinZone(DR.m.x, DR.m.y) || (BIN.state.pt === 1 && onBin(DR.fx, DR.fy))))
+    && (DW.tg === 1 || !fling) && (!fling || (DR.v.y > 0 && onDrawer(DR.m.px - DR.ox, DR.m.py - DR.oy)));
+  // 别人没贴请吃的、没人认的（只能挪）：在企鹅身上松手不喂，照常飞回去（shelfAt 在企鹅嘴边也是 -1）
+  if (pen && can) { if (A && !TR.frz) dwSet(0); feed(); }
+  else if (pen) { if (A && !TR.frz) dwSet(0); mode = 'busy'; penguinRest(); flyBack(() => { mode = 'open'; }); }
   else if (inBin) { if (A && !TR.frz) dwSet(0); binDrop(); }
-  else if (A && DW.tg === 1 && !DW.busy && L.rec.frz == null) dropFreeze();   // 在开着的冷冻抽屉上松手：掉进去
+  else if (frz) dropFreeze();   // 在冷冻抽屉上松手：掉进去（抽屉没开就先开，dropFreeze 里开）
   else if (mv >= 0) { if (!TR.frz) dwSet(0); moveToShelf(mv); }
   else { if (A && !TR.frz) dwSet(0); mode = 'busy'; penguinRest(); flyBack(() => { mode = 'open'; }); }
 }
 const MOUTH = () => ({ x: PC.x, y: 770 - 110 * P.sc + 110 * P.sc * 0.36 });
 // 在企鹅身上松手：东西缩进嘴里
 function feed() {
+  snapPlace(L.rec, 'pen');   // 撤销用：先记下原位
   mode = 'busy'; cancel('dscale'); cancel('doff');
   const f = { cx: L.cx, cy: L.cy, s: L.s, rz: L.rz, sh: L.shOp }, m = MOUTH(), due = isDue(L.rec);   // 旧界面、方向 B：isDue 总是 true
   tween(300, e => {
@@ -639,11 +682,12 @@ function feed() {
 // 方向 A“吃掉就有鱼”：放坏前吃掉也给一条鱼（标没标、“说不准”的都算），一条鱼划进严肃那只的嘴里（flyFish）；
 // 这次打开页面才放入的、这台冰箱今天已经给过 3 条的：照常蹦，没有鱼，也不多出字（freshFish）
 function ateNoFish(rec) {
-  const fish = freshFish(rec);
-  if (window.MARKS) MARKS.handled(rec);   // 和扔进垃圾桶一样：没人认的、有人挂起的原位留回执
-  removeItem(rec); penguinRest(); yumHop();
+  const fish = freshFish(rec), u = undoFor(rec);
+  const tok = window.MARKS ? MARKS.handled(rec) : null;   // 和扔进垃圾桶一样：没人认的、有人挂起的原位留回执
+  if (u) u.tok = tok;
+  removeItem(rec); penguinRest(); chewNod();
   if (fish) { D.fish += 1; flyFish(); }
-  toast(fish ? '企鹅吃掉了，得到一条鱼' : '企鹅吃掉了'); mode = 'open';
+  mode = 'open'; showUndo(u, fish ? '企鹅吃掉了，得到一条鱼' : '企鹅吃掉了');
 }
 // 防钻空子（打算 · 四 A）：NEWI 这次打开页面“放入”的东西（putNew 记的；数据里原有的都当放了好几天）；
 // FF 每台冰箱这次打开页面里“新鲜吃掉”给过几条（小样里一次打开就当一天；过了大半走庆祝的不占这 3 条）
@@ -673,7 +717,17 @@ function flyFish() {
     yFish.style.opacity = q >= 1 ? 0 : (1 - smooth(0.9, 1, q)).toFixed(3);
   }, { delay: 200, tag: 'yfish', done: () => { yFish.style.opacity = 0; P.vs -= 1.8; } });
 }
-function yumHop() {
+// 吃掉不换鱼、或者换了鱼但没庆祝的（ateNoFish）：严肃那只不蹦，慢慢低一下头、嚼两下再抬起来（约 1.2 秒）。
+// 低头 = 往下压一点（P.sq，和扔进桶时的点头同一个量级）；嚼 = 低着头时再轻轻压两下
+function chewNod() {
+  cancel('hop'); cancel('nod'); P.hop = 0;
+  const D_ = 1200;
+  tween(D_, e => {
+    const q = e / D_, dip = Math.sin(Math.PI * smooth(0, 1, q)), c = smooth(0.25, 0.4, q) * (1 - smooth(0.7, 0.85, q));
+    P.sq = 0.03 * dip + 0.014 * c * Math.max(0, Math.sin(Math.PI * 2 * (q - 0.25) / 0.225));
+  }, { tag: 'nod', done: () => { P.sq = 0; } });
+}
+function yumHop() {   // 以前不换鱼时的小蹦两下，留着没用了（第 9 条：换成 chewNod）
   cancel('hop'); cancel('nod');
   const D_ = 620, H = [11, 6];
   tween(D_, e => {
@@ -693,6 +747,7 @@ function yumHop() {
 const DROP_MIN = 36;
 function shelfAt() {
   const rec = L.rec;
+  if (A && rec && TR.on && TR.frz && !TR.closing && rec.frz != null && rec.tv && rec.F === TR.F && rec.F === cur) return frzShelfAt(rec);
   if (!A || !rec || TR.on || rec.frz != null || rec.hidden || rec.tv || rec.F !== cur || !camSettled()) return -1;
   if (DW.tg === 1 || (binOn() && BIN.hovering)) return -1;
   if (Math.hypot(L.cx - PC.x, L.cy - PC.y) < 120) return -1;
@@ -702,6 +757,20 @@ function shelfAt() {
   for (let t = 0; t < n; t++) {
     const y0 = t ? S[t - 1] + 24 : S[0] - 110, y1 = t === S.length - 1 ? dwEdge() : S[t] + 24;
     if (y >= y0 && y < y1) return 's' + t !== cz && zonesFor(rec).some(z => z.v === 's' + t) ? t : -1;
+  }
+  return -1;
+}
+// 冷冻托盘开着时，从托盘上把冻着的东西往上拖到托盘上面露出来的层上松手：拿出来放到那层（和“拿出来解冻”一样落层，满了进“+N”）。
+// 冰箱这时缩着（kNow），手指换算回冰箱里的坐标再按同样的竖条判断；手指还在托盘上（托盘上沿往下）不算，托盘挡住的那几层够不着
+function frzShelfAt(rec) {
+  if (!camSettled() || (binOn() && BIN.hovering) || Math.hypot(L.cx - PC.x, L.cy - PC.y) < 120) return -1;
+  if ((!TR.away && DR.fy > trayTop(TR.h || 0) - 4) || Math.abs(DR.fy - DR.sy) < DROP_MIN) return -1;   // 第二批 A：托盘让开了就不看托盘上沿
+  const q = toLoc(DR.fx, DR.fy, kNow()), x = q.x, y = q.y;
+  if (x < 24 || x > 366) return -1;
+  const n = Math.min(S.length, cur.data.shelves.length);
+  for (let t = 0; t < n; t++) {
+    const y0 = t ? S[t - 1] + 24 : S[0] - 110, y1 = t === S.length - 1 ? dwEdge() : S[t] + 24;
+    if (y >= y0 && y < y1) return zonesFor(rec).some(z => z.v === 's' + t) ? t : -1;
   }
   return -1;
 }
@@ -722,16 +791,47 @@ function moveToShelf(t) {
   const rec = L.rec, F = rec.F || cur, label = F.data.shelves[t].label.split(' · ')[0];
   trace('move ' + rec.it.id + ' ' + rec.it.t + '>' + t);
   mode = 'busy'; penguinRest();
-  detach(rec); placeOnShelf(F, rec, t);   // 原来那层回到 open 后补位（flushN）
-  const m = rec.hidden && F.moreEls[t];   // 那层满了：飞进“+N”格，格子弹一下
+  const wasFrz = rec.frz != null;   // 从冷冻托盘上拖上来的（frzShelfAt）：等于拿出来解冻
+  detach(rec);   // 原来那层回到 open 后补位（flushN）
+  const full = fullPut(F, rec, t); if (!full) placeOnShelf(F, rec, t);
+  const m = (full || rec.hidden) && F.moreEls[t];   // 那层满了：挪过来的看得见，原来最后那件进“+N”，“+N”格弹一下
+  const away = TR.away; TR.away = false;
+  if (away) awayTo(0);   // 第二批 A：冷冻托盘让开了、放到了层上：托盘回来、还开着（和改前从托盘拖到层上一样，托盘不收）
   flyBack(() => { mode = 'open'; if (m && m.animate && !RM) m.animate([{ transform: 'scale(1.35)' }, { transform: 'scale(1)' }], { duration: 320, easing: 'cubic-bezier(.3,1.6,.5,1)' }); });
   // 挪的是别人的东西：提示里带上是谁的什么（归属、计划、开没开都不变，只换层；不弹确认）
   const it = rec.it, whose = it.kind === 'other' && D.ownerNames[it.owner];
-  toast('已放到' + label + (whose ? ' · ' + whose + '的' + (it.name || D.names[it.img]) : ''));
+  toast(wasFrz ? '已拿出来解冻' : '已放到' + label + (whose ? ' · ' + whose + '的' + (it.name || D.names[it.img]) : ''));
+}
+// 第二批 B：拖到满了的层（有“+N”或已经摆了 4 件）：和 putNew 一样，挪过来的占第 3 格、看得见；原来最后看得见的那几件挤进“+N”的最前面
+function fullPut(F, rec, t) {
+  const it = rec.it, vis = F.data.items.filter(i => i.t === t).sort((a, b) => a.s - b.s), hid = F.hid[t] || [];
+  if (!hid.length && vis.length < 4) return false;
+  const inst = TR.on && TR.F === F && TR.t === t, out = vis.slice(2);
+  vis.slice(0, 2).forEach((v, i) => { const r = F.recs[v.id]; if (r && v.s !== i) slide(r, i, inst); });
+  out.forEach(v => { const r = F.recs[v.id]; if (r) demote(F, r, t, inst); });
+  F.hid[t] = out.concat(hid);
+  it.t = t; it.s = Math.min(2, vis.length); F.data.items.push(it); if (F.i === 0) D.items = F.data.items;
+  mkShelfEl(rec); setSticker(rec, false);
+  syncMore(F, t); updateMore(F, t, inst); queueN(F, t);
+  return true;
+}
+// 第二批 A：冷冻托盘开着、从托盘上把冻着的东西往上拖出托盘：托盘照收起的样子缩回抽屉让开（TR.push → 1，冰箱放回原大、五层都露出来）；
+// 手指回到抽屉面上：托盘再弹出来。让开以后五层都能放（frzShelfAt 不再看托盘上沿）
+function trayAway() {
+  const rec = L.rec;
+  if (!A || !rec || !TR.on || !TR.frz || TR.closing || rec.frz == null || !rec.tv || rec.F !== TR.F) return;
+  if (!TR.away) { if (Math.abs(DR.fy - DR.sy) >= DROP_MIN && DR.fy < trayTop(TR.h || 0) - 4) { TR.away = true; awayTo(1); } }
+  else if (onDrawer(DR.fx, DR.fy)) { TR.away = false; awayTo(0); }
+}
+function awayTo(v) {
+  trace('tray away ' + v); cancel('trayPush');
+  const p0 = TR.push, w = v ? 12 : 16, z = v ? .92 : .72;   // 让开用收起的弹簧，回来用推回去的弹簧
+  tween(springMs(w, z), e => { TR.push = clamp(spring(e, p0, v, 0, w, z).x, 0, 1); }, { tag: 'trayPush', done: () => { TR.push = v; } });
 }
 // 白卡上的“处理掉它”：东西从半空划过去喂给企鹅
 function feedFromPick() {
   if (!isDue(L.rec) && binOn()) { binFromPick(); return; }   // 第四步：不换鱼的东西扔进垃圾桶
+  snapPlace(L.rec, 'pen');
   mode = 'busy'; closeSheet(); dimTo(false); removeModel(); cancel('lift');
   L.tiltOn = false; L.bobA = 0;
   const f = { cx: L.cx, cy: L.cy, s: L.s, rx: L.rx, ry: L.ry }, dur = 620;
@@ -756,13 +856,15 @@ function nodPenguin() {
 // 东西缩进桶里以后：换鱼的走庆祝（celebrate 里留回执、拿掉东西）；不换鱼的在这里拿掉
 function binDone(rec) {
   if (isDue(rec)) { P.vs -= 1; at(160, () => celebrate(rec)); return; }
-  if (window.MARKS) MARKS.handled(rec);   // 回执只留给没人认的、有人挂起的（marks.js 里判断）
+  const u = undoFor(rec), tok = window.MARKS ? MARKS.handled(rec) : null;   // 回执只留给没人认的、有人挂起的（marks.js 里判断）
+  if (u) u.tok = tok;
   removeItem(rec); penguinRest(); nodPenguin();
-  toast('已处理'); mode = 'open';
+  mode = 'open'; showUndo(u, '已处理');
 }
 // 拖到垃圾桶上松手：桶盖掀开，东西缩进桶口，盖子落下弹一下
 function binDrop() {
   const rec = L.rec, f = { cx: L.cx, cy: L.cy, s: L.s, rz: L.rz, sh: L.shOp };
+  snapPlace(rec, 'bin');
   mode = 'busy'; cancel('dscale'); cancel('doff'); cancel('lift');
   BIN.open(); lookAt(BIN.mouth().x, BIN.mouth().y);
   tween(320, e => {
@@ -773,6 +875,7 @@ function binDrop() {
 }
 // 白卡上的“处理掉它”（不换鱼的）：东西从半空划一道弧扔进垃圾桶，快到时桶盖掀开
 function binFromPick() {
+  snapPlace(L.rec, 'bin');
   mode = 'busy'; closeSheet(); dimTo(false); removeModel(); cancel('lift');
   L.tiltOn = false; L.bobA = 0;
   // 垃圾桶改版：桶先从左下角弹上来（企鹅转头看一眼），等 240 毫秒东西再划过去。冷冻托盘开着时也出来（点了按钮，东西总得有地方去）
@@ -926,7 +1029,9 @@ function removeItem(rec) {
   if (F.i === 0) D.items = F.data.items;
 }
 function celebrate(rec) {
-  if (rec && A && window.MARKS) MARKS.handled(rec);   // 原位留一张“已处理”小纸条（marks.js）
+  const u = undoFor(rec);
+  const tok = rec && A && window.MARKS ? MARKS.handled(rec) : null;   // 原位留一张“已处理”小纸条（marks.js）
+  if (u) { u.tok = tok; u.cel = true; }   // 撤销条等庆祝收起再出来（dismissCel）
   if (rec) removeItem(rec);
   mode = 'celebrate'; C.leaving = false; penguinRest();
   cancel('conf'); renderConfetti(0);   // 上一次撒的东西（星星会一直留着）先收掉
@@ -1029,6 +1134,7 @@ function dismissCel() {
     mode = 'open'; C.leaving = false; CM.on = false; CM.held = false;
     HP.on = false; HP.el.style.opacity = 0;
     if (CM.mv) CM.mv.style.opacity = 0;
+    if (UD && UD.cel) showUndo(UD, UD.how === 'bin' ? '已处理' : '企鹅吃掉了');   // 庆祝收起、回到冰箱画面：这时才出撤销条，5 秒从这时算
   } });
 }
 C.el.addEventListener('pointerdown', act(() => { if (nowT - C.t0 > 500) dismissCel(); }));
@@ -1230,8 +1336,9 @@ function initGyro() {
 }
 function bindCam() {
   if (!A) return;
-  document.querySelectorAll('#topbar .tab').forEach((b, i) => b.addEventListener('click', act(() => {
+  document.querySelectorAll('#topbar .tab').forEach((b, i) => b.addEventListener('click', act(e => {
     if (G || (mode !== 'open' && mode !== 'closed')) return;
+    if (TO.free && nearToast(e)) return;   // 点偏在“撤销”提示条旁边：什么都不做
     // 拉出一层时点顶上的字：先把托盘收回去，收好了再换过去（点的就是这台就只收）
     if (TR.on) { if (mode !== 'open') return; TR.then = i === cur.i ? null : () => goTo(i); if (!TR.closing) closeTray(); return; }
     goTo(i);
@@ -1239,7 +1346,8 @@ function bindCam() {
   // 空白处按下：转镜头（按钮、详情卡、拿起层、庆祝层不算）
   phone.addEventListener('pointerdown', act(e => {
     if (G || (mode !== 'open' && mode !== 'closed') || TR.on) return;
-    if (e.target.closest('button, #sheet, #lift, #dim, #celebrate')) return;
+    if (e.target.closest('button, #sheet, #lift, #dim, #celebrate, #toast')) return;   // #toast：带撤销的提示条（整条都点得到），按下不转镜头
+    if (TO.free && nearToast(e)) return;   // 点偏在提示条旁边的缓冲区里：什么都不做（不转镜头，也不算“做了别的事”收掉撤销）
     // 企鹅的气泡：点一下（没拖）拉出记号最多的那层（marks.js 挑层）；拖着照样转镜头
     if (window.MARKS && e.target.closest('#bubble')) { camGesture(e, () => MARKS.bubbleTap()); return; }
     camGesture(e, null);
@@ -1413,7 +1521,7 @@ function bindTrayItem(c) {
       id: e.pointerId,
       move(q) {
         // 别人的、没人认的（只能挪，从托盘上只能挪进冷冻）：托盘滚得动时竖着划还是滚托盘，别的方向才拖起来
-        const only = !draggable(rec.it), vert = TR.maxScroll > 0 && Math.abs(q.y - p.y) > Math.abs(q.x - p.x);
+        const only = !disposable(rec.it), vert = TR.maxScroll > 0 && Math.abs(q.y - p.y) > Math.abs(q.x - p.x);
         if (movable(rec.it) && !(only && vert) && Math.hypot(q.x - p.x, q.y - p.y) > 8) { c.img.style.transform = ''; const id = G.id; beginDrag(rec, 'shelf', q); G.id = id; }
         else if (only && TR.maxScroll > 0 && Math.abs(q.y - p.y) > 8) {   // 拖不走的东西上下划 = 滚托盘
           c.img.style.transform = ''; const s0 = TR.scroll, id = G.id;
@@ -1469,7 +1577,7 @@ function openTray(F, t) {
     : F.data.items.filter(it => it.t === t).map(it => F.recs[it.id]).filter(Boolean);
   const hid = fz ? [] : ((F.hid && F.hid[t]) || []).map(it => F.recs[it.id]).filter(Boolean);
   trace('tray open ' + F.i + ':' + t);
-  Object.assign(TR, { on: true, F, t, p: 0, push: 0, hf: 1, closing: false, dirty: false, list: [], heads: [], scroll: 0, h: null, from: fz ? { x: 24, y: 626, w: 342, h: 96 } : trayFrom(t), then: null, frz: fz });
+  Object.assign(TR, { on: true, F, t, p: 0, push: 0, away: false, hf: 1, closing: false, dirty: false, list: [], heads: [], scroll: 0, h: null, from: fz ? { x: 24, y: 626, w: 342, h: 96 } : trayFrom(t), then: null, frz: fz });
   TL.layer.style.display = 'block'; TL.items.style.clipPath = '';
   TL.layer.classList.toggle('cold', fz);
   // 名牌：从层板上那条胶带的位置出发，最后骑在托盘前沿上（冷冻：从抽屉上那条“冷冻 · N 件”胶带出发）
@@ -1514,7 +1622,7 @@ function finishTray() {
   if (TR.shelfName) TR.shelfName.classList.remove('intray');
   TR.heads.forEach(h => h.el.remove());
   if (TR.frz) { dwSet(0, TR.F); TL.layer.classList.remove('cold'); }   // 冷冻托盘收好了：抽屉推回去
-  Object.assign(TR, { on: false, F: null, t: -1, p: 0, push: 0, closing: false, dirty: false, list: [], order: [], heads: [], scroll: 0, shelfName: null, frz: false });
+  Object.assign(TR, { on: false, F: null, t: -1, p: 0, push: 0, away: false, closing: false, dirty: false, list: [], order: [], heads: [], scroll: 0, shelfName: null, frz: false });
   TL.layer.style.display = 'none'; TL.items.style.clipPath = ''; tf(TL.kitchen, '');
   trace('tray closed');
   const then = TR.then; TR.then = null; if (then && mode === 'open' && !G) then();
@@ -1626,17 +1734,22 @@ function dwEdge() { return toScr(0, DRW.y).y - 6; }
 function dwZone() {
   if (DW.busy || (L.rec && L.rec.frz != null)) return;   // 冻着的东西（从冷冻托盘上拖出来的）不管抽屉
   const F = (L.rec && L.rec.F) || cur, it = L.rec && L.rec.it;
-  const near = Math.hypot(L.cx - PC.x, L.cy - PC.y) < 120;
+  const m = dragAim(), v = fingerV();
+  const near = Math.hypot(L.cx - PC.x, L.cy - PC.y) < 120 || nearPen(m.x, m.y);   // 企鹅先：按手指要去的地方看，不等东西追上来
   const inX = DR.fx > 8 && DR.fx < 382;
-  // 别人的、没人认的（只能挪）：桶不出来，但拖到左下角桶那块（和 bin.js 接东西的范围 ZIN 一样：东西中心 x < 142、y > 712）抽屉也不开，松手飞回去
-  const corner = binOn() && it && !draggable(it) && L.cx < 142 && L.cy > 712;
-  const inZ = it && movable(it) && !near && inX && DR.fy > dwEdge() - (DW.tg === 1 ? 16 : 0) && !(binOn() && BIN.hovering) && !corner;   // 在垃圾桶上：抽屉不开
+  // 左下角桶那块（和 bin.js 接东西的范围 ZIN 一样：东西中心 x < 142、y > 712）抽屉不开：桶出来的往桶里扔，桶没出来的（别人没贴请吃的、没人认的）松手飞回去
+  const corner = binOn() && it && (inBinZone(L.cx, L.cy) || inBinZone(m.x, m.y) || (BIN.state.pt === 1 && onBin(DR.fx, DR.fy)));   // 手指压在弹上来的桶上也不开
+  // 还没开的时候：手指走得快（> 600 像素/秒，在往企鹅、往桶那边去的路上）不开；桶出来了、手指在左下往桶那边走（x < 150、往下走）也不开
+  const toBin = binOn() && BIN.state.pt === 1 && DR.fx < 150 && v.y > 120;
+  const hold = DW.tg === 1 || (v.s < 600 && !toBin);
+  const inZ = it && movable(it) && !near && inX && DR.fy > dwEdge() - (DW.tg === 1 ? 16 : 0) && !(binOn() && BIN.hovering) && !corner && hold;   // 在垃圾桶上：抽屉不开
   dwSet(inZ ? 1 : 0, F);
 }
 // 东西掉进抽屉（拖到抽屉上松手，或者白卡上点了“放进冷冻”飞过来之后）
 function dropFreeze() {
   const rec = L.rec, F = rec.F || cur, d = F.dw;
   trace('freeze ' + rec.it.id);
+  const u = snapPlace(rec, 'frz');   // 撤销用：放进去之前记下原来那层那一格（计划、开没开也记下，放进冷冻会清掉）
   mode = 'busy'; DW.busy = true; cancel('dscale'); cancel('doff'); cancel('lift'); cancel('frz');
   if (DW.tg !== 1 || DW.F !== F) dwSet(1, F);
   L.tiltOn = false; L.bobA = 0; P.ringT = 0;
@@ -1687,7 +1800,7 @@ function dropFreeze() {
   say('放进冷冻了', 760);
   tween(140, e => { bubble.style.opacity = (1 - e / 140).toFixed(3); }, { delay: 760 + 2600, tag: 'bub' });
   say(() => F.bubble, 760 + 2600 + 150);   // 到时候再取：冻进去以后件数可能变了
-  at(1100, () => { mode = 'open'; DW.busy = false; }, 'frz');
+  at(1100, () => { mode = 'open'; DW.busy = false; if (u) showUndo(u, '已放进冷冻'); }, 'frz');
 }
 // 白卡上的“放进冷冻”：卡收起，东西从半空划到抽屉上方，抽屉开了接住
 function freezeFromPick() {
@@ -1785,7 +1898,7 @@ function sheetEx(rec) {
   return { where: fz ? F.data.frozen[rec.frz].label : rec.hidden ? F.data.shelves[rec.ht].label : undefined, frozen: fz, edit: ED && ED.rec === rec ? ED : null,
     mk: window.MARKS ? MARKS.sheet(rec) : null,   // 记号带来的那几行（marks.js）：{ meta, btns, replace }
     // 第四步：due 处理掉换不换鱼；paused 我不在、计划暂停着（没有“开了”）；thaw 解冻那两行的草稿
-    due: isDue(rec), paused: !fz && !!window.MARKS && MARKS.planState(rec.it) === 'paused', thaw: TH && TH.rec === rec ? TH : null };
+    due: isDue(rec), offer: !draggable(rec.it) && disposable(rec.it), paused:!fz && !!window.MARKS && MARKS.planState(rec.it) === 'paused', thaw: TH && TH.rec === rec ? TH : null };
 }
 // 编辑面板“区域”里能选的：这台冰箱的每一层（别人的层也能放，照产品：挪东西不分谁的层），再加冷冻两层。
 // 第四步起放满了（4 件）也照样能选（skin.js 不再灰掉“满了”），多出来的收进那层的“+N”；full 只是留着给别处读
@@ -1991,11 +2104,15 @@ const TO = { el: null, text: '', rec: null, ghost: null };
 const undoLive = () => !TO.rec || (mode === 'picked' && L.rec === TO.rec && !ED && !!TO.rec.it.opened);
 function dropUndo() {
   const el = TO.el, o0 = +el.style.opacity || 0;
-  TO.act = null; TO.rec = null; TO.text = ''; el.style.pointerEvents = 'none';
+  TO.act = null; TO.rec = null; TO.free = null; TO.text = ''; el.style.pointerEvents = 'none';
   cancel('toast');
   tween(120, e => { el.style.opacity = (o0 * (1 - e / 120)).toFixed(3); }, { tag: 'toast', done: () => { el.style.display = 'none'; } });
 }
-function keepUndo() { if (TO.act && TO.rec && !undoLive()) dropUndo(); }
+// 处理掉、放进冷冻之后的“撤销”（TO.free）：做了别的事就收掉——拿起别的、开始拖、开面板、换冰箱、开关门、拉出一层、按下转镜头
+function keepUndo() {
+  if (TO.act && TO.rec && !undoLive()) dropUndo();
+  else if (TO.act && TO.free && (mode !== 'open' || G || TR.on !== TO.free.trOn || cur !== TO.free.cur)) dropUndo();
+}
 // 提示条在手机画面里的框（上下各多 5：点得到的 44 高）
 function toastBox() {
   const r = TO.el.getBoundingClientRect(), f = frameEl.getBoundingClientRect();
@@ -2019,7 +2136,7 @@ function toast(text, y = 104, act) {
       const fn = TO.act.fn; TO.act = null; TO.rec = null; fn();
     });
   }
-  TO.act = act || null; TO.text = text; TO.rec = (act && act.rec) || null; TO.ghost = null; TO.el.style.pointerEvents = '';
+  TO.act = act || null; TO.text = text; TO.rec = (act && act.rec) || null; TO.free = (act && act.free) || null; TO.ghost = null; TO.el.style.pointerEvents = '';
   if (act) { TO.el.textContent = ''; TO.el.append(div('tmsg', text)); const b = document.createElement('button'); b.type = 'button'; b.className = 'tact'; b.textContent = act.label; TO.el.append(b); }
   else TO.el.textContent = text;
   TO.el.classList.toggle('act', !!act);
@@ -2031,8 +2148,87 @@ function toast(text, y = 104, act) {
     TO.el.style.translate = `-50% ${((1 - easeOut(e / 260)) * 6).toFixed(2)}px`;
   }, { tag: 'toast', done: () => {
     if (TO.act && A) TO.ghost = { r: toastBox(), until: nowT + 500 };   // 带撤销的到点自己淡掉：之后 0.5 秒里点原位置也不放回
-    TO.el.style.display = 'none'; TO.text = ''; TO.act = null; TO.rec = null;
+    TO.el.style.display = 'none'; TO.text = ''; TO.act = null; TO.rec = null; TO.free = null;
   } });
+}
+
+// ---------- 撤销处理掉 / 放进冷冻（只有默认界面） ----------
+// 处理掉（喂企鹅、扔进桶、白卡上的“处理掉它”）和放进冷冻之前先记下原位（snapPlace）；做完出一条 5 秒的“撤销”提示条（showUndo），
+// 样子、点法和“开了”的撤销一样。庆祝的等庆祝收起、回到冰箱画面才出来。点了撤销：放回原来那层原来那一格
+// （原来在“+N”里就回“+N”，原来冻着就回冷冻），鱼收回，“已处理”小纸条拿掉；进度、气泡、清单都是按东西现算的，跟着回来
+let UD = null;
+const UF = ['plan', 'opened', 'planAt', 't', 's', 'sticker'];
+function snapPlace(rec, how) {
+  if (!A || !rec) return null;
+  const F = rec.F || cur, it = rec.it, p = { F, rec, how, fields: {}, fish0: D.fish, ff0: FF.get(F.i), tok: null, tray: TR.on && !!rec.tv };
+  UF.forEach(k => { if (k in it) p.fields[k] = it[k]; });
+  if (rec.frz != null) { p.k = 'frz'; p.z = rec.frz; p.idx = F.data.frozen[rec.frz].items.indexOf(it); }
+  else {
+    const t = rec.hidden ? rec.ht : it.t, hid = F.hid[t] || [];
+    p.k = 'shelf'; p.t = t; p.full = hid.length > 0;
+    p.order = F.data.items.filter(i => i.t === t).sort((a, b) => a.s - b.s).concat(hid).map(i => i.id);
+  }
+  return (UD = p);
+}
+const undoFor = rec => (UD && UD.rec === rec ? UD : null);
+function showUndo(p, text) {
+  if (!p || UD !== p) { toast(text); return; }
+  UD = null; p.gain = D.fish - p.fish0; p.cur = cur; p.trOn = TR.on;
+  toast(text, 104, { label: '撤销', ms: 5000, free: p, fn: () => restorePlace(p) });
+}
+function restorePlace(p) {
+  const { F, rec } = p, it = rec.it;
+  trace('undo ' + it.id + ' ' + p.how);
+  if (rec.frz != null) detach(rec);   // 放进冷冻的撤销：先从冷冻里拿出来
+  UF.forEach(k => delete it[k]); Object.assign(it, p.fields);
+  F.recs[it.id] = rec;
+  if (p.k === 'frz') {
+    const z = F.data.frozen[p.z] ? p.z : 0, zs = F.data.frozen[z].items;
+    zs.splice(Math.min(Math.max(0, p.idx), zs.length), 0, it);
+    const g = ghost(it);
+    Object.assign(rec, { el: g.el, img: g.img, st: null, frz: z, hidden: false, mk: null, r: { x: 175, y: 650, w: 40, h: 40 } }); delete rec.ht;
+    tapeTo(F, true);
+  } else restoreShelf(F, rec, p);
+  if (F.i === 0) D.items = F.data.items;
+  // 原来在拉出来的托盘上（托盘还开着）：托盘上也放回去
+  if (p.tray && TR.on && TR.F === F && !TR.closing && (TR.frz ? rec.frz != null : rec.frz == null && rec.it.t === TR.t)) {
+    const c = mkTrayItem(rec); TR.list.push(c); TR.dirty = true;
+    tween(springMs(13, .62), e => { c.q = spring(e, 0, 1, 0, 13, .62).x; }, { tag: 'tray', delay: 120, done: () => { c.q = 1; } });
+  }
+  if (p.gain > 0) D.fish -= p.gain;
+  if (p.ff0 == null) FF.delete(F.i); else FF.set(F.i, p.ff0);
+  if (window.MARKS) MARKS.unhandle(p.tok);
+  if (p.how === 'frz' && F === cur) { cancel('bub'); BUB.out = false; bubble.innerHTML = BUB.html = F.bubble; bubble.style.opacity = 1; bubble.style.translate = ''; }
+  // 回来的那一下：层板上的弹出来，回“+N”的“+N”格弹一下
+  if (!RM) {
+    const el = rec.hidden ? F.moreEls && F.moreEls[rec.ht] : rec.frz == null && !rec.tv ? rec.el : null;
+    if (el && el.animate) el.animate(rec.hidden ? [{ transform: 'scale(1.35)' }, { transform: 'scale(1)' }] : [{ transform: 'scale(.3)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }],
+      { duration: 360, easing: 'cubic-bezier(.3,1.5,.5,1)' });
+  }
+  if (p.how === 'pen') P.vs -= 1;
+  toast('已撤销');
+}
+// 放回原来那层：原来这层没有“+N”、那一格还空着就直接放回那一格；否则先收进“+N”，再按原来的顺序把整层排一遍（原来挤上来补位的那件回“+N”）
+function restoreShelf(F, rec, p) {
+  const it = rec.it, t = p.t, hid = F.hid[t] || [], vis = F.data.items.filter(i => i.t === t);
+  const inst = TR.on && TR.F === F && TR.t === t;
+  if (!p.full && !hid.length && vis.length < 4 && p.fields.s != null && !vis.some(i => i.s === p.fields.s)) {
+    it.t = t; it.s = p.fields.s; F.data.items.push(it);
+    mkShelfEl(rec); setSticker(rec, false); updateMore(F, t, inst);
+    return;
+  }
+  it.t = t; delete it.s; hid.push(it); F.hid[t] = hid;
+  const g = ghost(it), b = moreBox(F, t);
+  Object.assign(rec, { el: g.el, img: g.img, st: null, hidden: true, ht: t, mk: null, r: { x: b.x - 10, y: b.y - 20, w: 20, h: 20 } });
+  const all = vis.concat(hid), byId = new Map(all.map(i => [i.id, i]));
+  const order = p.order.map(id => byId.get(id)).filter(Boolean).concat(all.filter(i => !p.order.includes(i.id)));
+  const cap = order.length <= 4 ? 4 : 3;
+  order.forEach((x, i) => {
+    const r = F.recs[x.id]; if (!r) return;
+    if (i < cap) { if (hid.includes(x)) promote(F, r, i, inst); else if (x.s !== i) slide(r, i, inst); }
+    else if (!hid.includes(x)) demote(F, r, t, inst);
+  });
+  F.hid[t] = order.slice(cap).filter(x => F.recs[x.id]); syncMore(F, t); updateMore(F, t, inst);
 }
 
 // ---------- 9 层板补位（只有默认界面） ----------
@@ -2099,7 +2295,7 @@ function decorate(rec) {
   if (it.yellow) { const y = div('ytag', '临期'); y.style.rotate = (h % 2 ? -8 : -5) + 'deg'; el.append(y); }
 }
 // 往某台冰箱放一样新东西（录入面板 add.js 用）。f：第几台（0 起）或冰箱本身；where：层号，或 { frozen: 冷冻第几层 }。
-// hold：先藏着（等飞过来的那一份落地再露出来，调返回的 land()）。层满了照常收进“+N”。
+// hold：先藏着（等飞过来的那一份落地再露出来，调返回的 land()）。层满了（默认界面）：新放的看得见，原来最后看得见的挤进“+N”；旧界面照常收进“+N”。
 // 返回 { rec, x, y 落点中心（手机坐标）, w, h, more 进了“+N”没有, frozen, land }
 function putNew(f, it, where, hold) {
   const F = typeof f === 'number' ? FR[f] : (f || cur);
@@ -2116,6 +2312,23 @@ function putNew(f, it, where, hold) {
     return { rec, x, y, w: 24, h: 24, more: false, frozen: true, land };
   }
   const t = clamp(Math.round(+where || 0), 0, F.data.shelves.length - 1);
+  if (A) {
+    // 这层满了（有“+N”或已经摆了 4 件）：新放的占第 3 格、看得见；原来最后看得见的那几件挤进“+N”的最前面
+    const vis = F.data.items.filter(i => i.t === t).sort((a, b) => a.s - b.s), hid = F.hid[t] || [];
+    if (hid.length || vis.length >= 4) {
+      const inst = TR.on && TR.F === F && TR.t === t, out = vis.slice(2);
+      vis.slice(0, 2).forEach((v, i) => { const r = F.recs[v.id]; if (r && v.s !== i) slide(r, i, inst); });
+      out.forEach(v => { const r = F.recs[v.id]; if (r) demote(F, r, t, inst); });
+      F.hid[t] = out.concat(hid);
+      it.t = t; it.s = Math.min(2, vis.length); F.data.items.push(it); if (F.i === 0) D.items = F.data.items;
+      mkShelfEl(rec); setSticker(rec, L.rec !== rec);
+      syncMore(F, t); updateMore(F, t, inst); queueN(F, t);
+      const m = F.moreEls[t], v2 = v => { rec.el.style.visibility = v; if (rec.st) rec.st.style.visibility = v; };
+      if (hold) v2('hidden');
+      return { rec, x: rec.r.x + rec.r.w / 2, y: rec.r.y + rec.r.h / 2, w: rec.r.w, h: rec.r.h, more: false, frozen: false,
+        land() { if (L.rec !== rec) v2(''); if (m && m.animate && !RM) m.animate([{ transform: 'scale(1.35)' }, { transform: 'scale(1)' }], { duration: 320, easing: 'cubic-bezier(.3,1.6,.5,1)' }); } };
+    }
+  }
   placeOnShelf(F, rec, t);
   if (rec.hidden) {
     const b = moreBox(F, t), m = F.moreEls[t];
@@ -2388,10 +2601,10 @@ function liveUpdate(dt, t) {
     L.cx = nx; L.cy = ny;
     const b = 1 - Math.exp(-dt / 70); DR.vx += (vx - DR.vx) * b; DR.vy += (vy - DR.vy) * b;
     L.rz = clamp(DR.vx * 0.02, -16, 16); L.ry = clamp(DR.vx * 0.03, -20, 20); L.rx = clamp(-DR.vy * 0.025, -16, 16);
-    penguinTrack(L.cx, L.cy, draggable(L.rec.it));   // 我的、大家的什么都能喂：凑到嘴边就张嘴；别人的、没人认的只能挪：企鹅只看着，不张嘴
+    penguinTrack(L.cx, L.cy, disposable(L.rec.it));   // 我的、大家的（还有别人贴了请吃的）什么都能喂：凑到嘴边就张嘴；别人的、没人认的只能挪：企鹅只看着，不张嘴
     // 垃圾桶改版：桶跟着东西变大小、到了桶上掀盖子（按没偏过的位置判断）；到了桶上东西缩小一点
     if (binOn()) { BIN.track(L.cx - DR.nx, L.cy - DR.ny); L.s = DR.s * (1 - 0.36 * BIN.pull); }
-    if (A) { dwZone(); shelfMark(shelfAt()); }
+    if (A) { dwZone(); trayAway(); shelfMark(shelfAt()); }
   } else if (mode === 'picked' && L.rec) { if (A) penguinRest(); else penguinTrack(L.cx, L.cy, false); }   // 默认界面：拿起来时企鹅探头到白卡上（7 企鹅探头），角落里那只歇着
   else if (mode === 'open' || mode === 'closed') {
     if (A && P.look && (!G || G.cam)) P.look = null;
@@ -2595,6 +2808,8 @@ window.__app = { get cm() { return { ready: CM.ready, on: CM.on, held: CM.held }
       slot: it.s != null ? it.s : null, sticker: r.st ? r.st.textContent : null, left: r.el.parentNode ? parseFloat(r.el.style.left) : null }; } return null; },
   // 编辑面板：开着时是草稿（item / own / plan / zone / zones），没开是 null；toast 当前提示的字
   get edit() { return ED ? { item: ED.rec.it.id, own: ED.own, plan: ED.plan, zone: ED.zone, zones: ED.zones } : null; }, get toast() { return TO.text; },
+  // 处理掉 / 放进冷冻之后的撤销条：开着时 { text, how（pen 喂企鹅 / bin 扔桶 / frz 冷冻）, item }，没有是 null
+  get undo() { return TO.act && TO.free ? { text: TO.text, how: TO.free.how, item: TO.free.rec.it.id } : null; },
   // 每周结算（week.js）：把开着的门关回去，见上面的 reclose()
   reclose,
   // 录入面板（add.js）用：decorate 重贴名字小标签和黄标；putNew 往某层 / 冷冻放一样新东西（见上面 putNew）；

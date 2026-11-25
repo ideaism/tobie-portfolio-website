@@ -7,11 +7,11 @@
 .skin-a .item { isolation: isolate; }
 /* 白纸小标签：贴在东西下半截正中，暖白底、细边、微微歪；只看我的打开时跟着东西一起变淡（--mf 是 app.js 写的） */
 .skin-a .item .nlab { position: absolute; left: 50%; top: 75%; translate: -50% -50%; z-index: 2; pointer-events: none;
-  padding: 0 3px; height: 15px; line-height: 14px; border-radius: 2px; white-space: nowrap;
-  font-family: var(--fun); font-size: 10px; color: #4f4130; letter-spacing: .02em;
+  padding: 0 3px; height: 17px; line-height: 16px; border-radius: 2px; white-space: nowrap;
+  font-family: var(--fun); font-size: 11px; color: #4f4130; letter-spacing: .02em;
   background: #fffaf0; border: 1px solid rgba(109, 84, 55, .26);
   box-shadow: 0 1px 1.5px rgba(60, 40, 15, .28); opacity: var(--mf, 1); }
-.skin-a .item .nlab.plain { font-family: var(--font); font-size: 9px; font-weight: 600; letter-spacing: 0; }
+.skin-a .item .nlab.plain { font-family: var(--font); font-size: 11px; font-weight: 600; letter-spacing: -.02em; }   /* 第二批 3：10 / 9px → 11px */
 /* 黄标：左上角一张柠檬黄的价签，写“临期”（右上角是主人贴纸，所以放左边）。左头一个小打孔 */
 .skin-a .item .ytag { position: absolute; left: -7px; top: -6px; z-index: 2; pointer-events: none; transform-origin: 100% 50%;
   height: 15px; line-height: 15px; padding: 0 4px 0 9px; border-radius: 2px 3px 3px 2px; white-space: nowrap;
@@ -36,6 +36,7 @@
 #addLayer .apanel { position: absolute; left: 0; bottom: 0; width: 390px; max-height: 78%; display: flex; flex-direction: column;
   background: var(--card); border-radius: 28px 28px 0 0; box-shadow: 0 -8px 30px rgba(38, 48, 43, .16); transform: translateY(102%); }
 #addLayer .ahandle { flex: none; height: 26px; cursor: pointer; position: relative; }
+#addLayer .ahandle::after { content: ""; position: absolute; left: 0; right: 0; top: -18px; bottom: 0; }   /* 第二批 3：看着还是 26 高，点按区往面板上沿外（压暗层，点了也是关）探 18px 到 44 */
 #addLayer .ahandle::before { content: ""; position: absolute; left: 50%; top: 10px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: #ddd6c6; }
 #addLayer .ascroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 0 22px 8px; scrollbar-width: none; }
 #addLayer .ascroll::-webkit-scrollbar { display: none; }
@@ -50,7 +51,8 @@
   box-shadow: -1px 1px 0 rgba(109, 84, 55, .12); transform: rotate(45deg); border-radius: 0 0 0 3px; }
 
 /* 看到一件没人认的东西（产品 found 的字） */
-#addLayer .aback { display: inline-block; margin: 0 0 8px; font-size: 13px; color: var(--sage); font-weight: 600; }
+/* 第二批 3（追加）：「← 回到放入」本身就是 44 高（字居中），左右各多 6 的点按区；它在滚动区最上面，往上探会被裁掉，所以撑自己的高，下面的东西往下让 14 */
+#addLayer .aback { display: inline-flex; align-items: center; height: 44px; padding: 0 6px; margin: 0 0 -4px -6px; position: relative; z-index: 1; font-size: 13px; color: var(--sage); font-weight: 600; }
 #addLayer .akicker { font-size: 12px; color: #9a5f22; font-weight: 600; margin: 0 0 4px; }
 #addLayer .atitle { font-size: 22px; line-height: 1.25; font-weight: 700; margin: 0 0 6px; }
 #addLayer .alede { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 14px; }
@@ -69,16 +71,20 @@
 #addLayer .aother { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 4px 0 12px; border-radius: 14px; margin: 0 0 10px;
   background: #fffaf0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .2); }
 #addLayer .aother .aol { font-size: 13px; color: var(--sage); font-weight: 600; flex: none; }
-#addLayer .aother input { flex: 1; min-width: 0; height: 40px; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: var(--ink);
+#addLayer .aother input { flex: 1; min-width: 0; height: 44px; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: var(--ink);
   -webkit-user-select: text; user-select: text; }
 #addLayer .aother input::placeholder { color: #a9a395; }
-#addLayer .aother button { flex: none; height: 34px; padding: 0 12px; border-radius: 11px; font-size: 13px; font-weight: 600; color: #fff; background: var(--sage); }
+#addLayer .aother button { flex: none; height: 34px; padding: 0 12px; border-radius: 11px; font-size: 13px; font-weight: 600; color: #fff; background: var(--sage); position: relative; }
+#addLayer .aother button::after { content: ""; position: absolute; left: 0; right: 0; top: -5px; bottom: -5px; }   /* 第二批 3：看着 34 高，点按区 44（正好是这一条的高） */
 
 /* 拍购物小票（演示） */
-#addLayer .areceipt { width: 100%; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0 0 6px;
-  font-size: 14px; color: #3f5a4a; font-weight: 600; box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .45); background: transparent; }
-#addLayer .areceipt svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-#addLayer .areceipt small { font-size: 10px; font-weight: 600; color: #9a5f22; background: #f5e5ce; border-radius: 6px; padding: 1px 5px; }
+/* 第二批 6：“拍购物小票”和“看到没人认的东西”并成一排，两颗一样宽、一样的描边次按钮 */
+#addLayer .aduo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 6px; }
+#addLayer .areceipt, #addLayer .afound { width: 100%; min-width: 0; height: 44px; padding: 0 6px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-size: 13.5px; color: #3f5a4a; font-weight: 600; white-space: nowrap; box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .45); background: transparent; }
+#addLayer .areceipt svg, #addLayer .afound svg { flex: none; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#addLayer .afound svg .dot { fill: currentColor; }
+#addLayer .areceipt small { font-size: 11px; font-weight: 600; color: #9a5f22; background: #f5e5ce; border-radius: 6px; padding: 1px 4px; }
 #addLayer .areceipt:disabled { opacity: .55; }
 #addLayer .rwrap { overflow: hidden; margin: 4px 0 8px; }
 #addLayer .rpaper { position: relative; width: 236px; margin: 0 auto; padding: 12px 16px 20px; background: #fffefa; color: #3b3a35;
@@ -103,31 +109,35 @@
 @keyframes arowIn { from { opacity: 0; transform: translateY(8px) scale(.97); } }
 #addLayer .athumb { position: relative; flex: none; width: 50px; height: 50px; border-radius: 13px; background: #f7efe0; box-shadow: inset 0 0 0 1px rgba(109, 84, 55, .1); }
 #addLayer .athumb img { position: absolute; left: 7px; top: 5px; width: 36px; height: 36px; object-fit: contain; object-position: 50% 100%; pointer-events: none; }
-#addLayer .athumb .nlab { position: absolute; left: 50%; bottom: 3px; translate: -50% 0; padding: 0 3px; height: 14px; line-height: 13px; border-radius: 2px; white-space: nowrap;
-  font-family: var(--fun); font-size: 9.5px; color: #4f4130; background: #fffaf0; border: 1px solid rgba(109, 84, 55, .26); box-shadow: 0 1px 1.5px rgba(60, 40, 15, .25); pointer-events: none; }
-#addLayer .athumb .nlab.plain { font-family: var(--font); font-size: 9px; font-weight: 600; }
+/* 第二批 3（追加）：名字签 9 / 9.5px → 11px；放大了往下挪到缩略图下沿外面一半（骑在下沿上），只压住东西图最下面 1px，四个字的也不裁 */
+#addLayer .athumb .nlab { position: absolute; left: 50%; bottom: -7px; translate: -50% 0; padding: 0 2px; height: 16px; line-height: 15px; border-radius: 2px; white-space: nowrap;
+  font-family: var(--fun); font-size: 11px; color: #4f4130; background: #fffaf0; border: 1px solid rgba(109, 84, 55, .26); box-shadow: 0 1px 1.5px rgba(60, 40, 15, .25); pointer-events: none; }
+#addLayer .athumb .nlab.plain { font-family: var(--font); font-size: 11px; font-weight: 600; letter-spacing: -.03em; }
 #addLayer .athumb .ytag { position: absolute; left: -5px; top: -5px; height: 14px; line-height: 14px; padding: 0 4px; border-radius: 2px; rotate: -7deg; pointer-events: none;
   font-size: 9px; font-weight: 800; color: #2a2614; background: #ffe234; box-shadow: 0 1px 1.5px rgba(70, 60, 10, .35); }
 #addLayer .abody { flex: 1; min-width: 0; }
 #addLayer .aname { font-size: 15px; font-weight: 600; line-height: 20px; margin: 1px 0 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#addLayer .achips { display: flex; flex-wrap: wrap; gap: 5px; }
-#addLayer .achips button { height: 26px; padding: 0 9px; border-radius: 9px; font-size: 12px; color: var(--ink); background: #fffaf0;
+/* 第二批 3（追加）：小按钮看着 26 → 30 高，上下两排隔 14（一排一排正好 44 一格），点按区上下各探 7、左右各探 2.5（和隔壁正好接上，不盖住对方） */
+#addLayer .achips { display: flex; flex-wrap: wrap; gap: 14px 5px; }
+#addLayer .achips button { position: relative; height: 30px; padding: 0 9px; border-radius: 10px; font-size: 12px; color: var(--ink); background: #fffaf0;
   box-shadow: inset 0 0 0 1px rgba(38, 48, 43, .16); white-space: nowrap; }
+#addLayer .achips button::after { content: ""; position: absolute; left: -2.5px; right: -2.5px; top: -7px; bottom: -7px; }
 #addLayer .achips button.set { color: #3f5a4a; box-shadow: inset 0 0 0 1.2px rgba(80, 107, 91, .5); background: #eef3ee; }
 #addLayer .achips button.open { color: #9a5f22; box-shadow: inset 0 0 0 1.2px rgba(216, 146, 69, .5); background: #fbf1e3; }
 #addLayer .achips button.cold { color: #2f6570; box-shadow: inset 0 0 0 1.2px rgba(63, 122, 134, .42); background: #f1f8f8; }
 #addLayer .achips button:disabled { color: #8f978f; box-shadow: inset 0 0 0 1px rgba(38, 48, 43, .1); background: #f6f2e8; cursor: default; }
-#addLayer .achips button.yl { color: #6b6320; box-shadow: inset 0 0 0 1px rgba(160, 140, 20, .35); background: #fffbe0; }
-#addLayer .achips button.yl.on { color: #2a2614; font-weight: 700; background: #ffe234; box-shadow: 0 1px 1.5px rgba(70, 60, 10, .3); }
-#addLayer .ax { flex: none; width: 30px; height: 30px; margin-top: 10px; border-radius: 10px; font-size: 14px; color: #8f978f; }
+/* 第二批 6：黄标两种样子分清——关着是空心、淡；开着是填满的柠檬黄，字前一个勾 */
+#addLayer .achips button.yl { color: #a39a6a; box-shadow: inset 0 0 0 1px rgba(160, 140, 20, .28); background: transparent; }
+#addLayer .achips button.yl.on { display: inline-flex; align-items: center; gap: 2px; padding-left: 6px; color: #2a2614; font-weight: 700; background: #ffe234; box-shadow: 0 1px 1.5px rgba(70, 60, 10, .3); }
+#addLayer .achips button.yl .ck { flex: none; width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+#addLayer .ax { flex: none; width: 30px; height: 30px; margin-top: 10px; border-radius: 10px; font-size: 14px; color: #8f978f; position: relative; }
+#addLayer .ax::after { content: ""; position: absolute; inset: -7px; }   /* 第二批 3（追加）：看着 30，点按区 44；左边离小按钮还有 10 的缝，探 7 不碰它们 */
 
 /* 底下：主按钮、看到一件没人认的东西 */
 #addLayer .ago { width: 100%; height: 54px; border-radius: 18px; font-size: 17px; font-weight: 700; letter-spacing: .02em; color: #fff; background: #3f5a4a;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 2px 6px rgba(40, 60, 48, .3); transition: transform .12s; }
 #addLayer .ago:active { transform: scale(.98); }
 #addLayer .ago:disabled { color: #8f978f; background: #ebe6da; box-shadow: none; font-weight: 600; font-size: 15px; cursor: default; }
-#addLayer .afound { display: block; width: 100%; margin: 12px 0 4px; padding: 11px 0; border-radius: 14px; font-size: 13px; color: var(--muted);
-  box-shadow: inset 0 0 0 1px rgba(38, 48, 43, .14); background-image: none; border: 1px dashed rgba(38, 48, 43, .22); }
 
 /* 飞向层板的那一份 */
 #addFly { left: 0; top: 0; width: 390px; height: 844px; z-index: 45; pointer-events: none; }

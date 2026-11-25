@@ -23,6 +23,7 @@
 #shopLayer .shimg { flex: none; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 11px; background: #f4ecdc; }
 #shopLayer .shimg img { max-width: 32px; max-height: 32px; display: block; pointer-events: none; }
 #shopLayer .shname { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#shopLayer .shdays { margin-left: 8px; font-size: 12px; font-weight: 500; color: var(--muted); }   /* 名字后面“放了 N 天”：同名的两件靠它分开 */
 /* 计划：颜色照层上的胶带（过了大半橙、过了砖红），还早的是浅绿 */
 #shopLayer .shplan { flex: none; font-style: normal; height: 22px; line-height: 22px; padding: 0 9px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #3f5a4a; background: var(--sage-soft); white-space: nowrap; }
 #shopLayer .shplan.midway { color: #fff; background: linear-gradient(180deg, #f6a550, #e8832c); }

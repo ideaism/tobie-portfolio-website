@@ -228,7 +228,7 @@ class StudioTests(unittest.TestCase):
             self.assertLessEqual(len(d['how']), 3, key)
             for pair in d['how']:
                 self.assertEqual(len(pair), 2, key)
-                self.assertLessEqual(len(pair[0]), 20, f'{key}: {pair[0]}')
+                self.assertLessEqual(len(pair[0].replace(' ', '')), 30, f'{key}: {pair[0]}')   # 栏名是英文，按去空格的字符数算
             for name, pair in d['t'].items():
                 self.assertEqual(len(pair), 2, f'{key}.t.{name}')
                 self.assertTrue(all(pair), f'{key}.t.{name}')

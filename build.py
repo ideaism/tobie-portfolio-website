@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261125b'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261125c'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -34,9 +34,15 @@ def img(name, alt, cls='', lazy=True):
         attrs += ' loading="lazy" decoding="async"'
     return f'<img src="/assets/work/{name}.webp" width="{w}" height="{h}" alt="{escape(alt)}"{attrs}>'
 
-def legacy_img(name, alt):
+def legacy_img(name, alt, cls=''):
     w, h = LEGACY[name]
-    return f'<img src="/assets/{name}.webp" width="{w}" height="{h}" alt="{escape(alt)}" loading="lazy" decoding="async">'
+    c = f' class="{cls}"' if cls else ''
+    return f'<img src="/assets/{name}.webp"{c} width="{w}" height="{h}" alt="{escape(alt)}" loading="lazy" decoding="async">'
+
+# 2026-11-25（作品集理解成本优化方案第 1 批）：首页次按钮照点进去实际能做的事写，不再五个都叫「亲手试原型」
+TRY_TEXT = {'qingju': ['交互流程演示', 'Interactive flow'], 'smt': ['查看组件状态表', 'See the component states']}
+def try_text(slug):
+    return TRY_TEXT.get(slug, ['亲手试原型', 'Try the prototype'])
 
 def frame_label(name, prov_text, prov_cls='', project='explore'):
     prov = f'<span class="prov {prov_cls}">{prov_text}</span>' if prov_text else ''    # 来源小标签不显示时整个不出（见 prov_shown）
@@ -329,7 +335,7 @@ def home(lang):
     for p in PROJECTS:
         prov_text, prov_cls = prov_shown(p['prov'])
         chips = ''.join(f'<li class="chip">{c}</li>' for c in T(p['chips'], lang))
-        try_link = f'<a class="link" href="{url(p["slug"], lang)}#try">{t("亲手试原型", "Try the prototype", lang)}</a>' if has_try(p['slug']) else ''
+        try_link = f'<a class="link" href="{url(p["slug"], lang)}#try">{T(try_text(p['slug']), lang)}</a>' if has_try(p['slug']) else ''
         h += f'''
   <article class="work-item reveal" data-component="Work item" data-slug="{p['slug']}">
    <div class="work-item__visual frame-block">{frame_label(T(p['label'], lang), T(prov_text, lang), prov_cls, p['project'])}<a href="{url(p['slug'], lang)}" aria-label="{t('阅读案例：', 'Read the case: ', lang)}{p['name']}"><div class="frame">{cover(p['slug'], lang)}</div></a></div>
@@ -345,11 +351,11 @@ def home(lang):
     h += '\n </div>' + WORK_ORDER_JS + '\n</div></section>'
 
     explorations = [
-        ('cctv', ['CDU · 批判性设计', 'CDU · critical design'], ['让看不见的监控被看见', 'Making the invisible visible'],
+        ('cctv', ['批判性设计', 'Critical design'], ['让看不见的监控被看见', 'Making the invisible visible'],
          ['用伦敦与温彻斯特的交互地图，探索“被看见”与“看回去”的权力关系。', 'An interactive map of London and Winchester exploring the power of being watched — and of looking back.'], 'https://project2-yuchengfeng.vercel.app/', ['可访问网页', 'Live site']),
-        ('quantified', ['CDU · 数据与身份', 'CDU · data & identity'], ['情绪，也有自己的地理', 'The geography of a feeling'],
+        ('quantified', ['数据可视化', 'Data visualisation'], ['情绪，也有自己的地理', 'The geography of a feeling'],
          ['把个人状态、城市与时间连起来，用 28 种状态的虚拟形象重新阅读一年的情绪记录。', 'Linking personal states, cities and time, with a 28-state avatar as a way to reread a year of mood records.'], 'https://macd-yuchengfeng-kmiz.vercel.app/', ['可访问网页', 'Live site']),
-        ('wuhan', ['EAI · 城市研究', 'EAI · urban research'], ['重新阅读江汉路', 'Reading Jianghan Road'],
+        ('wuhan', ['城市研究', 'Urban research'], ['重新阅读江汉路', 'Reading Jianghan Road'],
          ['从建筑、城市记忆与人的行为出发，绘制一条街道在不同时代留下的痕迹。', 'A counter-map of one Wuhan street: its architecture, its memory and the everyday behaviour it holds.'], '/assets/Jianghan-Road-Study.pdf', ['PDF', 'PDF']),
     ]
     h += f'''
@@ -358,7 +364,7 @@ def home(lang):
  <div class="explore-grid">'''
     for image, label, title, desc, link, kind in explorations:
         h += f'''
-  <article class="explore reveal"><a href="{link}" target="_blank" rel="noopener" class="frame-block">{frame_label(T(label, lang), T(kind, lang), '', 'explore')}<div class="frame">{legacy_img(image, T(title, lang))}</div></a>
+  <article class="explore reveal"><a href="{link}" target="_blank" rel="noopener" class="frame-block">{frame_label(T(label, lang), T(kind, lang), '', 'explore')}<div class="frame">{legacy_img(image, T(title, lang), 'legacy--contain' if image == 'quantified' else '')}</div></a>
    <h3>{T(title, lang)}</h3><p>{T(desc, lang)}</p><a class="link-arrow" href="{link}" target="_blank" rel="noopener">{t('打开', 'Open', lang)} <span aria-hidden="true">↗</span></a></article>'''
     h += '\n </div>\n</div></section>'
 
@@ -500,46 +506,74 @@ def figure_html(f, lang):
         return f'<figure class="figure frame-block">{label}<div class="frame" style="background:#F6F1E6"><div class="phone-strip" style="--n:4">{items}</div></div>{cap}</figure>'
     return ''
 
+def _section_inner(s, key, n, lang):
+    """一节的正文、表、决策块、注释、步骤卡、图和原型；n 是这一节在 c['sections'] 里的位置（从 1 起），也是 figures.py 和 section_demo 的键。"""
+    i = 0 if lang == 'zh' else 1
+    h = ''
+    paras = [f'<p>{para[i]}</p>' for para in s['text']]
+    box = 'outcome' if s.get('outcome') else 'prose'
+    if 'rows' in s:
+        # 'rows'（2026-11-17，Agent Matrix 06 节）：一张几行的细线表，插在正文第 after 段后面，沿用开头摘要和决策块的样式。
+        # 每行 [左边小标签, 加粗的一句, 下面一句]，都是 [zh, en]。没有这个键的章节一个字都不变
+        k = s['rows']['after']
+        table = ('<dl class="case-brief case-decision" data-component="Rows">'
+                 + ''.join(f'<div><dt>{r[0][i]}</dt><dd><strong>{r[1][i]}</strong><br>{r[2][i]}</dd></div>' for r in s['rows']['items']) + '</dl>')
+        h += f'<div class="{box}">{"".join(paras[:k])}</div>{table}<div class="{box}">{"".join(paras[k:])}</div>'
+    else:
+        h += f'<div class="{box}">{"".join(paras)}</div>'
+    if 'decision' in s:
+        h += '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, s['decision'])) + '</dl>'
+    if 'insight' in s:
+        h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
+    if 'steps' in s:
+        h += '<div class="steps">' + ''.join(f'<div class="step"><span class="label label--teal">{st[0][i]}</span><h3>{st[1][i]}</h3><p>{st[2][i]}</p></div>' for st in s['steps']) + '</div>'
+    figs = FIGURES.get((key, n), [])
+    h += ''.join(figure_html(f, lang) for f in figs if f.get('before_demo'))   # 'before_demo'（2026-11-23）：紧跟正文的图，放在原型前面
+    h += section_demo(key, n, lang)
+    h += ''.join(figure_html(f, lang) for f in figs if not f.get('before_demo'))
+    if 'external' in s:
+        h += f'<p style="margin-top:24px"><a class="link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
+    return h
+
 def case_layout(c, key, lang, anchor='section'):
     """目录 + 正文。c 是一份案例内容（CASES[slug]，或它 'tabs' 里的一个 tab）；
-    key 是 figures.py 和 section_demo 的键名（案例 slug 或 tab id）；anchor 是各节锚点的前缀（section-1、daton-section-1）。"""
+    key 是 figures.py 和 section_demo 的键名（案例 slug 或 tab id）；anchor 是各节锚点的前缀（section-1、daton-section-1）。
+    'more'（2026-11-25，PlayBook，作品集理解成本优化方案第 1 批）：带这个键的几节连在一起，收进一节「更多系统模块」，
+    每节一行折叠（<details>），不编号、不进目录（目录只有一条「更多系统模块」）。编号只数主线的节；没有 'more' 的案例编号、锚点和以前一样。"""
     i = 0 if lang == 'zh' else 1
+    secs = c['sections']
+    more_name = t('更多系统模块', 'More modules', lang)
     h = f'''
 <div class="case-layout">
  <nav class="toc" aria-label="{t('本页目录', 'On this page', lang)}"><span class="toc__title label">{t('目录', 'Contents', lang)}</span>'''
-    for n, s in enumerate(c['sections']):
+    num = 0
+    for n, s in enumerate(secs):
+        if s.get('more'):
+            if n == 0 or not secs[n - 1].get('more'):
+                h += f'<a href="#{anchor}-more"><span>+</span>{more_name}</a>'
+            continue
+        num += 1
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
-        h += f'<a href="#{anchor}-{n+1}"><span>{n+1:02d}</span>{label}</a>'
+        h += f'<a href="#{anchor}-{num}"><span>{num:02d}</span>{label}</a>'
     h += '</nav>\n <article class="case-body">'
-    for n, s in enumerate(c['sections']):
+    num = 0; k = 0
+    for n, s in enumerate(secs):
+        if s.get('more'):
+            if n == 0 or not secs[n - 1].get('more'):
+                h += f'\n<section class="case-section case-more" id="{anchor}-more" data-component="More modules"><h2>{more_name}</h2><div class="case-more__list">'
+            k += 1
+            h += (f'\n<details class="case-module" id="{anchor}-more-{k}"><summary><span class="case-module__name">{s["label"][i]}</span>'
+                  f'<span class="case-module__title">{s["title"][i]}</span><span class="case-module__mark" aria-hidden="true"></span></summary>'
+                  f'<div class="case-module__body">{_section_inner(s, key, n + 1, lang)}</div></details>')
+            if n == len(secs) - 1 or not secs[n + 1].get('more'):
+                h += '</div></section>'
+            continue
+        num += 1
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
-        h += f'\n<section class="case-section" id="{anchor}-{n+1}"><p class="label label--teal">{n+1:02d} · {label}</p><h2>{s["title"][i]}</h2>'
-        if 'sub' in s:   # 'sub'（2026-11-24，PlayBook 04 节）：标题下面一行小号灰字，不是正文；没有这个键的章节一个字都不变
+        h += f'\n<section class="case-section" id="{anchor}-{num}"><p class="label label--teal">{num:02d} · {label}</p><h2>{s["title"][i]}</h2>'
+        if 'sub' in s:   # 'sub'（2026-11-24）：标题下面一行小号灰字，不是正文；没有这个键的章节一个字都不变
             h += f'<p class="meta case-sub">{s["sub"][i]}</p>'
-        paras = [f'<p>{para[i]}</p>' for para in s['text']]
-        box = 'outcome' if s.get('outcome') else 'prose'
-        if 'rows' in s:
-            # 'rows'（2026-11-17，Agent Matrix 06 节）：一张几行的细线表，插在正文第 after 段后面，沿用开头摘要和决策块的样式。
-            # 每行 [左边小标签, 加粗的一句, 下面一句]，都是 [zh, en]。没有这个键的章节一个字都不变
-            k = s['rows']['after']
-            table = ('<dl class="case-brief case-decision" data-component="Rows">'
-                     + ''.join(f'<div><dt>{r[0][i]}</dt><dd><strong>{r[1][i]}</strong><br>{r[2][i]}</dd></div>' for r in s['rows']['items']) + '</dl>')
-            h += f'<div class="{box}">{"".join(paras[:k])}</div>{table}<div class="{box}">{"".join(paras[k:])}</div>'
-        else:
-            h += f'<div class="{box}">{"".join(paras)}</div>'
-        if 'decision' in s:
-            h += '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, s['decision'])) + '</dl>'
-        if 'insight' in s:
-            h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
-        if 'steps' in s:
-            h += '<div class="steps">' + ''.join(f'<div class="step"><span class="label label--teal">{st[0][i]}</span><h3>{st[1][i]}</h3><p>{st[2][i]}</p></div>' for st in s['steps']) + '</div>'
-        figs = FIGURES.get((key, n + 1), [])
-        h += ''.join(figure_html(f, lang) for f in figs if f.get('before_demo'))   # 'before_demo'（2026-11-23）：紧跟正文的图，放在原型前面
-        h += section_demo(key, n + 1, lang)
-        h += ''.join(figure_html(f, lang) for f in figs if not f.get('before_demo'))
-        if 'external' in s:
-            h += f'<p style="margin-top:24px"><a class="link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
-        h += '</section>'
+        h += _section_inner(s, key, n + 1, lang) + '</section>'
     if c.get('source'):   # 没有 Figma 原稿的案例（Agent Matrix）不出这一行
         h += f'''
 <p class="source-line">{t('原稿', 'Source', lang)}: <a href="{c['source']}" target="_blank" rel="noopener">{t('Figma 项目文件', 'Figma project file', lang)} ↗</a> · {t('访问遵循原文件的分享权限。', 'Access follows the source file’s sharing settings.', lang)}</p>'''
@@ -560,7 +594,7 @@ def case_page(slug, lang):
     prov_text, prov_cls = prov_shown(prov_key)
     # 没有可试演示的案例（Agent Matrix）不出「直接试原型」，「从头读」当主按钮
     start = f'<a class="btn{" btn--ghost" if has_try(slug) else ""}" href="#section-1">{t("从头读", "Read from the start", lang)}</a>'
-    actions = (f'<a class="btn" href="#try">{t("直接试原型", "Try the prototype", lang)} <span aria-hidden="true">↓</span></a>' if has_try(slug) else '') + start
+    actions = (f'<a class="btn" href="#try">{T(try_text(slug), lang) if slug in TRY_TEXT else t("直接试原型", "Try the prototype", lang)} <span aria-hidden="true">↓</span></a>' if has_try(slug) else '') + start
     back = f'<a class="back" href="{url("", lang)}#work">← {t("全部作品", "All work", lang)}</a>'
     tabs = c.get('tabs')
     if tabs:

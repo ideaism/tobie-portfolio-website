@@ -299,6 +299,8 @@ p,li{text-wrap:pretty}
 .explore p{font-size:var(--fs-small);color:var(--ink-2);margin-bottom:var(--s-3)}
 .explore .frame img{aspect-ratio:3/2;object-fit:cover;transition:transform .5s var(--ease)}
 .explore a:hover .frame img{transform:scale(1.03)}
+/* 2026-11-25（优化方案第 1 批）：quantified 是 16:9 的长条，裁成 3:2 会把左边的 Data 切掉；整张放进来，上下补和原图一样的底色 */
+.explore .frame img.legacy--contain{object-fit:contain;background:#FFFAF0}
 
 .about{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s-8);align-items:start}
 .about__intro h2{font-size:var(--fs-h2);margin:var(--s-3) 0 var(--s-5)}
@@ -626,6 +628,10 @@ html:not(.js) .case-tab+.case-tab{margin-top:var(--s-9);border-top:1px solid var
 .studio__status:empty{visibility:hidden}
 .studio__side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s-5) var(--s-6);align-items:start;padding-top:var(--s-4);border-top:1px solid var(--rule)}
 .studio__how{margin:var(--s-3) 0 0;padding-left:1.1em;font-size:var(--fs-small);color:var(--ink-2);display:grid;gap:6px}
+/* 2026-11-25（优化方案第 1 批）：三条提示改成编号小圆点，和 SMT 第二个 Tab 的编号气泡一个说法 */
+ol.studio__how{list-style:none;padding-left:0;counter-reset:how}
+ol.studio__how li{counter-increment:how;display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:baseline}
+ol.studio__how li::before{content:counter(how);display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;font-size:.75rem;font-weight:700;line-height:1;transform:translateY(-1px)}
 .studio__right{display:grid;gap:var(--s-4)}
 .studio__right .proto__note{min-height:0}
 .studio__read{margin:0;font-size:var(--fs-small);line-height:1.6;color:var(--ink);padding:10px 12px;border-left:3px solid var(--teal);background:#fff;border-radius:0 8px 8px 0;min-height:3.6em}
@@ -1502,3 +1508,25 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .anims img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 16px 30px -18px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06)}
 .anims figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
 @media (max-width:640px){.stack,.anims{padding:var(--s-5)}}
+
+/* ---------- 2026-11-25 更多系统模块（PlayBook，作品集理解成本优化方案第 1 批） ----------
+   case_layout 里带 'more' 的几节：一节「更多系统模块」，每个模块一行 <details>，点开是那一节原来的全部内容。 */
+.case-more__list{border-top:1px solid var(--rule)}
+.case-module{border-bottom:1px solid var(--rule)}
+.case-module>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(7em,auto) minmax(0,1fr) 28px;align-items:baseline;gap:var(--s-2) var(--s-5);padding:var(--s-4) 0}
+.case-module>summary::-webkit-details-marker{display:none}
+.case-module__name{font-weight:700;color:var(--ink)}
+.case-module__title{color:var(--ink-2)}
+.case-module__mark{position:relative;width:28px;height:28px;align-self:center;border:1px solid var(--rule-strong);border-radius:50%}
+.case-module__mark::before,.case-module__mark::after{content:'';position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:var(--teal);transition:transform .2s var(--ease)}
+.case-module__mark::after{transform:rotate(90deg)}
+.case-module[open]>summary .case-module__mark::after{transform:rotate(0deg)}
+.case-module>summary:hover .case-module__name{color:var(--teal)}
+.case-module>summary:focus-visible{outline:3px solid var(--beak);outline-offset:4px}
+.case-module__body{padding:var(--s-2) 0 var(--s-8)}
+@media (max-width:640px){
+  .case-module>summary{grid-template-columns:minmax(0,1fr) 28px}
+  .case-module__title{grid-column:1;grid-row:2;font-size:var(--fs-small)}
+  .case-module__mark{grid-column:2;grid-row:1 / span 2}
+}
+@media (prefers-reduced-motion:reduce){.case-module__mark::before,.case-module__mark::after{transition:none}}

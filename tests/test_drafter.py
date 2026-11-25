@@ -317,7 +317,7 @@ class DrafterTests(unittest.TestCase):
         self.assertNotIn('container-type', block)   # 不加内层容器：--sku 里的 cqw 要按 .sk 算
         # 编辑器顶上不留空：标签和物品库照 03 节的位置往上提
         self.assertIn('[data-own] .rz__tag{display:flex;align-items:center;gap:calc(12 * var(--u));position:absolute;left:calc(14 * var(--u));top:calc(172 * var(--u));', css)
-        self.assertIn('[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 212) * var(--u));', css)
+        self.assertIn('[data-own] .rz-lib{left:calc((var(--x) - 64) * var(--u));top:calc((var(--y) - 217.5) * var(--u));', css)
         # 三张封面：网站用的 1000 宽 webp 都在，样式里按草案换图，空状态用弥音那张
         manifest = json.loads((ROOT / 'dist' / 'assets' / 'work' / 'manifest.json').read_text(encoding='utf-8'))
         for look, name in (('halloween', 'lumi-halloween'), ('move', 'ache-moving'), ('newsong', 'miyin-new-song')):

@@ -1436,73 +1436,227 @@ function drafterLab(root) {
      (illustration only: they say so); once a goal is picked the assistant's missions, items and recipes are in them. */
   const block = (title, cls) => { const b = el('section', 'dz-block' + (cls ? ' ' + cls : '')); b.append(el('h4', 'label dz-block__title', title)); return b; };
   const mark = (li, s) => { li.toggleAttribute('data-removed', s.removed); li.toggleAttribute('data-accepted', s.accepted && !s.removed); };
-  function panel(kind, heading, icon) {
+  function panel(kind, heading, icon, counts) {
     const p = el('section', 'dz-panel dz-panel--' + kind), h = el('div', 'dz-panel__head'), h4 = el('h4', 'dz-panel__h');
     h4.append(ico(icon), el('span', '', heading));
     const t = el('span', 'dz-panel__tools');
     t.append(ico('save'), ico('expand'));
     const tabs = el('p', 'dz-tabs');
     tabs.setAttribute('aria-hidden', 'true');
-    tabs.append(el('span', 'dz-tab dz-tab--on', T.tab_all), el('span', 'dz-tab', T.tab_on));
+    // ⑬: once drafted, each tab carries its count in a round block (Figma: the lit one blue with white digits, the other white)
+    [[T.tab_all, 'dz-tab dz-tab--on'], [T.tab_on, 'dz-tab']].forEach(([text, cls], n) => {
+      const s = el('span', cls, text);
+      if (counts) s.append(el('b', 'dz-count', String(counts[n])));
+      tabs.append(s);
+    });
     h.append(h4, t);
     // ⑫: what goes in the panel sits in its own box, which scrolls inside a panel of fixed size on wide screens
     p.append(h, tabs, el('div', 'dz-panel__body'));
     return p;
   }
+  /* ⑬: the empty panels' pictures, redrawn after the original's three (a mission card, a cluster of items, a recipe graph) out of
+     the drafter's own 17 item pictures; decoration only. Places are the original's pixels inside the 254-high dashed frame. */
+  const pic = (look, item) => fillIn(cfg.item_src, { draft: look, item });
+  const disc = (src, x, y, d) => `<span class="dz-disc" style="--x:${x};--y:${y};--d:${d}"><img src="${src}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>`;
+  const ART = {
+    missions: () => {
+      const dots = cls => `<span class="${cls}">${'<i></i>'.repeat(5)}</span>`;
+      return '<div class="dz-im__back"><b>Lofi Girl’s First Mission</b>' + dots('dz-im__dots') + '</div>'
+        + `<div class="dz-im__card"><b>Lofi Girl’s First Mission</b><span class="dz-im__thumb"><img src="${pic('newsong', 'headphones')}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>`
+        + '<span class="dz-im__stat"><small>Time</small><b>20H</b></span><span class="dz-im__stat dz-im__stat--2"><small>Participants</small><b>200</b></span>'
+        + '<small class="dz-im__rel">Related Platforms</small>' + dots('dz-im__dots dz-im__dots--on') + '</div>';
+    },
+    items: () => {   // three rows around the middle, the middle one bigger and wider: 6 × 30, 7 × 36, 6 × 30
+      const rows = [[64, 30, [['halloween', 'candy'], ['move', 'key'], ['newsong', 'headphones'], ['move', 'plate'], ['halloween', 'sticker'], ['newsong', 'note']]],
+        [103, 36, [['move', 'box'], ['halloween', 'jack'], ['newsong', 'record'], ['move', 'sticker'], ['halloween', 'hat'], ['newsong', 'card'], ['move', 'badge']]],
+        [142, 30, [['newsong', 'gold'], ['halloween', 'badge'], ['move', 'stub'], ['newsong', 'signed'], ['halloween', 'candy'], ['move', 'key']]]];
+      return rows.map(([y, d, list]) => list.map(([look, item], n) => disc(pic(look, item), 153 + (n - (list.length - 1) / 2) * (d === 36 ? 33 : 32), y, d)).join('')).join('');
+    },
+    recipes: () => {   // six items around one, joined by arcs with arrowheads: red ones go into it, blue ones come out of it or go elsewhere
+      const nodes = [['halloween', 'jack', 65, 60], ['halloween', 'sticker', 147, 38], ['move', 'key', 237, 63], ['newsong', 'headphones', 66, 133],
+        ['move', 'box', 139, 156], ['newsong', 'note', 239, 138]].map(([look, item, x, y]) => disc(pic(look, item), x, y, 40)).join('');
+      const blue = '#6E8EF5', red = '#F95757';
+      const arc = (d, c) => { const k = c === red ? 'r' : 'b'; return `<path d="${d}" stroke="${c}" marker-start="url(#dz-ir-o${k})" marker-end="url(#dz-ir-a${k})"/>`; };
+      const mk = (k, c) => `<marker id="dz-ir-a${k}" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" fill="${c}"/></marker>`
+        + `<marker id="dz-ir-o${k}" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5"><circle cx="4" cy="4" r="2.6" fill="#fff" stroke="${c}" stroke-width="1.4"/></marker>`;
+      return '<svg class="dz-ir__lines" viewBox="0 0 307 200" fill="none" stroke-width="1.3">' + `<defs>${mk('b', blue)}${mk('r', red)}</defs>`
+        + arc('M84 68Q110 98 136 101', blue) + arc('M177 98Q194 70 170 50', blue) + arc('M56 81Q44 98 58 113', blue)
+        + arc('M154 123Q152 133 146 137', blue) + arc('M178 107Q203 112 221 127', blue)
+        + arc('M145 58Q139 72 149 85', red) + arc('M217 61Q181 62 162 85', red) + '</svg>'
+        + nodes + disc(pic('newsong', 'record'), 157, 103, 38);
+    },
+  };
   function startHere(p, kind, heading, text) {
-    const f = el('div', 'dz-start'), art = el('span', 'dz-start__art');
+    const f = el('div', 'dz-start dz-start--' + kind), art = el('div', 'dz-start__art dz-start__art--' + kind);
     art.setAttribute('aria-hidden', 'true');
-    for (let i = 0; i < 7; i++) art.append(el('i'));   // a few grey circles stand in for the original's illustration
+    art.innerHTML = ART[kind]();
     const c = createBtn('start:' + kind, () => say(T.blank_only), 'dz-create--sm');
     c.setAttribute('aria-disabled', 'true');
     c.setAttribute('aria-label', fillIn(T.act, { act: T.create, name: heading }));
     f.append(art, c, el('p', 'dz-start__t', text));
     p.append(f);
   }
+  // a "+ Create" that is only there to look like Studio: it says so instead of going dead
+  const addOnly = (key, cls, name) => {
+    const c = createBtn(key, () => say(T.blank_only), cls);
+    c.setAttribute('aria-disabled', 'true');
+    c.setAttribute('aria-label', fillIn(T.act, { act: T.create, name }));
+    return c;
+  };
+  // the mission's platform as a round icon, as Studio's cards have them
+  const PLAT = {
+    youtube: '<circle cx="12" cy="12" r="12" fill="#FF0000"/><path d="M10 8.3v7.4l6.2-3.7z" fill="#fff"/>',
+    x: '<circle cx="12" cy="12" r="12" fill="#000"/><path d="M8.2 7.5h2.4l5.2 9h-2.4zM15.6 7.5l-7 9" stroke="#fff" stroke-width="1.3" fill="#fff" stroke-linejoin="round"/>',
+    twitch: '<circle cx="12" cy="12" r="12" fill="#9146FF"/><path d="M8 7h8.5v5.6l-2.6 2.6h-2.1L10 17v-1.8H8z" fill="#fff"/><path d="M11.4 9.6v2.6M14 9.6v2.6" stroke="#9146FF" stroke-width="1.1"/>',
+  };
+  const platIcon = name => {
+    const s = el('span', 'dz-plat-ico');
+    s.setAttribute('role', 'img');
+    s.setAttribute('aria-label', name);
+    s.title = name;
+    s.innerHTML = `<svg viewBox="0 0 24 24">${PLAT[name.toLowerCase()] || '<circle cx="12" cy="12" r="12" fill="#808080"/>'}</svg>`;
+    return s;
+  };
+  /* ⑬ Missions, as in Figma (有数据 / more): a full-width dashed "+ Create", then one card per mission: its title; the reward item's
+     picture on a yellow square; how often and how many; Related Platforms; accept / edit / remove on the card's bottom row */
   function missionList(p) {
-    const ol = el('ol', 'dz-list');
+    const ol = el('ol', 'dz-list dz-mcards');
     draft().tasks.forEach(t => {
       const s = st.tasks[t.id], li = el('li', 'dz-li dz-mis');
       mark(li, s);
-      const top = el('div', 'dz-li__top'), reward = el('span', 'dz-item'), meta = el('p', 'dz-li__meta');
-      top.append(el('span', 'dz-li__id', taskName(t.id)), el('span', 'dz-plat', t.platform));
-      reward.append(itemArt(t.reward.item, 'dz-art--xs'), el('span', '', qty(t.reward.item, s.qty)));
-      meta.append(el('span', '', t.frequency.label), reward);
-      li.append(top, el('p', 'dz-li__what', t.what), meta, actions('task', t.id));
+      const head = el('div', 'dz-mis__head'), mid = el('div', 'dz-mis__mid'), thumb = el('span', 'dz-mis__thumb'), stats = el('div', 'dz-mis__stats');
+      head.append(el('p', 'dz-li__what', t.what), el('span', 'dz-li__id', taskName(t.id)));
+      thumb.append(itemArt(t.reward.item));
+      const stat = (label, value, more) => {
+        const g = el('span', 'dz-mis__stat'), b = el('b', '', value);
+        if (more) b.append(el('span', 'sr-only', more));
+        g.append(el('small', '', label), b);
+        return g;
+      };
+      stats.append(stat(T.freq, t.frequency.label), stat(T.reward, '×' + s.qty, ' ' + itemName(t.reward.item)));
+      mid.append(thumb, stats);
+      const foot = el('div', 'dz-mis__foot');
+      foot.append(platIcon(t.platform), actions('task', t.id));
+      li.append(head, mid, el('p', 'dz-mis__rel', T.platforms), foot);
       if (editing.has('task:' + t.id) && !s.removed) li.append(editor('task', t.id, [[t.reward.item, s.qty]]));
       ol.append(li);
     });
-    p.append(ol);
+    p.append(addOnly('add:missions', 'dz-create--wide', T.p_missions), ol);
+  }
+  /* ⑬ Item Rewards and Crafting Recipes: a honeycomb as in Figma, rows of 6 and 5 (the 5 shifted half a cell), round pictures,
+     the first cell a dashed "+ Create". A circle's name shows on hover and focus; clicking it (or Enter) opens its card under its row:
+     an item's rarity and where it comes from, a recipe's give / get with accept / edit / remove. A recipe still opens in the editor
+     on a double-click (two taps on a touch screen), on its circle or on its card. */
+  function hive(kind, cells, name) {
+    const box = el('div', 'dz-hive'), rows = [];
+    [addOnly('add:' + kind, 'dz-cell dz-cell--add', name), ...cells].forEach(c => {
+      let row = rows[rows.length - 1];
+      if (!row || row.childElementCount === (rows.length % 2 ? 6 : 5)) {
+        row = el('div', 'dz-hive__row');
+        if (rows.length % 2) row.dataset.odd = '';
+        rows.push(row);
+        box.append(row);
+      }
+      row.append(c);
+    });
+    const open = cells.find(c => c.getAttribute('aria-expanded') === 'true');
+    if (open) open.parentNode.after(card(kind, opened[kind]));
+    return box;
+  }
+  function cell(kind, id, label, s) {
+    const c = el('button', 'dz-cell');
+    c.type = 'button';
+    c.dataset.key = `cell:${kind}:${id}`;
+    c.dataset.tip = label;
+    const state = s ? (s.removed ? T.gone_tag : s.accepted ? T.accepted : '') : '';
+    c.setAttribute('aria-label', label + (state ? T.sep + state : ''));
+    c.setAttribute('aria-expanded', String(opened[kind] === id));
+    c.setAttribute('aria-controls', 'dz-card-' + kind);
+    if (s) mark(c, s);
+    c.addEventListener('click', e => {
+      if (kind === 'recipes') {
+        if (touchy) {
+          if (tap.id === id && e.timeStamp - tap.at < 450) { tap = { id: null, at: 0 }; openEditor(id); return; }
+          tap = { id, at: e.timeStamp };
+        } else if (e.detail > 1) return;   // the second click of a double-click: the card stays open and the editor opens (dblclick)
+      }
+      toggle(kind, id, c);
+    });
+    if (kind === 'recipes') {
+      c.setAttribute('aria-describedby', 'dz-open-hint');
+      c.addEventListener('pointerdown', e => { touchy = e.pointerType === 'touch' || e.pointerType === 'pen'; });
+      c.addEventListener('mousedown', e => { if (e.detail > 1) e.preventDefault(); });
+      c.addEventListener('dblclick', () => {
+        if (touchy) return;
+        if (opened.recipes !== id) toggle(kind, id, c);   // coming back from the editor lands on this recipe's card
+        openEditor(id);
+      });
+    }
+    return c;
+  }
+  function toggle(kind, id, c) {
+    const box = c.closest('.dz-hive');
+    box.querySelector('.dz-detail')?.remove();
+    opened[kind] = opened[kind] === id ? null : id;
+    box.querySelectorAll('.dz-cell[aria-expanded]').forEach(b => b.setAttribute('aria-expanded', String(b === c && opened[kind] === id)));
+    if (opened[kind] == null) return;
+    const k = card(kind, id), body = box.closest('.dz-panel__body');
+    c.parentNode.after(k);
+    if (body && body.scrollHeight > body.clientHeight) {   // wide screens: the card shows inside its panel, the page does not move
+      const over = k.getBoundingClientRect().bottom - body.getBoundingClientRect().bottom;
+      if (over > 0) body.scrollTop += over + 8;
+    }
+  }
+  function card(kind, id) {
+    const box = kind === 'items' ? itemCard(id) : recipeCard(id);
+    box.id = 'dz-card-' + kind;
+    return box;
+  }
+  function itemCard(id) {
+    const i = draft().items.find(x => x.id === id), li = el('div', 'dz-li dz-detail'), head = el('div', 'dz-rc dz-detail__head'), txt = el('span', 'dz-rc__name');
+    txt.append(el('strong', '', i.name), el('span', 'dz-li__meta', (T[i.rarity] || i.rarity) + ' · ' + i.source));
+    head.append(itemArt(id, 'dz-art--big'), txt);
+    li.append(head);
+    return li;
+  }
+  function recipeCard(id) {
+    const r = draft().recipes.find(x => x.id === id), s = st.recipes[id], li = el('div', 'dz-li dz-recipe dz-detail');
+    const head = el('div', 'dz-rc dz-detail__head'), nm = el('span', 'dz-rc__name');
+    mark(li, s);
+    nm.append(el('span', 'dz-li__id', fillIn(T.recipe, { n: num(r.id) })), el('strong', '', r.name));
+    head.append(itemArt(r.output.items[0].item, 'dz-art--big'), nm);
+    const outs = r.output.items;
+    const give = r.require.map(m => qty(m.item, s.qty[m.item])).join(T.sep);
+    const get = (r.output.choose_one ? fillIn(T.choose, { n: outs.length }) + T.colon : '') + outs.map(o => itemName(o.item) + (o.pct === 100 ? '' : ' ' + o.pct + '%')).join(T.sep);
+    li.append(head, el('p', 'dz-li__what', fillIn(T.give_get, { give, get })));
+    if (r.optional.length) li.append(el('p', 'dz-li__meta dz-li__opt', T.opt + T.colon + r.optional.map(m => qty(m.item, m.qty) + T.dash + m.effect).join(T.sep)));
+    openable(li, r.id);
+    li.append(actions('recipe', r.id));
+    if (editing.has('recipe:' + r.id) && !s.removed) li.append(editor('recipe', r.id, r.require.map(m => [m.item, s.qty[m.item]])));
+    return li;
   }
   function itemGrid(p) {
-    const ul = el('ul', 'dz-gifts');
-    draft().items.forEach(i => {
-      const li = el('li', 'dz-gift');
-      li.title = (T[i.rarity] || i.rarity) + ' · ' + i.source;
-      li.append(itemArt(i.id, 'dz-art--gift'), el('span', 'dz-gift__n', i.name));
-      ul.append(li);
-    });
-    p.append(ul, el('p', 'meta dz-note', T.items_note));
+    const cells = draft().items.map(i => { const c = cell('items', i.id, i.name); c.append(itemArt(i.id)); return c; });
+    p.append(hive('items', cells, T.p_items), el('p', 'meta dz-note', T.items_note));
   }
   function recipeList(p) {
-    const hint = el('p', 'dz-hint', T.open_hint), ol = el('ol', 'dz-list');
+    const hint = el('p', 'dz-hint', T.open_hint);
     hint.id = 'dz-open-hint';
-    draft().recipes.forEach(r => {
-      const s = st.recipes[r.id], li = el('li', 'dz-li dz-recipe'), head = el('div', 'dz-rc'), nm = el('span', 'dz-rc__name');
-      mark(li, s);
-      nm.append(el('span', 'dz-li__id', fillIn(T.recipe, { n: num(r.id) })), el('strong', '', r.name));
-      head.append(itemArt(r.output.items[0].item, 'dz-art--rc'), nm);
-      const outs = r.output.items;
-      const give = r.require.map(m => qty(m.item, s.qty[m.item])).join(T.sep);
-      const get = (r.output.choose_one ? fillIn(T.choose, { n: outs.length }) + T.colon : '') + outs.map(o => itemName(o.item) + (o.pct === 100 ? '' : ' ' + o.pct + '%')).join(T.sep);
-      li.append(head, el('p', 'dz-li__what', fillIn(T.give_get, { give, get })));
-      if (r.optional.length) li.append(el('p', 'dz-li__meta dz-li__opt', T.opt + T.colon + r.optional.map(m => qty(m.item, m.qty) + T.dash + m.effect).join(T.sep)));
-      openable(li, r.id);
-      li.append(actions('recipe', r.id));
-      if (editing.has('recipe:' + r.id) && !s.removed) li.append(editor('recipe', r.id, r.require.map(m => [m.item, s.qty[m.item]])));
-      ol.append(li);
+    const cells = draft().recipes.map(r => {
+      const c = cell('recipes', r.id, recipeName(r), st.recipes[r.id]);
+      c.append(itemArt(r.output.items[0].item), ico('recipes', 'dz-cell__mark'));   // the corner mark: a recipe, not an item
+      return c;
     });
-    p.append(hint, ol);
+    p.append(hive('recipes', cells, T.p_recipes), hint);
+  }
+  // the counts in the tabs: what is left / what is accepted for missions and recipes; all items / the items something still gives
+  function counts() {
+    const d = draft(), live = new Set();
+    d.tasks.forEach(t => { if (!st.tasks[t.id].removed) live.add(t.reward.item); });
+    d.recipes.forEach(r => { if (!st.recipes[r.id].removed) r.output.items.forEach(o => live.add(o.item)); });
+    const left = (list, map) => list.filter(x => !map[x.id].removed).length;
+    const on = (list, map) => list.filter(x => map[x.id].accepted && !map[x.id].removed).length;
+    return { missions: [left(d.tasks, st.tasks), on(d.tasks, st.tasks)], items: [d.items.length, live.size], recipes: [left(d.recipes, st.recipes), on(d.recipes, st.recipes)] };
   }
   function selfCheck() {
     const b = block(T.h_self, 'dz-self'), ul = el('ul', 'dz-checks');

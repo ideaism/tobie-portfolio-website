@@ -440,6 +440,10 @@ PlayBook
 - 没动：`fig-who-waits` 还在原来那节当正文图；正文、其他封面、分享图（`share-zh.jpg` / `share-en.jpg`）都没换。
 - 证据：`~/其他任务/claudestudy/evidence/2026-11-25-agent-matrix-封面换上/`（中英首页卡片 1440、首页精选前两张 1440、中英案例页开头 1440、中文首页手机 375）；`verify.py` 14 页、192 个本地地址，`errors: []`。
 
+## 2026-11-25：`build.py` `VERSION` 换成 `20261125b`（交接单 ⑭ 补）
+
+- ⑭（提交 ab061f0、dab7a30）改了 `dist/prototype.js` 和 `dist/styles.css`，`VERSION` 却还是上一次部署的 `20261125a`；这两个文件缓存一年（max-age=31536000），旧号会让来过的访客继续用旧的起草条脚本。换成 `20261125b`，重新构建只变了 12 个页面里 `styles.css` / `site.js` / `prototype.js` 的版本号。
+
 ## 2026-11-25：PlayBook 起草助手的框架照原稿比例，只缩字和图（交接单 ⑫，只合到本机，没部署、没推送）
 
 - 依据：`02-playbook/portfolio/handoff.md` 第 4 节「⑫ 起草助手：框架照原稿比例，只缩字和图」；本人原话「不要更改原本划分的框架大小，可以调整文字和图片的大小」。尺寸从 ⑪ 那三张原稿里量（窗口按 1091 宽折算），数写在交接单 ⑫ 的 publisher 核对里。

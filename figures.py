@@ -131,17 +131,14 @@ FIGURES = {
    'label': ['用户动线 · 从五个平行视图到一条链路', 'User flow · from five parallel views to one loop'],
    'alt': ['用户动线前后对比：上半是客户方需求文档里的五个平行视图，下半是我按一次回访整理的五步参与链路', 'User flow before and after: the client’s five parallel views above, and the five-step participation loop I organised around a single visit below'],
    'caption': ['上：客户方需求文档里的 App 结构。下：我按粉丝一次回访整理的参与链路，每个节点对应一组 App 中保真线框。', 'Top: the app structure in the client’s requirements. Bottom: the participation loop I organised around one fan visit; each node maps to a set of mid-fidelity wireframes.']},
-  # 功能架构图：内容是 2024 年秋整理作品集时画的；2026-11-17 照原图重画，只换呈现方式（卡 20261117-001），中英文各一张
-  {'kind': 'image', 'src': 'playbook/feature-map-zh', 'src_en': 'playbook/feature-map-en', 'prov': 'research', 'project': 'playbook',
-   'label': ['App 功能架构图', 'App feature map'],
-   'alt': ['功能树：主页面、物品百科、物品合成、社区、任务五个入口，以及个人主页、搜索、通知，各自展开到下一级页面', 'A feature tree: Home, Item catalogue, Crafting, Community and Missions, plus Profile, Search and Notifications, each expanded to its sub-pages'],
-   'caption': ['App 的功能架构：五个入口，加上个人主页、搜索和通知。', 'The app’s feature map: five entry points plus profile, search and notifications.']},
+  # 2026-11-27（卡 20261127-003 方案 A）：功能架构图（2024 年秋整理作品集时画的，只有 App）拿掉；图和导出设置留着没删
  ],
  # 2026-11-24（交接单 ⑧）：起草助手从第 11 节挪到 04（没有图，演示挂在 prototypes.py section_demo），原 4–10 键顺延为 5–11
- ('playbook', 4): [
+ ('playbook', 3): [
   # 2026-11-26（优化方案第 2 批第 5 条「两大三小」）：熔炉废案和完成的 UI 两张大图并排（'duo'，同高，各自整张显示），
   # 原来五张一排的手机条收进下面的折叠「看全部 5 版」（'more'），点开前不加载。
-  {'kind': 'duo', 'prov': 'mixed', 'project': 'playbook',
+  # 2026-11-27（方案 A）：'before_demo'：两大并排排在合成原型那行折叠前面
+  {'kind': 'duo', 'prov': 'mixed', 'project': 'playbook', 'before_demo': True,
    'label': ['合成界面的演变 · 谁做了什么', 'How the crafting screen evolved · who did what'],
    'items': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
    'caption': ['我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.'],
@@ -157,7 +154,7 @@ FIGURES = {
  # 2026-11-26（第 2 批第 2 条）：原「反馈与协作」模块（键 6）的图跟着决策块挪进 04 的第二段（cases.py 'then'）。
  # 'pins'：{图名: [(编号, x%, y%)]}，坐标按格子里看得见的那块算（整屏图是 390:844 那一屏，whole / partials 是整张图）；
  # 'notes'：每个编号一行说明，按编号顺序。
- ('playbook', '4b'): [
+ ('playbook', '3b'): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 3,
    'label': ['反馈的分量 · 轻提示与领取弹窗', 'Weight of feedback · light cue vs claim dialog'],
    'items': [('playbook/app-home', ['日常进度', 'Routine progress']), ('playbook/app-home-events-only', ['领取之后：每日任务离开首页', 'After claiming: daily tasks leave Home'])],
@@ -169,7 +166,7 @@ FIGURES = {
              ['值得停下来的奖励，才用弹窗和一次明确的领取。', 'Only a reward worth pausing for gets a dialog and a deliberate claim.']],
    'caption': ['', '']},
  ],
- ('playbook', 5): [
+ ('playbook', 4): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
    'label': ['创作者上下文与搜索', 'Creator context and search'],
    'items': [('playbook/app-home', ['首页：上下文与进度', 'Home: context + progress']), ('playbook/app-inventory', ['背包：相关物品', 'Inventory: related items']), ('playbook/app-search', ['全局搜索：分类筛选', 'Global search: categories']), ('playbook/app-search-creators', ['搜索结果：创作者', 'Results: creators'])],
@@ -177,7 +174,7 @@ FIGURES = {
  ],
  # 2026-11-16 第三批：07 节加展示柜四个状态；新增 08「交易与交换」，原 08「交付与反思」顺延为 09
  # 2026-11-26（第 2 批）：原键 5–10 → 5 上下文、6 展示柜、7 交易、8 Remix、9 团队 UI（反馈那张挪到 '4b'）
- ('playbook', 6): [
+ ('playbook', 5): [
   # 「推荐选择」那张是 390×770，不是整屏，放在 'whole'（不套竖屏框，按原比例整张显示），第三项 1 是它在这一排里的位置
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
    'label': ['展示柜的四个状态', 'Four showcase states'],
@@ -189,7 +186,7 @@ FIGURES = {
              ['选好的物品摆上架子。', 'The chosen items go on the shelf.']],
    'caption': ['', '']},
  ],
- ('playbook', 7): [
+ ('playbook', 6): [
   # 交易市场和以物换物各四屏，1 倍图（390 宽），2 倍图以后再换。
   # 七张 390×868 的屏只比竖屏框（390:844）高 3%，但底部正好是操作按钮（Refuse / Accept、List、Sure…），
   # 套竖屏框会把按钮切掉一半，所以放在 'whole' 里整张显示；只有 390×1203 的社区首页照常裁成一屏高。
@@ -206,6 +203,15 @@ FIGURES = {
    'notes': [['上栏：会失去的物品。', 'Top: the items you will lose.'], ['下栏：想得到的物品。', 'Bottom: the items you want.']],
    'caption': ['交易市场和以物换物共约 27 屏线框，这里各放四屏。', 'The marketplace and barter flows run to about 27 wireframes; four of each are shown here.']},
  ],
+ # 2026-11-27（卡 20261127-003 方案 A）：新 04「转折」（sections 第 7 项）：App 活动详情 ↔ Studio 任务画布，两边的分段结构对得上。
+ # 两张都是 2026-11-27 从 Figma 按 2 倍新导的（见 tools/prepare_assets.py、docs/sources.md）；只说分段，Studio 段间的 Rewards 和 App 的「最后领取」是不是一回事图上看不出，不写。
+ ('playbook', 7): [
+  {'kind': 'duo', 'prov': 'original', 'project': 'playbook',
+   'label': ['同一场活动的两端 · App ↔ Studio', 'One campaign, two sides · App ↔ Studio'],
+   'items': [('playbook/app-wire-mission-locked', ['App 活动详情 · 第 2 段上锁 · 我的 UX 线框', 'App campaign detail · stage 2 locked · my UX wireframe']),
+             ('playbook/studio-mission-nexus', ['Studio 任务画布 · 第 1 段 → 奖励 → 第 2 段 · 我的 UX/UI', 'Studio mission canvas · stage 1 → rewards → stage 2 · my UX/UI'])],
+   'caption': ['粉丝完成第 1 段才解锁第 2 段；创作者在画布上把每段要做的任务连起来。', 'Fans unlock stage 2 by finishing stage 1; on the canvas, the creator links the tasks each stage asks for.']},
+ ],
  # 2026-11-17（卡 20261115-031、20261117-011）：新增 09「二创与联名 / Remix」，原 09「交付与反思」顺延为 10。
  # 五张 Studio 定稿（UX + UI 都是本人），1440 宽画框的 2 倍图，按原比例整张显示，不裁切。
  # 2026-11-17 第 2 版（卡 20261117-017 本人打回：一屏放不下的做成上下滑动）：比 16:9 高的三张（新建挑战、挑战页、作品详情）
@@ -215,27 +221,30 @@ FIGURES = {
  #   新建挑战、挑战页：顶部搜索栏到 y=96（下沿那条线在 y=94–95），左侧菜单到 x=512（右边那条竖线在 x=510–511）；
  #   作品详情：没有左侧菜单；顶部条到 y=96（白底在 y=95 结束），右侧「Message From The Creator」栏从 x=2238 起（2880−2238=642）。
  # 2026-11-26（第 2 批第 1、8 条）：Remix 回到主线，键 9 → 8；页面上用 1200 宽的图（'-1200'），放大时换成 2400 宽的原图（'full'）
- ('playbook', 8): [
-  {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges-1200', 'full': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
-   'label': ['粉丝挑战列表', 'Fan challenges'],
-   'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']},
-  {'kind': 'image', 'src': 'playbook/studio-remix-new-challenge-1200', 'full': 'playbook/studio-remix-new-challenge', 'prov': 'original', 'project': 'playbook', 'scroll': True,
-   'fixed': {'of': 2880, 'top': 96, 'left': 512},
-   'label': ['新建挑战', 'New challenge'],
-   'caption': ['名称、说明、可提交的文件类型和数量、阶段时间、给粉丝的分成。', 'Name, description, accepted file types and counts, phase timing and the fan’s share.']},
-  {'kind': 'image', 'src': 'playbook/studio-remix-challenge-page-1200', 'full': 'playbook/studio-remix-challenge-page', 'prov': 'original', 'project': 'playbook', 'scroll': True,
-   'fixed': {'of': 2880, 'top': 96, 'left': 512},
-   'label': ['挑战页', 'Challenge page'],
-   'caption': ['当前阶段、剩余天数和全部投稿，创作者从这里选出获胜者。', 'The current phase, days left and all submissions. The creator picks the winner here.']},
+ # 2026-11-27（卡 20261127-003 方案 A）：键 8 → 9；主图留两张（作品详情、联名），另外三张收进一组页签（'tabs'，一次看一张）
+ ('playbook', 9): [
   {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail-1200', 'full': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook', 'scroll': True,
    'fixed': {'of': 2880, 'top': 96, 'right': 642},
    'label': ['作品详情', 'Submission detail'],
    'caption': ['在画面上框出一块留修改意见，右侧按版本记录往来。', 'Mark an area of the image to comment on it. The side panel keeps the feedback by revision.']},
+  {'kind': 'tabs', 'label': ['挑战的另外三页', 'Three more challenge pages'], 'items': [
+    (['挑战列表', 'Challenges'], {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges-1200', 'full': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
+       'label': ['粉丝挑战列表', 'Fan challenges'],
+       'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']}),
+    (['新建挑战', 'New challenge'], {'kind': 'image', 'src': 'playbook/studio-remix-new-challenge-1200', 'full': 'playbook/studio-remix-new-challenge', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+       'fixed': {'of': 2880, 'top': 96, 'left': 512},
+       'label': ['新建挑战', 'New challenge'],
+       'caption': ['名称、说明、可提交的文件类型和数量、阶段时间、给粉丝的分成。', 'Name, description, accepted file types and counts, phase timing and the fan’s share.']}),
+    (['挑战页', 'Challenge page'], {'kind': 'image', 'src': 'playbook/studio-remix-challenge-page-1200', 'full': 'playbook/studio-remix-challenge-page', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+       'fixed': {'of': 2880, 'top': 96, 'left': 512},
+       'label': ['挑战页', 'Challenge page'],
+       'caption': ['当前阶段、剩余天数和全部投稿，创作者从这里选出获胜者。', 'The current phase, days left and all submissions. The creator picks the winner here.']}),
+  ]},
   {'kind': 'image', 'src': 'playbook/studio-remix-creator-collab-1200', 'full': 'playbook/studio-remix-creator-collab', 'prov': 'original', 'project': 'playbook',
    'label': ['创作者联名', 'Creator collaborations'],
    'caption': ['已联名的物品按合作的创作者分组，另有待审批和收到的申请两个页签。', 'Collaborated items grouped by partner creator, with tabs for pending approvals and incoming requests.']},
  ],
- ('playbook', 9): [
+ ('playbook', 10): [
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],

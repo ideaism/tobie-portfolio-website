@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261126a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261127a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -432,6 +432,13 @@ def fold(summary, body, cls=''):
             f'<span class="case-module__mark" aria-hidden="true"></span></summary><div class="case-module__body">{body}</div></details>')
 
 def figure_html(f, lang):
+    if f['kind'] == 'tabs':
+        # 'tabs'（2026-11-27，PlayBook Remix，卡 20261127-003 方案 A）：几张图一次只看一张，上面一排页签切换。
+        # 页签的样子和行为照 Studio 三段演示（styles.css .clips__tabs、prototype.js liveset()）；藏着的图点开前不加载。
+        # 'items'：[(页签名 [zh, en], 一张图的配置)]，图的配置和别的图一样（各自带图名、图注）
+        tabs = ''.join(f'<button type="button" data-live-tab="{n}" aria-pressed="{str(n == 0).lower()}">{T(lbl, lang)}</button>' for n, (lbl, _) in enumerate(f['items']))
+        panels = ''.join(f'<div data-live-panel="{n}"{" hidden" if n else ""}>{figure_html(sub, lang)}</div>' for n, (_, sub) in enumerate(f['items']))
+        return f'<div class="liveset figtabs" data-liveset data-component="Image tabs"><div class="clips__tabs" role="group" aria-label="{escape(T(f["label"], lang))}">{tabs}</div>{panels}</div>'
     prov_text, prov_cls = prov_shown(f['prov'])
     # 图名留空（['', '']）、来源标签也不显示时，整行 frame-label 不出（2026-11-23：交接单只给了图注的图）
     has_label = T(f.get('label', ['', '']), lang) or T(prov_text, lang)

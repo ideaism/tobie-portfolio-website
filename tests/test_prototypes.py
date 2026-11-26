@@ -92,7 +92,7 @@ class StudioTests(unittest.TestCase):
             self.assertTrue(d['provenance'][0].startswith(REBUILT[0]), f'{key}: the provenance line must open by saying this is rebuilt from the source')
             self.assertTrue(d['provenance'][1].startswith(REBUILT[1]), f'{key}: the provenance line must open by saying this is rebuilt from the source')
         for lang, n in (('zh', 0), ('en', 1)):
-            html = section_demo('playbook', 3, lang)
+            html = section_demo('playbook', 8, lang)   # 2026-11-27（方案 A）：Studio 挪到 sections 第 8 项
             self.assertEqual(html.count(f'<p class="proto__prov">{REBUILT[n]}'), len(STUDIO), lang)
             self.assertEqual(html.count(f'<span class="prov prov--retro">{REBUILT_TAG[n]}</span>'), len(STUDIO), lang)
             self.assertIn('data-clips', html, 'the original recordings stay below the rebuilt demos')
@@ -280,6 +280,7 @@ class SmtTests(unittest.TestCase):
 class FigureTests(unittest.TestCase):
     def test_figures_use_exported_assets_and_known_provenance(self):
         for (slug, n), figs in FIGURES.items():
+            figs = [sub for f in figs for sub in ([s for _, s in f['items']] if f['kind'] == 'tabs' else [f])]   # 'tabs'（2026-11-27）：检查里面每一张图
             for f in figs:
                 self.assertIn(f['prov'], PROV, f'{slug}/{n}')
                 srcs = [f['src']] if 'src' in f else [i[0] for i in f.get('items', [])]
@@ -339,7 +340,7 @@ class FigureTests(unittest.TestCase):
                     self.assertTrue(0 <= x0 < x1 <= fx['of'] and 0 <= y0 < y1 <= fx['of'] * h / w, f'{slug}/{n}')
                     self.assertTrue(fx.get('top', 0) <= st['at'] < y0, f'{slug}/{n}')
                     self.assertLessEqual(st['at'] + (y1 - y0), fx['of'] * 9 / 16 - fx.get('bottom', 0), f'{slug}/{n}: the column would run under the bottom bar')
-        plain = dict(FIGURES[('playbook', 8)][0])   # 2026-11-24：Remix 从 09 顺延为 10；2026-11-25 起草助手下线，回到 9；2026-11-26 回到主线，键 8
+        plain = dict(next(f for f in FIGURES[('playbook', 9)] if f['kind'] == 'image' and not f.get('scroll')))   # 2026-11-27（方案 A）：Remix 键 9，第一张换成作品详情（滑动的），取一张不滑动的   # 2026-11-24：Remix 从 09 顺延为 10；2026-11-25 起草助手下线，回到 9；2026-11-26 回到主线，键 8
         self.assertNotIn('scroll', plain)
         self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default
 

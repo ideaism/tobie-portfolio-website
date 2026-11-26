@@ -141,6 +141,10 @@ JOBS = {
     # 2026-11-26（理解成本优化第 2 批第 8 条）：页面上用 1200 宽（正文栏最宽 936，够 1.3 倍屏），点放大才换上面 2400 宽的
     **{f'playbook/studio-remix-{n}-1200': (SRC / 'work' / 'playbook' / f'studio-remix-{n}@2x.png', 1200, 82)
        for n in ('fan-challenges', 'new-challenge', 'challenge-page', 'submission-detail', 'creator-collab')},
+    # 2026-11-27（卡 20261127-003 方案 A，新 04「转折」）：App 活动详情第 3 屏（第 2 段上锁）和 Studio 任务画布，
+    # 2026-11-27 从 Figma 按 2 倍导出（3IhJOmCVR6WC8mJYbbYLA7 704:62283 裁第 3 屏；XDyOn5545LrSOsCwqUcED7 5562:30168），见 docs/sources.md
+    'playbook/app-wire-mission-locked': (SRC / 'work' / 'playbook' / 'app-wire-mission-locked@2x.png', 780, 88),
+    'playbook/studio-mission-nexus': (SRC / 'work' / 'playbook' / 'studio-mission-nexus@2x.png', 1600, 84),
     # 2026-11-26（第 2 批第 3 条）：「更多系统模块」三行折叠左边的关键屏缩略图，显示 72×96，导 2 倍；裁切见 CROP
     'playbook/thumb-context': (V2 / 'app-search.png', 144, 84),
     'playbook/thumb-showcase': (SRC / 'work' / 'playbook' / 'app-showcase-filled@2x.png', 144, 84),

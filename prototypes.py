@@ -979,12 +979,16 @@ def section_demo(slug, number, lang):
     # 2026-11-16：PlayBook 前面插了一节「用户与动线」，Studio 从 02 顺延为 03，App 从 03 顺延为 04
     # 2026-11-26（理解成本优化第 2 批第 4 条）：亲手试的三段放最前（带 #try）；原始编辑器导览和录屏收进一行折叠「看当年的录屏」，
     # 样子和行为同 build.py fold()（这里不能 import build，照抄那一行的结构）
-    if slug == 'playbook' and number == 3:
+    # 2026-11-27（卡 20261127-003 方案 A）：先 App 后 Studio，Studio 挪到 sections 第 8 项、页面编号 05（前面是两节 App、三行「更多系统模块」、04 转折）
+    if slug == 'playbook' and number == 8:
         return (live_set(lang, 'try')
                 + f'<details class="case-module case-module--fold" data-clips-fold><summary><span class="case-module__name">{t("看当年的录屏", "See the original recordings", lang)}</span>'
                   f'<span class="case-module__mark" aria-hidden="true"></span></summary><div class="case-module__body">{studio_tour(lang, "tour")}{clips(lang)}</div></details>')
     # 2026-11-25（优化方案第 1 批）：04 起草助手下线（drafter() 留着没删），原 05 App 成为 04
-    if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
+    # 2026-11-27（方案 A）：App 两个决定成 03；合成三个状态的可点原型收进一行折叠（App 的图少占地方），放在两大并排图后面
+    if slug == 'playbook' and number == 3:
+        return (f'<details class="case-module case-module--fold"><summary><span class="case-module__name">{t("亲手点一遍合成的三个状态", "Tap through the three crafting states", lang)}</span>'
+                f'<span class="case-module__mark" aria-hidden="true"></span></summary><div class="case-module__body">{flow("playbook-craft", lang, "try-app")}</div></details>')
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')
     if slug == 'commons-fridge' and number == 7: return fridge_3d(lang, 'try')   # 2026-11-24（交接单 6h）：v1.8 外链原型撤掉，换成 07「3D 小样」里嵌本站打包的小样；原 08「原型与结果」并进 07
     # 2026-11-21：新 07「重新定义」（交接单第 9 节）放的是审核中心小原型和批次图。

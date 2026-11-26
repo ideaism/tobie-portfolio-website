@@ -126,6 +126,7 @@
 | **More modules 缩略图（2026-11-26，第 2 批）** | 收着时每行看得出是哪块 | `cases.py` 该节的可选键 `'thumb'`（图名），行首放一张 72 × 96（手机 54 × 72，跨两行）的关键屏小图，装饰性 `aria-hidden`；点开后小图隐去，标题条回到原来三列。小图由 `tools/prepare_assets.py` 的 `thumb-*` 从原图裁出（144 宽 2 倍）。现在三行：上下文与发现、收藏与展示、交易与交换（反馈与协作并进 04 App，二创与联名回主线 05） |
 | **Fold 折叠区** | 正文里「想看再点开」的一块（「看全部 5 版」「看当年的录屏」） | `build.py` `fold()`，和更多系统模块同一套 `<details class="case-module case-module--fold">`：上面一条细线、左边一行名字、右边圆圈加号；点开后标题吸在顶栏下，吸住时点收起回到这一行（同一段 `site.js`）。里面有视频的，点开前不请求封面和视频（`prototype.js` `clips()`：`data-poster`、`data-src` 点开才换成真地址，收起时暂停） |
 | **Duo 两大** | 两张关键屏并排放大（PlayBook 04 演变条：废案熔炉 + 最终版） | `figures.py` kind `'duo'`，其余版本放 `'more'`，收进下面一个 Fold。两张按同一高度（取较矮那张原图高）缩放，所以并排时没有高矮不齐的空白；1440 宽每张不小于 390px。520 以下上下排，每张一行 |
+| **Image tabs 图片页签（2026-11-27）** | 同一类的几张图一次只看一张（PlayBook 06 Remix 的挑战列表 / 新建挑战 / 挑战页） | `figures.py` kind `'tabs'`，`items` 是 `(页签名, 一张图的配置)`。样子和行为照 Rebuilt prototype 的 Tab（`.clips__tabs`、`prototype.js` `liveset()`）：切换时 Tab 这一行不动；藏着的图点开前不加载；里面的滑动窗显示时重新量高度（`site.js` `ResizeObserver`） |
 | **Section sub 章节小字** | 章节标题下面一行小号灰字（2026-11-25 起页面上没有用到；原来只有 PlayBook 04 节起草助手） | `cases.py` 该节的可选键 `sub`（`[zh, en]`），`build.py` 写成 `<p class="meta case-sub">`，紧贴 h2；不是正文，不加图标。没有这个键的章节不变（2026-11-24） |
 | **Contact** | 联系 | 深墨色区块；邮箱、LinkedIn、PDF；企鹅作为签名 |
 | **Structure mode** | 页脚开关 | 用虚线框显示页面由哪些组件组成——作品集自己的“设计规范”随手可见 |

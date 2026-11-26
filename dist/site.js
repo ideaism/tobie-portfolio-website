@@ -159,6 +159,9 @@ document.querySelectorAll('[data-scroll-shot]').forEach(shot => {
   view.addEventListener('scroll', update, { passive: true });
   view.querySelector('img')?.addEventListener('load', update);
   window.addEventListener('resize', update, { passive: true });
+  // 2026-11-27: inside a hidden tab panel (figure kind 'tabs') the window measures 0 tall and reads as "at the end";
+  // re-measure when the panel is shown, otherwise the hint and fade stay hidden on a picture that still scrolls
+  if ('ResizeObserver' in window) new ResizeObserver(update).observe(view);
   update();
 });
 

@@ -375,6 +375,10 @@
   390,
   875
  ],
+ "playbook/app-wire-mission-locked": [
+  780,
+  1732
+ ],
  "playbook/cauldron-list": [
   390,
   1519
@@ -590,6 +594,10 @@
  "playbook/studio-editor": [
   2400,
   1350
+ ],
+ "playbook/studio-mission-nexus": [
+  1600,
+  900
  ],
  "playbook/studio-remix-challenge-page": [
   2400,

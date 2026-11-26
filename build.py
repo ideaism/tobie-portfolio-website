@@ -621,7 +621,7 @@ def case_layout(c, key, lang, anchor='section'):
                 h += f'\n<section class="case-section case-more" id="{anchor}-more" data-component="More modules"><h2>{more_name}</h2><div class="case-more__list">'
             k += 1
             # 'thumb'（2026-11-26，第 2 批第 3 条）：收着时这一行左边的关键屏缩略图（装饰，alt 留空：右边就是名字和那句话）
-            thumb = f'<span class="case-module__thumb">{img(s["thumb"], "")}</span>' if s.get('thumb') else ''
+            thumb = ('<span class="case-module__thumb">' + img(s["thumb"], "").replace('<img ', '<img aria-hidden="true" ', 1) + '</span>') if s.get('thumb') else ''   # decorative: the row's name says what it is
             h += (f'\n<details class="case-module{" case-module--thumb" if thumb else ""}" id="{anchor}-more-{k}"><summary>{thumb}<span class="case-module__name">{s["label"][i]}</span>'
                   f'<span class="case-module__title">{s["title"][i]}</span><span class="case-module__mark" aria-hidden="true"></span></summary>'
                   f'<div class="case-module__body">{_section_inner(s, key, n + 1, lang)}</div></details>')

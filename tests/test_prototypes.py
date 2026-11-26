@@ -339,7 +339,7 @@ class FigureTests(unittest.TestCase):
                     self.assertTrue(0 <= x0 < x1 <= fx['of'] and 0 <= y0 < y1 <= fx['of'] * h / w, f'{slug}/{n}')
                     self.assertTrue(fx.get('top', 0) <= st['at'] < y0, f'{slug}/{n}')
                     self.assertLessEqual(st['at'] + (y1 - y0), fx['of'] * 9 / 16 - fx.get('bottom', 0), f'{slug}/{n}: the column would run under the bottom bar')
-        plain = dict(FIGURES[('playbook', 9)][0])   # 2026-11-24：Remix 从 09 顺延为 10；2026-11-25 起草助手下线，回到 9
+        plain = dict(FIGURES[('playbook', 8)][0])   # 2026-11-24：Remix 从 09 顺延为 10；2026-11-25 起草助手下线，回到 9；2026-11-26 回到主线，键 8
         self.assertNotIn('scroll', plain)
         self.assertNotIn('shot-scroll', figure_html(plain, 'zh'))   # the switch is off by default
 

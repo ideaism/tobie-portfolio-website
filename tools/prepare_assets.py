@@ -138,6 +138,13 @@ JOBS = {
     'playbook/studio-remix-challenge-page': (SRC / 'work' / 'playbook' / 'studio-remix-challenge-page@2x.png', 2400, 84),
     'playbook/studio-remix-submission-detail': (SRC / 'work' / 'playbook' / 'studio-remix-submission-detail@2x.png', 2400, 84),
     'playbook/studio-remix-creator-collab': (SRC / 'work' / 'playbook' / 'studio-remix-creator-collab@2x.png', 2400, 84),
+    # 2026-11-26（理解成本优化第 2 批第 8 条）：页面上用 1200 宽（正文栏最宽 936，够 1.3 倍屏），点放大才换上面 2400 宽的
+    **{f'playbook/studio-remix-{n}-1200': (SRC / 'work' / 'playbook' / f'studio-remix-{n}@2x.png', 1200, 82)
+       for n in ('fan-challenges', 'new-challenge', 'challenge-page', 'submission-detail', 'creator-collab')},
+    # 2026-11-26（第 2 批第 3 条）：「更多系统模块」三行折叠左边的关键屏缩略图，显示 72×96，导 2 倍；裁切见 CROP
+    'playbook/thumb-context': (V2 / 'app-search.png', 144, 84),
+    'playbook/thumb-showcase': (SRC / 'work' / 'playbook' / 'app-showcase-filled@2x.png', 144, 84),
+    'playbook/thumb-trading': (SRC / 'work' / 'playbook' / 'app-barter-request.png', 144, 84),
     'playbook/app-missions': (V2 / 'app-missions.png', 390, 88),
     'playbook/app-owned': (V2 / 'app-owned.png', 390, 88),
     'playbook/app-unowned': (V2 / 'app-unowned.png', 390, 88),
@@ -302,6 +309,10 @@ CROP = {
     'qingju/hifi-phone-discussion': (9, 42, 409, 905),    # the discussion phone on the route crop
     # 2026-11-23：录屏右边是米色画布上的演示按钮（快进到周日、重放）和鼠标圈；140 帧逐帧看过，结算卡和企鹅都在手机框里（框右边到 x=217），裁到框
     'fridge/3d-weekly-pass': (0, 0, 221, 449),
+    # 2026-11-26：三张缩略图都裁成 3:4，取每屏最能认出来的上半截
+    'playbook/thumb-context': (0, 0, 390, 520),            # 搜索框和分类
+    'playbook/thumb-showcase': (0, 300, 780, 1340),        # 2 倍图：头像下半到摆满物品的展示架
+    'playbook/thumb-trading': (0, 0, 390, 520),            # 发起交换：会失去的物品那一栏
 }
 
 

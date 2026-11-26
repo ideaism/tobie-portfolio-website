@@ -595,21 +595,41 @@
   2400,
   2457
  ],
+ "playbook/studio-remix-challenge-page-1200": [
+  1200,
+  1228
+ ],
  "playbook/studio-remix-creator-collab": [
   2400,
   1350
+ ],
+ "playbook/studio-remix-creator-collab-1200": [
+  1200,
+  675
  ],
  "playbook/studio-remix-fan-challenges": [
   2400,
   1350
  ],
+ "playbook/studio-remix-fan-challenges-1200": [
+  1200,
+  675
+ ],
  "playbook/studio-remix-new-challenge": [
   2400,
   1775
  ],
+ "playbook/studio-remix-new-challenge-1200": [
+  1200,
+  888
+ ],
  "playbook/studio-remix-submission-detail": [
   2400,
   2590
+ ],
+ "playbook/studio-remix-submission-detail-1200": [
+  1200,
+  1295
  ],
  "playbook/team-home": [
   390,
@@ -630,6 +650,18 @@
  "playbook/team-search": [
   390,
   904
+ ],
+ "playbook/thumb-context": [
+  144,
+  192
+ ],
+ "playbook/thumb-showcase": [
+  144,
+  192
+ ],
+ "playbook/thumb-trading": [
+  144,
+  192
  ],
  "qingju/active-user-stages-2021": [
   1920,

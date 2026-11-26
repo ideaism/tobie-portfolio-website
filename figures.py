@@ -139,13 +139,35 @@ FIGURES = {
  ],
  # 2026-11-24（交接单 ⑧）：起草助手从第 11 节挪到 04（没有图，演示挂在 prototypes.py section_demo），原 4–10 键顺延为 5–11
  ('playbook', 4): [
-  # 2026-11-16 第三批：加熔炉废案稿。它是 390×1080 的长屏，熔炉在最底部，不能裁成一屏高，放在 'whole'（整张显示），
-  # 第三项 1 是它在这一排里的位置：早期 UI 之后、配方列表之前。五张排一排。
-  {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 5,
+  # 2026-11-26（优化方案第 2 批第 5 条「两大三小」）：熔炉废案和完成的 UI 两张大图并排（'duo'，同高，各自整张显示），
+  # 原来五张一排的手机条收进下面的折叠「看全部 5 版」（'more'），点开前不加载。
+  {'kind': 'duo', 'prov': 'mixed', 'project': 'playbook',
    'label': ['合成界面的演变 · 谁做了什么', 'How the crafting screen evolved · who did what'],
-   'items': [('playbook/early-ui', ['早期 UI · 另一位设计师', 'Early UI · another designer']), ('playbook/cauldron-list', ['配方列表 · 我的 UX', 'Recipe list · my UX']), ('playbook/app-craft-ready', ['配方详情 · 我的 UX', 'Recipe detail · my UX']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
-   'whole': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace'], 1)],
-   'caption': ['早期视觉确立了方向。我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'The early UI set a visual direction. I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.']},
+   'items': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
+   'caption': ['我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.'],
+   'more': {'summary': ['看全部 5 版', 'See all 5 versions'],
+    # 2026-11-16 第三批：加熔炉废案稿。它是 390×1080 的长屏，熔炉在最底部，不能裁成一屏高，放在 'whole'（整张显示），
+    # 第三项 1 是它在这一排里的位置：早期 UI 之后、配方列表之前。五张排一排。
+    'fig': {'kind': 'phones', 'prov': 'mixed', 'project': 'playbook', 'n': 5,
+     'label': ['', ''],
+     'items': [('playbook/early-ui', ['早期 UI · 另一位设计师', 'Early UI · another designer']), ('playbook/cauldron-list', ['配方列表 · 我的 UX', 'Recipe list · my UX']), ('playbook/app-craft-ready', ['配方详情 · 我的 UX', 'Recipe detail · my UX']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
+     'whole': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace'], 1)],
+     'caption': ['', '']}}},
+ ],
+ # 2026-11-26（第 2 批第 2 条）：原「反馈与协作」模块（键 6）的图跟着决策块挪进 04 的第二段（cases.py 'then'）。
+ # 'pins'：{图名: [(编号, x%, y%)]}，坐标按格子里看得见的那块算（整屏图是 390:844 那一屏，whole / partials 是整张图）；
+ # 'notes'：每个编号一行说明，按编号顺序。
+ ('playbook', '4b'): [
+  {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 3,
+   'label': ['反馈的分量 · 轻提示与领取弹窗', 'Weight of feedback · light cue vs claim dialog'],
+   'items': [('playbook/app-home', ['日常进度', 'Routine progress']), ('playbook/app-home-events-only', ['领取之后：每日任务离开首页', 'After claiming: daily tasks leave Home'])],
+   'partials': [('playbook/app-reward', ['重要奖励', 'A significant reward'])],
+   'cap': {'playbook/app-reward': 330},
+   'pins': {'playbook/app-home': [(1, 81.3, 21.6), (2, 71.8, 64.8)], 'playbook/app-reward': [(3, 20.4, 39.0)]},
+   'notes': [['小进度只在右上角显示 +N，不弹窗。', 'Minor progress shows as “+N” in the corner, with no dialog.'],
+             ['每日任务自动判定完成，可以一键全部领取。', 'Daily tasks are detected automatically and can all be claimed at once.'],
+             ['值得停下来的奖励，才用弹窗和一次明确的领取。', 'Only a reward worth pausing for gets a dialog and a deliberate claim.']],
+   'caption': ['', '']},
  ],
  ('playbook', 5): [
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
@@ -153,27 +175,21 @@ FIGURES = {
    'items': [('playbook/app-home', ['首页：上下文与进度', 'Home: context + progress']), ('playbook/app-inventory', ['背包：相关物品', 'Inventory: related items']), ('playbook/app-search', ['全局搜索：分类筛选', 'Global search: categories']), ('playbook/app-search-creators', ['搜索结果：创作者', 'Results: creators'])],
    'caption': ['日常任务保留创作者上下文；评审后，搜索改为跨社区的全局入口。', 'Everyday tasks keep the creator context; after a product review, search became a global, cross-community entry point.']},
  ],
- ('playbook', 6): [
-  # 2026-11-16（卡 20261115-026 选 B）：奖励弹窗是 330×453 的弹窗局部，不是整屏，从 items 挪到 partials：
-  # 不加 screen 类，按原比例完整显示（见 build.py figure_html）。第三批换成 2 倍图（660×906），'cap' 把显示宽度上限留在 330；
-  # 首页和弹窗之间加一张「领取之后」。
-  {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 3,
-   'label': ['反馈的分量 · 轻提示与领取弹窗', 'Weight of feedback · light cue vs claim dialog'],
-   'items': [('playbook/app-home', ['日常进度：+5 · 2m 的小提示', 'Routine progress: a small “+5 · 2m” cue']), ('playbook/app-home-events-only', ['领取之后：每日任务离开首页', 'After claiming: daily tasks leave Home'])],
-   'partials': [('playbook/app-reward', ['重要奖励：Acquire items 领取', 'A significant reward: “Acquire items”'])],
-   'cap': {'playbook/app-reward': 330},
-   'caption': ['日常的小进度贴在任务旁边；只有值得停下来的奖励才用弹窗和一次明确的领取。', 'Routine progress stays next to the task; only a reward worth pausing for gets a dialog and a deliberate claim.']},
- ],
  # 2026-11-16 第三批：07 节加展示柜四个状态；新增 08「交易与交换」，原 08「交付与反思」顺延为 09
- ('playbook', 7): [
+ # 2026-11-26（第 2 批）：原键 5–10 → 5 上下文、6 展示柜、7 交易、8 Remix、9 团队 UI（反馈那张挪到 '4b'）
+ ('playbook', 6): [
   # 「推荐选择」那张是 390×770，不是整屏，放在 'whole'（不套竖屏框，按原比例整张显示），第三项 1 是它在这一排里的位置
   {'kind': 'phones', 'prov': 'original', 'project': 'playbook', 'n': 4,
    'label': ['展示柜的四个状态', 'Four showcase states'],
-   'items': [('playbook/app-showcase-empty', ['未填充：空架子和“一键展示”', 'Empty: a bare shelf and “One-click Show”']), ('playbook/app-showcase-filled', ['已填充', 'Filled']), ('playbook/app-showcase-visitor', ['访客视角：共同关注的创作者', 'Visitor’s view: creators you both follow'])],
-   'whole': [('playbook/app-showcase-pick', ['推荐选择：从背包里推荐', 'Choosing: recommended from the inventory'], 1)],
-   'caption': ['展示柜从空架子开始：点“一键展示”，系统从背包里推荐物品，选好后出现在个人主页上；别人来访时还能看到共同关注的创作者。', 'The showcase starts as an empty shelf. “One-click Show” recommends items from the inventory; once chosen they appear on the profile, and visitors also see the creators you both follow.']},
+   'items': [('playbook/app-showcase-empty', ['未填充', 'Empty']), ('playbook/app-showcase-filled', ['已填充', 'Filled']), ('playbook/app-showcase-visitor', ['访客视角：共同关注的创作者', 'Visitor’s view: creators you both follow'])],
+   'whole': [('playbook/app-showcase-pick', ['推荐选择', 'Choosing'], 1)],
+   'pins': {'playbook/app-showcase-empty': [(1, 61.5, 35.2)], 'playbook/app-showcase-pick': [(2, 36.7, 43.8)], 'playbook/app-showcase-filled': [(3, 33.3, 39.7)]},
+   'notes': [['空的时候，一键展示。', 'When it is empty, one tap shows items.'],
+             ['从背包里推荐珍贵物品。', 'Valuable items are recommended from the inventory.'],
+             ['选好的物品摆上架子。', 'The chosen items go on the shelf.']],
+   'caption': ['', '']},
  ],
- ('playbook', 8): [
+ ('playbook', 7): [
   # 交易市场和以物换物各四屏，1 倍图（390 宽），2 倍图以后再换。
   # 七张 390×868 的屏只比竖屏框（390:844）高 3%，但底部正好是操作按钮（Refuse / Accept、List、Sure…），
   # 套竖屏框会把按钮切掉一半，所以放在 'whole' 里整张显示；只有 390×1203 的社区首页照常裁成一屏高。
@@ -185,7 +201,9 @@ FIGURES = {
   {'kind': 'phones', 'prov': 'wire', 'project': 'playbook', 'n': 4,
    'label': ['以物换物 · 线框', 'Barter · wireframes'],
    'items': [],
-   'whole': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换：上面是会失去的，下面是想得到的', 'Posting a request: what you lose above, what you want below']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
+   'whole': [('playbook/app-barter-market', ['换物市场：他有什么、他要什么', 'Barter market: what they have, what they want']), ('playbook/app-barter-request', ['发起交换', 'Posting a request']), ('playbook/app-barter-consume', ['确认要交出的物品', 'Confirm the items you will give up']), ('playbook/app-barter-received', ['收到的交换：接受或拒绝', 'A received request: accept or refuse'])],
+   'pins': {'playbook/app-barter-request': [(1, 61.1, 16.3), (2, 64.3, 58.0)]},
+   'notes': [['上栏：会失去的物品。', 'Top: the items you will lose.'], ['下栏：想得到的物品。', 'Bottom: the items you want.']],
    'caption': ['交易市场和以物换物共约 27 屏线框，这里各放四屏。', 'The marketplace and barter flows run to about 27 wireframes; four of each are shown here.']},
  ],
  # 2026-11-17（卡 20261115-031、20261117-011）：新增 09「二创与联名 / Remix」，原 09「交付与反思」顺延为 10。
@@ -196,27 +214,28 @@ FIGURES = {
  # 按 2 倍原图（sources/work/playbook/studio-remix-*@2x.png，2880 宽）上量的像素：
  #   新建挑战、挑战页：顶部搜索栏到 y=96（下沿那条线在 y=94–95），左侧菜单到 x=512（右边那条竖线在 x=510–511）；
  #   作品详情：没有左侧菜单；顶部条到 y=96（白底在 y=95 结束），右侧「Message From The Creator」栏从 x=2238 起（2880−2238=642）。
- ('playbook', 9): [
-  {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
+ # 2026-11-26（第 2 批第 1、8 条）：Remix 回到主线，键 9 → 8；页面上用 1200 宽的图（'-1200'），放大时换成 2400 宽的原图（'full'）
+ ('playbook', 8): [
+  {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges-1200', 'full': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
    'label': ['粉丝挑战列表', 'Fan challenges'],
    'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']},
-  {'kind': 'image', 'src': 'playbook/studio-remix-new-challenge', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+  {'kind': 'image', 'src': 'playbook/studio-remix-new-challenge-1200', 'full': 'playbook/studio-remix-new-challenge', 'prov': 'original', 'project': 'playbook', 'scroll': True,
    'fixed': {'of': 2880, 'top': 96, 'left': 512},
    'label': ['新建挑战', 'New challenge'],
    'caption': ['名称、说明、可提交的文件类型和数量、阶段时间、给粉丝的分成。', 'Name, description, accepted file types and counts, phase timing and the fan’s share.']},
-  {'kind': 'image', 'src': 'playbook/studio-remix-challenge-page', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+  {'kind': 'image', 'src': 'playbook/studio-remix-challenge-page-1200', 'full': 'playbook/studio-remix-challenge-page', 'prov': 'original', 'project': 'playbook', 'scroll': True,
    'fixed': {'of': 2880, 'top': 96, 'left': 512},
    'label': ['挑战页', 'Challenge page'],
    'caption': ['当前阶段、剩余天数和全部投稿，创作者从这里选出获胜者。', 'The current phase, days left and all submissions. The creator picks the winner here.']},
-  {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+  {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail-1200', 'full': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook', 'scroll': True,
    'fixed': {'of': 2880, 'top': 96, 'right': 642},
    'label': ['作品详情', 'Submission detail'],
    'caption': ['在画面上框出一块留修改意见，右侧按版本记录往来。', 'Mark an area of the image to comment on it. The side panel keeps the feedback by revision.']},
-  {'kind': 'image', 'src': 'playbook/studio-remix-creator-collab', 'prov': 'original', 'project': 'playbook',
+  {'kind': 'image', 'src': 'playbook/studio-remix-creator-collab-1200', 'full': 'playbook/studio-remix-creator-collab', 'prov': 'original', 'project': 'playbook',
    'label': ['创作者联名', 'Creator collaborations'],
    'caption': ['已联名的物品按合作的创作者分组，另有待审批和收到的申请两个页签。', 'Collaborated items grouped by partner creator, with tabs for pending approvals and incoming requests.']},
  ],
- ('playbook', 10): [
+ ('playbook', 9): [
   {'kind': 'phones', 'prov': 'team', 'project': 'playbook', 'n': 3,
    'label': ['团队完成的 UI · 用于产品与投资沟通', 'Completed team UI · used in product and investor conversations'],
    'items': [('playbook/team-home', ['首页', 'Home']), ('playbook/team-profile', ['个人主页', 'Profile']), ('playbook/team-mission', ['任务', 'Mission'])],

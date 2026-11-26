@@ -88,6 +88,11 @@ FLOWS = {
      'note': ['“You will consume”在承诺那一刻列出所有代价。取消会回到上一步，材料不变。',
               '“You will consume” lists the full cost at the moment of commitment. Cancel returns to the previous state with nothing spent.'],
      'next': ['点 Cancel 返回，或点 Sure 完成。', 'Tap Cancel to go back, or Sure to finish.'],
+     # 2026-11-26（理解成本优化第 2 批第 6 条）：这一屏上的编号（x%、y% 按整张 780×1754 算），只在这一屏亮着时出现；每个编号一行说明
+     'pins': [(1, 53.0, 32.7), (2, 80.4, 64.6), (3, 41.2, 71.2)],
+     'pin_notes': [['会消耗的物品，逐个列出。', 'Every item that will be consumed is listed.'],
+                   ['常合成的人可以今天不再提醒。', 'People who craft often can turn the reminder off for today.'],
+                   ['会得到的物品，留在弹层下方看得见。', 'What you will get stays visible below the sheet.']],
      'hotspots': [
        {'box': [60, 1002, 326, 100], 'go': 'ready', 'label': ['Cancel', 'Cancel']},
        {'box': [406, 1002, 314, 100], 'go': '@end', 'label': ['Sure', 'Sure']},
@@ -415,14 +420,15 @@ def studio(key, lang):
 </section>'''
 
 
-def live_set(lang):
-    """The three rebuilt interactions, one visible at a time."""
+def live_set(lang, anchor=''):
+    """The three rebuilt interactions, one visible at a time.
+    2026-11-26（理解成本优化第 2 批第 4 条）：放在 03 节最前面，带 #try 锚点（首页和案例头的「试一试」跳到这里）。"""
     keys = list(STUDIO)
     buttons = ''.join(f'<button type="button" data-live-tab="{k}" aria-pressed="{str(n == 0).lower()}">{t(*STUDIO[k]["tab"], lang)}</button>' for n, k in enumerate(keys))
     panels = ''.join(f'<div data-live-panel="{k}" {"hidden" if n else ""}>{studio(k, lang)}</div>' for n, k in enumerate(keys))
-    return f'''<div class="liveset" data-liveset data-component="Rebuilt prototypes">
+    return f'''<div class="liveset" data-liveset data-component="Rebuilt prototypes"{f' id="{anchor}"' if anchor else ''}>
 <div class="liveset__head"><span class="label label--teal">{t('亲手试', 'Try it', lang)}</span>
-<p>{t('三段交互按原稿还原，没有固定顺序，可以随便拖、来回调。原始录屏在下面。', 'Three interactions rebuilt from the source, in no fixed order: drag and adjust freely. The original recordings are below.', lang)}</p>
+<p>{t('三段交互按原稿还原，没有固定顺序，可以随便拖、来回调。', 'Three interactions rebuilt from the source, in no fixed order: drag and adjust freely.', lang)}</p>
 <div class="clips__tabs" role="group" aria-label="{t('选择一段交互', 'Choose an interaction', lang)}">{buttons}</div></div>
 {panels}</div>'''
 
@@ -450,9 +456,16 @@ def flow(key, lang, anchor):
     rail = ''.join(f'<li><button type="button" data-go="{sid}"><span class="pin">{n+1}</span><span>{t(*s["step"], lang)}</span></button></li>'
                    for n, (sid, s) in enumerate(f['screens'].items()))
     first = f['screens'][f['start']]
-    inner = f'<div class="proto__screens">{screens_html}<div class="proto__hotspots"></div></div>'
+    # 'pins' / 'pin_notes'（2026-11-26）：某一屏上的编号和说明，prototype.js 的 go() 切屏时一起显示或藏起；没有就一个字都不变
+    pins = ''.join(f'<span class="pin-layer" data-pins-for="{sid}" aria-hidden="true"{"" if sid == f["start"] else " hidden"}>'
+                   + ''.join(f'<span class="pin" data-pin="{n}" style="left:{x}%;top:{y}%">{n}</span>' for n, x, y in s['pins']) + '</span>'
+                   for sid, s in f['screens'].items() if s.get('pins'))
+    notes = ''.join(f'<ol class="pin-notes" data-pins-for="{sid}"{"" if sid == f["start"] else " hidden"}>'
+                    + ''.join(f'<li data-pin="{n}" tabindex="0"><span class="pin">{n}</span><span>{t(*line, lang)}</span></li>' for n, line in enumerate(s['pin_notes'], 1)) + '</ol>'
+                    for sid, s in f['screens'].items() if s.get('pin_notes'))
+    inner = f'<div class="proto__screens">{screens_html}{pins}<div class="proto__hotspots"></div></div>'
     device = f'<div class="proto__device"><div class="phone"><div class="phone__screen">{inner}</div></div></div>'
-    return f'''<section class="proto frame-block" id="{anchor}" data-proto="{_json(data)}" data-component="Prototype player">
+    return f'''<section class="proto frame-block" id="{anchor}" data-proto="{_json(data)}" data-component="Prototype player"{" data-pins" if pins else ""}>
 {_frame_label(t(*f['label'], lang), t(*f['prov'], lang), '', f['project'])}
 <div class="frame frame--canvas">
  <div class="proto__stage">
@@ -460,7 +473,7 @@ def flow(key, lang, anchor):
   <div class="proto__side">
    <div class="proto__intro"><span class="label label--teal">{t('可操作原型', 'Try it', lang)}</span><h3>{t(*f['title'], lang)}</h3><p>{t(*f['intro'], lang)}</p></div>
    <ol class="rail" aria-label="{t('原型步骤', 'Prototype steps', lang)}">{rail}</ol>
-   {_note(t(*first['note'], lang), t('Tobie 的注释', 'Tobie’s note', lang))}
+   {_note(t(*first['note'], lang), t('Tobie 的注释', 'Tobie’s note', lang))}{notes}
    <p class="proto__next" data-next>{t(*first['next'], lang)}</p>
    <div class="proto__tools"><button type="button" class="tool-btn" data-action="hint">◎ {data['labels']['hint']}</button><button type="button" class="tool-btn" data-action="restart">↺ {data['labels']['restart']}</button></div>
   </div>
@@ -615,8 +628,10 @@ def clips(lang):
              ('items', t('物品交互', 'Item interaction', lang), t('物品详情与关联内容的原始交互。', 'The original item-detail and related-content interaction.', lang)),
              ('comments', t('评论交互', 'Comment interaction', lang), t('评论流程的原始操作与反馈。', 'Actions and feedback in the original comment flow.', lang))]
     tabs = ''.join(f'<button type="button" data-clip="{k}" aria-pressed="{str(n == 0).lower()}">{label}</button>' for n, (k, label, d) in enumerate(items))
-    figs = ''.join(f'<figure data-clip-panel="{k}" {"hidden" if n else ""}><video controls playsinline preload="none" poster="/assets/motion/{k}-poster.webp" aria-label="{label}"><source src="/assets/motion/{k}.mp4" type="video/mp4"></video><figcaption>{d} {t("无声录屏，未经剪辑。", "Silent, unedited screen recording.", lang)}</figcaption></figure>' for n, (k, label, d) in enumerate(items))
-    return f'''<section class="frame-block clips" data-clips data-component="Recordings" style="margin:48px 0">
+    # 2026-11-26（第 2 批第 4 条）：录屏收在「看当年的录屏」折叠里。封面和视频地址先写在 data-poster / data-src 上，
+    # 折叠点开时 prototype.js 才填进去，点开前页面不请求任何视频和封面
+    figs = ''.join(f'<figure data-clip-panel="{k}" {"hidden" if n else ""}><video controls playsinline preload="none" data-poster="/assets/motion/{k}-poster.webp" aria-label="{label}"><source data-src="/assets/motion/{k}.mp4" type="video/mp4"></video><figcaption>{d} {t("无声录屏，未经剪辑。", "Silent, unedited screen recording.", lang)}</figcaption></figure>' for n, (k, label, d) in enumerate(items))
+    return f'''<section class="frame-block clips" data-clips data-component="Recordings" style="margin:48px 0 0">
 {_frame_label(t('PlayBook · 当年的交互录屏', 'PlayBook · interaction recordings from the time', lang), t('原始录屏', 'Screen recording', lang), '', 'playbook')}
 <div class="frame frame--canvas"><div class="clips__tabs" role="group" aria-label="{t('选择录屏', 'Choose a recording', lang)}">{tabs}</div>{figs}</div></section>'''
 
@@ -962,7 +977,12 @@ def section_demo(slug, number, lang):
     """Which demo sits in which case section (1-based)."""
     if slug == 'qingju' and number == 4: return flow('qingju-route', lang, 'try')
     # 2026-11-16：PlayBook 前面插了一节「用户与动线」，Studio 从 02 顺延为 03，App 从 03 顺延为 04
-    if slug == 'playbook' and number == 3: return studio_tour(lang, 'try') + live_set(lang) + clips(lang)
+    # 2026-11-26（理解成本优化第 2 批第 4 条）：亲手试的三段放最前（带 #try）；原始编辑器导览和录屏收进一行折叠「看当年的录屏」，
+    # 样子和行为同 build.py fold()（这里不能 import build，照抄那一行的结构）
+    if slug == 'playbook' and number == 3:
+        return (live_set(lang, 'try')
+                + f'<details class="case-module case-module--fold" data-clips-fold><summary><span class="case-module__name">{t("看当年的录屏", "See the original recordings", lang)}</span>'
+                  f'<span class="case-module__mark" aria-hidden="true"></span></summary><div class="case-module__body">{studio_tour(lang, "tour")}{clips(lang)}</div></details>')
     # 2026-11-25（优化方案第 1 批）：04 起草助手下线（drafter() 留着没删），原 05 App 成为 04
     if slug == 'playbook' and number == 4: return flow('playbook-craft', lang, 'try-app')
     if slug == 'smt' and number == 3: return smt_table(lang, 'try')

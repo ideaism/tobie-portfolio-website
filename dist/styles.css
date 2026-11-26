@@ -1543,3 +1543,62 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
   .case-module__mark{grid-column:2;grid-row:1 / span 2}
 }
 @media (prefers-reduced-motion:reduce){.case-module__mark::before,.case-module__mark::after{transition:none}}
+
+/* ---------- 2026-11-26 理解成本优化第 2 批（PlayBook） ----------
+   build.py: pin_layer / pin_notes / fold / kind 'duo' / 'then' / 'thumb'；prototypes.py: flow 'pins'、03 节的「看当年的录屏」 */
+
+/* 收着的模块行左边一张关键屏缩略图；点开后缩略图收起，标题行和以前一样矮（吸顶时不占地方） */
+.case-module--thumb>summary{grid-template-columns:72px minmax(7em,auto) minmax(0,1fr) 28px;align-items:center}
+.case-module__thumb{display:block;width:72px;height:96px;border-radius:8px;overflow:hidden;background:var(--frame);box-shadow:0 0 0 1px var(--rule)}
+.case-module__thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+.case-module--thumb[open]>summary{grid-template-columns:minmax(7em,auto) minmax(0,1fr) 28px;align-items:baseline}
+.case-module--thumb[open] .case-module__thumb{display:none}
+@media (max-width:640px){
+  .case-module--thumb>summary{grid-template-columns:54px minmax(0,1fr) 28px;column-gap:var(--s-4)}
+  .case-module--thumb .case-module__thumb{grid-column:1;grid-row:1 / span 2;width:54px;height:72px}
+  .case-module--thumb .case-module__name,.case-module--thumb .case-module__title{grid-column:2}
+  .case-module--thumb .case-module__mark{grid-column:3}
+  .case-module--thumb[open]>summary{grid-template-columns:minmax(0,1fr) 28px}
+  .case-module--thumb[open] .case-module__name,.case-module--thumb[open] .case-module__title{grid-column:1}
+  .case-module--thumb[open] .case-module__mark{grid-column:2}
+}
+
+/* 正文里的一行折叠（看全部 5 版、看当年的录屏）：同「更多系统模块」的一行，只有名字和 +/− */
+.case-module--fold{border-top:1px solid var(--rule);margin:var(--s-6) 0}
+.case-module--fold>summary{grid-template-columns:minmax(0,1fr) 28px;align-items:center}
+.case-module--fold .case-module__body{padding-bottom:var(--s-5)}
+.case-module--fold .case-module__body>:first-child{margin-top:var(--s-3)}
+
+/* 04 节里接着的第二段小标题 */
+.case-then{font-size:var(--fs-h3);max-width:24em;margin:var(--s-8) 0 var(--s-3)}
+
+/* 'duo'：两张大图并排、同高，整张显示；窄屏一行一张 */
+.duo{display:flex;justify-content:center;align-items:flex-start;gap:var(--s-5);padding:var(--s-6);margin:0 auto}
+.duo figure{margin:0;min-width:0}
+.duo img{width:100%;border-radius:12px;box-shadow:0 16px 30px -18px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06)}
+.duo figcaption{margin-top:var(--s-3);font-family:var(--mono);font-size:var(--fs-micro);color:var(--ink-2);line-height:1.45}
+@media (max-width:640px){.duo{flex-direction:column;align-items:stretch;padding:var(--s-5)}.duo figure{flex:none!important}}
+
+/* 01 节两端那对图：窄屏上下排，手机那张不超过 300 宽 */
+@media (max-width:520px){
+  .phone-strip--pair{grid-template-columns:minmax(0,1fr)!important;padding:var(--s-5)}
+  .phone-strip--pair>figure:last-child{width:100%;max-width:300px;justify-self:center}
+}
+
+/* 编号小圆点：图上一层，下面每个编号一行说明；指着或 Tab 到一行，图上同号的点放大 */
+.pin-box{position:relative;display:block}
+.pin-layer[hidden]{display:none}
+.pin-layer .pin{width:22px;height:22px;font-size:11px;box-shadow:0 0 0 2px #fff,0 2px 6px rgba(0,0,0,.28)}
+.pin-layer .pin.is-active{box-shadow:0 0 0 2px #fff,0 0 0 6px rgba(247,119,95,.8)}
+.pin-notes{list-style:none;margin:var(--s-4) 2px 0;padding:0;display:grid;gap:6px;max-width:62ch}
+.pin-notes li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:baseline;font-size:var(--fs-small);line-height:1.55;color:var(--ink-2);border-radius:6px}
+.pin-notes .pin{width:22px;height:22px;font-size:11px;box-shadow:none;transform:translateY(-1px)}
+.pin-notes li:hover,.pin-notes li:focus-visible{color:var(--ink)}
+.pin-notes li:focus-visible{outline:2px solid var(--beak);outline-offset:3px}
+.pin-notes[hidden]{display:none}
+.proto__side .pin-notes{margin:0}
+@media (max-width:520px){.pin-layer .pin{width:20px;height:20px;font-size:10px}}
+@media (prefers-reduced-motion:reduce){.pin-layer .pin,.pin-layer .pin.is-active{transition:none;transform:translate(-50%,-50%)}}
+
+/* 图还没到时，图的位置是页面底色，不是图框的白（site.js 加 / 去 is-wait） */
+.case-body img.is-wait{background:var(--canvas)}

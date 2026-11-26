@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261125d'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261126a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -414,6 +414,23 @@ CASE_TITLES = {   # conclusion headlines, aligned with the PDF deck
     'commons-fridge': ['共享一台冰箱，也共享清晰的边界。', 'Make shared care easier to negotiate.'],
 }
 
+def pin_layer(pins):
+    """2026-11-26（理解成本优化第 2 批第 6 条）：图上的编号小圆点。pins 是 [(编号, x%, y%)]，坐标按套着它的那个框算。
+    只是标记，读屏跳过（说明在下面的 pin_notes 里）。"""
+    return ('<span class="pin-layer" aria-hidden="true">'
+            + ''.join(f'<span class="pin" data-pin="{n}" style="left:{x}%;top:{y}%">{n}</span>' for n, x, y in pins) + '</span>')
+
+def pin_notes(notes, lang):
+    """每个编号一行说明；鼠标移上或键盘聚焦一行，图上同号的圆点放大（site.js），系统开了「减少动效」就只变色不放大（styles.css）。"""
+    return ('<ol class="pin-notes">'
+            + ''.join(f'<li data-pin="{n}" tabindex="0"><span class="pin">{n}</span><span>{T(s, lang)}</span></li>' for n, s in enumerate(notes, 1)) + '</ol>')
+
+def fold(summary, body, cls=''):
+    """2026-11-26：正文里的一行折叠（「看全部 5 版」「看当年的录屏」），样子和行为沿用「更多系统模块」那几行：
+    点开后标题行吸在顶栏下面，从下面收起时页面回到这一行（site.js 的 .case-module 处理）。里面的图和视频点开前不加载。"""
+    return (f'<details class="case-module case-module--fold{" " + cls if cls else ""}"><summary><span class="case-module__name">{summary}</span>'
+            f'<span class="case-module__mark" aria-hidden="true"></span></summary><div class="case-module__body">{body}</div></details>')
+
 def figure_html(f, lang):
     prov_text, prov_cls = prov_shown(f['prov'])
     # 图名留空（['', '']）、来源标签也不显示时，整行 frame-label 不出（2026-11-23：交接单只给了图注的图）
@@ -422,6 +439,8 @@ def figure_html(f, lang):
     cap_text = T(f.get('caption', ['', '']), lang)
     cap = f'<figcaption class="frame-caption">{cap_text}</figcaption>' if cap_text else ''    # 图注留空（['', '']）就不出这一行：两条手机条共用后一条的图注时用
     kind = f['kind']
+    # 'full'（2026-11-26，PlayBook Remix）：页面上显示的是缩小的那张（'src'），点放大时换成这张大图（site.js 读 data-full）
+    full = f' data-full="/assets/work/{f["full"]}.webp"' if f.get('full') else ''
     if kind == 'image':
         # 'flat'：图本身就是页面底色时用，去掉图框的描边和投影，图直接落在页面上（配合 'bg' 把白底也换掉）。没有这个键的图框一个字都不变
         css = ([f'background:{f["bg"]}'] if f.get('bg') else []) + (['box-shadow:none'] if f.get('flat') else [])
@@ -471,8 +490,8 @@ def figure_html(f, lang):
             return (f'<figure class="figure frame-block"{width}>{label}<div class="frame shot-scroll{" shot-scroll--fixed" if fixed else ""}" data-scroll-shot{style}>'
                     f'<div class="shot-scroll__view" tabindex="0" role="region" aria-label="{name}{t("（可上下滑动）", " (scroll to see more)", lang)}">{img(src, T(f["label"], lang))}</div>{extra}'
                     f'<span class="shot-scroll__hint" aria-hidden="true">{t("可上下滑动", "Scroll to see more", lang)}</span>'
-                    f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
-        return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang) or cap_text)}"><div{pad}>'
+                    f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge{full} aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
+        return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge{full} aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang) or cap_text)}"><div{pad}>'
                 f'{img(src, T(f["label"], lang) or cap_text)}</div></button></div>{cap}</figure>')   # 没有图名的图，用图注当 alt
     if kind == 'phones':
         # 一条手机条里有三种格子，都不放大（显示宽度不超过原图宽度，.claude/agents/walkthrough.md R1、R3）：
@@ -483,18 +502,33 @@ def figure_html(f, lang):
         #              按原比例整张显示，顶对齐，带放大按钮。
         # 'partials' 和 'whole' 的条目可以带第三项：它在这一排里的位置（从 0 数）；不写就排在最后。
         # 'cap'：{图名: 显示宽度上限（CSS 像素）}，2 倍图用它把上限定在 1 倍宽度；不写就是导出图的宽度。
+        # 'pins' / 'notes'（2026-11-26）：见 figures.py ('playbook', '4b') 上面的说明；没有这两个键的手机条一个字都不变
         cap_w = lambda src: f.get('cap', {}).get(src, MANIFEST[src][0])
+        pins = f.get('pins', {})
+        pl = lambda src: pin_layer(pins[src]) if src in pins else ''
         zoom = lambda lbl: f'<button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">'
-        cells = [f'<figure>{zoom(lbl)}{img(src, T(lbl, lang), "screen")}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items']]
-        extra = [(pos[0] if pos else len(f['items']) + 99, f'<figure class="partial" style="max-width:{cap_w(src)}px">{img(src, T(lbl, lang))}<figcaption>{T(lbl, lang)}</figcaption></figure>') for src, lbl, *pos in f.get('partials', [])]
-        extra += [(pos[0] if pos else len(f['items']) + 99, f'<figure class="whole" style="max-width:{cap_w(src)}px">{zoom(lbl)}{img(src, T(lbl, lang))}</button><figcaption>{T(lbl, lang)}</figcaption></figure>') for src, lbl, *pos in f.get('whole', [])]
+        part = lambda src, lbl: f'<span class="pin-box">{img(src, T(lbl, lang))}{pl(src)}</span>' if src in pins else img(src, T(lbl, lang))
+        cells = [f'<figure>{zoom(lbl)}{img(src, T(lbl, lang), "screen")}{pl(src)}</button><figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in f['items']]
+        extra = [(pos[0] if pos else len(f['items']) + 99, f'<figure class="partial" style="max-width:{cap_w(src)}px">{part(src, lbl)}<figcaption>{T(lbl, lang)}</figcaption></figure>') for src, lbl, *pos in f.get('partials', [])]
+        extra += [(pos[0] if pos else len(f['items']) + 99, f'<figure class="whole" style="max-width:{cap_w(src)}px">{zoom(lbl)}{img(src, T(lbl, lang))}{pl(src)}</button><figcaption>{T(lbl, lang)}</figcaption></figure>') for src, lbl, *pos in f.get('whole', [])]
         for pos, cell in sorted(extra, key=lambda e: e[0]):
             cells.insert(pos, cell)
         items = ''.join(cells)
-        return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip" style="--n:{f["n"]}">{items}</div></div>{cap}</figure>'
+        notes = pin_notes(f['notes'], lang) if f.get('notes') else ''
+        return f'<figure class="figure frame-block"{" data-pins" if notes else ""}>{label}<div class="frame frame--canvas"><div class="phone-strip" style="--n:{f["n"]}">{items}</div></div>{notes}{cap}</figure>'
+    if kind == 'duo':
+        # 'duo'（2026-11-26，PlayBook 04「两大三小」）：两张大图并排、同高、各自整张显示，带放大按钮。
+        # 行高取两张原图里矮的那张的原高（不放大任何一张），各张按宽高比分宽（flex-grow = 该高度下的宽）；整行最宽不超过这个宽度。
+        # 窄屏（≤640px）一行一张。'more'：下面一行折叠，里面是完整的那条图（点开前不加载）。
+        h = min(MANIFEST[src][1] for src, _ in f['items'])
+        ws = [MANIFEST[src][0] * h / MANIFEST[src][1] for src, _ in f['items']]
+        cells = ''.join(f'<figure style="flex:{w:.1f} 1 0"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}</button><figcaption>{T(lbl, lang)}</figcaption></figure>'
+                        for (src, lbl), w in zip(f['items'], ws))
+        more = fold(T(f['more']['summary'], lang), figure_html(f['more']['fig'], lang)) if f.get('more') else ''
+        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="duo" style="max-width:calc({sum(ws):.0f}px + {len(ws) - 1} * var(--s-5) + 2 * var(--s-6))">{cells}</div></div>{cap}</figure>{more}')
     if kind == 'pair':
         (wsrc, wl), (psrc, pl) = f['wide'], f['phone']
-        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip" style="grid-template-columns:3fr 1fr;align-items:center">'
+        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip phone-strip--pair" style="grid-template-columns:3fr 1fr;align-items:center">'
                 f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{escape(T(wl, lang))}">{img(wsrc, T(wl, lang))}</button><figcaption>{T(wl, lang)}</figcaption></figure>'
                 f'<figure><button type="button" class="enlarge" data-enlarge aria-label="{escape(T(pl, lang))}">{img(psrc, T(pl, lang), "screen")}</button><figcaption>{T(pl, lang)}</figcaption></figure></div></div>{cap}</figure>')
     if kind == 'stack':
@@ -538,8 +572,9 @@ def _section_inner(s, key, n, lang):
         h += f'<div class="{box}">{"".join(paras[:k])}</div>{table}<div class="{box}">{"".join(paras[k:])}</div>'
     else:
         h += f'<div class="{box}">{"".join(paras)}</div>'
+    decision = lambda rows: '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, rows)) + '</dl>'
     if 'decision' in s:
-        h += '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, s['decision'])) + '</dl>'
+        h += decision(s['decision'])
     if 'insight' in s:
         h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
     if 'steps' in s:
@@ -548,6 +583,12 @@ def _section_inner(s, key, n, lang):
     h += ''.join(figure_html(f, lang) for f in figs if f.get('before_demo'))   # 'before_demo'（2026-11-23）：紧跟正文的图，放在原型前面
     h += section_demo(key, n, lang)
     h += ''.join(figure_html(f, lang) for f in figs if not f.get('before_demo'))
+    # 'then'（2026-11-26，PlayBook 04）：同一节里接着的一段：小标题 + 决策块 + 图（figures.py 的键 (key, 'fig')）。没有这个键的章节一个字都不变
+    for sub in s.get('then', []):
+        h += f'<h3 class="case-then">{sub["title"][i]}</h3>'
+        if 'decision' in sub:
+            h += decision(sub['decision'])
+        h += ''.join(figure_html(f, lang) for f in FIGURES.get((key, sub['fig']), []))
     if 'external' in s:
         h += f'<p style="margin-top:24px"><a class="link" href="{s["external"][0]}" target="_blank" rel="noopener">{s["external"][1][i]}</a></p>'
     return h
@@ -579,7 +620,9 @@ def case_layout(c, key, lang, anchor='section'):
             if n == 0 or not secs[n - 1].get('more'):
                 h += f'\n<section class="case-section case-more" id="{anchor}-more" data-component="More modules"><h2>{more_name}</h2><div class="case-more__list">'
             k += 1
-            h += (f'\n<details class="case-module" id="{anchor}-more-{k}"><summary><span class="case-module__name">{s["label"][i]}</span>'
+            # 'thumb'（2026-11-26，第 2 批第 3 条）：收着时这一行左边的关键屏缩略图（装饰，alt 留空：右边就是名字和那句话）
+            thumb = f'<span class="case-module__thumb">{img(s["thumb"], "")}</span>' if s.get('thumb') else ''
+            h += (f'\n<details class="case-module{" case-module--thumb" if thumb else ""}" id="{anchor}-more-{k}"><summary>{thumb}<span class="case-module__name">{s["label"][i]}</span>'
                   f'<span class="case-module__title">{s["title"][i]}</span><span class="case-module__mark" aria-hidden="true"></span></summary>'
                   f'<div class="case-module__body">{_section_inner(s, key, n + 1, lang)}</div></details>')
             if n == len(secs) - 1 or not secs[n + 1].get('more'):

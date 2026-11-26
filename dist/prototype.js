@@ -40,6 +40,7 @@ function flowPlayer(root) {
     });
     note.textContent = s.note;
     next.textContent = s.next;
+    root.querySelectorAll('[data-pins-for]').forEach(el => { el.hidden = el.dataset.pinsFor !== id; });   // numbered pins belong to one screen (2026-11-26)
     rail.forEach(b => {
       b.toggleAttribute('aria-current', false);
       if (b.dataset.go === id) b.setAttribute('aria-current', 'step');
@@ -185,6 +186,16 @@ function live(root) {
 /* ---------- 5. Recording tabs ---------- */
 function clips(root) {
   const tabs = [...root.querySelectorAll('[data-clip]')];
+  // 2026-11-26: posters and video sources wait in data-poster / data-src until the fold around them is opened,
+  // so nothing from /assets/motion/ is requested before someone asks for the recordings
+  const fill = () => root.querySelectorAll('video').forEach(v => {
+    if (v.dataset.poster) { v.poster = v.dataset.poster; delete v.dataset.poster; }
+    const s = v.querySelector('source[data-src]');
+    if (s) { s.src = s.dataset.src; s.removeAttribute('data-src'); v.load(); }
+  });
+  const fold = root.closest('details');
+  if (!fold) fill();
+  else fold.addEventListener('toggle', () => { if (fold.open) fill(); else root.querySelectorAll('video').forEach(v => v.pause()); });
   tabs.forEach(tab => tab.addEventListener('click', () => {
     tabs.forEach(t => t.setAttribute('aria-pressed', String(t === tab)));
     root.querySelectorAll('[data-clip-panel]').forEach(p => {
@@ -1880,8 +1891,14 @@ function drafterLab(root) {
 function liveset(root) {
   const tabs = [...root.querySelectorAll('[data-live-tab]')];
   tabs.forEach(tab => tab.addEventListener('click', () => {
+    // 2026-11-26: the three panels differ in height; if the set's top has scrolled under the top bar, bring the tab row
+    // back to just below the bar so the new panel starts in view instead of somewhere above it
+    const bar = document.querySelector('.topbar')?.getBoundingClientRect().bottom || 0;
+    const head = root.querySelector('.clips__tabs');
+    const before = head.getBoundingClientRect().top;
     tabs.forEach(t => t.setAttribute('aria-pressed', String(t === tab)));
     root.querySelectorAll('[data-live-panel]').forEach(p => { p.hidden = p.dataset.livePanel !== tab.dataset.liveTab; });
+    if (before < bar) window.scrollBy({ top: head.getBoundingClientRect().top - bar - 12, behavior: 'instant' });
   }));
 }
 

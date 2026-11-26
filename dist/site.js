@@ -137,7 +137,7 @@ if (box) {
     if (!btn) return;
     trigger = btn;
     const pic = btn.querySelector('img') || btn.closest('.frame').querySelector('img');   // 'scroll' figures: the button sits beside the picture, not around it
-    img.src = pic.currentSrc || pic.src; img.alt = pic.alt; link.href = img.src;
+    img.src = btn.dataset.full || pic.currentSrc || pic.src; img.alt = pic.alt; link.href = img.src;   // data-full (2026-11-26): the page shows a smaller copy, the lightbox the full one
     cap.textContent = btn.closest('figure')?.querySelector('figcaption')?.textContent || pic.alt;
     box.showModal(); document.body.style.overflow = 'hidden';
   });
@@ -173,6 +173,28 @@ document.querySelectorAll('.case-module > summary').forEach(sum => {
     if (d.getBoundingClientRect().top >= bar - 1) return;
     requestAnimationFrame(() => window.scrollBy({ top: d.getBoundingClientRect().top - bar, behavior: 'instant' }));   // not scrollIntoView: the page's scroll-padding (96px, for anchor jumps) would leave a gap
   });
+});
+
+/* numbered pins (2026-11-26): pointing at or tabbing to a line under a figure enlarges the pin with the same number
+   (styles.css keeps it still when the system asks for reduced motion) */
+document.querySelectorAll('.pin-notes li[data-pin]').forEach(li => {
+  const scope = li.closest('[data-pins]');
+  if (!scope) return;
+  const on = v => scope.querySelectorAll(`.pin-layer .pin[data-pin="${li.dataset.pin}"]`).forEach(p => p.classList.toggle('is-active', v));
+  li.addEventListener('pointerenter', () => on(true));
+  li.addEventListener('pointerleave', () => on(false));
+  li.addEventListener('focus', () => on(true));
+  li.addEventListener('blur', () => on(false));
+});
+
+/* image placeholders (2026-11-26): until a case picture has arrived its box shows the page colour, not the white frame
+   behind it, so a jump through the contents on a slow connection does not flash white rectangles */
+document.querySelectorAll('.case-body img').forEach(im => {
+  if (im.complete) return;
+  im.classList.add('is-wait');
+  const done = () => im.classList.remove('is-wait');
+  im.addEventListener('load', done, { once: true });
+  im.addEventListener('error', done, { once: true });
 });
 
 /* structure mode: shows the components this page is built from */

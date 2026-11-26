@@ -1602,3 +1602,5 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 
 /* 图还没到时，图的位置是页面底色，不是图框的白（site.js 加 / 去 is-wait） */
 .case-body img.is-wait{background:var(--canvas)}
+/* nested figure with no name of its own (2026-11-26, 「看全部 5 版」): no lone project dot */
+.frame-label__name:has(>span:empty){visibility:hidden}

@@ -1533,7 +1533,10 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .case-module__body{padding:var(--s-2) 0 var(--s-8)}
 /* 2026-11-25 (card 20261126-005: 「展开的内容滑动时顶部要贴在顶部」): an open row's header sticks just under the top bar
    (68px + its 1px line) while its body scrolls under it; site.js brings the row back up if it is closed while stuck */
-.case-module[open]>summary{position:sticky;top:69px;z-index:6;background:var(--canvas);box-shadow:0 1px 0 var(--rule)}
+.case-module[open]>summary{position:sticky;top:69px;z-index:6;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);background:linear-gradient(var(--rule),var(--rule)) center bottom/calc(100% - 2 * var(--gutter)) 1px no-repeat,var(--canvas)}
+/* 2026-11-26 (card 20261126-005 v2 approved with 「这个地方有点问题」 and arrows at both ends of the stuck bar): the figure frames' ring and
+   shadow sit just outside the column, so a column-wide bar showed a line hugging the name and the − button. The bar now reaches one
+   gutter past the column on each side (text and button stay put), covering that ring; its bottom line stays column-wide. */
 @media (max-width:640px){
   .case-module>summary{grid-template-columns:minmax(0,1fr) 28px}
   .case-module__title{grid-column:1;grid-row:2;font-size:var(--fs-small)}

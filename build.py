@@ -12,7 +12,7 @@ import json, re
 
 from cases import CASES
 from figures import FIGURES, PROV
-from prototypes import section_demo
+from prototypes import section_demo, loop
 
 ROOT = Path(__file__).parent
 OUT = ROOT / 'dist'
@@ -685,6 +685,11 @@ def case_layout(c, key, lang, anchor='section'):
     h = f'''
 <div class="case-layout">
  <nav class="toc" aria-label="{t('本页目录', 'On this page', lang)}"><span class="toc__title label">{t('目录', 'Contents', lang)}</span>'''
+    # 「一张卡走一圈」（2026-11-28，Agent Matrix 做法单第二部分，卡 20261127-009 选 A）：正文最上面一节，不编号，锚点 #how；
+    # 目录最上面一行写法照「+ 更多系统模块」。图和字都在 prototypes.py loop()
+    how = key == 'agent-matrix'
+    if how:
+        h += f'<a href="#how"><span>+</span>{t("怎么搭的", "How it was built", lang)}</a>'
     num = 0
     for n, s in enumerate(secs):
         if s.get('more'):
@@ -695,6 +700,8 @@ def case_layout(c, key, lang, anchor='section'):
         label = re.sub(r'^\d+\s*/\s*', '', s['label'][i])
         h += f'<a href="#{anchor}-{num}"><span>{num:02d}</span>{label}</a>'
     h += '</nav>\n <article class="case-body">'
+    if how:
+        h += f'\n<section class="case-section case-how" id="how" data-component="One card, one loop">{loop(lang)}</section>'
     num = 0; k = 0
     for n, s in enumerate(secs):
         if s.get('more'):

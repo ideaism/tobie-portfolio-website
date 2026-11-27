@@ -248,3 +248,155 @@ document.querySelectorAll('[data-compare]').forEach(box => {
   box.addEventListener('pointerup', end);
   box.addEventListener('pointercancel', end);
 });
+
+/* 「一张卡走一圈」 (2026-11-28, Agent Matrix #how, prototypes.py loop()) */
+
+/* 「一张卡走一圈」 (2026-11-27, card 20261127-009; prototypes.py loop()). The page is drawn as 「现在」 with plain <span> blocks,
+   so it reads the same without JS and in print; this turns the blocks into buttons, switches the three states
+   (blocks that are not in a state are taken out of the page, not faded) and opens one block's detail at a time.
+   Desktop: the detail sits at the bottom of the diagram. Phone (≤700px): stations start collapsed, the station name opens one,
+   and the detail sits inside that station (or rail) under the block. Pictures get their src only when their block is opened. */
+(() => {
+  const roots = document.querySelectorAll('[data-loop]');
+  if (!roots.length) return;
+  const narrow = matchMedia('(max-width:700px)');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const how = () => (still.matches ? 'instant' : 'smooth');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  roots.forEach(root => {
+    let cfg;
+    try { cfg = JSON.parse(root.dataset.config); } catch { return; }
+    const I = cfg.i18n, B = cfg.b;
+    const stage = root.querySelector('[data-stage]'), detail = root.querySelector('[data-detail]');
+    const seg = root.querySelector('[data-seg]'), segBtns = [...seg.querySelectorAll('[data-state]')];
+    const legendNew = root.querySelector('[data-legend-new]');
+    const boxes = [...root.querySelectorAll('[data-box]')];
+    const stations = boxes.filter(b => b.classList.contains('lp-st'));
+    const rails = boxes.filter(b => b.classList.contains('lp-rail'));
+    let state = 'now', openBtn = null, before = null, after = null;
+
+    const ids = box => (state === 'start' ? (cfg.start[box] || []) : cfg.boxes[box].concat(state === 'next' ? cfg.plus[box] : []));
+    const blockHTML = id => {
+      const b = B[id];
+      const text = b.plus ? `<span class="lp-b__plus">${esc(b.n[0])}</span>${esc(b.n.slice(1))}` : esc(b.n);
+      return `<button type="button" class="lp-b${b.new ? ' lp-b--new' : ''}${b.plus ? ' lp-b--plus' : ''}" data-id="${id}" aria-pressed="false">`
+        + (b.new ? '<span class="lp-b__dot" aria-hidden="true"></span>' : '')
+        + `<span class="lp-b__t">${text}</span>` + (b.new ? `<span class="sr-only">${esc(I.sr_new)}</span>` : '') + '</button>';
+    };
+
+    /* phone: station name → open / close; the badge says how many blocks the station has now, 「收起」 while open */
+    const badge = st => {
+      const t = st.querySelector('[data-badge]');
+      if (t) t.textContent = st.classList.contains('is-open') ? I.close : String(st.querySelectorAll('.lp-b').length);
+    };
+    const setOpen = (st, on) => {
+      st.classList.toggle('is-open', on);
+      st.querySelector('.lp-st__tog')?.setAttribute('aria-expanded', String(on));
+      badge(st);
+    };
+    stations.forEach(st => {
+      const tog = document.createElement('button');
+      tog.type = 'button'; tog.className = 'lp-st__tog';
+      tog.setAttribute('aria-expanded', 'false'); tog.setAttribute('aria-controls', st.querySelector('[data-list]').id);
+      tog.innerHTML = `<span class="lp-st__tl">${st.querySelector('.lp-st__label').innerHTML}</span><span class="lp-st__badge" data-badge></span>`;
+      st.querySelector('.lp-st__h').appendChild(tog);
+      tog.addEventListener('click', () => {
+        // keep this station's top edge where it is on screen, also when its detail goes with it
+        const top = st.getBoundingClientRect().top, on = !st.classList.contains('is-open');
+        if (!on && openBtn && st.contains(openBtn)) close(false);
+        setOpen(st, on);
+        const d = st.getBoundingClientRect().top - top;
+        if (Math.abs(d) >= 0.5) window.scrollBy({ top: d, behavior: 'instant' });
+      });
+    });
+
+    const render = animate => {
+      boxes.forEach(box => {
+        const list = box.querySelector('[data-list]');
+        const had = new Set([...list.querySelectorAll('[data-id]')].map(b => b.dataset.id));
+        list.innerHTML = ids(box.dataset.box).map(blockHTML).join('');
+        if (animate) list.querySelectorAll('.lp-b').forEach(b => { if (!had.has(b.dataset.id)) b.classList.add('is-enter'); });
+      });
+      rails.forEach(r => { r.hidden = state === 'start'; });
+      legendNew.hidden = state === 'start';
+      stations.forEach(st => {
+        const empty = !st.querySelector('.lp-b');
+        st.classList.toggle('is-empty', empty);
+        if (empty) setOpen(st, false); else badge(st);
+      });
+    };
+
+    /* the detail */
+    const fill = id => {
+      const b = B[id], im = b.img;
+      const fig = im ? `<figure class="lp-fig"><button type="button" class="enlarge" data-enlarge aria-label="${esc(I.zoom + b.n)}">`
+        + `<img src="${esc(im.src)}"${im.w ? ` width="${im.w}" height="${im.h}"` : ''} alt="${esc(b.n)}" decoding="async"></button>`
+        + `<figcaption>${esc(I.cap)}</figcaption></figure>` : '';
+      detail.innerHTML = `<div class="lp-detail__body${im ? ' lp-detail__body--img' : ''}"><dl>`
+        + `<dt>${esc(b.plus ? I.pq : I.q)}</dt><dd class="lp-q">${esc(b.q)}</dd>`
+        + `<dt>${esc(b.plus ? I.pa : I.a)}</dt><dd>${esc(b.a)}</dd></dl>${fig}</div>`;
+    };
+    const open = btn => {
+      const ref = btn.getBoundingClientRect().top;
+      if (!openBtn) { before = window.scrollY; after = null; }
+      openBtn?.setAttribute('aria-pressed', 'false');
+      openBtn = btn; btn.setAttribute('aria-pressed', 'true');
+      const host = narrow.matches ? btn.closest('.lp-st, .lp-rail') : stage;
+      if (detail.parentElement !== host) host.appendChild(detail);
+      fill(btn.dataset.id);
+      // moving the detail out of a station above this one must not move the block that was just tapped
+      const d = btn.getBoundingClientRect().top - ref;
+      if (Math.abs(d) >= 0.5) window.scrollBy({ top: d, behavior: 'instant' });
+      // if the detail's bottom is off screen, scroll only until it is all in view ('nearest'), never past its top
+      const r = detail.getBoundingClientRect();
+      if (r.bottom > innerHeight) {
+        const bar = document.querySelector('.topbar')?.getBoundingClientRect().bottom || 0;
+        const by = Math.min(r.bottom - innerHeight + 8, r.top - bar - 8);
+        if (by > 0) {
+          const max = document.documentElement.scrollHeight - innerHeight;
+          after = Math.min(max, Math.round(window.scrollY + by));
+          window.scrollTo({ top: after, behavior: how() });
+        }
+      }
+    };
+    // closing puts the page back where it was before the detail scrolled it into view (if the reader has not scrolled since)
+    function close(restore = true) {
+      if (!openBtn) return null;
+      const btn = openBtn;
+      btn.setAttribute('aria-pressed', 'false'); openBtn = null;
+      detail.innerHTML = '';
+      if (restore && after !== null && Math.abs(window.scrollY - after) < 2) window.scrollTo({ top: before, behavior: how() });
+      before = after = null;
+      return btn;
+    }
+
+    const setState = (s, animate = true) => {
+      if (s === state) return;
+      close();
+      state = s;
+      segBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === s)));
+      render(animate && !still.matches);
+    };
+
+    stage.addEventListener('click', e => {
+      const b = e.target.closest('button.lp-b');
+      if (!b) return;
+      if (b === openBtn) close(); else open(b);
+    });
+    root.addEventListener('keydown', e => {
+      if (e.key !== 'Escape' || !openBtn) return;
+      e.preventDefault();
+      close()?.focus({ preventScroll: true });
+    });
+    segBtns.forEach(b => b.addEventListener('click', () => setState(b.dataset.state)));
+    narrow.addEventListener?.('change', () => close(false));
+    // print is always 「现在」
+    let printed = null;
+    window.addEventListener('beforeprint', () => { if (state !== 'now') { printed = state; setState('now', false); } });
+    window.addEventListener('afterprint', () => { if (printed) { setState(printed, false); printed = null; } });
+
+    seg.hidden = false;
+    root.classList.add('is-js');
+    render(false);
+  });
+})();

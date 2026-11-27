@@ -596,4 +596,4 @@ PlayBook
   - 「部署后-线上数据」两个文件夹是真数据，没用。
 - **小图**：三条 03 折叠行的小图从各组「改之后」左上角裁 16:10；飞书看板小图从 `feishu-kanban.png` 左上角裁；04 三张小图从对应的审核中心截图裁。对比框用 1904 宽的 `-w` 那份。都在 `tools/prepare_assets.py`。
 - **联系区邮箱**：`build.py` 不再写死，从环境变量 `SITE_EMAIL` 读（本人定，见 README「Build and check」）。
-- `VERSION` 换成 `20261128a`。证据：`~/其他任务/claudestudy/evidence/2026-11-28-作品集-AgentMatrix-03拆短和一张卡走一圈/`。
+- `VERSION` 换成 `20261128b`。证据：`~/其他任务/claudestudy/evidence/2026-11-28-作品集-AgentMatrix-03拆短和一张卡走一圈/`。

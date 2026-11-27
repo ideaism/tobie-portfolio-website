@@ -1822,6 +1822,8 @@ button.lp-b:hover{border-color:var(--teal)}
 @media (prefers-reduced-motion:reduce){
   .lp__seg button,.lp-b{transition:none}
   .lp-b.is-enter,.lp-detail:not(:empty){animation:none}
+  /* 全站「减少动效」那条给所有属性留了 .01ms 过渡，详情的上边距会晚一帧到位，site.js 量下沿时少算 32px；这里直接不过渡 */
+  .lp-detail{transition:none!important}
 }
 @media print{
   .lp__seg,.lp-detail{display:none!important}

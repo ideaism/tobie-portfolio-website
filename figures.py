@@ -485,7 +485,7 @@ FIGURES = {
  ('agent-matrix', '3-smt'): [
   {'kind': 'duo', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
    'items': [('agent-matrix/ba-smt-before', ['改之前', 'Before'], 'agent-matrix/ba-smt-before-en'), ('agent-matrix/ba-smt-after', ['改之后', 'After'], 'agent-matrix/ba-smt-after-en')],
-   'pins': {'agent-matrix/ba-smt-after': [(1, 41, 12.6)], 'agent-matrix/ba-smt-after-en': [(1, 62, 12.3)]},
+   'pins': {'agent-matrix/ba-smt-after': [(1, 45, 12.6)], 'agent-matrix/ba-smt-after-en': [(1, 66, 12.3)]},   # 编号放在第二个标签字的右边，390 宽也不压字（11-28 验收量过 41 / 62 会压）
    'notes': [['顶部多了两个标签页，兴业和大通各占一个。', 'Two tabs at the top now, one for Industrial Securities and one for Daton.']],
    'caption': ['', '']},
  ],

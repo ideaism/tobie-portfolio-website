@@ -252,11 +252,10 @@ STUDIO = {
   },
   'rows': CAMPAIGN_ROWS, 'cell': 64, 'pitch': [68, 64], 'shift': 34, 'warn': CAMPAIGN_WARN,
   'names': {k: [v, v] for k, v in CAMPAIGN_NAMES.items()},
-  # 悬停卡（2162:19352）；纸鹤一件照录屏 live-items-02 的价格和 1368:21372 的三档版式，其余照红耳机这张
-  'card': {'addr': '0x12f4...jasd', 'price_label': 'Current Trade Price', 'price': '0.03$', 'sold': '(241sold24h)',
-           'intro_label': 'Introduction', 'intro': 'Item Description But Only Display The First 100 Characters...',
-           'none': 'No Sales Channels', 'new': 'Create Your First Sales Channel'},
-  'card_special': {'crane': {'price': '$23.4', 'tiers': [['First Price', '$20.00', '80/100', 59], ['Second Price', '$30.00', '90/100', 65], ['Third Price', '$50.00', '95/100', 67]]}},
+  # 悬停小卡片（卡 20261127-008 通过）：原稿悬停卡 2162:19352 太大，压住 49 个物品（卡 20261127-007 打回），
+  # 只留名字、现价和 24 小时成交、销售档位。值照红耳机那张；纸鹤照录屏 live-items-02 的价格和 1368:21372 的三档
+  'card': {'price': '0.03$', 'sold': '(241sold24h)', 'none': 'No Sales Channels'},
+  'card_special': {'crane': {'price': '$23.4', 'tiers': [['First Price', '$20.00', '80/100'], ['Second Price', '$30.00', '90/100'], ['Third Price', '$50.00', '95/100']]}},
   # 物品详情（5101:40697）：红耳机原样；别的物品盖掉标题、图和描述三处，换成这件的
   'item': {'source': 'red-headphones', 'back': [264, 54, 140, 30], 'title': [276, 94, 770, 50], 'title_text': [280, 120],
            'avatars': [664, 103, 59, 35], 'pic': [282, 248, 196, 196], 'pen': [455, 248, 23, 23], 'pic_icon': [306, 272, 148], 'desc': [497, 462, 566, 30]},

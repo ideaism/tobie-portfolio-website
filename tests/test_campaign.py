@@ -132,6 +132,19 @@ class CampaignCodeTests(unittest.TestCase):
         self.assertIn("col.scrollTop = tops[col.dataset.col]", body, 'back keeps each column where it was')
         self.assertIn("addEventListener('scroll', hide", body, 'scrolling a column hides the card')
 
+    def test_hover_card_is_the_small_one(self):
+        # card 20261127-007: the source card (582 wide) covered 49 items; card 20261127-008 approved the 216 wide one
+        rule = re.search(r'\.cp__card\{([^}]+)\}', CSS).group(1)
+        self.assertIn('width:216px', rule)
+        self.assertEqual(set(D['card']), {'price', 'sold', 'none'}, 'no address, introduction or "create a sales channel"')
+        body = lab_body()
+        fill = body[body.index('function fill('):body.index('function hide(')]
+        for gone in ('cp__addr', 'cp__pic', 'cp__intro', 'cp__new', 'cp__lbl'):
+            self.assertNotIn(gone, fill)
+        self.assertIn('card.replaceChildren(name, price, sales)', fill)
+        self.assertIn('let left = x + cfg.cell + 10;', body, '10 px right of the item')
+        self.assertIn('if (left + cw > W - 8) left = x - 10 - cw;', body, 'to its left at the right edge')
+
     def test_mission_cards_are_not_clickable(self):
         body = lab_body()
         missions = body[body.index("if (key === 'missions')"):body.index('} else {', body.index("if (key === 'missions')"))]

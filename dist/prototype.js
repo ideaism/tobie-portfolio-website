@@ -1892,7 +1892,7 @@ function drafterLab(root) {
    scroll boxes of their own (overscroll stays inside them); pointing at an item shows the source's hover card;
    clicking it opens the item page, and "‹ Christmas Event" comes back with every column where it was. */
 const CP_EXCL = '<svg class="cp__excl" viewBox="0 0 24 24" fill="none" aria-hidden="true"><mask id="cp-m" fill="#fff"><path d="M14.5981 20.5C13.4434 22.5 10.5566 22.5 9.40192 20.5L2.47372 8.5C1.31902 6.5 2.7624 4 5.0718 4L18.9282 4C21.2376 4 22.681 6.5 21.5263 8.5L14.5981 20.5Z"/></mask><path d="M18.9282 4L5.0718 4C2.7624 4 1.31902 6.5 2.47372 8.5L9.40192 20.5C10.5566 22.5 13.4434 22.5 14.5981 20.5L21.5263 8.5C22.681 6.5 21.2376 4 18.9282 4Z" stroke-width="4" stroke="#F95757" mask="url(#cp-m)"/><path d="M13 7V9H11V7H13ZM11 17V10H13V17H11Z" fill-rule="evenodd" clip-rule="evenodd" fill="#F95757"/></svg>';
-const CP_EMPTY = '<svg class="cp__empty" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 13.5h3.2l1.3 2h4l1.3-2h3.2M5.5 13.5 7.4 9h9.2l1.9 4.5v4.5H5.5zM12 3.5v2.5M7 5l1.3 2M17 5l-1.3 2" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+const CP_EMPTY = '<svg class="cp__empty" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 13.5h3.2l1.3 2h4l1.3-2h3.2M5.5 13.5 7.4 9h9.2l1.9 4.5v4.5H5.5zM12 3.5v2.5M7 5l1.3 2M17 5l-1.3 2" fill="none" stroke="#555" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
 
 function campaignLab(root) {
   const { stage, say, watch, cfg } = studioShell(root);
@@ -1958,45 +1958,35 @@ function campaignLab(root) {
     return col;
   });
 
-  /* the hover card */
+  /* the hover card: the small card the owner approved on card 20261127-008 (the source card, 582 wide, covered 49 items;
+     card 20261127-007). Name, price and 24 h sales, and the sales line: the crane's three tiers, otherwise "No Sales Channels". */
   const card = el('div', 'cp__card');
   card.id = root.id + '-card';
   card.setAttribute('role', 'tooltip');
   card.hidden = true;
   function fill(slug) {
     const s = real(slug), d = cfg.card, sp = cfg.card_special[s] || {};
-    const left = el('div', 'cp__cl'), right = el('div', 'cp__cr');
     const name = el('p', 'cp__ct');
     name.innerHTML = CP_EXCL;
     name.append(el('span', null, cfg.names[s]));
-    const addr = el('p', 'cp__addr');
-    addr.append(el('i'), el('span', null, d.addr));
-    left.append(name, addr, sprite(el('i', 'cp__pic'), s));
     const price = el('p', 'cp__price');
     price.append(el('b', null, sp.price || d.price), el('small', null, d.sold));
-    right.append(el('p', 'cp__lbl', d.price_label), price, el('hr'), el('p', 'cp__lbl', d.intro_label), el('p', 'cp__intro', d.intro));
-    if (sp.tiers) {   // the paper crane: the three price tiers of the recording instead of "No Sales Channels"
-      const tiers = el('div', 'cp__tiers');
-      sp.tiers.forEach(([label, value, count, w]) => {
-        const row = el('div', 'cp__tier'), a = el('div'), b = el('div', 'cp__meter'), bar = el('i');
-        a.append(el('span', 'cp__lbl', label), el('b', null, value));
-        bar.style.setProperty('--w', px(w));
-        b.append(el('small', null, count), bar);
-        row.append(a, b);
-        tiers.append(row);
+    const sales = el('div', 'cp__sales');
+    if (sp.tiers) {
+      sp.tiers.forEach(([, value, count]) => {
+        const row = el('div', 'cp__tier'), bar = el('i');
+        const [n, of] = count.split('/').map(Number);
+        bar.style.setProperty('--p', (100 * n / of) + '%');
+        row.append(el('b', null, value), bar, el('small', null, count));
+        sales.append(row);
       });
-      right.append(tiers);
     } else {
-      right.append(el('hr'));
       const none = el('div', 'cp__none');
       none.innerHTML = CP_EMPTY;
       none.append(el('span', null, d.none));
-      right.append(none);
+      sales.append(none);
     }
-    const add = el('div', 'cp__new');
-    add.append(el('i', 'cp__plus'), el('span', null, d.new));
-    right.append(add);
-    card.replaceChildren(left, right);
+    card.replaceChildren(name, price, sales);
   }
   let on = null;
   function hide() {
@@ -2012,15 +2002,14 @@ function campaignLab(root) {
     cell.setAttribute('aria-describedby', card.id);
     fill(cell.dataset.item);
     card.hidden = false;
-    // where the source puts it: left edge 4 px inside the icon's right edge, 45 px below its top;
-    // to the icon's left when it would run off the page, and kept inside the page at the bottom
+    // 10 px right of the item, level with its top; to the item's left when it would run off the page; inside the page at the bottom
     const col = cell.closest('[data-col]'), c = cfg.cols[col.dataset.col];
     const x = c.box[0] + cell.offsetLeft, y = c.box[1] + cell.offsetTop - col.scrollTop;
     const cw = card.offsetWidth, ch = card.offsetHeight;
-    let left = x + cfg.cell - 4;
-    if (left + cw > W - 8) left = x + 4 - cw;
+    let left = x + cfg.cell + 10;
+    if (left + cw > W - 8) left = x - 10 - cw;
     card.style.left = px(left);
-    card.style.top = px(Math.max(8, Math.min(y + 45, H - 8 - ch)));
+    card.style.top = px(Math.max(8, Math.min(y - 4, H - 8 - ch)));
   }
   const cellOf = e => e.target.closest?.('.cp__cell[data-item]');
   page.addEventListener('pointerover', e => {

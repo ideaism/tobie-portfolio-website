@@ -32,6 +32,7 @@ def _site_email():
                 v = str(winreg.QueryValueEx(k, 'SITE_EMAIL')[0]).strip()
         except OSError:
             v = ''
+    v = v.strip('<>"\' ')   # 照 README 的「<你的邮箱>」连尖括号一起设进去了也认
     if not v:
         raise SystemExit('build.py：没有找到环境变量 SITE_EMAIL（联系区的邮箱）。请本人自己设一次，见 README.md「Build and check」。')
     return v

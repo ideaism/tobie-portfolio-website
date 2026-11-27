@@ -195,7 +195,80 @@ _FULL = {'require': ['crates', 'key'], 'optional': [],
          'groups': [{'items': [['gamepad', 100]]}, {'items': [['pink', 10], ['blue', 10], ['yellow', 10]], 'choose': True},
                     {'items': [['battery', 80], ['charge', 20]]}], 'joins': ['or', 'or']}
 
+# 2026-11-27（卡 20261127-004 本人意见，拍板卡 20261127-006 选 A）：Studio 活动页放回来，作为 05 Studio 的第一个 Tab。
+# 原稿 Figma XDyOn5545LrSOsCwqUcED7 Final pages 5685:4981「Christmas Special Campaign」（1440×810）。任务、物品、配方三栏
+# 各自滑（原稿每栏有自己的滚动条）；指着物品出悬停卡（2162:19352，纸鹤的三档价格照 1368:21372 的版式和当年录屏的数）；
+# 点物品进物品详情（Demo 5101:40697，只有红耳机这一页，别的物品共用它的版式和字段值，换图和名字、描述留空）。
+# 底图、图标、任务卡都是原稿导出或从导出里切的（tools/extract_campaign_parts.py），出处 docs/sources.md 2026-11-27。
+# 物品名：红耳机、纸鹤、磁带用原稿里的名字；徽章用徽章上印的字；别的按图起英文短名（中英文页都用英文，界面原稿是英文）。
+# 格子顺序照原稿网格从左到右、从上到下；None 是虚线 Create 格（不是物品）。
+CAMPAIGN_NAMES = {
+ 'crane': 'Lofi Girl’s Paper Crane', 'red-headphones': 'Lofi Girl’s Red Headphones', 'cassette': 'Lofi Cassette Tape',
+ 'cat': 'Cat', 'rocket': 'Rocket', 'corgi-loaf': 'Corgi Loaf', 'black-cat': 'Black Cat', 'purple-headphones': 'Purple Headphones',
+ 'soda-can': 'Soda Can', 'gamepad': 'Gamepad', 'backpack': 'Backpack', 'blanket-cat': 'Blanket Cat', 'eraser': 'Eraser',
+ 'take-a-break': 'Take A Break', 'diary': 'Diary', 'tea': 'Tea',
+ 'lets-talk': '#LET’S TALK', 'games': '#GAMES', 'synthwave': '#SYNTHWAVE', 'fan-pics': '#FAN PICS', 'fanarts': '#FANARTS',
+ 'vinyls': '#VINYLS', 'merch': '#MERCH', 'pets': '#PETS', 'afternoon-jazz': '#AFTERNOON JAZZ', 'artists': '#ARTISTS',
+ 'giveaways': '#GIVEAWAYS',
+ 'lofi-books': 'Lofi Books', 'scroll': 'Scroll', 'bomb': 'Bomb', 'open-box': 'Open Box', 'sword': 'Sword',
+ 'lightning': 'Lightning', 'heart': 'Heart', 'crown': 'Crown', 'potion': 'Potion', 'shield': 'Shield',
+}
+CAMPAIGN_ITEMS = [None, 'crane', 'red-headphones', 'cassette', 'cat', 'rocket',
+                  'corgi-loaf', 'black-cat', 'purple-headphones', 'soda-can', 'gamepad',
+                  'backpack', 'blanket-cat', 'eraser', 'take-a-break', 'diary', 'tea',
+                  'lets-talk', 'games', 'synthwave', 'fan-pics', 'fanarts',
+                  'vinyls', 'merch', 'pets', 'afternoon-jazz', 'artists', 'giveaways',
+                  'lofi-books', 'scroll', 'bomb', 'open-box', 'sword',
+                  'lightning', 'heart', 'crown', 'potion', 'shield']
+# 配方栏前两格是原稿「物品栏」组件的 hover4 态（模糊加红三角），图分别是磁带和猫；悬停卡和详情用磁带、猫本身
+CAMPAIGN_RECIPES = [None, 'warning-a', 'warning-b', 'crane', 'red-headphones', 'rocket'] + CAMPAIGN_ITEMS[6:]
+CAMPAIGN_WARN = {'warning-a': 'cassette', 'warning-b': 'cat'}
+CAMPAIGN_ROWS = [6, 5, 6, 5, 6, 5, 5]
+# icons.png 里的顺序（8 个一行，192 px 一格）；tools/extract_campaign_parts.py 读这几张表
+CAMPAIGN_SPRITE = [k for k in CAMPAIGN_ITEMS if k] + ['warning-a', 'warning-b', 'create']
+
 STUDIO = {
+ 'playbook-campaign': {
+  'kind': 'campaign', 'anchor': 'try-campaign',
+  'tab': ['活动页', 'Campaign page'],
+  'label': ['PlayBook Studio · 活动页', 'PlayBook Studio · Campaign page'],
+  'title': ['在活动页里翻物品', 'Browse a campaign’s items'],
+  'how': [['任务、物品、配方三栏各自滑', 'Missions, items and recipes scroll on their own'],
+          ['指着物品，看悬停卡', 'Point at an item to see its card'],
+          ['点物品进详情，左上角返回', 'Click an item for its page; back at top left']],
+  'provenance': [REBUILT[0] + '（UX 与 UI 均为我的工作）。原稿只给三件物品起了名字（红耳机、纸鹤、磁带），其余是按图补的。',
+                 REBUILT[1] + ' (UX and UI are both my work). The source names only three items (red headphones, paper crane, cassette); the other names were added from the pictures.'],
+  'still': ['/assets/work/playbook/campaign-page.webp', ['Studio 活动页「Christmas Special Campaign」：上面是活动标题和收益，下面是任务、物品、配方三栏', 'The Studio campaign page “Christmas Special Campaign”: title and earnings on top, missions, items and recipes in three columns below']],
+  'frame': [1440, 810],
+  'page': '/assets/work/playbook/campaign-page.webp', 'detail': '/assets/work/playbook/campaign-item.webp',
+  'icons': '/assets/work/playbook/campaign-icons.webp', 'sheet_cols': 8, 'sprite': CAMPAIGN_SPRITE,
+  'mission_card': '/assets/work/playbook/campaign-mission-card.webp', 'mission_create': '/assets/work/playbook/campaign-mission-create.webp',
+  # 三栏（页面 1 倍坐标）：从标签行下面（栏内 y 97，页面 y 418）到页面底（810）是各自滑的那一块；内容高照原稿栏高
+  'cols': {
+   'missions': {'box': [265, 418, 279, 392], 'height': 530, 'name': 'Missions',
+                'create': [15, 10, 249, 40], 'cards': [[16, 66], [16, 272]], 'card': [247, 188], 'all': 478, 'all_text': 'View all missons'},
+   'items': {'box': [552, 418, 436, 392], 'height': 488, 'name': 'Item Rewards', 'grid': [16, 8], 'cells': CAMPAIGN_ITEMS},
+   'recipes': {'box': [996, 418, 436, 392], 'height': 488, 'name': 'Crafting Recipes', 'grid': [16, 8], 'cells': CAMPAIGN_RECIPES},
+  },
+  'rows': CAMPAIGN_ROWS, 'cell': 64, 'pitch': [68, 64], 'shift': 34, 'warn': CAMPAIGN_WARN,
+  'names': {k: [v, v] for k, v in CAMPAIGN_NAMES.items()},
+  # 悬停卡（2162:19352）；纸鹤一件照录屏 live-items-02 的价格和 1368:21372 的三档版式，其余照红耳机这张
+  'card': {'addr': '0x12f4...jasd', 'price_label': 'Current Trade Price', 'price': '0.03$', 'sold': '(241sold24h)',
+           'intro_label': 'Introduction', 'intro': 'Item Description But Only Display The First 100 Characters...',
+           'none': 'No Sales Channels', 'new': 'Create Your First Sales Channel'},
+  'card_special': {'crane': {'price': '$23.4', 'tiers': [['First Price', '$20.00', '80/100', 59], ['Second Price', '$30.00', '90/100', 65], ['Third Price', '$50.00', '95/100', 67]]}},
+  # 物品详情（5101:40697）：红耳机原样；别的物品盖掉标题、图和描述三处，换成这件的
+  'item': {'source': 'red-headphones', 'back': [264, 54, 140, 30], 'title': [276, 94, 770, 50], 'title_text': [280, 120],
+           'avatars': [664, 103, 59, 35], 'pic': [282, 248, 196, 196], 'pen': [455, 248, 23, 23], 'pic_icon': [306, 272, 148], 'desc': [497, 462, 566, 30]},
+  't': {
+    'stage': ['Studio 活动页模拟', 'Simulated Studio campaign page'],
+    'back': ['返回 Christmas Event', 'Back to Christmas Event'],
+    'said_open': ['{name} 的物品详情。左上角「‹ Christmas Event」回活动页。', '{name}: the item page. “‹ Christmas Event” at the top left goes back.'],
+    'said_back': ['回到活动页，三栏还在原来的位置。', 'Back on the campaign page; the columns are where you left them.'],
+    'reset': ['重来', 'Start over'], 'said_reset': ['回到开始的样子。', 'Back to the start.'],
+    'big': ['放大操作', 'Enlarge'], 'small': ['退出放大', 'Exit enlarged view'],
+  },
+ },
  'playbook-recipe': {
   'kind': 'recipe', 'anchor': 'try-recipe',
   'tab': ['配方编辑', 'Recipe editor'],
@@ -421,14 +494,14 @@ def studio(key, lang):
 
 
 def live_set(lang, anchor=''):
-    """The three rebuilt interactions, one visible at a time.
+    """The rebuilt interactions (2026-11-27: four, the campaign page first), one visible at a time.
     2026-11-26（理解成本优化第 2 批第 4 条）：放在 03 节最前面，带 #try 锚点（首页和案例头的「试一试」跳到这里）。"""
     keys = list(STUDIO)
     buttons = ''.join(f'<button type="button" data-live-tab="{k}" aria-pressed="{str(n == 0).lower()}">{t(*STUDIO[k]["tab"], lang)}</button>' for n, k in enumerate(keys))
     panels = ''.join(f'<div data-live-panel="{k}" {"hidden" if n else ""}>{studio(k, lang)}</div>' for n, k in enumerate(keys))
     return f'''<div class="liveset" data-liveset data-component="Rebuilt prototypes"{f' id="{anchor}"' if anchor else ''}>
 <div class="liveset__head"><span class="label label--teal">{t('亲手试', 'Try it', lang)}</span>
-<p>{t('三段交互按原稿还原，没有固定顺序，可以随便拖、来回调。', 'Three interactions rebuilt from the source, in no fixed order: drag and adjust freely.', lang)}</p>
+<p>{t('四段交互按原稿还原，没有固定顺序，可以随便滑、拖、来回调。', 'Four interactions rebuilt from the source, in no fixed order: scroll, drag and adjust freely.', lang)}</p>
 <div class="clips__tabs" role="group" aria-label="{t('选择一段交互', 'Choose an interaction', lang)}">{buttons}</div></div>
 {panels}</div>'''
 

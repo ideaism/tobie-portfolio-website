@@ -558,3 +558,21 @@ PlayBook
 - `VERSION` 换成 `20261127b`。
 - 页面长度（无头 Chrome，什么都不展开，第 1 版 → 第 2 版）：中文 1440 宽 18.4 → 18.9 屏，英文 19.7 → 20.2；中文 390 宽 25.2 → 24.8，英文 28.0 → 27.7。1440 变长是因为 04 从 1.06 屏变成 1.91 屏（App 两屏放大到看得清）。
 - 证据：`04-shared/qa/walkthrough/2026-11-27-PlayBook方案A-第2版/`（`verify.mjs`、`verify.json`、`before-after.json`、截图）。没测：4G 慢网、真手机、Safari。
+
+## 2026-11-27：05 Studio 加回「活动页」模拟（卡 20261127-004 本人意见，拍板卡 20261127-006 选 A；只在本机，没部署、没推送）
+
+本人原话：活动页是 Studio 核心的页面和功能；之前模拟的问题是没搞清哪些地方能滑、呈现方式不符合定下的交互：mission、item 和合成配方分别可以滑，查看 item 详情是 hover 悬浮看，点击直接跳到物品详情。
+
+- **原稿**（Figma 文件 `XDyOn5545LrSOsCwqUcED7`，PlayBook Studio）：活动页 Final pages `5685:4981`「Christmas Special Campaign」（1440 × 810，2 倍导出 `campaign-5685-4981@2x.png`）；任务栏 `5685:5034`（2 倍）、物品网格 `5685:5151`、配方网格 `5685:5223`（3 倍）；物品详情 Demo `5101:40697`（2 倍）；悬停卡 `2162:19352`（默认）和 `1368:21372`（带三档价格）；交互稿 `4926:19301`（悬停时卡浮在哪）；组件集「物品栏」`1263:13611`（64 / 悬停 72 加阴影 / Create / 警告）。导出放在 `portfolio-web/sources/work/playbook/campaign/figma/`（不进仓库，`./网站原图.sh save` 存档）。
+- **网格最后一行**在 810 页底下面，Figma 导出不画，这 5 格用格子自己的图片填充（`items-row6-*.png`，照 Figma 的 cover 裁）。
+- **切图**：`tools/extract_campaign_parts.py` 把两张网格按 64 px 格子、3 倍切圆，存 `icons/*.png`（40 个：37 件物品、配方栏 2 个警告格、虚线 Create），拼成一张 8 × 5 的 `icons.png`；从任务栏导出裁出第一张任务卡和 Create 条（第二张卡原稿里一样）；`contact.png` 是带编号的对照表，核名字用。没有画任何东西。格子的 slug 列表只有一份，在 `prototypes.py`（`CAMPAIGN_ITEMS / RECIPES / ROWS / SPRITE`），切图脚本也读它。
+- **导出**：`tools/prepare_assets.py` 的 `playbook/campaign-page`、`campaign-item`（2400 宽）、`campaign-icons`（1536）、`campaign-mission-card`、`campaign-mission-create`。
+- **切圆丢了原稿格子外面那圈淡阴影**，用 CSS `box-shadow` 补回（`0 0 8px rgba(0,0,0,.09)`），颜色对着原稿网格看的。
+- **名字（选 A）**：红耳机 `Lofi Girl’s Red Headphones`（详情页）、纸鹤 `Lofi Girl’s Paper Crane`（录屏 live-items-02）、磁带 `Lofi Cassette Tape`（`1368:21372`）用原稿名；十一个徽章用印着的字（#LET’S TALK、#GAMES …）；其余 23 件按图起英文短名（Cat、Rocket、Corgi Loaf …），中英文页都用英文。
+- **悬停卡（选 A）**：纸鹤用录屏的价格 $23.4 和三档 $20 / $30 / $50（版式照 `1368:21372`，档位数 80/100、90/100、95/100 和条长照这张）；其余（含磁带）照红耳机那张：0.03$ (241sold24h)、Introduction 占位句、No Sales Channels、Create Your First Sales Channel。卡是 HTML 重画的，尺寸、颜色从两张悬停卡量；警告三角和空盒图标是 SVG。
+- **物品详情（选 A）**：底图就是 `5101:40697`；点红耳机原样显示；点别的物品，用白块盖住标题、图片框、描述三处，写上这件的名字、放这件的图标，描述留空。标题后面两个头像和图片框角上的铅笔从同一张底图里截回来，位置不变。
+- **字体**：站里只自带 Atkinson，原稿字体用退路（标题 Roboto → Segoe UI → Arial，数字 Anton → Impact，地址 Consolas），Windows 上实际是 Segoe UI / Impact。
+- **没做**：任务卡点击（原稿有任务详情页 `5562:30762`，本人没提）、配方详情页 `5562:57621`、物品详情页里的 Tab、编辑按钮（都是底图，不能点）。
+- `tests/test_drafter.py`：去掉整个类的 skip，删掉要在页面上找起草助手的 7 条（双击、草案规则、新设计示意说明、评分、04 节位置、窗口装饰、从 Create 进入），`test_every_item_has_its_picture` 去掉查 section_demo 的两行；剩 8 条，全过。新加 `tests/test_campaign.py`（12 条）。全部 41 条通过。
+- `VERSION` 换成 `20261127c`。
+- 证据：`04-shared/qa/walkthrough/2026-11-27-PlayBook-Studio活动页/`（`shots.mjs`、`checks.json`、`run.log`、截图；原稿对照图在 `原稿/`）。无头 Chrome 1440 中英：三栏真滚轮各自滑到底再滑回顶，页面 scrollY 一直不变，别的栏不动；悬停出卡、图标 1.125 倍、卡在页内；点物品进详情，返回后三栏位置和焦点都回来；任务卡点了不动；Tab 到物品出卡、Enter 进详情；重来。390 中英：不横向溢出、不报错、点一下进详情、不出卡。没测：真手机、Safari、4G。

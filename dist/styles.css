@@ -1615,3 +1615,63 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .case-body img.is-wait{background:var(--canvas)}
 /* nested figure with no name of its own (2026-11-26, 「看全部 5 版」): no lone project dot */
 .frame-label__name:has(>span:empty){visibility:hidden}
+
+/* PlayBook 05 Studio · 活动页 (2026-11-27, prototype.js campaignLab). The page is drawn at its own 1440 × 810 and scaled to the
+   stage. Only Atkinson is self-hosted, so the source's fonts fall back: titles Roboto → Segoe UI → Arial, numbers Anton →
+   Impact, the address Consolas. Missions, items and recipes scroll on their own; overscroll stays inside each column. */
+.cp-stage{-webkit-user-select:none;user-select:none}
+.cp{position:absolute;left:0;top:0;width:1440px;height:810px;transform-origin:0 0;font-family:Roboto,'Segoe UI',Arial,sans-serif;color:#1A1A1A;line-height:1.2}
+.cp__view{position:absolute;inset:0}
+.cp__view[hidden]{display:none}
+.cp img,.cp__view img{position:absolute;max-width:none;display:block;margin:0;border-radius:0}
+.cp__col{position:absolute;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;background:#fff;scrollbar-width:thin;scrollbar-color:#CCCFD0 transparent}
+.cp__col::-webkit-scrollbar{width:4px}
+.cp__col::-webkit-scrollbar-thumb{background:#CCCFD0;border-radius:2px}
+.cp__col::-webkit-scrollbar-track{background:transparent}
+.cp__col:focus-visible{outline:3px solid #F95757;outline-offset:-3px}
+.cp__in{position:relative}
+.cp__all{position:absolute;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:29px;background:#F95757;color:#fff;font-weight:800;font-size:16px;white-space:nowrap}
+.cp__cell{position:absolute;padding:0;border:0;border-radius:50%;background-color:#fff;box-shadow:0 0 8px rgba(0,0,0,.09);background-repeat:no-repeat;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.cp__cell--create{cursor:default;background-color:transparent;box-shadow:none}
+.cp__cell[data-on]{transform:scale(1.125);box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:1}
+.cp__cell:focus-visible{outline:3px solid #F95757;outline-offset:2px}
+.cp__card{position:absolute;z-index:3;width:582px;box-sizing:border-box;display:flex;gap:17px;padding:16px 16px 32px;background:#fff;border:2px solid #D5DCE0;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);pointer-events:none}
+.cp__card[hidden]{display:none}
+.cp__card p{margin:0}
+.cp__cl{width:232px;flex:none;display:flex;flex-direction:column}
+.cp__ct{display:flex;align-items:center;gap:6px;font-weight:700;font-size:16px}
+.cp__excl{width:24px;height:24px;flex:none;transform:rotate(180deg)}
+.cp__addr{display:flex;align-items:center;gap:10px;margin-top:10px!important;font:12px Consolas,'Courier New',monospace;color:#555}
+.cp__addr i{width:10px;height:10px;border-radius:50%;background:#12F4AB}
+.cp__pic{display:block;width:200px;height:200px;margin:auto;background-repeat:no-repeat}
+.cp__cr{flex:1;min-width:0;display:flex;flex-direction:column;padding-top:16px}
+.cp__lbl{font-size:14px;color:#9A9A9A}
+.cp__price{display:flex;align-items:baseline;gap:6px;margin:4px 0 8px!important;font-family:Anton,Impact,'Arial Narrow',sans-serif;color:#F95757}
+.cp__price b{font-weight:400;font-size:24px}
+.cp__price small{font-size:13px}
+.cp__card hr{width:100%;margin:0 0 8px;border:0;border-top:1px solid #E6E9EB}
+.cp__intro{margin:8px 0 8px!important;font-weight:700;font-size:14px;line-height:20px}
+.cp__none{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0 12px;border-radius:8px;background:#E9F0F2;font-size:14px}
+.cp__empty{width:22px;height:22px}
+.cp__tiers{padding:4px 16px;border-radius:8px;background:#E9F0F2}
+.cp__tier{display:flex;align-items:flex-end;justify-content:space-between;padding:10px 0 8px}
+.cp__tier+.cp__tier{border-top:1px solid #D5DCE0}
+.cp__tier>div:first-child{display:flex;flex-direction:column;gap:4px}
+.cp__tier .cp__lbl{font-size:12px}
+.cp__tier b{font:400 20px Anton,Impact,'Arial Narrow',sans-serif}
+.cp__meter{display:flex;flex-direction:column;align-items:flex-end;gap:2px;width:72px}
+.cp__meter small{font:12px Anton,Impact,'Arial Narrow',sans-serif}
+.cp__meter i{display:block;width:var(--w);height:4px;border-radius:2px;background:#F95757}
+.cp__new{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;height:61px;border:1px solid #F95757;border-radius:8px;background:#FEEEEE;color:#F95757;font-size:14px}
+.cp__plus{position:relative;width:16px;height:16px;border-radius:50%;background:#F95757}
+.cp__plus::before,.cp__plus::after{content:'';position:absolute;left:50%;top:50%;width:8px;height:2px;margin:-1px 0 0 -4px;background:#fff}
+.cp__plus::after{transform:rotate(90deg)}
+.cp__back{position:absolute;padding:0;border:0;border-radius:6px;background:transparent;cursor:pointer}
+.cp__back:focus-visible{outline:3px solid #F95757;outline-offset:2px}
+.cp__cover{position:absolute;background:#fff}
+.cp__cover[hidden],.cp__pi[hidden]{display:none}
+.cp__title{display:flex;align-items:center;gap:9px;padding-left:4px;box-sizing:border-box}
+.cp__tt{font-weight:800;font-size:32px;letter-spacing:-.01em;white-space:nowrap}
+.cp__crop{position:absolute;display:block;background-repeat:no-repeat}
+.cp__av{flex:none}
+.cp__pi{position:absolute;display:block;background-repeat:no-repeat}

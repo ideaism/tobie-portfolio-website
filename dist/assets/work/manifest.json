@@ -383,6 +383,26 @@
   780,
   1732
  ],
+ "playbook/campaign-icons": [
+  1536,
+  960
+ ],
+ "playbook/campaign-item": [
+  2400,
+  1350
+ ],
+ "playbook/campaign-mission-card": [
+  494,
+  376
+ ],
+ "playbook/campaign-mission-create": [
+  498,
+  80
+ ],
+ "playbook/campaign-page": [
+  2400,
+  1350
+ ],
  "playbook/cauldron-list": [
   390,
   1519

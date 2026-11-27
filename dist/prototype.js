@@ -1887,7 +1887,210 @@ function drafterLab(root) {
   } else hint();
 }
 
-/* ---------- 7. The three rebuilt demos: one visible at a time ---------- */
+/* 6f. Campaign page (2026-11-27, card 20261127-006 option A)
+   The Studio campaign page at its own 1440 × 810 size, scaled to the stage. Missions, items and recipes are three
+   scroll boxes of their own (overscroll stays inside them); pointing at an item shows the source's hover card;
+   clicking it opens the item page, and "‹ Christmas Event" comes back with every column where it was. */
+const CP_EXCL = '<svg class="cp__excl" viewBox="0 0 24 24" fill="none" aria-hidden="true"><mask id="cp-m" fill="#fff"><path d="M14.5981 20.5C13.4434 22.5 10.5566 22.5 9.40192 20.5L2.47372 8.5C1.31902 6.5 2.7624 4 5.0718 4L18.9282 4C21.2376 4 22.681 6.5 21.5263 8.5L14.5981 20.5Z"/></mask><path d="M18.9282 4L5.0718 4C2.7624 4 1.31902 6.5 2.47372 8.5L9.40192 20.5C10.5566 22.5 13.4434 22.5 14.5981 20.5L21.5263 8.5C22.681 6.5 21.2376 4 18.9282 4Z" stroke-width="4" stroke="#F95757" mask="url(#cp-m)"/><path d="M13 7V9H11V7H13ZM11 17V10H13V17H11Z" fill-rule="evenodd" clip-rule="evenodd" fill="#F95757"/></svg>';
+const CP_EMPTY = '<svg class="cp__empty" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 13.5h3.2l1.3 2h4l1.3-2h3.2M5.5 13.5 7.4 9h9.2l1.9 4.5v4.5H5.5zM12 3.5v2.5M7 5l1.3 2M17 5l-1.3 2" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+
+function campaignLab(root) {
+  const { stage, say, watch, cfg } = studioShell(root);
+  const T = cfg.t, [W, H] = cfg.frame, I = cfg.item;
+  const px = n => n + 'px';
+  const place = (n, [x, y, w, h]) => { n.style.left = px(x); n.style.top = px(y); if (w != null) n.style.width = px(w); if (h != null) n.style.height = px(h); return n; };
+  const COLS = cfg.sheet_cols, ROWS = Math.ceil(cfg.sprite.length / COLS);
+  const sprite = (n, slug) => {
+    const k = cfg.sprite.indexOf(slug);
+    Object.assign(n.style, { backgroundImage: `url("${cfg.icons}")`, backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
+      backgroundPosition: `${(k % COLS) * 100 / (COLS - 1)}% ${Math.floor(k / COLS) * 100 / (ROWS - 1)}%` });
+    return n;
+  };
+  const real = slug => cfg.warn[slug] || slug;   // the two warning cells of the recipe column are the cassette and the cat
+  const img = (cls, src, box) => { const i = place(el('img', cls), box); i.src = src; i.alt = ''; i.draggable = false; return i; };
+
+  stage.classList.add('cp-stage');
+  const box = el('div', 'cp');
+  box.setAttribute('role', 'group');
+  box.setAttribute('aria-label', T.stage);
+
+  /* the campaign page */
+  const page = el('div', 'cp__view');
+  page.dataset.view = 'campaign';
+  page.append(img('cp__base', cfg.page, [0, 0, W, H]));
+  const cols = Object.entries(cfg.cols).map(([key, c]) => {
+    const col = place(el('div', 'cp__col'), c.box);
+    col.dataset.col = key;
+    col.setAttribute('role', 'region');
+    col.setAttribute('aria-label', c.name);
+    const inner = el('div', 'cp__in');
+    inner.style.height = px(c.height);
+    if (key === 'missions') {
+      col.tabIndex = 0;   // nothing in it takes focus (mission cards are not clickable), so the column does: arrow keys scroll it
+      inner.append(img('cp__part', cfg.mission_create, c.create));
+      c.cards.forEach(([x, y]) => inner.append(img('cp__part', cfg.mission_card, [x, y, ...c.card])));
+      const all = el('span', 'cp__all', c.all_text);
+      all.style.top = px(c.all);
+      inner.append(all);
+    } else {
+      let i = 0;
+      cfg.rows.forEach((n, r) => {
+        for (let k = 0; k < n; k++, i++) {
+          const slug = c.cells[i];
+          const at = [c.grid[0] + (r % 2 ? cfg.shift : 0) + k * cfg.pitch[0], c.grid[1] + r * cfg.pitch[1], cfg.cell, cfg.cell];
+          let cell;
+          if (!slug) {   // the dashed Create cell
+            cell = sprite(el('span', 'cp__cell cp__cell--create'), 'create');
+            cell.setAttribute('aria-hidden', 'true');
+          } else {
+            cell = sprite(el('button', 'cp__cell'), slug);
+            cell.type = 'button';
+            cell.dataset.item = slug;
+            cell.dataset.key = key + ':' + i;
+            cell.setAttribute('aria-label', cfg.names[real(slug)]);
+          }
+          inner.append(place(cell, at));
+        }
+      });
+    }
+    col.append(inner);
+    page.append(col);
+    return col;
+  });
+
+  /* the hover card */
+  const card = el('div', 'cp__card');
+  card.id = root.id + '-card';
+  card.setAttribute('role', 'tooltip');
+  card.hidden = true;
+  function fill(slug) {
+    const s = real(slug), d = cfg.card, sp = cfg.card_special[s] || {};
+    const left = el('div', 'cp__cl'), right = el('div', 'cp__cr');
+    const name = el('p', 'cp__ct');
+    name.innerHTML = CP_EXCL;
+    name.append(el('span', null, cfg.names[s]));
+    const addr = el('p', 'cp__addr');
+    addr.append(el('i'), el('span', null, d.addr));
+    left.append(name, addr, sprite(el('i', 'cp__pic'), s));
+    const price = el('p', 'cp__price');
+    price.append(el('b', null, sp.price || d.price), el('small', null, d.sold));
+    right.append(el('p', 'cp__lbl', d.price_label), price, el('hr'), el('p', 'cp__lbl', d.intro_label), el('p', 'cp__intro', d.intro));
+    if (sp.tiers) {   // the paper crane: the three price tiers of the recording instead of "No Sales Channels"
+      const tiers = el('div', 'cp__tiers');
+      sp.tiers.forEach(([label, value, count, w]) => {
+        const row = el('div', 'cp__tier'), a = el('div'), b = el('div', 'cp__meter'), bar = el('i');
+        a.append(el('span', 'cp__lbl', label), el('b', null, value));
+        bar.style.setProperty('--w', px(w));
+        b.append(el('small', null, count), bar);
+        row.append(a, b);
+        tiers.append(row);
+      });
+      right.append(tiers);
+    } else {
+      right.append(el('hr'));
+      const none = el('div', 'cp__none');
+      none.innerHTML = CP_EMPTY;
+      none.append(el('span', null, d.none));
+      right.append(none);
+    }
+    const add = el('div', 'cp__new');
+    add.append(el('i', 'cp__plus'), el('span', null, d.new));
+    right.append(add);
+    card.replaceChildren(left, right);
+  }
+  let on = null;
+  function hide() {
+    if (on) { delete on.dataset.on; on.removeAttribute('aria-describedby'); }
+    on = null;
+    card.hidden = true;
+  }
+  function show(cell) {
+    if (on === cell) return;
+    hide();
+    on = cell;
+    cell.dataset.on = '';
+    cell.setAttribute('aria-describedby', card.id);
+    fill(cell.dataset.item);
+    card.hidden = false;
+    // where the source puts it: left edge 4 px inside the icon's right edge, 45 px below its top;
+    // to the icon's left when it would run off the page, and kept inside the page at the bottom
+    const col = cell.closest('[data-col]'), c = cfg.cols[col.dataset.col];
+    const x = c.box[0] + cell.offsetLeft, y = c.box[1] + cell.offsetTop - col.scrollTop;
+    const cw = card.offsetWidth, ch = card.offsetHeight;
+    let left = x + cfg.cell - 4;
+    if (left + cw > W - 8) left = x + 4 - cw;
+    card.style.left = px(left);
+    card.style.top = px(Math.max(8, Math.min(y + 45, H - 8 - ch)));
+  }
+  const cellOf = e => e.target.closest?.('.cp__cell[data-item]');
+  page.addEventListener('pointerover', e => {
+    if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;   // touch: a tap opens the item, no card
+    const cell = cellOf(e);
+    if (cell) show(cell); else hide();
+  });
+  page.addEventListener('pointerleave', hide);
+  page.addEventListener('focusin', e => { const cell = cellOf(e); if (cell && cell.matches(':focus-visible')) show(cell); });
+  page.addEventListener('focusout', e => { if (cellOf(e) === on) hide(); });
+  cols.forEach(col => col.addEventListener('scroll', hide, { passive: true }));
+
+  /* the item page */
+  const item = el('div', 'cp__view');
+  item.dataset.view = 'item';
+  item.hidden = true;
+  item.append(img('cp__base', cfg.detail, [0, 0, W, H]));
+  const back = place(el('button', 'cp__back'), I.back);
+  back.type = 'button';
+  back.setAttribute('aria-label', T.back);
+  const title = place(el('div', 'cp__cover cp__title'), I.title);
+  const titleText = el('span', 'cp__tt');
+  const avatars = place(el('i', 'cp__crop cp__av'), [0, 0, I.avatars[2], I.avatars[3]]);   // the two avatars after the title, from the same picture
+  Object.assign(avatars.style, { position: 'static', backgroundImage: `url("${cfg.detail}")`, backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-I.avatars[0]}px ${-I.avatars[1]}px` });
+  title.append(titleText, avatars);
+  const pic = place(el('div', 'cp__cover'), I.pic);
+  const pen = place(el('i', 'cp__crop'), [I.pen[0] - I.pic[0], I.pen[1] - I.pic[1], I.pen[2], I.pen[3]]);   // the pencil in the picture's corner, from the same picture
+  Object.assign(pen.style, { backgroundImage: `url("${cfg.detail}")`, backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-I.pen[0]}px ${-I.pen[1]}px` });
+  pic.append(pen);
+  const picIcon = place(el('i', 'cp__pi'), [I.pic_icon[0], I.pic_icon[1], I.pic_icon[2], I.pic_icon[2]]);
+  const desc = place(el('div', 'cp__cover'), I.desc);
+  item.append(back, title, pic, picIcon, desc);
+
+  const tops = {};
+  let from = null;
+  function open(cell) {
+    hide();
+    const s = real(cell.dataset.item), same = s === I.source;
+    // the red headphones are the page as drawn; every other item covers the title, picture and description with its own
+    [title, pic, picIcon, desc].forEach(n => { n.hidden = same; });
+    if (!same) { titleText.textContent = cfg.names[s]; sprite(picIcon, s); }
+    cols.forEach(col => { tops[col.dataset.col] = col.scrollTop; });
+    from = cell;
+    page.hidden = true;
+    item.hidden = false;
+    back.focus({ preventScroll: true });
+    say(fillIn(T.said_open, { name: cfg.names[s] }));
+  }
+  function close(text) {
+    item.hidden = true;
+    page.hidden = false;
+    cols.forEach(col => { col.scrollTop = tops[col.dataset.col] || 0; });
+    if (from) from.focus({ preventScroll: true });
+    say(text);
+  }
+  page.addEventListener('click', e => { const cell = cellOf(e); if (cell) open(cell); });
+  back.addEventListener('click', () => close(T.said_back));
+  root.querySelector('[data-action="reset"]').addEventListener('click', () => {
+    Object.keys(tops).forEach(k => delete tops[k]);
+    from = null;
+    close(T.said_reset);
+    cols.forEach(col => { col.scrollTop = 0; });
+  });
+
+  box.append(page, item, card);
+  stage.append(box);
+  watch(w => { box.style.transform = `scale(${w / W})`; });
+}
+
+/* ---------- 7. The rebuilt demos (four since 2026-11-27): one visible at a time ---------- */
 function liveset(root) {
   const tabs = [...root.querySelectorAll('[data-live-tab]')];
   tabs.forEach(tab => tab.addEventListener('click', () => {
@@ -2026,7 +2229,7 @@ function sittingsChart(root) {
 }
 
 if (inBrowser) {
-  const labs = { recipe: recipeLab, items: itemsLab, comments: commentLab };
+  const labs = { campaign: campaignLab, recipe: recipeLab, items: itemsLab, comments: commentLab };
   document.querySelectorAll('[data-proto]').forEach(flowPlayer);
   document.querySelectorAll('[data-studio]').forEach(root => labs[root.dataset.studio]?.(root));
   document.querySelectorAll('[data-liveset]').forEach(liveset);

@@ -147,6 +147,13 @@ JOBS = {
     # 2026-11-27 第 2 版（卡 20261127-004 打回）：同一次导出里的第 2 屏（第 1 段进行中），和第 3 屏并排
     'playbook/app-wire-mission-s1': (SRC / 'work' / 'playbook' / 'app-wire-mission-s1@2x.png', 780, 88),
     'playbook/studio-mission-nexus': (SRC / 'work' / 'playbook' / 'studio-mission-nexus@2x.png', 1600, 84),
+    # 2026-11-27（卡 20261127-006 选 A）：05 Studio 第一个 Tab「活动页」。Figma XDyOn5545LrSOsCwqUcED7 按 2 倍导出：
+    # 活动页 5685:4981、物品详情 5101:40697（只缩放压缩）；图标表和两块任务卡由 tools/extract_campaign_parts.py 从导出里切，见 docs/sources.md
+    'playbook/campaign-page': (SRC / 'work' / 'playbook' / 'campaign' / 'figma' / 'campaign-5685-4981@2x.png', 2400, 84),
+    'playbook/campaign-item': (SRC / 'work' / 'playbook' / 'campaign' / 'figma' / 'item-detail-5101-40697@2x.png', 2400, 84),
+    'playbook/campaign-icons': (SRC / 'work' / 'playbook' / 'campaign' / 'icons.png', 1536, 86),   # 8×5 格，每格 192（64 的 3 倍），透明底
+    'playbook/campaign-mission-card': (SRC / 'work' / 'playbook' / 'campaign' / 'mission-card.png', 494, 86),
+    'playbook/campaign-mission-create': (SRC / 'work' / 'playbook' / 'campaign' / 'mission-create.png', 498, 86),
     # 2026-11-26（第 2 批第 3 条）：「更多系统模块」三行折叠左边的关键屏缩略图，显示 72×96，导 2 倍；裁切见 CROP
     'playbook/thumb-context': (V2 / 'app-search.png', 144, 84),
     'playbook/thumb-showcase': (SRC / 'work' / 'playbook' / 'app-showcase-filled@2x.png', 144, 84),

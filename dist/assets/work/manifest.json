@@ -7,6 +7,14 @@
   3192,
   2104
  ],
+ "agent-matrix/ba-covers-after-en-w": [
+  1904,
+  1255
+ ],
+ "agent-matrix/ba-covers-after-w": [
+  1904,
+  1255
+ ],
  "agent-matrix/ba-covers-before": [
   3192,
   2104
@@ -14,6 +22,14 @@
  "agent-matrix/ba-covers-before-en": [
   3192,
   2104
+ ],
+ "agent-matrix/ba-covers-before-en-w": [
+  1904,
+  1255
+ ],
+ "agent-matrix/ba-covers-before-w": [
+  1904,
+  1255
  ],
  "agent-matrix/ba-fridge-after": [
   984,
@@ -115,6 +131,26 @@
   1800,
   948
  ],
+ "agent-matrix/rc-first": [
+  1054,
+  320
+ ],
+ "agent-matrix/rc-lines": [
+  1054,
+  522
+ ],
+ "agent-matrix/rc-model": [
+  1054,
+  640
+ ],
+ "agent-matrix/rc-proj": [
+  1054,
+  450
+ ],
+ "agent-matrix/rc-who": [
+  1054,
+  208
+ ],
  "agent-matrix/review-card": [
   2880,
   3674
@@ -122,6 +158,46 @@
  "agent-matrix/review-demo-poster": [
   2000,
   1250
+ ],
+ "agent-matrix/thumb-ba-fridge": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-ba-fridge-en": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-ba-playbook": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-ba-playbook-en": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-ba-smt": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-ba-smt-en": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-feishu-kanban": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-rc-first": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-rc-lines": [
+  352,
+  220
+ ],
+ "agent-matrix/thumb-rc-who": [
+  333,
+  208
  ],
  "agent-matrix/undo-after": [
   1192,

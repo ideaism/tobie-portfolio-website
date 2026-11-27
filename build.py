@@ -431,6 +431,30 @@ def fold(summary, body, cls=''):
     return (f'<details class="case-module case-module--fold{" " + cls if cls else ""}"><summary><span class="case-module__name">{summary}</span>'
             f'<span class="case-module__mark" aria-hidden="true"></span></summary><div class="case-module__body">{body}</div></details>')
 
+def fold_row(it, body, lang, cls=''):
+    """2026-11-28（Agent Matrix 做法单 03节拆短）：带横向小图的一行折叠（组件表「Thumb row」）。收着时左边一张横向小图（装饰，读屏跳过），
+    中间三样（'name' 短名、'quote' 加粗一句、'sub' 下面一句；'quote' 可以没有），右边一句提示（'hint'，点开后换成「收起」）加圆圈加号。
+    点开后小图收掉，这一行吸在顶栏下面，点它收起回到这一行（和「更多系统模块」同一套 .case-module 样式和 site.js）。里面的图点开前不加载。"""
+    th = it.get('thumb')
+    if isinstance(th, (list, tuple)):
+        th = th[1] if lang == 'en' else th[0]
+    thumb = ('<span class="case-module__thumb">' + img(th, '').replace('<img ', '<img aria-hidden="true" ', 1) + '</span>') if th else ''
+    quote = f'<strong class="case-module__quote">{T(it["quote"], lang)}</strong>' if it.get('quote') else ''
+    sub = f'<span class="case-module__title">{T(it["sub"], lang)}</span>' if it.get('sub') else ''
+    name_cls = ' case-module__name--small' if quote else ''
+    return (f'<details class="case-module case-module--thumb case-module--wide{" " + cls if cls else ""}" data-component="Thumb row"><summary>{thumb}'
+            f'<span class="case-module__text"><span class="case-module__name{name_cls}">{T(it["name"], lang)}</span>{quote}{sub}</span>'
+            f'<span class="case-module__hint"><span class="case-module__closed">{T(it["hint"], lang)}</span><span class="case-module__open">{t("收起", "Close", lang)}</span>'
+            f'<span class="case-module__mark" aria-hidden="true"></span></span></summary><div class="case-module__body">{body}</div></details>')
+
+def more_html(m, lang):
+    """图下面挂的那一行折叠（'more'）：旧写法 {'summary', 'fig'} 出一行只有名字的折叠；带 'name' 的出带横向小图的一行（fold_row）"""
+    if not m:
+        return ''
+    if m.get('name'):
+        return fold_row(m, figure_html(m['fig'], lang), lang, 'case-module--fold')
+    return fold(T(m['summary'], lang), figure_html(m['fig'], lang))
+
 def figure_html(f, lang):
     if f['kind'] == 'tabs':
         # 'tabs'（2026-11-27，PlayBook Remix，卡 20261127-003 方案 A）：几张图一次只看一张，上面一排页签切换。
@@ -507,7 +531,7 @@ def figure_html(f, lang):
                     f'{"" if hint_up and label else hint}'    # 没挪到图名行的，提示照旧在窗口左下角
                     f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge{full} aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
         return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge{full} aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang) or cap_text)}"><div{pad}>'
-                f'{img(src, T(f["label"], lang) or cap_text)}</div></button></div>{cap}</figure>')   # 没有图名的图，用图注当 alt
+                f'{img(src, T(f["label"], lang) or cap_text)}</div></button></div>{cap}</figure>' + more_html(f.get('more'), lang))   # 没有图名的图，用图注当 alt；'more'（2026-11-28）：单图下面也能挂一行折叠
     if kind == 'phones':
         # 一条手机条里有三种格子，都不放大（显示宽度不超过原图宽度，.claude/agents/walkthrough.md R1、R3）：
         #   'items'    整屏截图：套 390:844 竖屏框，长图只露一屏高，点开看全图。
@@ -535,15 +559,34 @@ def figure_html(f, lang):
         # 'duo'（2026-11-26，PlayBook 04「两大三小」）：两张大图并排、同高、各自整张显示，带放大按钮。
         # 行高取两张原图里矮的那张的原高（不放大任何一张），各张按宽高比分宽（flex-grow = 该高度下的宽）；整行最宽不超过这个宽度。
         # 窄屏（≤640px）一行一张。'more'：下面一行折叠，里面是完整的那条图（点开前不加载）。
-        h = min(MANIFEST[src][1] for src, _ in f['items'])
-        ws = [MANIFEST[src][0] * h / MANIFEST[src][1] for src, _ in f['items']]
-        cells = ''.join(f'<figure style="flex:{w:.1f} 1 0"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}</button><figcaption>{T(lbl, lang)}</figcaption></figure>'
-                        for (src, lbl), w in zip(f['items'], ws))
-        more = fold(T(f['more']['summary'], lang), figure_html(f['more']['fig'], lang)) if f.get('more') else ''
+        # 2026-11-28（Agent Matrix 03 节）：items 每项可带第三个元素 src_en（英文页用）；'pins' {图名: [(编号, x%, y%)]} / 'notes'：图上编号和下面的说明，同手机条
+        items = [(it[2] if lang == 'en' and len(it) > 2 and it[2] else it[0], it[1]) for it in f['items']]
+        h = min(MANIFEST[src][1] for src, _ in items)
+        ws = [MANIFEST[src][0] * h / MANIFEST[src][1] for src, _ in items]
+        pins = f.get('pins', {})
+        cells = ''.join(f'<figure style="flex:{w:.1f} 1 0"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}{pin_layer(pins[src]) if src in pins else ""}</button><figcaption>{T(lbl, lang)}</figcaption></figure>'
+                        for (src, lbl), w in zip(items, ws))
+        more = more_html(f.get('more'), lang)
+        notes = pin_notes(f['notes'], lang) if f.get('notes') else ''
         # 'max'（2026-11-27 第 2 版，卡 20261127-004）：整行（含内边距）最宽多少 px，比原高那一行窄时整行等比缩；没有这个键的 duo 一个字都不变
         mw = f'calc({sum(ws):.0f}px + {len(ws) - 1} * var(--s-5) + 2 * var(--s-6))'
         mw = f'min({mw}, {f["max"]}px)' if f.get('max') else mw
-        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="duo" style="max-width:{mw}">{cells}</div></div>{cap}</figure>{more}')
+        return (f'<figure class="figure frame-block"{" data-pins" if notes else ""}>{label}<div class="frame frame--canvas"><div class="duo" style="max-width:{mw}">{cells}</div></div>{notes}{cap}</figure>{more}')
+    if kind == 'compare':
+        # 'compare'（2026-11-28，Agent Matrix 03 节，组件表「Before/after」）：两张同尺寸的图叠在一个框里，框的比例锁成原图比例；
+        # 「改之后」那张从左边裁掉 --pos，中间一条竖线和圆形拖柄。左上「改之前」、右上「改之后」两个按钮把线推到头。
+        # 拖柄的键盘和读屏靠叠在上面的一个看不见的 range（site.js [data-compare]）；手机上竖着滑照常滚页面（touch-action: pan-y）。不带放大按钮
+        pick = lambda pair: pair[1] if lang == 'en' and pair[1] else pair[0]
+        b, af = pick(f['before']), pick(f['after'])
+        w, hh = MANIFEST[b]
+        tb, ta = (T(x, lang) for x in f['tags'])
+        pos = f.get('start', 46)
+        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="compare" data-compare data-component="Before/after" style="--pos:{pos}%;aspect-ratio:{w}/{hh}">'
+                f'{img(b, tb, "compare__img")}<span class="compare__after">{img(af, ta, "compare__img")}</span>'
+                f'<input class="compare__range" type="range" min="0" max="100" step="1" value="{pos}" aria-valuetext="{pos}%" aria-label="{t("拖动比较改之前和改之后", "Drag to compare before and after", lang)}">'
+                f'<span class="compare__line" aria-hidden="true"><span class="compare__knob"></span></span>'
+                f'<button type="button" class="compare__tag compare__tag--before" data-to="100">{tb}</button><button type="button" class="compare__tag compare__tag--after" data-to="0">{ta}</button>'
+                f'</div></div>{cap}</figure>')
     if kind == 'pair':
         (wsrc, wl), (psrc, pl) = f['wide'], f['phone']
         return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip phone-strip--pair" style="grid-template-columns:3fr 1fr;align-items:center">'
@@ -560,7 +603,8 @@ def figure_html(f, lang):
                                     f'<figcaption>{T(lbl, lang)}</figcaption></figure>')
         rows = ''.join(f'<div class="stack__row">{"".join(cell(src, lbl, min(it["w"], MANIFEST[src][0])) for src, lbl in it["row"])}</div>' if isinstance(it, dict)
                        else cell(pick(it), it[1], MANIFEST[pick(it)][0]) for it in f['items'])
-        return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
+        # 'cap_hidden'（2026-11-28，Agent Matrix 01 节）：图注已经写在外面那一行折叠里，下面不再出一遍；图注照样当 alt
+        return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{"" if f.get("cap_hidden") else cap}</figure>'
     if kind == 'anims':
         # 'anims'（2026-11-23，冰箱 07 节）：小样录屏（动态 WebP），不放大，不带放大按钮；每张自己的图注写在下面。
         # 'rows' 每行几张：同一行等高、顶对齐——行高取这一行里最矮那张的原高，各张按宽高比分宽（flex-grow = 该高度下的宽），
@@ -584,13 +628,28 @@ def _section_inner(s, key, n, lang):
     h = ''
     paras = [f'<p>{para[i]}</p>' for para in s['text']]
     box = 'outcome' if s.get('outcome') else 'prose'
-    if 'rows' in s:
+    figs = FIGURES.get((key, n), [])
+    # 'folds'（2026-11-28，Agent Matrix 03、04 节）：几行带横向小图的折叠（fold_row），每行点开是 figures.py (key, 'fig') 的图，
+    # 可带 'body' 一段字接在图后面。'at': 'rows' 紧跟细线表，'end' 跟在注释后面。没有这个键的章节一个字都不变
+    fl = s.get('folds')
+    folds = ('<div class="case-folds">' + ''.join(fold_row(it, ''.join(figure_html(f, lang) for f in FIGURES.get((key, it['fig']), []))
+                                                     + (f'<div class="prose"><p>{it["body"][i]}</p></div>' if it.get('body') else ''), lang)
+                                            for it in fl['items']) + '</div>') if fl else ''
+    if 'feature' in s:
+        # 'feature'（2026-11-28，Agent Matrix 03 节）：正文第 after 段后面一小段（小标签、加粗的原话、改了什么）和标了 'at_feature' 的图，再接后面的正文
+        k = s['feature']['after']
+        r = s['feature']['row']
+        lead = f'<div class="ba-lead"><p class="label">{r[0][i]}</p><p class="ba-lead__quote"><strong>{r[1][i]}</strong></p><p>{r[2][i]}</p></div>'
+        h += (f'<div class="{box}">{"".join(paras[:k])}</div>{lead}' + ''.join(figure_html(f, lang) for f in figs if f.get('at_feature'))
+              + f'<div class="{box}">{"".join(paras[k:])}</div>')
+        figs = [f for f in figs if not f.get('at_feature')]
+    elif 'rows' in s:
         # 'rows'（2026-11-17，Agent Matrix 06 节）：一张几行的细线表，插在正文第 after 段后面，沿用开头摘要和决策块的样式。
         # 每行 [左边小标签, 加粗的一句, 下面一句]，都是 [zh, en]。没有这个键的章节一个字都不变
         k = s['rows']['after']
         table = ('<dl class="case-brief case-decision" data-component="Rows">'
                  + ''.join(f'<div><dt>{r[0][i]}</dt><dd><strong>{r[1][i]}</strong><br>{r[2][i]}</dd></div>' for r in s['rows']['items']) + '</dl>')
-        h += f'<div class="{box}">{"".join(paras[:k])}</div>{table}<div class="{box}">{"".join(paras[k:])}</div>'
+        h += f'<div class="{box}">{"".join(paras[:k])}</div>{table}{folds if fl and fl["at"] == "rows" else ""}<div class="{box}">{"".join(paras[k:])}</div>'
     else:
         h += f'<div class="{box}">{"".join(paras)}</div>'
     decision = lambda rows: '<dl class="case-brief case-decision" data-component="Decision">' + ''.join(f'<div><dt>{T(k, lang)}</dt><dd>{v[i]}</dd></div>' for k, v in zip(DECISION_LABELS, rows)) + '</dl>'
@@ -598,9 +657,10 @@ def _section_inner(s, key, n, lang):
         h += decision(s['decision'])
     if 'insight' in s:
         h += f'<div class="note" data-component="Tobie’s note"><span class="note__face" aria-hidden="true"></span><div><div class="note__who">{t("Tobie 的注释", "Tobie’s note", lang)}</div><p class="note__text">{s["insight"][i]}</p></div></div>'
+    if fl and fl['at'] == 'end':
+        h += folds
     if 'steps' in s:
         h += '<div class="steps">' + ''.join(f'<div class="step"><span class="label label--teal">{st[0][i]}</span><h3>{st[1][i]}</h3><p>{st[2][i]}</p></div>' for st in s['steps']) + '</div>'
-    figs = FIGURES.get((key, n), [])
     h += ''.join(figure_html(f, lang) for f in figs if f.get('before_demo'))   # 'before_demo'（2026-11-23）：紧跟正文的图，放在原型前面
     h += section_demo(key, n, lang)
     h += ''.join(figure_html(f, lang) for f in figs if not f.get('before_demo'))

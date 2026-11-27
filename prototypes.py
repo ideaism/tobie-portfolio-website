@@ -1023,6 +1023,164 @@ def sittings(lang):
 </section>'''
 
 
+# --------------------------------------------------------------------------
+# Agent Matrix「一张卡走一圈」（2026-11-27，卡 20261127-009 本人选 A；做法单 05-agent-matrix/portfolio/03节拆短-做法单.md 第二部分）
+# 放在案例头下面、01 节上面（build.py 套一层 <section class="case-section case-how" id="how">）。字照做法单的表，一个字不改。
+# 页面上先照「现在」画好（没开 JS、打印都是这个样子，块是 <span> 不能点）；site.js 里 [data-loop] 那一段读 data-config，
+# 把块换成按钮、切三个状态、出详情。详情里的图（审核中心截图，示例数据）点开那一块才设 src，点开前不加载。
+# --------------------------------------------------------------------------
+LOOP_BOXES = ['plan', 's1', 's2', 's3', 's4', 'trust']          # 上横栏、四站、下横栏，从上到下
+LOOP_STATIONS = {'s1': ['agent 干活', 'Agents work'], 's2': ['交一张卡', 'A card is raised'],
+                 's3': ['我给结论', 'I decide'], 's4': ['结论送回去', 'The decision goes back']}
+LOOP_RAILS = {'plan': ['排计划', 'Planning'], 'trust': ['放多少手', 'How much I hand over']}
+LOOP_DARK = 's3'                                                 # 第 ③ 站深色底
+LOOP_START = {'s2': ['card']}                                    # 「一开始」只有这一块
+# (id, 在哪, 新, 块名, 当时的问题, 加了什么, 图)
+LOOP_BLOCKS = [
+    ('plan', 'plan', False, ['早报、周计划', 'Morning brief, weekly plan'],
+     ['没人提醒我先做哪一件', 'Nobody tells me what to do first'],
+     ['每天定时跑，排出今天先做的几件。周一排这一周。', 'Runs on a schedule and ranks today’s first few items. On Mondays it lays out the week.'], None),
+    ('lines', 'plan', True, ['时间表分线', 'Timeline in lanes'],
+     ['进度页写「走到第 8 步」，其实第 13 步已经有卡在等我，另有 6 步同时在做。', 'The progress page said “step 8”, while step 13 already had a card waiting for me and six other steps were under way.'],
+     ['时间表按线摆，分「挡着」和「不挡」两组。', 'The timeline is laid out in lanes, grouped into blocking and not blocking.'], 'agent-matrix/rc-lines'),
+    ('proj', 'plan', True, ['项目能搁置、归档', 'Pause or archive a project'],
+     ['项目停了，它的卡还在待处理里占着数。', 'A project had stopped, but its cards still counted as waiting on me.'],
+     ['项目能搁置、归档，各写明后果。', 'A project can be paused or archived, and each states what follows.'], 'agent-matrix/rc-proj'),
+    ('board', 's1', False, ['看板', 'Board'],
+     ['十几个会话同时在跑，我看不见谁在做什么', 'A dozen sessions run at once and I cannot see who is doing what'],
+     ['会话自己把进度写进看板。', 'Sessions write their own progress to the board.'], None),
+    ('batch', 's1', False, ['一批一会话', 'One batch per session'],
+     ['会话越开越长，额度烧得快', 'Sessions grow long and burn through usage'],
+     ['交完一批写一页状态，换干净的新会话。', 'Write one page of state, start a clean session.'], None),
+    ('who', 's1', True, ['谁在干', 'Who’s on what'],
+     ['没交卡的会话，页面上看不到。', 'A session that had not raised a card did not show up anywhere.'],
+     ['会话开工、收工自动报到。新开的会话先被告知别人在改什么。', 'Sessions check in when they start and stop. A new session is told first what the others are changing.'], 'agent-matrix/rc-who'),
+    ('worker', 's1', True, ['小活派给 Codex', 'Small jobs go to Codex'],
+     ['所有的活都压在一家模型的额度上。', 'All the work drew on one model’s usage.'],
+     ['边界清楚的小活派给 Codex，在单独一份代码里做，做出来的只当候选。', 'Well-bounded small jobs go to Codex, done in a separate copy of the code. The result is only a candidate.'], None),
+    ('card', 's2', False, ['卡上答五个问题', 'Five questions on a card'],
+     ['光看文字，我不知道要审什么', 'From text alone I cannot tell what I am reviewing'],
+     ['每件要我看的事写成一张卡。五个问题答满才能交，结论只能我给。', 'Everything that needs me becomes a card. All five questions must be answered before it is raised, and only I can decide.'], None),
+    ('pre', 's2', True, ['交之前 Codex 先查', 'Codex checks before it’s raised'],
+     ['卡被退回 34 次。66 条意见里 45 条是同一类：写的话比证据多。', 'Cards were sent back 34 times. Of 66 objections, 45 were the same kind: the card claimed more than its evidence showed.'],
+     ['交卡前照这几类先查一遍。意见分「要退」和「建议」，建议不退卡。', 'Each card is checked for these before it is raised. An objection is either “send back” or “suggestion”, and a suggestion does not send the card back.'], None),
+    ('second', 's2', True, ['请 Gemini 出第二份', 'A second opinion from Gemini'],
+     ['想听第二家的意见，得我自己去问，再把回答贴回来。', 'To hear a second model’s view, I had to ask it myself and paste the answer back.'],
+     ['写方案前 Claude 自己去请 Gemini 出一份，只读。卡上两份并排，写明采纳了谁的。', 'Before drafting a plan, Claude asks Gemini for its own version, read-only. The card shows both and says whose points were taken.'], None),
+    ('center', 's3', False, ['审核中心', 'Review centre'],
+     ['我不在电脑前，就点不了卡', 'Away from my desk, I cannot open the cards'],
+     ['审核中心搬到服务器，手机能开。', 'The review centre moved to a server and opens on a phone.'], None),
+    ('first', 's3', True, ['AI 初审', 'AI first review'],
+     ['一半多的卡是验收卡，144 张里 78 张，每张都等我从头读。', 'More than half the cards were acceptance cards, 78 of 144, and each waited for me to read it from the top.'],
+     ['Gemini 或 Codex 先看一遍，写「建议通过」或「有问题」。结论还是我点。每 5 张抽 1 张先不给我看它的意见，对一下准不准。', 'Gemini or Codex reads it first and writes “suggest approve” or “has problems”. The decision is still mine. On one card in five its view is hidden until I have decided, to check how often it is right.'], 'agent-matrix/rc-first'),
+    ('wait', 's3', False, ['等 3 天默认推进', 'Proceed after 3 days'],
+     ['能点了，不急的卡还在等我', 'I can open them, yet non-urgent cards still wait for me'],
+     ['等满 3 天，按卡上的推荐选项先推进，我可以改回。', 'After three days it goes ahead on the option the card recommends. I can reverse it.'], None),
+    ('shift', 's3', True, ['上下班', 'On and off shift'],
+     ['我不在的时候，agent 交完卡干等，群里照样响。', 'When I was away, agents raised a card and sat waiting, and the group chat kept pinging.'],
+     ['不在班：agent 做完能做的就收工，消息攒成一条。', 'Off shift, agents finish what they can and stop, and the messages are held and sent as one.'], None),
+    ('dispatch', 's4', False, ['接班和结论分发', 'Successors and dispatch'],
+     ['会话收工后没人接班，我的结论也没人收', 'When a session ends nobody takes over, and my decisions reach nobody'],
+     ['一条命令开完接班会话；结论定时送回 agent。', 'One command opens successor sessions; decisions are delivered on a schedule.'], None),
+    ('level', 'trust', False, ['信任等级', 'Trust levels'],
+     ['要我看的事还是太多', 'Too many things still need me'],
+     ['一类任务一类任务地放手。最低一级先说打算，我点头才动手。', 'Hand over one type of task at a time. At the lowest level the AI states its plan and acts only after I agree.'], None),
+    ('gate', 'trust', True, ['动手前先拦', 'A check before acting'],
+     ['规矩写在文件里，照不照做靠自觉。', 'The rules lived in a file, and following them was left to the agent.'],
+     ['agent 写文件前先过一道自动检查，对不上等级就拦。', 'Before an agent writes a file it passes an automatic check, and is stopped if the task’s level does not allow it.'], None),
+    ('weekly', 'trust', True, ['每周回顾', 'Weekly review'],
+     ['打回了，同样的错下次还犯。', 'I sent something back, and the same mistake came again.'],
+     ['每周回顾一次，把打回变成一条检查。', 'Once a week, rejections are turned into checks.'], None),
+]
+# 三种加号，只在「往后加」出现：(id, 在哪几处, 块名, 怎么加, 已经加过一次, 图)。「＋同事」出现两次（第 ② 站、第 ③ 站）
+LOOP_PLUS = [
+    ('p-mate', ['s2', 's3'], ['＋同事', '+ A colleague'],
+     ['再来一家模型，接在同样两个位置：交卡之前，我点之前。', 'Another model plugs into the same two places: before a card is raised, and before I decide.'],
+     ['Codex 和 Gemini 就是这么接进来的。我给结论那一步没让出去。每个项目自己选用哪个模型。', 'Codex and Gemini came in this way. The deciding step stayed with me. Each project picks which model it uses.'], 'agent-matrix/rc-model'),
+    ('p-proj', ['plan'], ['＋项目', '+ A project'],
+     ['新项目排一张时间表就进来。', 'A new project joins by getting a timeline.'],
+     ['作品集、审核中心、信任系统、游戏，四个项目用的是同一种卡。', 'The portfolio, the review centre, the trust system and the game all run on the same kind of card.'], None),
+    ('p-trust', ['trust'], ['＋哪类活、哪个 agent', '+ A task type or an agent'],
+     ['新 agent、新一类活，在台账上加一格，从最低一级做起。', 'A new agent or a new type of task gets a cell in the ledger and starts at the lowest level.'],
+     ['Codex 接进来时就是这样。它现在还在最低一级。', 'That is how Codex came in. It is still at the lowest level.'], None),
+]
+LOOP_T = {
+    'eyebrow': ['怎么搭的', 'How it was built'],
+    'title': ['一张卡走一圈。别的都是后来挂上去的。', 'One card goes round a loop. Everything else was hung on later.'],
+    'name': ['一张卡走一圈', 'One card, one loop'],
+    'states': [('start', ['一开始', 'At first']), ('now', ['现在', 'Now']), ('next', ['往后加', 'To add'])],
+    'group': ['看哪个时候', 'Which point in time'],
+    'back': ['下一件活', 'Next piece of work'],
+    'q': ['当时的问题', 'The problem then'], 'a': ['加了什么', 'What was added'],
+    'pq': ['怎么加', 'How it is added'], 'pa': ['已经加过一次', 'Already done once'],
+    'cap': ['审核中心截图，示例数据', 'Review centre screenshot, example data'],
+    'new': ['新加的', 'Added since'],
+    'hint': ['点任何一块，看它是被哪个问题逼出来的', 'Click any block to see the problem that forced it'],
+    'close': ['收起', 'Close'],
+    'nojs': ['启用 JavaScript 后可以点这张图。', 'Enable JavaScript to use this diagram.'],
+    'zoom': ['放大：', 'Enlarge: '],                         # 和 build.py 放大按钮的读屏前缀同一个写法
+    'sr_new': ['，新加的', ', Added since'],                  # 带点的块读屏多读这一句（页面上看不到）
+}
+MANIFEST_PATH = Path(__file__).resolve().parent / 'dist' / 'assets' / 'work' / 'manifest.json'
+
+def _loop_img(name):
+    """图的地址和宽高（宽高从 manifest 读，和 build.py 的 img() 一样）；manifest 里还没有就不写宽高。"""
+    if not name: return None
+    try: size = json.loads(MANIFEST_PATH.read_text(encoding='utf-8')).get(name)
+    except (OSError, ValueError): size = None
+    d = {'src': f'/assets/work/{name}.webp'}
+    if size: d['w'], d['h'] = size
+    return d
+
+def _loop_block_html(name, new, plus, lang):
+    """一块在页面上先画好的样子（没开 JS 时是 <span>，不能点）。site.js 用同样的结构画按钮。"""
+    L = lambda k: LOOP_T[k][0 if lang == 'zh' else 1]
+    cls = 'lp-b' + (' lp-b--new' if new else '') + (' lp-b--plus' if plus else '')
+    dot = '<span class="lp-b__dot" aria-hidden="true"></span>' if new else ''
+    text = f'<span class="lp-b__plus">{escape(name[0])}</span>{escape(name[1:])}' if plus else escape(name)
+    sr = f'<span class="sr-only">{L("sr_new")}</span>' if new else ''
+    return f'<span class="{cls}">{dot}<span class="lp-b__t">{text}</span>{sr}</span>'
+
+def loop(lang):
+    i = 0 if lang == 'zh' else 1
+    L = lambda k: LOOP_T[k][i]
+    from figures import PROV
+    blocks = {b[0]: {'n': b[3][i], 'q': b[4][i], 'a': b[5][i], 'new': b[2], 'img': _loop_img(b[6])} for b in LOOP_BLOCKS}
+    blocks.update({p[0]: {'n': p[2][i], 'q': p[3][i], 'a': p[4][i], 'plus': True, 'img': _loop_img(p[5])} for p in LOOP_PLUS})
+    now = {box: [b[0] for b in LOOP_BLOCKS if b[1] == box] for box in LOOP_BOXES}
+    plus = {box: [p[0] for p in LOOP_PLUS if box in p[1]] for box in LOOP_BOXES}
+    cfg = {'boxes': now, 'plus': plus, 'start': LOOP_START, 'b': blocks,
+           'i18n': {k: L(k) for k in ('q', 'a', 'pq', 'pa', 'cap', 'close', 'zoom', 'sr_new')}}
+    lst = lambda box: ''.join(_loop_block_html(blocks[k]['n'], blocks[k]['new'], False, lang) for k in now[box])
+    rail = lambda box, pos: (f'<div class="lp-rail lp-rail--{pos}" data-box="{box}"><span class="lp-rail__name">{LOOP_RAILS[box][i]}</span>'
+                             f'<div class="lp-bs" id="lp-{lang}-{box}" data-list>{lst(box)}</div></div>')
+    stations = ''.join(
+        f'<li class="lp-st{" lp-st--dark" if box == LOOP_DARK else ""}" data-box="{box}"><h3 class="lp-st__h"><span class="lp-st__label">'
+        f'<span class="lp-st__n" aria-hidden="true">{n}</span><span class="lp-st__name">{LOOP_STATIONS[box][i]}</span></span></h3>'
+        f'<div class="lp-bs" id="lp-{lang}-{box}" data-list>{lst(box)}</div></li>'
+        for n, box in enumerate(['s1', 's2', 's3', 's4'], 1))
+    seg = ''.join(f'<button type="button" data-state="{k}" aria-pressed="{str(k == "now").lower()}">{lab[i]}</button>' for k, lab in LOOP_T['states'])
+    prov = PROV['diagram'][0][i]
+    return f'''<div class="lp" data-loop data-config="{_json(cfg)}" data-component="Loop diagram">
+<p class="label label--teal">{L('eyebrow')}</p><h2 class="lp__title">{L('title')}</h2>
+<div class="frame-block">
+{_frame_label(L('name'), prov, '', 'matrix')}
+<div class="frame frame--canvas"><div class="lp__in">
+ <div class="lp__seg" role="group" aria-label="{L('group')}" data-seg hidden>{seg}</div>
+ <div class="lp__stage" data-stage data-s="now">
+  {rail('plan', 'top')}
+  <ol class="lp-loop">{stations}</ol>
+  <div class="lp-back"><span>{L('back')}</span></div>
+  {rail('trust', 'bot')}
+  <div class="lp-detail" data-detail aria-live="polite"></div>
+ </div>
+ <p class="lp-legend"><span class="lp-legend__new" data-legend-new><span class="lp-b__dot" aria-hidden="true"></span>{L('new')}</span><span>{L('hint')}</span></p>
+</div></div>
+<noscript><p class="frame-caption">{L('nojs')}</p></noscript>
+</div>
+</div>'''
+
+
 # Agent Matrix 07：审核中心小原型（2026-11-21）。dist/demo/review-center/ 是审核中心 web/ 线上那一版（commit 168e852）的 app.js、style.css 原样，
 # 加一个 mock.js 把读写服务器的那一层换成内存里的 8 张示例卡：不用登录、不发请求、刷新就复原。源和改动清单在 05-agent-matrix/portfolio/demo/review-center/README.md。
 REVIEW_URL = '/demo/review-center/#/card/demo-03'   # 直接开到封面截图那张卡（同一件事的第三张，卡头下有前几张）

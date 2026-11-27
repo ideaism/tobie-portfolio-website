@@ -281,6 +281,28 @@ JOBS = {
     'agent-matrix/ba-smt-after-en': (SRC / 'work' / 'agent-matrix' / 'ba-smt-after-en.png', 2880, 86),
     'agent-matrix/ba-fridge-before-en': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-before-en.png', 963, 88),
     'agent-matrix/ba-fridge-after-en': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-after-en.png', 984, 88),
+    # 2026-11-28 做法单 03节拆短：前后对比框用 2 倍栏宽的一份（栏宽约 950）；折叠行的横向小图 176×110，2 倍导，从「改之后」左上角裁（CROP）
+    'agent-matrix/ba-covers-before-w': (SRC / 'work' / 'agent-matrix' / 'ba-covers-before.png', 1904, 86),
+    'agent-matrix/ba-covers-after-w': (SRC / 'work' / 'agent-matrix' / 'ba-covers-after.png', 1904, 86),
+    'agent-matrix/ba-covers-before-en-w': (SRC / 'work' / 'agent-matrix' / 'ba-covers-before-en.png', 1904, 86),
+    'agent-matrix/ba-covers-after-en-w': (SRC / 'work' / 'agent-matrix' / 'ba-covers-after-en.png', 1904, 86),
+    'agent-matrix/thumb-ba-playbook': (SRC / 'work' / 'agent-matrix' / 'ba-playbook-after.png', 352, 86),
+    'agent-matrix/thumb-ba-playbook-en': (SRC / 'work' / 'agent-matrix' / 'ba-playbook-after-en.png', 352, 86),
+    'agent-matrix/thumb-ba-smt': (SRC / 'work' / 'agent-matrix' / 'ba-smt-after.png', 352, 86),
+    'agent-matrix/thumb-ba-smt-en': (SRC / 'work' / 'agent-matrix' / 'ba-smt-after-en.png', 352, 86),
+    'agent-matrix/thumb-ba-fridge': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-after.png', 352, 86),
+    'agent-matrix/thumb-ba-fridge-en': (SRC / 'work' / 'agent-matrix' / 'ba-fridge-after-en.png', 352, 86),
+    'agent-matrix/thumb-feishu-kanban': (SRC / 'work' / 'agent-matrix' / 'feishu-kanban.png', 352, 88),
+    # 「一张卡走一圈」和 04 节三行用的五张审核中心截图，都是示例数据（小店官网、海边小店、旧画册），原图是 1440×900 的 1 倍截图，
+    # 只裁掉侧边栏、留要看的那一块，不缩放。来源见 docs/sources.md。lines 原定的「新-1440-浅色」是真卡，换成「谁在干」示例数据里的分线时间表
+    'agent-matrix/rc-first': (SRC / 'work' / 'agent-matrix' / 'rc-first-src.png', 1054, 88),
+    'agent-matrix/rc-lines': (SRC / 'work' / 'agent-matrix' / 'rc-lines-src.png', 1054, 88),
+    'agent-matrix/rc-who': (SRC / 'work' / 'agent-matrix' / 'rc-who-src.png', 1054, 88),
+    'agent-matrix/rc-proj': (SRC / 'work' / 'agent-matrix' / 'rc-proj-src.png', 1054, 88),
+    'agent-matrix/rc-model': (SRC / 'work' / 'agent-matrix' / 'rc-model-src.png', 1054, 88),
+    'agent-matrix/thumb-rc-first': (SRC / 'work' / 'agent-matrix' / 'rc-first-src.png', 352, 88),
+    'agent-matrix/thumb-rc-lines': (SRC / 'work' / 'agent-matrix' / 'rc-lines-src.png', 352, 88),
+    'agent-matrix/thumb-rc-who': (SRC / 'work' / 'agent-matrix' / 'rc-who-src.png', 352, 88),
 }
 
 # 动图（2026-11-23，冰箱 07「3D 小样」，交接单 6f ②、6g）：小样录屏 GIF → 动态 WebP（有损），不缩放。
@@ -326,6 +348,23 @@ CROP = {
     'playbook/thumb-context': (0, 0, 390, 520),            # 搜索框和分类
     'playbook/thumb-showcase': (0, 300, 780, 1340),        # 2 倍图：头像下半到摆满物品的展示架
     'playbook/thumb-trading': (0, 0, 390, 520),            # 发起交换：会失去的物品那一栏
+    # 2026-11-28：Agent Matrix 折叠行横向小图（16:10），从「改之后」左上角裁
+    'agent-matrix/thumb-ba-playbook': (0, 0, 600, 375),
+    'agent-matrix/thumb-ba-playbook-en': (0, 0, 600, 375),
+    'agent-matrix/thumb-ba-smt': (0, 0, 1280, 800),
+    'agent-matrix/thumb-ba-smt-en': (0, 0, 1280, 800),
+    'agent-matrix/thumb-ba-fridge': (0, 0, 640, 400),
+    'agent-matrix/thumb-ba-fridge-en': (0, 0, 640, 400),
+    'agent-matrix/thumb-feishu-kanban': (0, 0, 560, 350),
+    # 五张审核中心截图：去掉侧边栏（x<318），只留要看的那块
+    'agent-matrix/rc-first': (318, 12, 1372, 332),         # 卡头和「Gemini 初审 有问题」那一块
+    'agent-matrix/rc-lines': (318, 284, 1372, 806),        # 「离开业还差 2 条线」：挡着 / 不挡两组
+    'agent-matrix/rc-who': (318, 178, 1372, 386),          # 会话列表后三行（第一行「额度用完」是测试时造的状态，不放）
+    'agent-matrix/rc-proj': (318, 20, 1372, 470),          # 项目管理：现在 / 搁置 / 归档
+    'agent-matrix/rc-model': (318, 20, 1372, 660),         # 项目管理里的「模型」：Gemini、Codex 各选一个
+    'agent-matrix/thumb-rc-first': (318, 12, 830, 332),
+    'agent-matrix/thumb-rc-lines': (318, 284, 1150, 804),
+    'agent-matrix/thumb-rc-who': (318, 178, 651, 386),
 }
 
 

@@ -19,7 +19,24 @@ OUT = ROOT / 'dist'
 MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(encoding='utf-8'))
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
-EMAIL = 'beijixinfei@gmail.com'
+def _site_email():
+    """联系区的邮箱（2026-11-28 本人定）：不写在代码里，从环境变量 SITE_EMAIL 读，由本人在每台电脑上自己设一次。
+    Windows 上刚用 setx 设好、还没重开的程序看不到新变量，所以再到「用户环境变量」里找一次。
+    没设就停下：不能让线上联系区变成空的。"""
+    import os
+    v = os.environ.get('SITE_EMAIL', '').strip()
+    if not v and os.name == 'nt':
+        try:
+            import winreg
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Environment') as k:
+                v = str(winreg.QueryValueEx(k, 'SITE_EMAIL')[0]).strip()
+        except OSError:
+            v = ''
+    if not v:
+        raise SystemExit('build.py：没有找到环境变量 SITE_EMAIL（联系区的邮箱）。请本人自己设一次，见 README.md「Build and check」。')
+    return v
+
+EMAIL = _site_email()
 VERSION = '20261128a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 

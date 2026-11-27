@@ -18,6 +18,8 @@ Design system **“Annotated”** (v3, 2026-09-19): the site is a working canvas
 | `docs/sources.md` | Where every source came from; factual boundaries |
 
 ## Build and check
+The contact e-mail is not in the code. `build.py` reads it from the environment variable `SITE_EMAIL` and stops if it is missing. Set it once per computer yourself (Windows: `setx SITE_EMAIL "<your address>"`; macOS: add `export SITE_EMAIL="<your address>"` to `~/.zshrc`).
+
 ```
 python3 tools/prepare_assets.py      # only when source images change
 python3 build.py

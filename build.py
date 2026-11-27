@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261127d'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261128a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en

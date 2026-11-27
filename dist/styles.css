@@ -1661,3 +1661,60 @@ html[data-track="ai"] .trk[data-t="ai"],html[data-track="ux"] .trk[data-t="ux"],
 .cp__crop{position:absolute;display:block;background-repeat:no-repeat}
 .cp__av{flex:none}
 .cp__pi{position:absolute;display:block;background-repeat:no-repeat}
+
+/* ---------- 2026-11-28 Agent Matrix 03 节拆短（做法单 05-agent-matrix/portfolio/03节拆短-做法单.md，卡 20261126-009 选 A） ----------
+   build.py: fold_row / more_html / kind 'compare' / 章节 'feature' 'folds'。组件表见 docs/design-system.md */
+
+/* 几行带横向小图的折叠（Thumb row 的横向变体）：收着时 小图 | 名字、加粗一句、下面一句 | 「看前后」加圆圈加号 */
+.case-folds{border-top:1px solid var(--rule);margin:var(--s-6) 0}
+.case-folds>.case-module--fold{border-top:0;margin:0}
+.case-module--wide>summary{grid-template-columns:176px minmax(0,1fr) auto;align-items:center;gap:var(--s-3) var(--s-6);padding:var(--s-5) 0}
+.case-module--wide .case-module__thumb{width:176px;height:110px}
+.case-module--wide .case-module__thumb img{object-position:left top}
+.case-module__text{display:flex;flex-direction:column;gap:4px;min-width:0}
+.case-module__name--small{font-family:var(--mono);font-size:var(--fs-label);line-height:1.4;letter-spacing:.04em;font-weight:500;color:var(--ink-2)}
+.case-module__quote{font-weight:700;color:var(--ink);line-height:1.5}
+.case-module--wide .case-module__title{font-size:var(--fs-small);line-height:1.55}
+.case-module--wide>summary:hover .case-module__quote{color:var(--teal)}
+.case-module__hint{display:flex;align-items:center;gap:var(--s-3);color:var(--teal);font-size:var(--fs-small);font-weight:600;white-space:nowrap}
+.case-module__hint .case-module__mark{flex:none}
+.case-module__open{display:none}
+.case-module[open]>summary .case-module__open{display:inline}
+.case-module[open]>summary .case-module__closed{display:none}
+.case-module--wide[open]>summary{grid-template-columns:minmax(0,1fr) auto;padding-block:var(--s-4)}
+.case-module--wide[open] .case-module__thumb{display:none}
+@media (max-width:640px){
+  .case-module--wide>summary{grid-template-columns:96px minmax(0,1fr);align-items:start;gap:var(--s-3) var(--s-4)}
+  .case-module--wide .case-module__thumb{grid-column:1;grid-row:1 / span 2;width:96px;height:72px}
+  .case-module--wide .case-module__text{grid-column:2;grid-row:1}
+  .case-module--wide .case-module__hint{grid-column:2;grid-row:2}
+  .case-module--wide[open]>summary{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+  .case-module--wide[open] .case-module__text{grid-column:1}
+  .case-module--wide[open] .case-module__hint{grid-column:2;grid-row:1}
+}
+
+/* 03 节：表里拿出来的那一行（小标签、加粗的原话、改了什么），下面接前后对比框 */
+.ba-lead{margin:var(--s-7) 0 var(--s-5);max-width:46em;border-top:1px solid var(--ink);padding-top:var(--s-4)}
+.ba-lead .label{margin:0 0 var(--s-2)}
+.ba-lead__quote{margin:0 0 var(--s-2);font-size:var(--fs-lead);line-height:1.5}
+.ba-lead p:last-child{margin:0;color:var(--ink-2)}
+
+/* 'compare'：两张同尺寸的图叠在一个框里，「改之后」从左边裁掉 --pos；竖线和圆形拖柄跟着 --pos。
+   拖：site.js [data-compare]；键盘和读屏：叠着的 range（看不见，不接指针）；手机竖着滑照常滚页面 */
+.frame>.compare{margin:var(--s-6)}
+.compare{position:relative;overflow:hidden;border-radius:12px;box-shadow:0 16px 30px -18px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.06);background:var(--frame);touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.compare__img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.compare__after{position:absolute;inset:0;clip-path:inset(0 0 0 var(--pos))}
+.compare__line{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(14,42,39,.2);pointer-events:none}
+.compare__knob{position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230E2A27' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center/22px no-repeat;box-shadow:0 4px 14px rgba(0,0,0,.25),0 0 0 1px rgba(14,42,39,.12)}
+.compare__range{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
+.compare__range:focus-visible~.compare__line .compare__knob{outline:3px solid var(--beak);outline-offset:3px}
+.compare__tag{position:absolute;top:14px;z-index:2;margin:0;padding:6px 12px;border:0;border-radius:999px;background:rgba(14,42,39,.82);color:#fff;font:500 var(--fs-micro)/1.2 var(--mono);letter-spacing:.04em;cursor:pointer}
+.compare__tag:hover{background:var(--ink)}
+.compare__tag:focus-visible{outline:3px solid var(--beak);outline-offset:2px}
+.compare__tag--before{left:14px}
+.compare__tag--after{right:14px}
+.compare.is-anim .compare__after{transition:clip-path .28s var(--ease)}
+.compare.is-anim .compare__line{transition:left .28s var(--ease)}
+@media (max-width:640px){.frame>.compare{margin:var(--s-4)}.compare__knob{width:38px;height:38px;margin:-19px 0 0 -19px}.compare__tag{top:10px;padding:5px 10px}.compare__tag--before{left:10px}.compare__tag--after{right:10px}}
+@media (prefers-reduced-motion:reduce){.compare.is-anim .compare__after,.compare.is-anim .compare__line{transition:none}}

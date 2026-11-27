@@ -436,14 +436,20 @@ FIGURES = {
  ('agent-matrix', 1): [
   {'kind': 'image', 'src': 'agent-matrix/fig-sequence-zh', 'src_en': 'agent-matrix/fig-sequence-en', 'prov': 'diagram', 'project': 'matrix',
    'label': ['九个问题，各引出一个机制', 'Nine problems, one mechanism each'],
-   'caption': ['每个机制，都是被一个具体的问题逼出来的。', 'Every mechanism was forced by one specific problem.']},
-  # 2026-11-24（交接单第 11 节，卡 20261124-005 选 A）：飞书多维表两张截图上下叠放（'stack'）：上面甘特（只留前 13 行），下面看板（原样）。
-  # 图注已写明上 / 下，每张图下面不再出小字；build.py 的 stack 不读 'alt'，两张图的替代文字用的是图注，'alt' 只留作记录
-  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
+   'caption': ['每个机制，都是被一个具体的问题逼出来的。', 'Every mechanism was forced by one specific problem.'],
+   # 2026-11-28（做法单 03节拆短 · 01 节）：飞书两张截图收成图下面一行折叠（带横向小图）；点开是原来那组上下叠放的图，原样，图注只在折叠那一行里出
+   'more': {'name': ['当时的飞书看板', 'The Feishu board at the time'],
+            'sub': ['上：我定的计划。下：agent 此刻在做什么。', 'Top: the plan I set. Bottom: what each agent is doing now.'],
+            'hint': ['看两张截图', 'See both screenshots'], 'thumb': 'agent-matrix/thumb-feishu-kanban',
+            'fig':
+   # 2026-11-24（交接单第 11 节，卡 20261124-005 选 A）：飞书多维表两张截图上下叠放（'stack'）：上面甘特（只留前 13 行），下面看板（原样）。
+   # 图注已写明上 / 下，每张图下面不再出小字；build.py 的 stack 不读 'alt'，两张图的替代文字用的是图注，'alt' 只留作记录
+     {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
    'label': ['', ''],
    'items': [('agent-matrix/feishu-gantt-top13', ['', '']), ('agent-matrix/feishu-kanban', ['', ''])],
    'alt': ['飞书多维表的两张截图。上：甘特视图，13 行任务，每行有状态、进度条和横跨 2026 年 10 月到 12 月的时间条。下：看板视图，按未开始、进行中、完成分三列，每张卡写着计划开始、计划结束、进度和项目。', 'Two screenshots of a Feishu Base table. Top: the Gantt view with 13 tasks, each with a status, a progress bar and a time bar running from October to December 2026. Bottom: the kanban view in three columns (not started, in progress, done); each card shows planned start, planned end, progress and project.'],
-   'caption': ['上：我定的计划。下：agent 此刻在做什么。', 'Top: the plan I set. Bottom: what each agent is doing now.']},
+   'caption': ['上：我定的计划。下：agent 此刻在做什么。', 'Top: the plan I set. Bottom: what each agent is doing now.'],
+   'cap_hidden': True}}},
  ],
  # 新 02：每天卡数（cards_full.json 按卡片创建日重算，见 docs/sources.md）和一张示例审核卡，放在正文后、原型前（'before_demo'）；原型是审核中心小原型（#try）。
  # 审核卡是 2026-11-21 用审核中心小原型拍的示例卡，整卡比一屏高，放进 16:9 窗口上下滑，左侧菜单不动
@@ -459,22 +465,32 @@ FIGURES = {
    'label': ['一张审核卡', 'A review card'],
    'caption': ['一张卡回答五个问题。这是示例卡，不是真实待办。', 'One card answers five questions. This is an example card, not a live item.']},
  ],
- # 新 03：四组前后对照，顺序同表格四行。上下叠放（'stack'），改之前在上、改之后在下。每张从哪来见 docs/sources.md「2026-11-25：Agent Matrix 重讲（5 节）」
+ # 新 03：四组前后对照，每张从哪来见 docs/sources.md「2026-11-25：Agent Matrix 重讲（5 节）」
+ # 2026-11-28（做法单 03节拆短，卡 20261126-009 选 A）：首页封面那组变成一个框里的前后对比（'compare'，'at_feature'：跟在原话下面）；
+ # 用的是按这一栏两倍宽另导的一份（-w，1904 宽）。另外三组挪进 03 节三行折叠里（cases.py 'folds'），点开是下面 '3-playbook' 等三组 duo
  ('agent-matrix', 3): [
-  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
-   'label': ['PlayBook 配方编辑', 'PlayBook recipe editor'],
+  {'kind': 'compare', 'prov': 'original', 'project': 'matrix', 'at_feature': True,
+   'label': ['', ''],
+   'before': ('agent-matrix/ba-covers-before-w', 'agent-matrix/ba-covers-before-en-w'),
+   'after': ('agent-matrix/ba-covers-after-w', 'agent-matrix/ba-covers-after-en-w'),
+   'tags': [['改之前', 'Before'], ['改之后', 'After']],
+   'caption': ['PlayBook 的摆法留着，另外三张各换一种。', 'PlayBook keeps its layout; the other three each get their own.']},
+ ],
+ ('agent-matrix', '3-playbook'): [
+  {'kind': 'duo', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
    'items': [('agent-matrix/ba-playbook-before', ['改之前', 'Before'], 'agent-matrix/ba-playbook-before-en'), ('agent-matrix/ba-playbook-after', ['改之后', 'After'], 'agent-matrix/ba-playbook-after-en')],
    'caption': ['原来下面是固定的六步，现在没有固定顺序。', 'There used to be six fixed steps below; now there is no set order.']},
-  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
-   'label': ['首页四张封面', 'The four home covers'],
-   'items': [('agent-matrix/ba-covers-before', ['改之前', 'Before'], 'agent-matrix/ba-covers-before-en'), ('agent-matrix/ba-covers-after', ['改之后', 'After'], 'agent-matrix/ba-covers-after-en')],
-   'caption': ['PlayBook 的摆法留着，另外三张各换一种。', 'PlayBook keeps its layout; the other three each get their own.']},
-  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
-   'label': ['兴业 SMT 案例页顶部', 'Top of the SMT case page'],
+ ],
+ # 兴业 SMT：两张只差顶上两个标签页，并排后很小；「改之后」那张标一个编号，说明就是原来的图注，下面不再出图注。编号放在标签页右边的空白处
+ ('agent-matrix', '3-smt'): [
+  {'kind': 'duo', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
    'items': [('agent-matrix/ba-smt-before', ['改之前', 'Before'], 'agent-matrix/ba-smt-before-en'), ('agent-matrix/ba-smt-after', ['改之后', 'After'], 'agent-matrix/ba-smt-after-en')],
-   'caption': ['顶部多了两个标签页，兴业和大通各占一个。', 'Two tabs at the top now, one for Industrial Securities and one for Daton.']},
-  {'kind': 'stack', 'prov': 'original', 'project': 'matrix',
-   'label': ['The Commons Fridge 的一节', 'A section of The Commons Fridge'],
+   'pins': {'agent-matrix/ba-smt-after': [(1, 41, 12.6)], 'agent-matrix/ba-smt-after-en': [(1, 62, 12.3)]},
+   'notes': [['顶部多了两个标签页，兴业和大通各占一个。', 'Two tabs at the top now, one for Industrial Securities and one for Daton.']],
+   'caption': ['', '']},
+ ],
+ ('agent-matrix', '3-fridge'): [
+  {'kind': 'duo', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
    'items': [('agent-matrix/ba-fridge-before', ['停下的那一版', 'The version that stopped'], 'agent-matrix/ba-fridge-before-en'), ('agent-matrix/ba-fridge-after', ['之后上线的 3D 一节', 'The 3D section that went live'], 'agent-matrix/ba-fridge-after-en')],
    'caption': ['停下的那一版只有文字；之后冰箱本身成了界面。', 'The version that stopped was text only; afterwards the fridge itself became the interface.']},
  ],
@@ -489,6 +505,20 @@ FIGURES = {
    'label': ['', ''],   # 交接单只给了图注，没给图名：不出图名那一行
    'items': [('agent-matrix/undo-restored', ['', ''])],
    'caption': ['撤回以后，意见和图上批注都还在。', 'After Undo, the comment and the pinned note are still there.']},
+ ],
+ # 2026-11-28（做法单第三部分，卡 20261127-009 选 A）：04 节细线表下面三行折叠，点开各一张审核中心截图（示例数据，1440 宽 1 倍截图裁出来，原宽 1054 不放大）。
+ # lines 没用做法单写的「新-1440-浅色」（那张带真实卡片标题），换成「谁在干 · 只有没动静的」里示例数据的时间表；who 第一行「额度用完」是造的测试状态，裁掉了
+ ('agent-matrix', '4-first'): [
+  {'kind': 'image', 'src': 'agent-matrix/rc-first', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
+   'caption': ['审核中心截图，示例数据', 'Review centre screenshot, example data']},
+ ],
+ ('agent-matrix', '4-lines'): [
+  {'kind': 'image', 'src': 'agent-matrix/rc-lines', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
+   'caption': ['审核中心截图，示例数据', 'Review centre screenshot, example data']},
+ ],
+ ('agent-matrix', '4-who'): [
+  {'kind': 'image', 'src': 'agent-matrix/rc-who', 'prov': 'original', 'project': 'matrix', 'label': ['', ''],
+   'caption': ['审核中心截图，示例数据', 'Review centre screenshot, example data']},
  ],
  # 2026-11-25：旧 06「等着的六张卡」和旧 08 信任等级并进新 05「下一步」。信任图换成 2026-11-24 的台账（ledger/trust.md 逐格核对）
  ('agent-matrix', 5): [

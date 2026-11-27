@@ -209,3 +209,42 @@ if (structure) {
     document.body.classList.toggle('show-structure', on);
   });
 }
+
+/* before/after box (2026-11-28, Agent Matrix 03): --pos is where the line sits, from the left; the "after" picture is cut away left of it.
+   Mouse: press anywhere to jump there, then drag. Touch: only a sideways drag moves the line, an up-down swipe scrolls the page
+   (styles.css touch-action: pan-y). Keyboard and screen readers use the hidden range on top. The two tags push the line to one end;
+   with reduced motion they jump without the slide */
+document.querySelectorAll('[data-compare]').forEach(box => {
+  const range = box.querySelector('.compare__range');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const set = (v, anim) => {
+    v = Math.max(0, Math.min(100, Math.round(v * 10) / 10));
+    box.classList.toggle('is-anim', !!anim && !calm.matches);
+    box.style.setProperty('--pos', v + '%');
+    range.value = Math.round(v);
+    range.setAttribute('aria-valuetext', Math.round(v) + '%');
+  };
+  const at = e => { const r = box.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; };
+  range.addEventListener('input', () => set(+range.value, false));
+  box.querySelectorAll('.compare__tag').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); set(+b.dataset.to, true); }));
+  let drag = null;
+  box.addEventListener('pointerdown', e => {
+    if (e.target.closest('.compare__tag') || e.button > 0) return;
+    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, live: e.pointerType === 'mouse' };
+    if (drag.live) { e.preventDefault(); box.setPointerCapture(e.pointerId); set(at(e), false); }
+  });
+  box.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.live) {
+      const dx = Math.abs(e.clientX - drag.x), dy = Math.abs(e.clientY - drag.y);
+      if (dy > dx && dy > 6) { drag = null; return; }   // up-down: leave it to the page scroll
+      if (dx < 6) return;
+      drag.live = true;
+      try { box.setPointerCapture(e.pointerId); } catch (_) {}
+    }
+    set(at(e), false);
+  });
+  const end = e => { if (drag && e.pointerId === drag.id) drag = null; };
+  box.addEventListener('pointerup', end);
+  box.addEventListener('pointercancel', end);
+});

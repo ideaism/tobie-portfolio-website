@@ -20,7 +20,7 @@ MANIFEST = json.loads((OUT / 'assets' / 'work' / 'manifest.json').read_text(enco
 LEGACY = json.loads((ROOT / 'assets.json').read_text(encoding='utf-8'))          # exploration images
 LINKEDIN = 'https://www.linkedin.com/in/yucheng-feng-18a9b0375/'
 EMAIL = 'beijixinfei@gmail.com'
-VERSION = '20261127a'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
+VERSION = '20261127b'    # 样式表或脚本改了就要换这个号，不然访客的浏览器会继续用旧的缓存
 SITE = 'https://www.tobiefeng.com'       # 线上地址，必须带 www；canonical、分享卡片、站点地图都用它
 
 def t(zh, en, lang): return zh if lang == 'zh' else en
@@ -44,10 +44,10 @@ TRY_TEXT = {'qingju': ['交互流程演示', 'Interactive flow'], 'smt': ['查�
 def try_text(slug):
     return TRY_TEXT.get(slug, ['亲手试原型', 'Try the prototype'])
 
-def frame_label(name, prov_text, prov_cls='', project='explore'):
+def frame_label(name, prov_text, prov_cls='', project='explore', extra=''):
     prov = f'<span class="prov {prov_cls}">{prov_text}</span>' if prov_text else ''    # 来源小标签不显示时整个不出（见 prov_shown）
     return (f'<div class="frame-label" style="--project:var(--p-{project})"><span class="frame-label__name"><span>{name}</span></span>'
-            f'{prov}</div>')
+            f'{extra}{prov}</div>')
 
 
 # 2026-11-18 卡 20261118-021 本人「同意」（交接单 8b 第 5 条）：图上的来源小标签只留必要的——团队 UI、生成插画两种、
@@ -438,11 +438,19 @@ def figure_html(f, lang):
         # 'items'：[(页签名 [zh, en], 一张图的配置)]，图的配置和别的图一样（各自带图名、图注）
         tabs = ''.join(f'<button type="button" data-live-tab="{n}" aria-pressed="{str(n == 0).lower()}">{T(lbl, lang)}</button>' for n, (lbl, _) in enumerate(f['items']))
         panels = ''.join(f'<div data-live-panel="{n}"{" hidden" if n else ""}>{figure_html(sub, lang)}</div>' for n, (_, sub) in enumerate(f['items']))
-        return f'<div class="liveset figtabs" data-liveset data-component="Image tabs"><div class="clips__tabs" role="group" aria-label="{escape(T(f["label"], lang))}">{tabs}</div>{panels}</div>'
+        # 'head'（2026-11-27 第 2 版，卡 20261127-004）：页签上面一行小标题，说这一组是什么（样子照 Studio 演示的 .liveset__head）
+        head = f'<span class="label">{T(f["head"], lang)}</span>' if f.get('head') else ''
+        row = f'<div class="clips__tabs" role="group" aria-label="{escape(T(f["label"], lang))}">{tabs}</div>'
+        top = f'<div class="liveset__head">{head}{row}</div>' if head else row
+        return f'<div class="liveset figtabs" data-liveset data-component="Image tabs">{top}{panels}</div>'
     prov_text, prov_cls = prov_shown(f['prov'])
     # 图名留空（['', '']）、来源标签也不显示时，整行 frame-label 不出（2026-11-23：交接单只给了图注的图）
     has_label = T(f.get('label', ['', '']), lang) or T(prov_text, lang)
-    label = frame_label(T(f['label'], lang), T(prov_text, lang), prov_cls, f['project']) if has_label else ''
+    # 'scroll' 的图（2026-11-27 第 2 版，卡 20261127-004：「可上下滑动」压住了表单和正文）：提示挪到图名那一行右边，不盖界面
+    hint = f'<span class="shot-scroll__hint" aria-hidden="true">{t("可上下滑动", "Scroll to see more", lang)}</span>' if f.get('scroll') else ''
+    # 2026-11-27 第 2 版：PlayBook 的提示挪到图名那一行，不压界面；Agent Matrix 归另一条线，先不跟着改
+    hint_up = hint if f['project'] == 'playbook' else ''
+    label = frame_label(T(f['label'], lang), T(prov_text, lang), prov_cls, f['project'], hint_up) if has_label else ''
     cap_text = T(f.get('caption', ['', '']), lang)
     cap = f'<figcaption class="frame-caption">{cap_text}</figcaption>' if cap_text else ''    # 图注留空（['', '']）就不出这一行：两条手机条共用后一条的图注时用
     kind = f['kind']
@@ -496,7 +504,7 @@ def figure_html(f, lang):
             name = escape(T(f['label'], lang))
             return (f'<figure class="figure frame-block"{width}>{label}<div class="frame shot-scroll{" shot-scroll--fixed" if fixed else ""}" data-scroll-shot{style}>'
                     f'<div class="shot-scroll__view" tabindex="0" role="region" aria-label="{name}{t("（可上下滑动）", " (scroll to see more)", lang)}">{img(src, T(f["label"], lang))}</div>{extra}'
-                    f'<span class="shot-scroll__hint" aria-hidden="true">{t("可上下滑动", "Scroll to see more", lang)}</span>'
+                    f'{"" if hint_up and label else hint}'    # 没挪到图名行的，提示照旧在窗口左下角
                     f'<button type="button" class="enlarge shot-scroll__zoom" data-enlarge{full} aria-label="{t("放大：", "Enlarge: ", lang)}{name}"></button></div>{cap}</figure>')
         return (f'<figure class="figure frame-block"{width}>{label}<div class="frame"{style}><button type="button" class="enlarge" data-enlarge{full} aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(f["label"], lang) or cap_text)}"><div{pad}>'
                 f'{img(src, T(f["label"], lang) or cap_text)}</div></button></div>{cap}</figure>')   # 没有图名的图，用图注当 alt
@@ -532,7 +540,10 @@ def figure_html(f, lang):
         cells = ''.join(f'<figure style="flex:{w:.1f} 1 0"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang))}">{img(src, T(lbl, lang))}</button><figcaption>{T(lbl, lang)}</figcaption></figure>'
                         for (src, lbl), w in zip(f['items'], ws))
         more = fold(T(f['more']['summary'], lang), figure_html(f['more']['fig'], lang)) if f.get('more') else ''
-        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="duo" style="max-width:calc({sum(ws):.0f}px + {len(ws) - 1} * var(--s-5) + 2 * var(--s-6))">{cells}</div></div>{cap}</figure>{more}')
+        # 'max'（2026-11-27 第 2 版，卡 20261127-004）：整行（含内边距）最宽多少 px，比原高那一行窄时整行等比缩；没有这个键的 duo 一个字都不变
+        mw = f'calc({sum(ws):.0f}px + {len(ws) - 1} * var(--s-5) + 2 * var(--s-6))'
+        mw = f'min({mw}, {f["max"]}px)' if f.get('max') else mw
+        return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="duo" style="max-width:{mw}">{cells}</div></div>{cap}</figure>{more}')
     if kind == 'pair':
         (wsrc, wl), (psrc, pl) = f['wide'], f['phone']
         return (f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="phone-strip phone-strip--pair" style="grid-template-columns:3fr 1fr;align-items:center">'
@@ -543,9 +554,12 @@ def figure_html(f, lang):
         # 放大按钮挪到图下面那行的右边（styles.css .stack .enlarge::after），不盖住扁图上的按钮和字；小字留空时那一行照样留着放按钮；没有小字的图用图注当 alt
         # 每张图的显示宽度不超过导出图的宽度（不放大，和手机条的 partials / whole 一样）：2026-11-24 起 02 节的看板截图只有 667 宽，不加这条会被拉到整栏宽、发虚
         # 2026-11-25（Agent Matrix 03 节）：items 每项可带第三个元素 src_en，英文页用它；没有就沿用中文图。max-width 取实际选中那张的宽度
+        # 2026-11-27 第 2 版（PlayBook 04 转折，卡 20261127-004）：items 里可以有一项 {'row': [(图, 小字), …], 'w': 每张最宽 px}，几张窄图并排成一行、居中
         pick = lambda it: it[2] if lang == 'en' and len(it) > 2 and it[2] else it[0]
-        rows = ''.join(f'<figure style="max-width:{MANIFEST[src][0]}px"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang) or cap_text)}">{img(src, T(lbl, lang) or cap_text)}</button>'
-                       f'<figcaption>{T(lbl, lang)}</figcaption></figure>' for src, lbl in ((pick(it), it[1]) for it in f['items']))
+        cell = lambda src, lbl, w: (f'<figure style="max-width:{w}px"><button type="button" class="enlarge" data-enlarge aria-label="{t("放大：", "Enlarge: ", lang)}{escape(T(lbl, lang) or cap_text)}">{img(src, T(lbl, lang) or cap_text)}</button>'
+                                    f'<figcaption>{T(lbl, lang)}</figcaption></figure>')
+        rows = ''.join(f'<div class="stack__row">{"".join(cell(src, lbl, min(it["w"], MANIFEST[src][0])) for src, lbl in it["row"])}</div>' if isinstance(it, dict)
+                       else cell(pick(it), it[1], MANIFEST[pick(it)][0]) for it in f['items'])
         return f'<figure class="figure frame-block">{label}<div class="frame frame--canvas"><div class="stack">{rows}</div></div>{cap}</figure>'
     if kind == 'anims':
         # 'anims'（2026-11-23，冰箱 07 节）：小样录屏（动态 WebP），不放大，不带放大按钮；每张自己的图注写在下面。

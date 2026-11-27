@@ -119,7 +119,8 @@ FIGURES = {
  # ---------------- PlayBook ----------------
  ('playbook', 1): [
   {'kind': 'pair', 'prov': 'original', 'project': 'playbook',
-   'label': ['同一条规则的两端 · Studio → App', 'Two sides of one rule · Studio → App'],
+   # 2026-11-27 第 2 版（卡 20261127-004 打回，修改清单 D:\claudestudy\PlayBook改版修改清单-电脑端优先-给Claude.md）：图名跟 01「问题」走，不再写 Studio → App
+   'label': ['PlayBook 的两端 · 创作者 Studio 与粉丝 App', 'Two sides of PlayBook · creator Studio and fan App'],
    'wide': ('playbook/studio-campaign', ['Studio：配置活动、任务、物品与配方', 'Studio: configure campaigns, tasks, items and recipes']),
    'phone': ('playbook/app-missions', ['App：参与任务', 'App: take part in missions']),
    'caption': ['左：创作者端 Studio 活动页原稿。右：粉丝端 App 任务页的 UX 稿。', 'Left: the creator-side Studio campaign page. Right: the fan-side App missions screen, UX version.']},
@@ -138,8 +139,9 @@ FIGURES = {
   # 2026-11-26（优化方案第 2 批第 5 条「两大三小」）：熔炉废案和完成的 UI 两张大图并排（'duo'，同高，各自整张显示），
   # 原来五张一排的手机条收进下面的折叠「看全部 5 版」（'more'），点开前不加载。
   # 2026-11-27（方案 A）：'before_demo'：两大并排排在合成原型那行折叠前面
-  {'kind': 'duo', 'prov': 'mixed', 'project': 'playbook', 'before_demo': True,
-   'label': ['合成界面的演变 · 谁做了什么', 'How the crafting screen evolved · who did what'],
+  # 2026-11-27 第 2 版（卡 20261127-004 打回，修改清单 D:\claudestudy\PlayBook改版修改清单-电脑端优先-给Claude.md）：图名改讲演变本身；'max'：整行最宽 660px（熔炉那张 780×2160 太高，03 节在 1440 宽占 4 屏多）
+  {'kind': 'duo', 'prov': 'mixed', 'project': 'playbook', 'before_demo': True, 'max': 660,
+   'label': ['合成界面的演变 · 从熔炉到配方列表', 'How the crafting screen evolved · from furnace to recipe list'],
    'items': [('playbook/app-furnace-draft', ['废案 · 把材料拖进熔炉', 'Dropped · drag materials into a furnace']), ('playbook/team-inventory', ['完成的 UI · 团队', 'Completed UI · the team'])],
    'caption': ['我先画了把材料拖进熔炉的版本，评审后改成配方列表和配方详情；最终视觉由团队完成。', 'I first drew a version where materials are dragged into a furnace, then moved to a recipe list and recipe detail after review. The final visual design was a team effort.'],
    'more': {'summary': ['看全部 5 版', 'See all 5 versions'],
@@ -206,10 +208,13 @@ FIGURES = {
  # 2026-11-27（卡 20261127-003 方案 A）：新 04「转折」（sections 第 7 项）：App 活动详情 ↔ Studio 任务画布，两边的分段结构对得上。
  # 两张都是 2026-11-27 从 Figma 按 2 倍新导的（见 tools/prepare_assets.py、docs/sources.md）；只说分段，Studio 段间的 Rewards 和 App 的「最后领取」是不是一回事图上看不出，不写。
  ('playbook', 7): [
-  {'kind': 'duo', 'prov': 'original', 'project': 'playbook',
+  # 2026-11-27 第 2 版（卡 20261127-004 打回，修改清单 D:\claudestudy\PlayBook改版修改清单-电脑端优先-给Claude.md）：1440 宽时 App 线框只有 171px 宽、字看不清，改成上下排（'stack'）：
+  # 上面一行 App 两屏（第 1 段进行中、第 2 段上锁）并排，每张最宽 270px；下面 Studio 任务画布满宽。放大按钮在图下面那行（stack 本来就这样），不压 SURE 和 Upload。
+  {'kind': 'stack', 'prov': 'original', 'project': 'playbook',
    'label': ['同一场活动的两端 · App ↔ Studio', 'One campaign, two sides · App ↔ Studio'],
-   'items': [('playbook/app-wire-mission-locked', ['App 活动详情 · 第 2 段上锁 · 我的 UX 线框', 'App campaign detail · stage 2 locked · my UX wireframe']),
-             ('playbook/studio-mission-nexus', ['Studio 任务画布 · 第 1 段 → 奖励 → 第 2 段 · 我的 UX/UI', 'Studio mission canvas · stage 1 → rewards → stage 2 · my UX/UI'])],
+   'items': [{'row': [('playbook/app-wire-mission-s1', ['App 活动详情 · 第 1 段进行中', 'App campaign detail · stage 1 in progress']),
+                      ('playbook/app-wire-mission-locked', ['App 活动详情 · 第 2 段上锁', 'App campaign detail · stage 2 locked'])], 'w': 270},
+             ('playbook/studio-mission-nexus', ['Studio 任务画布 · 第 1 段 → 奖励 → 第 2 段', 'Studio mission canvas · stage 1 → rewards → stage 2'])],
    'caption': ['粉丝完成第 1 段才解锁第 2 段；创作者在画布上把每段要做的任务连起来。', 'Fans unlock stage 2 by finishing stage 1; on the canvas, the creator links the tasks each stage asks for.']},
  ],
  # 2026-11-17（卡 20261115-031、20261117-011）：新增 09「二创与联名 / Remix」，原 09「交付与反思」顺延为 10。
@@ -223,11 +228,8 @@ FIGURES = {
  # 2026-11-26（第 2 批第 1、8 条）：Remix 回到主线，键 9 → 8；页面上用 1200 宽的图（'-1200'），放大时换成 2400 宽的原图（'full'）
  # 2026-11-27（卡 20261127-003 方案 A）：键 8 → 9；主图留两张（作品详情、联名），另外三张收进一组页签（'tabs'，一次看一张）
  ('playbook', 9): [
-  {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail-1200', 'full': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook', 'scroll': True,
-   'fixed': {'of': 2880, 'top': 96, 'right': 642},
-   'label': ['作品详情', 'Submission detail'],
-   'caption': ['在画面上框出一块留修改意见，右侧按版本记录往来。', 'Mark an area of the image to comment on it. The side panel keeps the feedback by revision.']},
-  {'kind': 'tabs', 'label': ['挑战的另外三页', 'Three more challenge pages'], 'items': [
+  # 2026-11-27 第 2 版（卡 20261127-004 打回，修改清单 D:\claudestudy\PlayBook改版修改清单-电脑端优先-给Claude.md）：页签组挪到作品详情前面，加一行引导标题（'head'）
+  {'kind': 'tabs', 'label': ['挑战的三页', 'Three challenge pages'], 'head': ['发起和管理挑战', 'Running a challenge'], 'items': [
     (['挑战列表', 'Challenges'], {'kind': 'image', 'src': 'playbook/studio-remix-fan-challenges-1200', 'full': 'playbook/studio-remix-fan-challenges', 'prov': 'original', 'project': 'playbook',
        'label': ['粉丝挑战列表', 'Fan challenges'],
        'caption': ['Fans 页签：进行中和已结束的挑战分开，右上角新建挑战。', 'The Fans tab: ongoing and expired challenges, with “Create New Challenge” at the top right.']}),
@@ -240,6 +242,10 @@ FIGURES = {
        'label': ['挑战页', 'Challenge page'],
        'caption': ['当前阶段、剩余天数和全部投稿，创作者从这里选出获胜者。', 'The current phase, days left and all submissions. The creator picks the winner here.']}),
   ]},
+  {'kind': 'image', 'src': 'playbook/studio-remix-submission-detail-1200', 'full': 'playbook/studio-remix-submission-detail', 'prov': 'original', 'project': 'playbook', 'scroll': True,
+   'fixed': {'of': 2880, 'top': 96, 'right': 642},
+   'label': ['作品详情', 'Submission detail'],
+   'caption': ['在画面上框出一块留修改意见，右侧按版本记录往来。', 'Mark an area of the image to comment on it. The side panel keeps the feedback by revision.']},
   {'kind': 'image', 'src': 'playbook/studio-remix-creator-collab-1200', 'full': 'playbook/studio-remix-creator-collab', 'prov': 'original', 'project': 'playbook',
    'label': ['创作者联名', 'Creator collaborations'],
    'caption': ['已联名的物品按合作的创作者分组，另有待审批和收到的申请两个页签。', 'Collaborated items grouped by partner creator, with tabs for pending approvals and incoming requests.']},

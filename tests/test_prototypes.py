@@ -277,13 +277,24 @@ class SmtTests(unittest.TestCase):
         self.assertIn('class="up">141,123.13', html)
 
 
+def every_figure(figs):
+    """2026-11-27 v2（卡 20261127-004）：展开 'tabs' 里的每张图和 'duo' 折叠里那条图（'more'.'fig'），两个测试都查全。"""
+    for f in figs:
+        if f['kind'] == 'tabs':
+            yield from every_figure([sub for _, sub in f['items']])
+            continue
+        yield f
+        if f.get('more', {}).get('fig'):
+            yield from every_figure([f['more']['fig']])
+
+
 class FigureTests(unittest.TestCase):
     def test_figures_use_exported_assets_and_known_provenance(self):
         for (slug, n), figs in FIGURES.items():
-            figs = [sub for f in figs for sub in ([s for _, s in f['items']] if f['kind'] == 'tabs' else [f])]   # 'tabs'（2026-11-27）：检查里面每一张图
-            for f in figs:
+            for f in every_figure(figs):
                 self.assertIn(f['prov'], PROV, f'{slug}/{n}')
-                srcs = [f['src']] if 'src' in f else [i[0] for i in f.get('items', [])]
+                # 'stack' 的一项可以是 {'row': [...], 'w': …}（2026-11-27 v2），展开成里面的每张图
+                srcs = [f['src']] if 'src' in f else [i for it in f.get('items', []) for i in ([r[0] for r in it['row']] if isinstance(it, dict) else [it[0]])]
                 srcs += [f['src_en']] if 'src_en' in f else []        # 英文页另取的图
                 srcs += [i[0] for i in f.get('partials', [])]         # 不是整屏的局部图
                 srcs += [i[0] for i in f.get('whole', [])]            # 和手机一样宽、整张显示的图
@@ -298,11 +309,13 @@ class FigureTests(unittest.TestCase):
 
     def test_scroll_window_only_for_tall_images_and_reachable(self):
         """'scroll' (2026-11-17): only single images taller than 16:9; the window is focusable and named, the enlarge button stays."""
-        from build import figure_html
+        from build import figure_html, T
+        seen = 0
         for (slug, n), figs in FIGURES.items():
-            for f in figs:
+            for f in every_figure(figs):
                 if not f.get('scroll'):
                     continue
+                seen += 1
                 self.assertEqual(f['kind'], 'image', f'{slug}/{n}')
                 w, h = MANIFEST[f['src']]
                 self.assertGreater(h / w, 9 / 16, f'{slug}/{n}: {f["src"]} fits 16:9 already')
@@ -310,6 +323,8 @@ class FigureTests(unittest.TestCase):
                     html = figure_html(f, lang)
                     self.assertIn('class="shot-scroll__view" tabindex="0" role="region" aria-label="', html)
                     self.assertIn(hint, html)
+                    if slug == 'playbook' and T(f.get('label', ['', '']), lang):   # 2026-11-27 v2：PlayBook 有图名时，提示在图名那一行，不在窗口里压界面（Agent Matrix 先不跟）
+                        self.assertLess(html.index('shot-scroll__hint'), html.index('data-scroll-shot'))
                     self.assertEqual(html.count('data-enlarge'), 1)
                     fixed = f.get('fixed')
                     # 2026-11-25: one copy for top / left / right, one more for 'bottom', one per 'sticky' column
@@ -324,8 +339,9 @@ class FigureTests(unittest.TestCase):
                             self.assertIn('--fix-b:', html)
                         self.assertEqual(html.count('class="shot-scroll__fixed shot-scroll__sticky" style="clip-path:inset('), len(fixed.get('sticky', [])))
                         self.assertLess(html.index('shot-scroll__view'), html.index('shot-scroll__fixed'))
+        self.assertGreaterEqual(seen, 3)   # PlayBook Remix：作品详情，加页签里的新建挑战、挑战页
         for (slug, n), figs in FIGURES.items():   # 'fixed' only goes with 'scroll', in source pixels that fit the picture's first 16:9 screen
-            for f in figs:
+            for f in every_figure(figs):
                 fx = f.get('fixed')
                 if not fx:
                     continue
